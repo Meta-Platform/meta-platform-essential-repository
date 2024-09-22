@@ -1,0 +1,60 @@
+{
+    "installationDataDir":"~/Workspaces/meta-platform-repo/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "repositoryNamespace":"EssentialRepo",
+            "repositorySourceType": "LOCAL_FS",
+            "repositoryPath": "~/Workspaces/meta-platform-repo/repos/EssentialRepo",
+            "appsToInstall":[
+                {
+                    "appType":"CLI",
+                    "executable":"mytoolkit",
+                    "packageNamespace":"Main.Module/Application.layer/maintenance-toolkit.cli",
+                    "supervisorSocketFileName":"mytoolkit.sock"
+                }
+            ]
+        },
+        {
+            "repositoryNamespace":"PlatformCoreRepo",
+            "repositorySourceType": "LOCAL_FS",
+            "repositoryPath": "~/Workspaces/meta-platform-repo/repos/PlatformCoreRepo",
+            "appsToInstall":[
+                {
+                    "appType":"APP",
+                    "executable":"start-platform",
+                    "packageNamespace":"Main.Module/Application.layer/platform-main-application.app",
+                    "supervisorSocketFileName":"daemon.sock"
+                },
+                {
+                    "appType":"CLI",
+                    "executable":"mylauncher",
+                    "packageNamespace":"Main.Module/Application.layer/ecosystem-daemon-launcher.cli",
+                    "supervisorSocketFileName":"launcher.sock"
+                },
+                {
+                    "appType":"CLI",
+                    "executable":"myexec",
+                    "packageNamespace":"Main.Module/Application.layer/platform-executor.cli",
+                    "supervisorSocketFileName":"myexec.sock"
+                },
+                {
+                    "appType":"CLI",
+                    "executable":"myrepo",
+                    "packageNamespace":"Main.Module/Application.layer/repository-manager.cli",
+                    "supervisorSocketFileName":"myrepo.sock"
+                },
+                {
+                    "appType":"CLI",
+                    "executable":"mysup",
+                    "packageNamespace":"Main.Module/Application.layer/execution-supervisor.cli",
+                    "supervisorSocketFileName":"mysup.sock"
+                }
+            ]
+        },
+        {
+            "repositoryNamespace":"PlaformApplicationsRepo",
+            "repositorySourceType": "LOCAL_FS",
+            "repositoryPath": "~/Workspaces/meta-platform-repo/repos/PlaformApplicationsRepo"
+        }
+    ]
+}

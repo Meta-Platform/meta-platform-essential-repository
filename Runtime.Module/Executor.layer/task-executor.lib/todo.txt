@@ -1,0 +1,14 @@
+
+Casos de teste específicos devem ser desenvolvidos para cada área funcional identificada. Alguns exemplos incluem:
+
+   - Testar a criação de uma tarefa com diferentes configurações de parâmetros.
+   - Verificar a resposta e o estado da tarefa após a criação.
+   - Testar a criação de múltiplas tarefas simultaneamente.
+   - Avaliar a interdependência e execução hierárquica, se aplicável.
+   - Testar a funcionalidade de interrupção para uma tarefa ativa.
+   - Verificar o estado da tarefa após a interrupção.
+   - Testar a interrupção de múltiplas tarefas em uma única operação.
+   - Avaliar o estado de cada tarefa após a interrupção.
+   - Testar a criação de tarefas com diferentes tipos e estruturas de parâmetros.
+   - Verificar se os parâmetros são corretamente passados e utilizados pela tarefa.
+   - Monitorar e verificar as transições de estado em resposta a eventos específicos (criação, ativação, conclusão, interrupção).

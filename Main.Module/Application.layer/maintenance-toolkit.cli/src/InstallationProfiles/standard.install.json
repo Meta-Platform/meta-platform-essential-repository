@@ -1,0 +1,31 @@
+{
+    "installationDataDir": "~/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "repositoryNamespace":"EssentialRepo",
+            "repositorySourceType": "GOOGLE_DRIVE",
+            "fileId": "12PKZU1Uea1yYnhO7R26Il9eyF__v6MAc",
+            "appsToInstall":[
+                {
+                    "appType":"CLI",
+                    "executable":"mytoolkit",
+                    "packageNamespace":"Main.Module/Application.layer/maintenance-toolkit.cli",
+                    "supervisorSocketFileName":"mytoolkit.sock"
+                }
+            ]
+        },
+        {
+            "repositoryNamespace":"PlatformCoreRepo",
+            "repositorySourceType": "GOOGLE_DRIVE",
+            "fileId": "1-PuPdjU36acGmoPgusYWrMuhyGyMnoRI",
+            "appsToInstall":[
+                {
+                    "appType":"CLI",
+                    "executable":"myexec",
+                    "packageNamespace":"Main.Module/Application.layer/platform-executor.cli",
+                    "supervisorSocketFileName":"myexec.sock"
+                }
+            ]
+        }
+    ]
+}

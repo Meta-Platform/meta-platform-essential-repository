@@ -1,0 +1,9 @@
+{
+  "name": "task-executor.lib",
+  "version": "0.0.6",
+  "author": "Kaio Cezar <kadisk.shark@gmail.com>",
+  "scripts": {
+    "test": "node --test tests/"
+  },
+  "license": "ISC"
+}

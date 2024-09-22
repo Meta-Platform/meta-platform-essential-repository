@@ -1,0 +1,18 @@
+{
+    "installationDataDir":"~/Workspaces/meta-platform-repo/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "repositoryNamespace":"EssentialRepo",
+            "repositorySourceType": "LOCAL_FS",
+            "repositoryPath": "~/Workspaces/meta-platform-repo/repos/EssentialRepo",
+            "appsToInstall":[
+                {
+                    "appType":"CLI",
+                    "executable":"mytoolkit",
+                    "packageNamespace":"Main.Module/Application.layer/maintenance-toolkit.cli",
+                    "supervisorSocketFileName":"mytoolkit.sock"
+                }
+            ]
+        }
+    ]
+}
