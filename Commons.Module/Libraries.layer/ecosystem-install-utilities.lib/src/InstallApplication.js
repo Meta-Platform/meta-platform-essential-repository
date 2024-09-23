@@ -5,7 +5,7 @@ const BuildApplicationScriptContent = require("./BuildApplicationScriptContent")
 const BuildCommandLineApplicationScriptContent = require("./BuildCommandLineApplicationScriptContent")
 
 const InstallApplication = async ({
-    repositoryNamespace,
+    namespace,
     appToInstall,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
@@ -26,13 +26,13 @@ const InstallApplication = async ({
     const scriptContent = appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_NAME: repositoryNamespace,
+            REPOSITORY_NAMESPACE: namespace,
             EXEC_NAME: executable,
             SUPERVISOR_SOCKET_FILE_PATH
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_NAME: repositoryNamespace,
+            REPOSITORY_NAMESPACE: namespace,
             SUPERVISOR_SOCKET_FILE_PATH
         })
     

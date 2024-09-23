@@ -45,7 +45,7 @@ const Installer = async ({ profile, installationPath }) => {
     await InstallEcosystemByProfile({
         ecosystemDefaults  : ECOSYSTEM_DEFAULTS,
         npmDependencies : PROVISIONAL_NODEJS_DEPENDENCIES,
-        installProfile : INSTALL_PROFILES[profile],
+        installationProfile : INSTALL_PROFILES[profile],
         installationPath,
         loggerEmitter
     })

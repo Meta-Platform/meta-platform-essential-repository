@@ -4,7 +4,7 @@
         {
             "repositoryNamespace":"EssentialRepo",
             "repositorySourceType": "LOCAL_FS",
-            "repositoryPath": "~/Workspaces/meta-platform-repo/repos/EssentialRepo",
+            "repositoryPath": "~/Workspaces/meta-platform-repo/repos/meta-platform-essential-repository",
             "appsToInstall":[
                 {
                     "appType":"CLI",
