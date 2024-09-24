@@ -2,9 +2,12 @@
     "installationDataDir": "~/EcosystemData",
     "repositoriesToInstall":[
         {
-            "repositoryNamespace":"EssentialRepo",
-            "repositorySourceType": "GOOGLE_DRIVE",
-            "fileId": "12PKZU1Uea1yYnhO7R26Il9eyF__v6MAc",
+            "repository":{
+                "namespace": "EssentialRepo",
+                "source":{
+                    "type":"GITHUB_REPO"
+                }
+            },
             "appsToInstall":[
                 {
                     "appType":"CLI",

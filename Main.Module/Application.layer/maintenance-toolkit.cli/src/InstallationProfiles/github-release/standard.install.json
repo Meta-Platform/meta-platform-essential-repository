@@ -1,0 +1,45 @@
+{
+    "installationDataDir":"~/Workspaces/meta-platform-repo/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "repository":{
+                "namespace": "EssentialRepo",
+                "source":{
+                    "type":"GITHUB_RELEASE",
+                    "repository":{
+                        "name":"meta-platform-essential-repository",
+                        "owner": "Meta-Platform"
+                    }
+                }
+            },
+            "appsToInstall":[
+                {
+                    "appType":"CLI",
+                    "executable":"mytoolkit",
+                    "packageNamespace":"Main.Module/Application.layer/maintenance-toolkit.cli",
+                    "supervisorSocketFileName":"mytoolkit.sock"
+                }
+            ]
+        },
+        {
+            "repository":{
+                "namespace": "PlatformCoreRepo",
+                "source":{
+                    "type":"GITHUB_RELEASE",
+                    "repository":{
+                        "name":"",
+                        "owner": ""
+                    }
+                }
+            },
+            "appsToInstall":[
+                {
+                    "appType":"CLI",
+                    "executable":"myexec",
+                    "packageNamespace":"Main.Module/Application.layer/platform-executor.cli",
+                    "supervisorSocketFileName":"myexec.sock"
+                }
+            ]
+        }
+    ]
+}

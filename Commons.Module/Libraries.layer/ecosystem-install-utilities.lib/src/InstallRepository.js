@@ -4,7 +4,7 @@ const os = require('os')
 const InstallApplication = require("./InstallApplication")
 const RegisterRepository = require("../../register-repository.lib/src/RegisterRepository")
 
-const DeployRepository = require("./DeployRepository")
+const DownloadRepository = require("./DownloadRepository")
 
 const InstallRepository = async ({
     repositoryToInstall,
@@ -22,7 +22,7 @@ const InstallRepository = async ({
         appsToInstall
     } = repositoryToInstall
 
-    const deployedRepoPath = await DeployRepository({
+    const deployedRepoPath = await DownloadRepository({
         repositoryToInstall,
         ECO_DIRPATH_INSTALL_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES

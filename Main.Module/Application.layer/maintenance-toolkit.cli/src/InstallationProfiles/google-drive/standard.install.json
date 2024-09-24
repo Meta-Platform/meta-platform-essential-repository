@@ -2,9 +2,13 @@
     "installationDataDir": "~/EcosystemData",
     "repositoriesToInstall":[
         {
-            "repositoryNamespace":"EssentialRepo",
-            "repositorySourceType": "GOOGLE_DRIVE",
-            "fileId": "12PKZU1Uea1yYnhO7R26Il9eyF__v6MAc",
+            "repository":{
+                "namespace": "EssentialRepo",
+                "source":{
+                    "type":"GOOGLE_DRIVE",
+                    "fileId": "12PKZU1Uea1yYnhO7R26Il9eyF__v6MAc"
+                }
+            },    
             "appsToInstall":[
                 {
                     "appType":"CLI",
@@ -15,9 +19,13 @@
             ]
         },
         {
-            "repositoryNamespace":"PlatformCoreRepo",
-            "repositorySourceType": "GOOGLE_DRIVE",
-            "fileId": "1-PuPdjU36acGmoPgusYWrMuhyGyMnoRI",
+            "repository":{
+                "namespace": "PlatformCoreRepo",
+                "source":{
+                    "type":"GOOGLE_DRIVE",
+                    "fileId": "1-PuPdjU36acGmoPgusYWrMuhyGyMnoRI"
+                }
+            },    
             "appsToInstall":[
                 {
                     "appType":"CLI",

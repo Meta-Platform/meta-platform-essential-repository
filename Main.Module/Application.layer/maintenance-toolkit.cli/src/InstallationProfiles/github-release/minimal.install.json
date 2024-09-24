@@ -2,9 +2,16 @@
     "installationDataDir":"~/Workspaces/meta-platform-repo/EcosystemData",
     "repositoriesToInstall":[
         {
-            "repositoryNamespace":"EssentialRepo",
-            "repositorySourceType": "LOCAL_FS",
-            "repositoryPath": "~/Workspaces/meta-platform-repo/repos/meta-platform-essential-repository",
+            "repository":{
+                "namespace": "EssentialRepo",
+                "source":{
+                    "type":"GITHUB_RELEASE",
+                    "repository":{
+                        "name":"meta-platform-essential-repository",
+                        "owner": "Meta-Platform"
+                    }
+                }
+            },
             "appsToInstall":[
                 {
                     "appType":"CLI",
