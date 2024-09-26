@@ -1,3 +1,4 @@
+[Meta Platform Essential Repository](../../../README.md) / [Runtime Module](../../README.md)
 # Dependency Graph Builder Library
 
 Esse pacote é responsavel por construir uma hierarquia de metadados a função mais importante desse pacote é a `BuildMetadataHierarchy`

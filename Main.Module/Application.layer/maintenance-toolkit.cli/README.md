@@ -1,3 +1,5 @@
+[Meta Platform Essential Repository](../../../README.md) / [Main Module](../../README.md)
+
 # Maintenance Toolkit Command-line
 
 O **Maintenance Toolkit Command-line** é uma ferramenta usada para configuração e instalação de ecossistemas **Meta Platform**. Ele facilita a preparação e personalização da instalação, garantindo que todos os componentes essenciais do ecossistema estejam integrados e funcionando de maneira otimizada.

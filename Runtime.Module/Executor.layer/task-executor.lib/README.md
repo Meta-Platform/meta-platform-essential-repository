@@ -1,3 +1,4 @@
+[Meta Platform Essential Repository](../../../README.md) / [Runtime Module](../../README.md)
 # Task Executor
 
 O Task Executor é uma biblioteca projetada para facilitar a gestão e execução de tarefas programáticas de maneira organizada e eficiente. Com foco na flexibilidade e escalabilidade, esta ferramenta oferece um conjunto robusto de funcionalidades para lidar com o ciclo de vida das tarefas, eventos associados, dependências e condições específicas, permitindo aos desenvolvedores construir sistemas complexos de execução de tarefas com facilidade.

@@ -1,4 +1,4 @@
-
+[Task Executor README](../README.md)
 
 # API de Referência do Task Executor
 
@@ -6,15 +6,17 @@ O Task Executor fornece uma API flexível e poderosa para gerenciar o ciclo de v
 
 # Índice
 
-- [Criação de Tarefas](#criação-de-tarefas)
+- [API de Referência do Task Executor](#api-de-referência-do-task-executor)
+- [Índice](#índice)
+  - [Criação de Tarefas](#criação-de-tarefas)
     - [`CreateTask(executionParams[, pTaskId])`](#createtaskexecutionparams-ptaskid)
     - [`CreateTasks(executionParamsList[, pTaskId])`](#createtasksexecutionparamslist-ptaskid)
-- [Consulta e Gerenciamento de Tarefas](#consulta-e-gerenciamento-de-tarefas)
+  - [Consulta e Gerenciamento de Tarefas](#consulta-e-gerenciamento-de-tarefas)
     - [`GetTask(taskId)`](#gettasktaskid)
     - [`ListTasks()`](#listtasks)
     - [`StopTask(taskId)`](#stoptasktaskid)
     - [`StopTasks(taskIdList)`](#stoptaskstaskidlist)
-- [Monitoramento de Tarefas](#monitoramento-de-tarefas)
+  - [Monitoramento de Tarefas](#monitoramento-de-tarefas)
     - [`AddTaskStatusListener(listenerFunction)`](#addtaskstatuslistenerlistenerfunction)
 
 ## Criação de Tarefas

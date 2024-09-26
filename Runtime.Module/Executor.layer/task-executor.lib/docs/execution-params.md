@@ -1,3 +1,5 @@
+[Task Executor README](../README.md)
+
 # ExecutionParams no `Task Executor`
 
 O ExecutionParams é uma peça chave na organização de tarefas. Ele guarda todas as informações necessárias para uma tarefa rodar bem, incluindo quando ela deve começar e como se conecta com outras tarefas. Aqui, vamos explicar de forma clara o papel dos ExecutionParams.
@@ -6,12 +8,18 @@ O ExecutionParams é uma peça chave na organização de tarefas. Ele guarda tod
 
 Os ExecutionParams, ou parâmetros de execução, são um conjunto de informações que dizem ao Executor de Tarefas como uma tarefa deve ser preparada, rodar e ser gerenciada. Eles incluem:
 
-- [Tipo de Carregador de Tarefa (`objectLoaderType`)](#tipo-de-carregador-de-tarefa-objectloadertype)
-- [Parâmetros Estáticos (`staticParameters`)](#parâmetros-estáticos-staticparameters)
-- [Parâmetros Vinculados (`linkedParameters`)](#parâmetros-vinculados-linkedparameters)
-- [Regras de Vinculação entre Agentes (`agentLinkRules`)](#regras-de-vinculação-entre-agentes-agentlinkrules)
-- [Regras de Ativação (`activationRules`)](#regras-de-ativação-activationrules)
-- [Tarefas Filhas (`children`)](#tarefas-filhas-children)
+- [ExecutionParams no `Task Executor`](#executionparams-no-task-executor)
+  - [O que são os ExecutionParams?](#o-que-são-os-executionparams)
+  - [Tipo de Carregador de Tarefa (`objectLoaderType`)](#tipo-de-carregador-de-tarefa-objectloadertype)
+  - [Parâmetros Estáticos (`staticParameters`)](#parâmetros-estáticos-staticparameters)
+    - [Criação do `PrintParamsTaskLoader`](#criação-do-printparamstaskloader)
+    - [Demonstrando uso do `staticParameters`](#demonstrando-uso-do-staticparameters)
+      - [Resultado da demonstração](#resultado-da-demonstração)
+  - [Parâmetros Vinculados (`linkedParameters`)](#parâmetros-vinculados-linkedparameters)
+  - [Regras de Vinculação entre Agentes (`agentLinkRules`)](#regras-de-vinculação-entre-agentes-agentlinkrules)
+  - [Regras de Ativação (`activationRules`)](#regras-de-ativação-activationrules)
+  - [Tarefas Filhas (`children`)](#tarefas-filhas-children)
+  - [Como o Executor de Tarefas usa os ExecutionParams](#como-o-executor-de-tarefas-usa-os-executionparams)
 
 ## Tipo de Carregador de Tarefa (`objectLoaderType`)
 Define qual carregador usar. Isso é fundamental porque o carregador determina as funcionalidades da tarefa. O Executor de Tarefas assegura que a tarefa só será ativada quando estiver pronta, conforme definido pelos ExecutionParams.
