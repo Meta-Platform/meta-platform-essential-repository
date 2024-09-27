@@ -1,4 +1,3 @@
-[Meta Platform](../../README.md)
 # Meta Platform Essential Repository
 
 ## Módulos do repositório
