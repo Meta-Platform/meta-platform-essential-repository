@@ -19,7 +19,7 @@
         },
         {
             "repository":{
-                "namespace": "PlatformCoreRepo",
+                "namespace": "EcosystemCoreRepo",
                 "source":{
                     "type":"GITHUB_REPO"
                 }

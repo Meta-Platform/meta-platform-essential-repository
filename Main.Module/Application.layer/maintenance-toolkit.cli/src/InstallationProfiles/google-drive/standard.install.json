@@ -20,7 +20,7 @@
         },
         {
             "repository":{
-                "namespace": "PlatformCoreRepo",
+                "namespace": "EcosystemCoreRepo",
                 "source":{
                     "type":"GOOGLE_DRIVE",
                     "fileId": "1-PuPdjU36acGmoPgusYWrMuhyGyMnoRI"
