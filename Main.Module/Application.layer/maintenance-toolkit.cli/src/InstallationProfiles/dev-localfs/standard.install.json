@@ -20,10 +20,10 @@
         },
         {
             "repository":{
-                "namespace": "~/Workspaces/meta-platform-repo/repos/EcosystemCoreRepo",
+                "namespace": "~/Workspaces/meta-platform-repo/repos/meta-platform-ecosystem-core-repository",
                 "source":{
                     "type":"LOCAL_FS",
-                    "path": "~/Workspaces/meta-platform-repo/repos/EcosystemCoreRepo"
+                    "path": "~/Workspaces/meta-platform-repo/repos/meta-platform-ecosystem-core-repository"
                 }
             }, 
             "appsToInstall":[
