@@ -1,14 +1,14 @@
 const path = require("path")
 const os = require('os')
 
-const UpdateEcosystem          = require("./UpdateEcosystem")
-const UpdateNodejsDependencies = require("./UpdateNodejsDependencies")
+const UpdateEcosystem          = require("./Update/UpdateEcosystem")
+const UpdateNodejsDependencies = require("./Update/UpdateNodejsDependencies")
+const UpdateRepository         = require("./Update/UpdateRepository")
 
 const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)
     .replace('~', os.homedir())
 
-const UpdateRepository = require("./UpdateRepository")
 
 const UpdateEcosystemByProfile = async ({
     ecosystemDefaults,

@@ -1,12 +1,12 @@
 const path = require("path")
 
-const ConstructEcosystemStructure = require("../ConstructEcosystemStructure")
+const ConstructEcosystemStructure = require("../../Helpers/ConstructEcosystemStructure")
 const UpdatePackageExecutor = require("./UpdatePackageExecutor")
 const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
 
-const CreatePackageExecutableScript = require("../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
-const GetApplicationExecutionContent = require("../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
-const GetCommandLineApplicationExecutionContent = require("../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")
+const CreatePackageExecutableScript = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
+const GetApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
+const GetCommandLineApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")
 
 const Update = async ({
     ecosystemDefaults,

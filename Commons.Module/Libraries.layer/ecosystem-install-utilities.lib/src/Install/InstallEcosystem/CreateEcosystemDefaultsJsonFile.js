@@ -1,6 +1,6 @@
 const { join } = require("path")
 
-const WriteObjectToFile = require("../../../write-object-to-file.lib/src/WriteObjectToFile")
+const WriteObjectToFile = require("../../../../write-object-to-file.lib/src/WriteObjectToFile")
 
 const CreateEcosystemDefaultsJsonFile = async ({
     ECO_DIRPATH_INSTALL_DATA, 

@@ -1,14 +1,14 @@
 const path = require("path")
 const os = require('os')
 
-const InstallEcosystem          = require("./InstallEcosystem")
-const InstallNodejsDependencies = require("./InstallNodejsDependencies")
+const InstallEcosystem          = require("./Install/InstallEcosystem")
+const InstallNodejsDependencies = require("./Install/InstallNodejsDependencies")
+const InstallRepository         = require("./Install/InstallRepository")
 
 const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)
     .replace('~', os.homedir())
 
-const InstallRepository = require("./InstallRepository")
 
 const InstallEcosystemByProfile = async ({
     ecosystemDefaults,

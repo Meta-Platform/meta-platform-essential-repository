@@ -1,5 +1,5 @@
 const DownloadPackageExecutorBin = require("./DownloadPackageExecutorBin")
-const MakeFileExecutable         = require("../../../script-file-utilities.lib/src/MakeFileExecutable")
+const MakeFileExecutable         = require("../../../../script-file-utilities.lib/src/MakeFileExecutable")
 
 const InstallPackageExecutor = async ({
     ECO_DIRPATH_INSTALL_DATA,

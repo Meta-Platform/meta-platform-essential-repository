@@ -1,12 +1,12 @@
 const path = require("path")
-const os = require('os')
+
+const RegisterRepository = require("../../../register-repository.lib/src/RegisterRepository")
 
 const InstallApplication = require("./InstallApplication")
-const RegisterRepository = require("../../register-repository.lib/src/RegisterRepository")
+const DownloadRepository = require("../Helpers/DownloadRepository")
 
-const DownloadRepository = require("./DownloadRepository")
 
-const UpdateEcosystem = async ({
+const InstallRepository = async ({
     repositoryToInstall,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
@@ -53,4 +53,4 @@ const UpdateEcosystem = async ({
     }
 }
 
-module.exports = UpdateEcosystem
+module.exports = InstallRepository

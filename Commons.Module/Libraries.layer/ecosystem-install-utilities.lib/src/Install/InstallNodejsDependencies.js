@@ -1,5 +1,5 @@
 
-const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
+const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
 const Arborist = SmartRequire("@npmcli/arborist")
 
 const InstallNodejsDependencies = async ({

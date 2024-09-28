@@ -1,6 +1,6 @@
 const { join } = require("path")
 
-const DownloadLatestGithubRelease = require("../../../download-file.lib/src/DownloadLatestGithubRelease")
+const DownloadLatestGithubRelease = require("../../../../download-file.lib/src/DownloadLatestGithubRelease")
 
 const DownloadPackageExecutorBin = async ({
     ECO_DIRPATH_INSTALL_DATA,

@@ -1,10 +1,10 @@
 const path = require("path")
 const os = require('os')
 
-const CopyDirectory                 = require("../../copy-directory.lib/src/CopyDirectory")
-const ExtractTarGz                  = require("../../extract-tar-gz.lib/src/ExtractTarGz")
-const DownloadFileFromGoogleDrive   = require("../../download-file.lib/src/DownloadFileFromGoogleDrive")
-const GetReleaseLatestData          = require("../../download-file.lib/src/GetReleaseLatestData")
+const CopyDirectory               = require("../../../copy-directory.lib/src/CopyDirectory")
+const ExtractTarGz                = require("../../../extract-tar-gz.lib/src/ExtractTarGz")
+const DownloadFileFromGoogleDrive = require("../../../download-file.lib/src/DownloadFileFromGoogleDrive")
+const GetReleaseLatestData        = require("../../../download-file.lib/src/GetReleaseLatestData")
 
 const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)

@@ -1,8 +1,8 @@
 const path = require("path")
 
-const CreateExecutableScript = require("../../script-file-utilities.lib/src/CreateExecutableScript")
-const BuildApplicationScriptContent = require("./BuildApplicationScriptContent")
-const BuildCommandLineApplicationScriptContent = require("./BuildCommandLineApplicationScriptContent")
+const CreateExecutableScript = require("../../../script-file-utilities.lib/src/CreateExecutableScript")
+const BuildApplicationScriptContent = require("../Helpers/BuildApplicationScriptContent")
+const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildCommandLineApplicationScriptContent")
 
 const InstallApplication = async ({
     namespace,
