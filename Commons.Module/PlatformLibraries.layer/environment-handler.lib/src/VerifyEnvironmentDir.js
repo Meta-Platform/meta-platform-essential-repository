@@ -18,7 +18,7 @@ const VerifyEnvironmentDir = async ({
     } catch(e){
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "VerifyEnvironmentDir",
-            type: "warning",
+            type: "info",
             message: `${environmentName} environment não existe`
         })
         return false

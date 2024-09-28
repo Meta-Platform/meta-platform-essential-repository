@@ -9,7 +9,8 @@ const InstallApplication = async ({
     appToInstall,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-    SUPERVISOR_SOCKET_DIR_PATH
+    SUPERVISOR_SOCKET_DIR_PATH,
+    loggerEmitter
 }) => {
 
     const {
@@ -37,7 +38,7 @@ const InstallApplication = async ({
         })
     
     const fullScriptPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
-    await CreateExecutableScript(fullScriptPath, scriptContent)
+    await CreateExecutableScript(fullScriptPath, scriptContent, loggerEmitter)
     return fullScriptPath
 }
 

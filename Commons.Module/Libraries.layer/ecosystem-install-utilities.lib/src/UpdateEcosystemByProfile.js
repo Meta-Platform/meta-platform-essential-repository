@@ -1,14 +1,14 @@
 const path = require("path")
 const os = require('os')
 
-const InstallEcosystem          = require("./InstallEcosystem")
-const InstallNodejsDependencies = require("./InstallNodejsDependencies")
+const UpdateEcosystem          = require("./UpdateEcosystem")
+const UpdateNodejsDependencies = require("./UpdateNodejsDependencies")
 
 const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)
     .replace('~', os.homedir())
 
-const InstallRepository = require("./InstallRepository")
+const UpdateRepository = require("./UpdateRepository")
 
 const UpdateEcosystemByProfile = async ({
     ecosystemDefaults,
@@ -33,20 +33,20 @@ const UpdateEcosystemByProfile = async ({
 
     const ECO_DIRPATH_INSTALL_DATA = ConvertPathToAbsolutPath(installationPath || installationDataDir)
 
-    await InstallEcosystem({
+    await UpdateEcosystem({
         ecosystemDefaults,
         ECO_DIRPATH_INSTALL_DATA,
         loggerEmitter
     })
 
-    await InstallNodejsDependencies({
+    await UpdateNodejsDependencies({
         contextPath: path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES),
         dependencies: npmDependencies
     })
 
     if(repositoriesToInstall){
         for (const repositoryToInstall of repositoriesToInstall) {
-            await InstallRepository({
+            await UpdateRepository({
                 repositoryToInstall,
                 ECO_DIRPATH_INSTALL_DATA,
                 ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,

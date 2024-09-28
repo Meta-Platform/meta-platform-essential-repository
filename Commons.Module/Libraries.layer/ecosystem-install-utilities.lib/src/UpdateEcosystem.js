@@ -6,7 +6,7 @@ const RegisterRepository = require("../../register-repository.lib/src/RegisterRe
 
 const DownloadRepository = require("./DownloadRepository")
 
-const InstallRepository = async ({
+const UpdateEcosystem = async ({
     repositoryToInstall,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
@@ -53,4 +53,4 @@ const InstallRepository = async ({
     }
 }
 
-module.exports = InstallRepository
+module.exports = UpdateEcosystem

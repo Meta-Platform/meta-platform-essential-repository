@@ -21,7 +21,7 @@ const VerifyPackageDependenciesDir = async ({
         if(e.code === "ENOENT"){
             loggerEmitter && loggerEmitter.emit("log", {
                 sourceName: "VerifyPackageDependenciesDir",
-                type: "warning",
+                type: "info",
                 message: `${dirpath} não existe`
             })
             return false

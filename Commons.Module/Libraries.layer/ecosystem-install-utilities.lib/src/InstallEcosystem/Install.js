@@ -31,7 +31,8 @@ const Install = async ({
 
     const packageExecutorBinFilePath = await InstallPackageExecutor({
         ECO_DIRPATH_INSTALL_DATA,
-        ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
+        ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
+        loggerEmitter
     })
 
     const packageExecutorBinaryName = path.basename(packageExecutorBinFilePath)

@@ -16,7 +16,7 @@ const VerifyConfigDir = async ({ECO_DIRPATH_INSTALL_DATA, loggerEmitter}) => {
     } catch (e){
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "VerifyConfigDir",
-            type: "warning",
+            type: "info",
             message: `${filename} não existe`
         })
         return false
