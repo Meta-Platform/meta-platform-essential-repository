@@ -1,5 +1,8 @@
 const path = require("path")
 
+const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
+const colors = SmartRequire("colors")
+
 const InstallEcosystem          = require("./Install/InstallEcosystem")
 const InstallNodejsDependencies = require("./Install/InstallNodejsDependencies")
 const InstallRepository         = require("./Install/InstallRepository")
@@ -11,8 +14,15 @@ const InstallEcosystemByProfile = async ({
     npmDependencies,
     installationProfile,
     installationPath,
+    profile,
     loggerEmitter
 }) => {
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallEcosystemByProfile",
+        type: "info",
+        message: `Inicio de instalação usando o perfil ${colors.bold(path.basename(profile))}`
+    })
 
     const { 
         REPOS_CONF_FILENAME_REPOS_DATA,
@@ -37,7 +47,8 @@ const InstallEcosystemByProfile = async ({
 
     await InstallNodejsDependencies({
         contextPath: path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES),
-        dependencies: npmDependencies
+        dependencies: npmDependencies,
+        loggerEmitter
     })
 
     if(repositoriesToInstall){
@@ -53,6 +64,12 @@ const InstallEcosystemByProfile = async ({
             })
         }
     }
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallEcosystemByProfile",
+        type: "info",
+        message: `Fim da instalação do perfil ${colors.bold(path.basename(profile))}!`
+    })
 }
 
 module.exports = InstallEcosystemByProfile

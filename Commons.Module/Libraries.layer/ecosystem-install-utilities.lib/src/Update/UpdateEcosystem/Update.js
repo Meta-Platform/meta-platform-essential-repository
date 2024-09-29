@@ -22,7 +22,8 @@ const Update = async ({
 
     await CreateEcosystemDefaultsJsonFile({
         ECO_DIRPATH_INSTALL_DATA, 
-        ecosystemDefaults
+        ecosystemDefaults,
+        loggerEmitter
     })
 
     const {

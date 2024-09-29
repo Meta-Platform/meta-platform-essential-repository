@@ -1,18 +1,27 @@
 const path = require("path")
 
-const ConstructEcosystemStructure = require("../../Helpers/ConstructEcosystemStructure")
-const InstallPackageExecutor = require("./InstallPackageExecutor")
-const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
+const SmartRequire = require("../../../../smart-require.lib/src/SmartRequire")
+const colors = SmartRequire("colors")
 
-const CreatePackageExecutableScript = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
-const GetApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
+const CreatePackageExecutableScript             = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
+const GetApplicationExecutionContent            = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
 const GetCommandLineApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")
+
+const ConstructEcosystemStructure     = require("../../Helpers/ConstructEcosystemStructure")
+const InstallPackageExecutor          = require("./InstallPackageExecutor")
+const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
 
 const Install = async ({
     ecosystemDefaults,
     ECO_DIRPATH_INSTALL_DATA,
     loggerEmitter
 }) => {
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallEcosystem",
+        type: "info",
+        message: `Instalando ecosistema...`
+    })
 
     await ConstructEcosystemStructure({
         ECO_DIRPATH_INSTALL_DATA,
@@ -22,7 +31,8 @@ const Install = async ({
 
     await CreateEcosystemDefaultsJsonFile({
         ECO_DIRPATH_INSTALL_DATA, 
-        ecosystemDefaults
+        ecosystemDefaults,
+        loggerEmitter
     })
 
     const {
@@ -42,7 +52,8 @@ const Install = async ({
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetApplicationExecutionContent,
-        executableScriptFilename:"execute-application"
+        executableScriptFilename:"execute-application",
+        loggerEmitter
     })
 
     await CreatePackageExecutableScript({
@@ -50,11 +61,16 @@ const Install = async ({
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
-        executableScriptFilename:"execute-command-line-application"
+        executableScriptFilename:"execute-command-line-application",
+        loggerEmitter
     })
 
-    //const executablesDirPath = join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR)
-    //await AddPathToUserBashrc(executablesDirPath)
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallEcosystem",
+        type: "info",
+        message: `Ecosistem instalado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
+    })
 
 }
 

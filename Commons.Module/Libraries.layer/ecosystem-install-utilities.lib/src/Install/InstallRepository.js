@@ -1,10 +1,10 @@
 const path = require("path")
-
+const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
+const colors = SmartRequire("colors")
 const RegisterRepository = require("../../../register-repository.lib/src/RegisterRepository")
 
 const InstallApplication = require("./InstallApplication")
 const DownloadRepository = require("../Helpers/DownloadRepository")
-
 
 const InstallRepository = async ({
     repositoryToInstall,
@@ -15,12 +15,20 @@ const InstallRepository = async ({
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
+
     const {
         repository:{
-            namespace
+            namespace,
+            source
         },
         appsToInstall
     } = repositoryToInstall
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallRepository",
+        type: "info",
+        message: `Instalando o repositório ${colors.bold("namespace")} pela fonte do tipo [${source}]...`
+    })
 
     const deployedRepoPath = await DownloadRepository({
         repositoryToInstall,
@@ -40,7 +48,6 @@ const InstallRepository = async ({
 
     if(appsToInstall){
         for (const appToInstall of appsToInstall) {
-
             await InstallApplication({
                 namespace,
                 appToInstall,
@@ -51,6 +58,12 @@ const InstallRepository = async ({
             })
         }
     }
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallRepository",
+        type: "info",
+        message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(source.type)}] foi concluída!`
+    })
 }
 
 module.exports = InstallRepository

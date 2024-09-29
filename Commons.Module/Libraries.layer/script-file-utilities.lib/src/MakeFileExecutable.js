@@ -1,4 +1,5 @@
 const fs = require('fs').promises
+const { basename } = require("path")
 
 const MakeFileExecutable = async (filePath, loggerEmitter) => {
     try {
@@ -6,7 +7,7 @@ const MakeFileExecutable = async (filePath, loggerEmitter) => {
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "MakeFileExecutable",
             type: "info",
-            message: `O arquivo ${filePath} agora é executável.`
+            message: `O arquivo ${basename(filePath)} agora é executável.`
         })
     } catch (err) {
         console.error(err)

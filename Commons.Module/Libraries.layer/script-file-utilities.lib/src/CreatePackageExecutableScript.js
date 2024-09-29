@@ -8,7 +8,8 @@ const CreatePackageExecutableScript = async ({
     ecosystemDefaults,
     packageExecutorBinaryName,
     buildContentFunction,
-    executableScriptFilename
+    executableScriptFilename,
+    loggerEmitter
 }) => {
 
     const {
@@ -32,6 +33,14 @@ const CreatePackageExecutableScript = async ({
 
     const fullScriptPath = join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executableScriptFilename)
     await CreateExecutableScript(fullScriptPath, scriptContent)
+
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "CreatePackageExecutableScript",
+        type: "info",
+        message: `Script executável ${executableScriptFilename} criado com sucesso!`
+    })
+
     return fullScriptPath
 }
 
