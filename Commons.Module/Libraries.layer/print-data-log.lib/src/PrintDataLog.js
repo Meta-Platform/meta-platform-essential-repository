@@ -20,8 +20,7 @@ const GetLocalISODateTime = () => {
 	return  (new Date(now - offset)).toISOString()
 }
 
-
-const PrintDataLog = (dataLog) => {
+const PrintDataLog = (dataLog, eventOrigin) => {
 	
 	const {
 		sourceName,
@@ -38,7 +37,7 @@ const PrintDataLog = (dataLog) => {
 		sourceNameFormatted
 	] = [
 		colors.dim(`[${GetLocalISODateTime()}]`),
-		colors.bgYellow.black("[setup-wizard]"),
+		colors.bgYellow.black(`[${eventOrigin}]`),
 		colors[color](`[${type.padEnd(7)}]`),
 		colors.inverse(`[${sourceName.padEnd(23)}]`)
 	]

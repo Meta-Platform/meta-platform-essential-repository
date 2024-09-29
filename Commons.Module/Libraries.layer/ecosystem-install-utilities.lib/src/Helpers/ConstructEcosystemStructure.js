@@ -40,7 +40,7 @@ const ConstructEcosystemStructure = async ({
            loggerEmitter && loggerEmitter.emit("log", {
                 sourceName: "ConstructEcosystemStructure",
                 type: "info",
-                message: `configuração ${ colors.bold(configKey)} : o subdiretório ${ colors.bold(dirname)} criado com sucesso!`
+                message: `configuração ${ colors.bold(configKey)}: o subdiretório ${ colors.bold(dirname)} criado com sucesso!`
             })
         }
 
