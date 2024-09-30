@@ -27,7 +27,7 @@ const InstallRepository = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallRepository",
         type: "info",
-        message: `Instalando o repositório ${colors.bold("namespace")} pela fonte do tipo [${source}]...`
+        message: `Instalando o repositório ${colors.bold("namespace")} pela fonte do tipo [${source.type}]...`
     })
 
     const deployedRepoPath = await DownloadRepository({
