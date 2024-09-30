@@ -24,7 +24,7 @@ const VerifyRepoFile = async ({
     } catch (e){
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "VerifyRepoFile",
-            type: "warning",
+            type: "info",
             message: `${REPOS_CONF_FILENAME_REPOS_DATA} não existe`
         })
         return false
