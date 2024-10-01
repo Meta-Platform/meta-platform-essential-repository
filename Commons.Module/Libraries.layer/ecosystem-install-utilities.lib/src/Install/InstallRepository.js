@@ -9,12 +9,17 @@ const DownloadRepository = require("../Helpers/DownloadRepository")
 const InstallRepository = async ({
     repositoryToInstall,
     ECO_DIRPATH_INSTALL_DATA,
-    ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-    ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-    ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
-    REPOS_CONF_FILENAME_REPOS_DATA,
+    ecosystemDefaults,
     loggerEmitter
 }) => {
+
+
+    const { 
+        REPOS_CONF_FILENAME_REPOS_DATA,
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
+        ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
+    } = ecosystemDefaults
 
     const {
         repository:{

@@ -7,7 +7,7 @@ const InstallEcosystem          = require("./Install/InstallEcosystem")
 const InstallNodejsDependencies = require("./Install/InstallNodejsDependencies")
 const InstallRepository         = require("./Install/InstallRepository")
 
-const ConvertPathToAbsolutPath = require("./Helpers/ConvertPathToAbsolutPath")
+const PrepareContext            = require("./Helpers/PrepareContext")
 
 const InstallEcosystemByProfile = async ({
     ecosystemDefaults,
@@ -24,42 +24,39 @@ const InstallEcosystemByProfile = async ({
         message: `Inicio de instalação usando o perfil ${colors.bold(path.basename(profile))}`
     })
 
-    const { 
-        REPOS_CONF_FILENAME_REPOS_DATA,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-        ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-        ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
-        ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES
-    } = ecosystemDefaults
+    const context = PrepareContext({
+        installationProfile,
+        ecosystemDefaults,
+        installationPath
+    })
 
     const {
-        installationDataDir,
-        repositoriesToInstall
-    } = installationProfile
-
-    const ECO_DIRPATH_INSTALL_DATA = ConvertPathToAbsolutPath(installationPath || installationDataDir)
+        absolutInstallDataDirPath,
+        npmDependenciesContextPath
+    } = context
 
     await InstallEcosystem({
         ecosystemDefaults,
-        ECO_DIRPATH_INSTALL_DATA,
+        ECO_DIRPATH_INSTALL_DATA: absolutInstallDataDirPath,
         loggerEmitter
     })
 
     await InstallNodejsDependencies({
-        contextPath: path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES),
+        contextPath: npmDependenciesContextPath,
         dependencies: npmDependencies,
         loggerEmitter
     })
 
-    if(repositoriesToInstall){
+    if(installationProfile?.repositoriesToInstall){
+        const {
+            repositoriesToInstall
+        } = installationProfile
+    
         for (const repositoryToInstall of repositoriesToInstall) {
             await InstallRepository({
                 repositoryToInstall,
-                ECO_DIRPATH_INSTALL_DATA,
-                ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-                ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-                ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
-                REPOS_CONF_FILENAME_REPOS_DATA,
+                ECO_DIRPATH_INSTALL_DATA: absolutInstallDataDirPath,
+                ecosystemDefaults,
                 loggerEmitter
             })
         }
