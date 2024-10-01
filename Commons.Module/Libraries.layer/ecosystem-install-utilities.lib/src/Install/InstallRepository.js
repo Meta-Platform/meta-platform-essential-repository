@@ -27,13 +27,14 @@ const InstallRepository = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallRepository",
         type: "info",
-        message: `Instalando o repositório ${colors.bold("namespace")} pela fonte do tipo [${source.type}]...`
+        message: `Instalando o repositório ${colors.bold(namespace)}...`
     })
 
     const deployedRepoPath = await DownloadRepository({
         repositoryToInstall,
         ECO_DIRPATH_INSTALL_DATA,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        loggerEmitter
     })
 
     await RegisterRepository({
