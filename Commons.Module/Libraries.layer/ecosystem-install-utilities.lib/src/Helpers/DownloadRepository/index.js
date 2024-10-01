@@ -1,4 +1,6 @@
 const path = require("path")
+const SmartRequire = require("../../../../smart-require.lib/src/SmartRequire")
+const colors = SmartRequire("colors")
 
 const DownloadFromLocalFS       = require("./DownloadFromLocalFS")
 const DownloadFromGoogleDrive   = require("./DownloadFromGoogleDrive")
@@ -8,7 +10,8 @@ const DownloadFromGithubRelease = require("./DownloadFromGithubRelease")
 const DownloadRepository = async ({
     repositoryToInstall,
     ECO_DIRPATH_INSTALL_DATA,
-    ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES
+    ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+    loggerEmitter
 }) => {
 
     const {
@@ -20,7 +23,7 @@ const DownloadRepository = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "DownloadRepository",
         type: "info",
-        message: `Inciando o download do repositório ${colors.bold(repository.namespace)}...`
+        message: `Baixando repositório ${colors.bold(repository.namespace)}...`
     })
 
     const REPOS_PATH = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
