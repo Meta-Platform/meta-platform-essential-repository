@@ -64,7 +64,7 @@ const InstallApplication = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallApplication",
         type: "info",
-        message: `O executável ${colors.bold(executable)} do pacote ${colors.bold(path.basename(packageNamespace))} foi instalado!`
+        message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi instalado!`
     })
 
     return fullScriptPath
