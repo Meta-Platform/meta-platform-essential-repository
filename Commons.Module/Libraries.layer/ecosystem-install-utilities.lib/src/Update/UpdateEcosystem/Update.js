@@ -1,6 +1,6 @@
 const path = require("path")
 
-const RestoreEcosystemStructure = require("../../Helpers/RestoreEcosystemStructure")
+const RestoreEcosystemStructure = require("../../Domains/RestoreEcosystemStructure")
 const UpdatePackageExecutor = require("./UpdatePackageExecutor")
 const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
 

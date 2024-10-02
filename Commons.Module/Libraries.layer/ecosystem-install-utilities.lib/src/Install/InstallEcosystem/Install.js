@@ -7,7 +7,7 @@ const CreatePackageExecutableScript             = require("../../../../script-fi
 const GetApplicationExecutionContent            = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
 const GetCommandLineApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")
 
-const ConstructEcosystemStructure     = require("../../Helpers/ConstructEcosystemStructure")
+const ConstructEcosystemStructure     = require("../../Domains/ConstructEcosystemStructure")
 const InstallPackageExecutor          = require("./InstallPackageExecutor")
 const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
 
