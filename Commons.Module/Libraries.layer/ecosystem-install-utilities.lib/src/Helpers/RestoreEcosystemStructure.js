@@ -5,9 +5,20 @@ const {
     mkdir
 } = require('node:fs/promises')
 
-const BuildObjectFromPrefix = require("../Helpers/BuildObjectFromPrefix")
+const FilterStringsWithPrefix = (array, prefix) => 
+    array.filter(str => str.startsWith(prefix))
 
-const ConstructEcosystemStructure = async ({
+const BuildObjectFromPrefix = (object, prefixAttribute) => {
+    const allKeys = Object.keys(object)
+    const filteredKeys = FilterStringsWithPrefix(allKeys, prefixAttribute)
+    const newObject = filteredKeys.reduce((acc, key) => {
+        return {...acc, [key]: object[key]}
+    }, {})
+
+    return newObject
+}
+
+const RestoreEcosystemStructure = async ({
     ECO_DIRPATH_INSTALL_DATA,
     ecosystemDefaults,
     loggerEmitter
@@ -18,7 +29,7 @@ const ConstructEcosystemStructure = async ({
     try{
         await mkdir(ECO_DIRPATH_INSTALL_DATA, { recursive: true })
         loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "ConstructEcosystemStructure",
+            sourceName: "RestoreEcosystemStructure",
             type: "info",
             message: `o diretório de dados do ecosistema criado com sucesso em ${ECO_DIRPATH_INSTALL_DATA}`
         })
@@ -44,4 +55,4 @@ const ConstructEcosystemStructure = async ({
     }
 }
 
-module.exports = ConstructEcosystemStructure
+module.exports = RestoreEcosystemStructure

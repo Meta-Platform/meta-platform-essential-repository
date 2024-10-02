@@ -1,12 +1,10 @@
 /*const path = require("path")
 
-const UpdateEcosystem          = require("./Update/UpdateEcosystem")
 const UpdateNodejsDependencies = require("./Update/UpdateNodejsDependencies")
 const UpdateRepository         = require("./Update/UpdateRepository")*/
 
-
-const ConvertPathToAbsolutPath = require("./Helpers/ConvertPathToAbsolutPath")
-const PrepareContext = require("./Helpers/PrepareContext")
+const UpdateEcosystem = require("./Update/UpdateEcosystem")
+const PrepareContext  = require("./Helpers/PrepareContext")
 
 const UpdateEcosystemByProfile = async ({
     ecosystemDefaults,

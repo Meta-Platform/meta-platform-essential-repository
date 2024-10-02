@@ -1,11 +1,11 @@
 const path = require("path")
 
-const ConstructEcosystemStructure = require("../../Helpers/ConstructEcosystemStructure")
+const RestoreEcosystemStructure = require("../../Helpers/RestoreEcosystemStructure")
 const UpdatePackageExecutor = require("./UpdatePackageExecutor")
 const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
 
-const CreatePackageExecutableScript = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
-const GetApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
+const CreatePackageExecutableScript             = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
+const GetApplicationExecutionContent            = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
 const GetCommandLineApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")
 
 const Update = async ({
@@ -14,7 +14,13 @@ const Update = async ({
     loggerEmitter
 }) => {
 
-    await ConstructEcosystemStructure({
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallEcosystem",
+        type: "info",
+        message: `Atualizando o ecosistema...`
+    })
+
+    await RestoreEcosystemStructure({
         ECO_DIRPATH_INSTALL_DATA,
         ecosystemDefaults,
         loggerEmitter

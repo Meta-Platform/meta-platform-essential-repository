@@ -20,7 +20,7 @@ const Install = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallEcosystem",
         type: "info",
-        message: `Instalando ecosistema...`
+        message: `Instalando o ecosistema...`
     })
 
     await ConstructEcosystemStructure({
