@@ -1,10 +1,12 @@
-const path = require("path")
+/*const path = require("path")
 
 const UpdateEcosystem          = require("./Update/UpdateEcosystem")
 const UpdateNodejsDependencies = require("./Update/UpdateNodejsDependencies")
-const UpdateRepository         = require("./Update/UpdateRepository")
+const UpdateRepository         = require("./Update/UpdateRepository")*/
+
 
 const ConvertPathToAbsolutPath = require("./Helpers/ConvertPathToAbsolutPath")
+const PrepareContext = require("./Helpers/PrepareContext")
 
 const UpdateEcosystemByProfile = async ({
     ecosystemDefaults,
@@ -14,28 +16,30 @@ const UpdateEcosystemByProfile = async ({
     loggerEmitter
 }) => {
 
-    const { 
-        REPOS_CONF_FILENAME_REPOS_DATA,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-        ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-        ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
-        ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES
-    } = ecosystemDefaults
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "InstallEcosystemByProfile",
+        type: "info",
+        message: `Inicio da atualização usando o perfil ${colors.bold(path.basename(profile))}`
+    })
+
+    const context = PrepareContext({
+        installationProfile,
+        ecosystemDefaults,
+        installationPath
+    })
 
     const {
-        installationDataDir,
-        repositoriesToInstall
-    } = installationProfile
-
-    const ECO_DIRPATH_INSTALL_DATA = ConvertPathToAbsolutPath(installationPath || installationDataDir)
+        absolutInstallDataDirPath,
+        npmDependenciesContextPath
+    } = context
 
     await UpdateEcosystem({
         ecosystemDefaults,
-        ECO_DIRPATH_INSTALL_DATA,
+        ECO_DIRPATH_INSTALL_DATA: absolutInstallDataDirPath,
         loggerEmitter
     })
 
-    await UpdateNodejsDependencies({
+    /*await UpdateNodejsDependencies({
         contextPath: path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES),
         dependencies: npmDependencies
     })
@@ -52,7 +56,7 @@ const UpdateEcosystemByProfile = async ({
                 loggerEmitter
             })
         }
-    }
+    }*/
 }
 
 module.exports = UpdateEcosystemByProfile
