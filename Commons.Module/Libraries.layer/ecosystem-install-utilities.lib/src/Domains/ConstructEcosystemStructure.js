@@ -20,7 +20,7 @@ const ConstructEcosystemStructure = async ({
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "ConstructEcosystemStructure",
             type: "info",
-            message: `o diretório de dados do ecosistema criado com sucesso em ${ECO_DIRPATH_INSTALL_DATA}`
+            message: `o diretório de dados do ecosistema criado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
         })
 
         for (const configKey of Object.keys(ecosystemDefaultsConfDirname)) {
@@ -34,11 +34,15 @@ const ConstructEcosystemStructure = async ({
         }
 
     } catch (e){
-        console.log(e)
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "ConstructEcosystemStructure",
             type: "error",
-            message: `erro ao criar diretório de dados do ecosistema ${ECO_DIRPATH_INSTALL_DATA}`
+            message: `erro ao criar diretório de dados do ecosistema ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
+        })
+        loggerEmitter && loggerEmitter.emit("log", {
+            sourceName: "ConstructEcosystemStructure",
+            type: "warning",
+            message: `Verifique se o ecosistema já esta instalado.`
         })
         throw e
     }

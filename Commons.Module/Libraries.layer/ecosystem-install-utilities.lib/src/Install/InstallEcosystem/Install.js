@@ -20,7 +20,7 @@ const Install = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallEcosystem",
         type: "info",
-        message: `Instalando o ecosistema...`
+        message: `Iniciando a instalação do ecosistema...`
     })
 
     await ConstructEcosystemStructure({
@@ -69,8 +69,9 @@ const Install = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallEcosystem",
         type: "info",
-        message: `Ecosistem instalado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
+        message: `Ecosistema instalado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
     })
+    
 
 }
 
