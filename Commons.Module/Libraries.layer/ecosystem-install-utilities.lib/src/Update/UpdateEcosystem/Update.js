@@ -1,12 +1,12 @@
 const path = require("path")
 
 const RestoreEcosystemStructure = require("../../Domains/RestoreEcosystemStructure")
-const UpdatePackageExecutor = require("./UpdatePackageExecutor")
+/*const UpdatePackageExecutor = require("./UpdatePackageExecutor")
 const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
 
 const CreatePackageExecutableScript             = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
 const GetApplicationExecutionContent            = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
-const GetCommandLineApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")
+const GetCommandLineApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")*/
 
 const Update = async ({
     ecosystemDefaults,
@@ -25,7 +25,7 @@ const Update = async ({
         ecosystemDefaults,
         loggerEmitter
     })
-
+/*
     await CreateEcosystemDefaultsJsonFile({
         ECO_DIRPATH_INSTALL_DATA, 
         ecosystemDefaults,
@@ -58,7 +58,7 @@ const Update = async ({
         packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
         executableScriptFilename:"execute-command-line-application"
-    })
+    })*/
 
 }
 

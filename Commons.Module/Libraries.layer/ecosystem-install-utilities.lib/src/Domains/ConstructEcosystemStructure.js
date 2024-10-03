@@ -20,16 +20,23 @@ const ConstructEcosystemStructure = async ({
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "ConstructEcosystemStructure",
             type: "info",
-            message: `o diretório de dados do ecosistema criado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
+            message: `O diretório de dados do ecosistema criado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
         })
 
         for (const configKey of Object.keys(ecosystemDefaultsConfDirname)) {
+
+            loggerEmitter && loggerEmitter.emit("log", {
+                sourceName: "ConstructEcosystemStructure",
+                type: "info",
+                message: `Verificando configuração ${colors.bold(configKey)}`
+            })
+            
            const dirname = ecosystemDefaultsConfDirname[configKey]
            await mkdir(resolve(ECO_DIRPATH_INSTALL_DATA, dirname))
            loggerEmitter && loggerEmitter.emit("log", {
                 sourceName: "ConstructEcosystemStructure",
                 type: "info",
-                message: `configuração ${ colors.bold(configKey)}: o subdiretório ${ colors.bold(dirname)} criado com sucesso!`
+                message: `Configuração ${ colors.bold(configKey)}: o subdiretório ${ colors.bold(dirname)} criado com sucesso!`
             })
         }
 

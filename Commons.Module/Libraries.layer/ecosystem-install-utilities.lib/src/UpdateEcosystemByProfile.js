@@ -1,7 +1,12 @@
-/*const path = require("path")
+const path = require("path")
+
+/*
 
 const UpdateNodejsDependencies = require("./Update/UpdateNodejsDependencies")
 const UpdateRepository         = require("./Update/UpdateRepository")*/
+
+const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
+const colors = SmartRequire("colors")
 
 const UpdateEcosystem = require("./Update/UpdateEcosystem")
 const PrepareContext  = require("./Helpers/PrepareContext")
@@ -11,6 +16,7 @@ const UpdateEcosystemByProfile = async ({
     npmDependencies,
     installationProfile,
     installationPath,
+    profile,
     loggerEmitter
 }) => {
 
