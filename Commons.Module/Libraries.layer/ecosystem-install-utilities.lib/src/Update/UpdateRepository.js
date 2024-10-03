@@ -1,31 +1,45 @@
 const path = require("path")
-const os = require('os')
+const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
+const colors = SmartRequire("colors")
+const RegisterRepository = require("../../../register-repository.lib/src/RegisterRepository")
 
 const InstallApplication = require("./InstallApplication")
-const RegisterRepository = require("../../register-repository.lib/src/RegisterRepository")
-
-const DownloadRepository = require("./DownloadRepository")
+const DownloadRepository = require("../Helpers/DownloadRepository")
 
 const UpdateRepository = async ({
     repositoryToInstall,
     ECO_DIRPATH_INSTALL_DATA,
-    ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-    ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-    ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
-    REPOS_CONF_FILENAME_REPOS_DATA,
+    ecosystemDefaults,
     loggerEmitter
 }) => {
+
+
+    const { 
+        REPOS_CONF_FILENAME_REPOS_DATA,
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
+        ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
+    } = ecosystemDefaults
+
     const {
         repository:{
-            namespace
+            namespace,
+            source
         },
         appsToInstall
     } = repositoryToInstall
 
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "UpdateRepository",
+        type: "info",
+        message: `Instalando o repositório ${colors.bold(namespace)}...`
+    })
+
     const deployedRepoPath = await DownloadRepository({
         repositoryToInstall,
         ECO_DIRPATH_INSTALL_DATA,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        loggerEmitter
     })
 
     await RegisterRepository({
@@ -40,7 +54,6 @@ const UpdateRepository = async ({
 
     if(appsToInstall){
         for (const appToInstall of appsToInstall) {
-
             await InstallApplication({
                 namespace,
                 appToInstall,
@@ -51,6 +64,12 @@ const UpdateRepository = async ({
             })
         }
     }
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "UpdateRepository",
+        type: "info",
+        message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(source.type)}] foi concluída!`
+    })
 }
 
 module.exports = UpdateRepository

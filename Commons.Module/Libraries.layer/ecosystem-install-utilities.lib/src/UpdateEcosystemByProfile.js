@@ -1,14 +1,10 @@
 const path = require("path")
 
-/*
-
-const UpdateNodejsDependencies = require("./Update/UpdateNodejsDependencies")
-const UpdateRepository         = require("./Update/UpdateRepository")*/
-
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
 const UpdateEcosystem = require("./Update/UpdateEcosystem")
+const UpdateRepository = require("./Update/UpdateRepository")
 const PrepareContext  = require("./Helpers/PrepareContext")
 const SynchronizeNodejsDependencies = require("./Helpers/SynchronizeNodejsDependencies")
 
@@ -50,21 +46,20 @@ const UpdateEcosystemByProfile = async ({
         loggerEmitter
     })
 
-    /*
-
-    if(repositoriesToInstall){
+    if(installationProfile?.repositoriesToInstall){
+        const {
+            repositoriesToInstall
+        } = installationProfile
+    
         for (const repositoryToInstall of repositoriesToInstall) {
             await UpdateRepository({
                 repositoryToInstall,
-                ECO_DIRPATH_INSTALL_DATA,
-                ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-                ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-                ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
-                REPOS_CONF_FILENAME_REPOS_DATA,
+                ECO_DIRPATH_INSTALL_DATA: absolutInstallDataDirPath,
+                ecosystemDefaults,
                 loggerEmitter
             })
         }
-    }*/
+    }
 }
 
 module.exports = UpdateEcosystemByProfile
