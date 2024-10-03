@@ -3,11 +3,11 @@ const path = require("path")
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
-const InstallEcosystem          = require("./Install/InstallEcosystem")
-const InstallNodejsDependencies = require("./Install/InstallNodejsDependencies")
-const InstallRepository         = require("./Install/InstallRepository")
+const InstallEcosystem = require("./Install/InstallEcosystem")
+const InstallRepository = require("./Install/InstallRepository")
 
-const PrepareContext            = require("./Helpers/PrepareContext")
+const SynchronizeNodejsDependencies = require("./Helpers/SynchronizeNodejsDependencies")
+const PrepareContext                = require("./Helpers/PrepareContext")
 
 const InstallEcosystemByProfile = async ({
     ecosystemDefaults,
@@ -41,7 +41,7 @@ const InstallEcosystemByProfile = async ({
         loggerEmitter
     })
 
-    await InstallNodejsDependencies({
+    await SynchronizeNodejsDependencies({
         contextPath: npmDependenciesContextPath,
         dependencies: npmDependencies,
         loggerEmitter

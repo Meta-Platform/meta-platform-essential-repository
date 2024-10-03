@@ -10,6 +10,7 @@ const colors = SmartRequire("colors")
 
 const UpdateEcosystem = require("./Update/UpdateEcosystem")
 const PrepareContext  = require("./Helpers/PrepareContext")
+const SynchronizeNodejsDependencies = require("./Helpers/SynchronizeNodejsDependencies")
 
 const UpdateEcosystemByProfile = async ({
     ecosystemDefaults,
@@ -43,10 +44,13 @@ const UpdateEcosystemByProfile = async ({
         loggerEmitter
     })
 
-    /*await UpdateNodejsDependencies({
-        contextPath: path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES),
-        dependencies: npmDependencies
+    await SynchronizeNodejsDependencies({
+        contextPath: npmDependenciesContextPath,
+        dependencies: npmDependencies,
+        loggerEmitter
     })
+
+    /*
 
     if(repositoriesToInstall){
         for (const repositoryToInstall of repositoriesToInstall) {

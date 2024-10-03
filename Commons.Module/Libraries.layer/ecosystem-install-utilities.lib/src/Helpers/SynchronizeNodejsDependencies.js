@@ -2,19 +2,19 @@ const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 const Arborist = SmartRequire("@npmcli/arborist")
 
-const InstallNodejsDependencies = async ({
+const SynchronizeNodejsDependencies = async ({
     contextPath, 
     dependencies,
     loggerEmitter
 }) => {
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallNodejsDependencies",
-        type: "info",
-        message: `Início da instalação das dependências NPM ...`
+        sourceName: "SynchronizeNodejsDependencies",
+        type: "warning",
+        message: `Sincronizando dependências NPM ...`
     }) && loggerEmitter.emit("log", {
-        sourceName: "InstallNodejsDependencies",
-        type: "info",
+        sourceName: "SynchronizeNodejsDependencies",
+        type: "warning",
         message: `Contexto da instalação ${colors.bold(contextPath)}`
     })
 
@@ -27,10 +27,10 @@ const InstallNodejsDependencies = async ({
     await arborist.reify({add:dependenciesForAdd})
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallNodejsDependencies",
+        sourceName: "SynchronizeNodejsDependencies",
         type: "info",
-        message: `As dependências NPM ${dependenciesForAdd.join(", ")} foram instaladas com sucesso!`
+        message: `As dependências NPM ${dependenciesForAdd.join(", ")} foram sincronizadas com sucesso!`
     })
 }
 
-module.exports = InstallNodejsDependencies
+module.exports = SynchronizeNodejsDependencies
