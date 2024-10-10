@@ -1,10 +1,12 @@
 const path = require("path")
+
 const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
-const RegisterRepository = require("../../../register-repository.lib/src/RegisterRepository")
 
-const InstallApplication = require("./InstallApplication")
+const ReinstallApplication = require("./ReinstallApplication")
 const DownloadRepository = require("../Helpers/DownloadRepository")
+
+const CleanOldRepository = require("../Helpers/CleanOldRepository")
 
 const UpdateRepository = async ({
     repositoryToInstall,
@@ -22,17 +24,23 @@ const UpdateRepository = async ({
     } = ecosystemDefaults
 
     const {
-        repository:{
-            namespace,
-            source
-        },
+        repository:repositoryData,
         appsToInstall
     } = repositoryToInstall
+
+    const { namespace } = repositoryData
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
         type: "info",
-        message: `Instalando o repositório ${colors.bold(namespace)}...`
+        message: `Atualizando o repositório ${colors.bold(namespace)}...`
+    })
+
+    await CleanOldRepository({
+        repositoryData,
+        ECO_DIRPATH_INSTALL_DATA,
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        loggerEmitter
     })
 
     const deployedRepoPath = await DownloadRepository({
@@ -42,34 +50,27 @@ const UpdateRepository = async ({
         loggerEmitter
     })
 
-    await RegisterRepository({
-        namespace, 
-        path : path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, namespace), 
-        ECO_DIRPATH_INSTALL_DATA,
-        REPOS_CONF_FILENAME_REPOS_DATA,
-        loggerEmitter
-    })
-    
-    const SUPERVISOR_SOCKET_DIR_PATH = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
-
     if(appsToInstall){
+        const supervisorSocketDirPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
-            await InstallApplication({
+            await ReinstallApplication({
                 namespace,
                 appToInstall,
                 ECO_DIRPATH_INSTALL_DATA,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-                SUPERVISOR_SOCKET_DIR_PATH,
+                supervisorSocketDirPath,
                 loggerEmitter
             })
         }
     }
 
+    /*
+
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
         type: "info",
         message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(source.type)}] foi concluída!`
-    })
+    })*/
 }
 
 module.exports = UpdateRepository

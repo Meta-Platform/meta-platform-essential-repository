@@ -6,12 +6,12 @@ const CreateExecutableScript = require("../../../script-file-utilities.lib/src/C
 const BuildApplicationScriptContent = require("../Helpers/BuildApplicationScriptContent")
 const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildCommandLineApplicationScriptContent")
 
-const UpdateApplication = async ({
+const ReinstallApplication = async ({
     namespace,
     appToInstall,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-    SUPERVISOR_SOCKET_DIR_PATH,
+    supervisorSocketDirPath,
     loggerEmitter
 }) => {
 
@@ -25,9 +25,9 @@ const UpdateApplication = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateApplication",
         type: "info",
-        message: `Inicio da instalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
+        message: `Inicio da reinstalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
     })
-
+/*
     if(!appType) {
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "UpdateApplication",
@@ -67,7 +67,7 @@ const UpdateApplication = async ({
         message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi instalado!`
     })
 
-    return fullScriptPath
+    return fullScriptPath*/
 }
 
-module.exports = UpdateApplication
+module.exports = ReinstallApplication

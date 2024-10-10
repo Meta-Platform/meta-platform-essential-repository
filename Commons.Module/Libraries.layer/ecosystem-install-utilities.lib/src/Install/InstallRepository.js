@@ -49,17 +49,16 @@ const InstallRepository = async ({
         REPOS_CONF_FILENAME_REPOS_DATA,
         loggerEmitter
     })
-    
-    const SUPERVISOR_SOCKET_DIR_PATH = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
 
     if(appsToInstall){
+        const supervisorSocketDirPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
             await InstallApplication({
                 namespace,
                 appToInstall,
                 ECO_DIRPATH_INSTALL_DATA,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-                SUPERVISOR_SOCKET_DIR_PATH,
+                supervisorSocketDirPath,
                 loggerEmitter
             })
         }

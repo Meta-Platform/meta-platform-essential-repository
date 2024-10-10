@@ -11,7 +11,7 @@ const InstallApplication = async ({
     appToInstall,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-    SUPERVISOR_SOCKET_DIR_PATH,
+    supervisorSocketDirPath,
     loggerEmitter
 }) => {
 
@@ -43,7 +43,7 @@ const InstallApplication = async ({
         message: `Instalando do executável ${colors.bold(executable)} do tipo ${appType}`
     })
 
-    const SUPERVISOR_SOCKET_FILE_PATH = path.join(SUPERVISOR_SOCKET_DIR_PATH, supervisorSocketFileName)
+    const SUPERVISOR_SOCKET_FILE_PATH = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
     const scriptContent = appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
