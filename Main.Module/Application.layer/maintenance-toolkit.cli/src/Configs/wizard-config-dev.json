@@ -1,0 +1,6 @@
+{
+    "NPM_DEPENDENCIES_DIRNAME": "meta-platform-setup-wizard-npm-dependencies",
+    "MINIMUM_REPO_NAMESPACE": "EssentialRepo",
+    "MINIMUM_REPO_SOURCE_TYPE": "LOCAL_FS",
+    "MINIMUM_REPO_PATH": "~/Workspaces/meta-platform-repo/repos/meta-platform-essential-repository"
+}
