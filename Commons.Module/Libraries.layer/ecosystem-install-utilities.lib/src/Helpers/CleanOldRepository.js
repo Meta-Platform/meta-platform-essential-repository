@@ -2,17 +2,25 @@ const fs = require('fs/promises')
 const path = require('path')
 
 const CleanOldRepository = async ({
-    repositoryData,
+    namespace,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
     loggerEmitter
 }) => {
     try {
-
-        const { namespace } = repositoryData
-
         const allReposPath = path.resolve(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
         const repoPath = path.resolve(allReposPath, namespace)
+
+        try {
+            await fs.access(repoPath)
+        } catch {
+            loggerEmitter && loggerEmitter.emit("log", {
+                sourceName: "CleanOldRepository",
+                type: "info",
+                message: `O diretório ${repoPath} não existe.`
+            })
+            return
+        }
 
         const dirExists = await fs.stat(repoPath)
 

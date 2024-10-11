@@ -21,7 +21,7 @@ const InstallEcosystemByProfile = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallEcosystemByProfile",
         type: "info",
-        message: `Inicio de instalação usando o perfil ${colors.bold(path.basename(profile))}`
+        message: `Início de instalação usando o perfil ${colors.bold(path.basename(profile))}`
     })
 
     const context = PrepareContext({

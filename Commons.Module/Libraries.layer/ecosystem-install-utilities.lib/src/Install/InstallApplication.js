@@ -25,7 +25,7 @@ const InstallApplication = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallApplication",
         type: "info",
-        message: `Inicio da instalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
+        message: `Início da instalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
     })
 
     if(!appType) {
@@ -43,19 +43,19 @@ const InstallApplication = async ({
         message: `Instalando do executável ${colors.bold(executable)} do tipo ${appType}`
     })
 
-    const SUPERVISOR_SOCKET_FILE_PATH = path.join(supervisorSocketDirPath, supervisorSocketFileName)
+    const supervisorSocketFilePath = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
     const scriptContent = appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_NAMESPACE: namespace,
             EXEC_NAME: executable,
-            SUPERVISOR_SOCKET_FILE_PATH
+            supervisorSocketFilePath
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_NAMESPACE: namespace,
-            SUPERVISOR_SOCKET_FILE_PATH
+            supervisorSocketFilePath
         })
     
     const fullScriptPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)

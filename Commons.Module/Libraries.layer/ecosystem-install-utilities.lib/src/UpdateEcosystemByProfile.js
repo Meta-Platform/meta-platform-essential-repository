@@ -20,9 +20,9 @@ const UpdateEcosystemByProfile = async ({
 }) => {
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallEcosystemByProfile",
+        sourceName: "UpdateEcosystemByProfile",
         type: "info",
-        message: `Inicio da atualização usando o perfil ${colors.bold(path.basename(profile))}`
+        message: `Início da atualização usando o perfil ${colors.bold(path.basename(profile))}`
     })
 
     const context = PrepareContext({
@@ -77,6 +77,13 @@ const UpdateEcosystemByProfile = async ({
             throw "Os repositórios instalados não correspondem com o perfil selecionado"
         }
     }
+
+
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "UpdateEcosystemByProfile",
+        type: "info",
+        message: `Fim da atualização do perfil ${colors.bold(path.basename(profile))}!`
+    })
 }
 
 module.exports = UpdateEcosystemByProfile

@@ -15,9 +15,7 @@ const UpdateRepository = async ({
     loggerEmitter
 }) => {
 
-
     const { 
-        REPOS_CONF_FILENAME_REPOS_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
         ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
@@ -28,7 +26,10 @@ const UpdateRepository = async ({
         appsToInstall
     } = repositoryToInstall
 
-    const { namespace } = repositoryData
+    const { 
+        namespace,
+        source
+    } = repositoryData
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
@@ -37,7 +38,7 @@ const UpdateRepository = async ({
     })
 
     await CleanOldRepository({
-        repositoryData,
+        namespace,
         ECO_DIRPATH_INSTALL_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
@@ -64,13 +65,11 @@ const UpdateRepository = async ({
         }
     }
 
-    /*
-
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
         type: "info",
-        message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(source.type)}] foi concluída!`
-    })*/
+        message: `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(source.type)}] foi concluída!`
+    })
 }
 
 module.exports = UpdateRepository

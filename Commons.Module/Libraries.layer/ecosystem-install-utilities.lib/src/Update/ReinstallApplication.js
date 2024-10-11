@@ -2,7 +2,7 @@ const path = require("path")
 
 const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
-const CreateExecutableScript = require("../../../script-file-utilities.lib/src/CreateExecutableScript")
+const RecreateExecutableScript = require("../../../script-file-utilities.lib/src/RecreateExecutableScript")
 const BuildApplicationScriptContent = require("../Helpers/BuildApplicationScriptContent")
 const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildCommandLineApplicationScriptContent")
 
@@ -23,14 +23,14 @@ const ReinstallApplication = async ({
     } = appToInstall
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UpdateApplication",
+        sourceName: "ReinstallApplication",
         type: "info",
-        message: `Inicio da reinstalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
+        message: `Início da reinstalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
     })
-/*
+
     if(!appType) {
         loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "UpdateApplication",
+            sourceName: "ReinstallApplication",
             type: "error",
             message: `appToInstall.appType é obrigatório`
         })
@@ -38,36 +38,36 @@ const ReinstallApplication = async ({
     }
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UpdateApplication",
+        sourceName: "ReinstallApplication",
         type: "info",
-        message: `Instalando do executável ${colors.bold(executable)} do tipo ${appType}`
+        message: `Reinstalando executável ${colors.bold(executable)} do tipo ${appType}`
     })
 
-    const SUPERVISOR_SOCKET_FILE_PATH = path.join(SUPERVISOR_SOCKET_DIR_PATH, supervisorSocketFileName)
+    const supervisorSocketFilePath = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
     const scriptContent = appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_NAMESPACE: namespace,
             EXEC_NAME: executable,
-            SUPERVISOR_SOCKET_FILE_PATH
+            supervisorSocketFilePath
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_NAMESPACE: namespace,
-            SUPERVISOR_SOCKET_FILE_PATH
+            supervisorSocketFilePath
         })
     
-    const fullScriptPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
-    await CreateExecutableScript(fullScriptPath, scriptContent, loggerEmitter)
+        const fullScriptPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
+        await RecreateExecutableScript(fullScriptPath, scriptContent, loggerEmitter)
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UpdateApplication",
-        type: "info",
-        message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi instalado!`
-    })
+        loggerEmitter && loggerEmitter.emit("log", {
+            sourceName: "ReinstallApplication",
+            type: "info",
+            message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi reinstalado!`
+        })
 
-    return fullScriptPath*/
+        return fullScriptPath
 }
 
 module.exports = ReinstallApplication
