@@ -5,14 +5,13 @@ const NPM_DEPENDENCIES =  require("../Configs/npm-dependencies.json")
 
 const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfiles")
 
+const PrintDataLog = require("../../../../../Commons.Module/Libraries.layer/print-data-log.lib/src/PrintDataLog")
+const UpdateEcosystemByProfile = require("../../../../../Commons.Module/Libraries.layer/ecosystem-install-utilities.lib/src/UpdateEcosystemByProfile")
+
 const Updater = async ({ 
     profile, 
-    installationPath,
-    LoaderScript
+    installationPath
 }) => {
-    
-    const PrintDataLog = LoaderScript("print-data-log.lib/src/PrintDataLog")
-    const UpdateEcosystemByProfile = LoaderScript("ecosystem-install-utilities.lib/src/UpdateEcosystemByProfile")
 
     const installationProfiles = LoadAllInstalationProfiles()
     
