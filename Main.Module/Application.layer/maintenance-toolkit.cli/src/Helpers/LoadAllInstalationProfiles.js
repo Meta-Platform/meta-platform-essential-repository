@@ -1,6 +1,3 @@
-
-
-
 const LoadAllInstalationProfiles = () => {
 
     const INSTALLATION_PROFILES = {
