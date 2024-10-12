@@ -32,6 +32,32 @@
         ]
     },
     {
+        "namespace": "Update",
+        "path": "Commands/Update.command",
+        "command" : "update [profile]",
+        "description": "Atualizar um ecosistema conforme o perfil especificado",
+        "parameters": [
+            {
+                "key":"profile",
+                "paramType":"positional",
+                "valueType":"string",
+                "describe":"perfil de instalação"
+            },
+            {
+                "key":"profile-file",
+                "paramType":"option",
+                "valueType":"string",
+                "describe":"endereço do arquivo de perfil de instalação"
+            },
+            {
+                "key":"installation-path",
+                "paramType":"option",
+                "valueType":"string",
+                "describe":"local aonde a plataforma será atualizada"
+            }
+        ]
+    },
+    {
         "namespace": "Show",
         "command" : "show",
         "description": "Comandos relacionados à visualização de informações",
