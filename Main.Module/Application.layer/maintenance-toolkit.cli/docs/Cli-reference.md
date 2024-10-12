@@ -22,8 +22,16 @@ Comando: `mytoolkit list-profiles`
 
 ---
 
-**Instalar Ecossistema na Pasta Padrão do Usuário**  
+**Instalar Ecossistema**  
 Comando: `mytoolkit install`
+
+Opções:
+- `--profile <nome_do_perfil>`  
+- `--installation-path "<caminho_para_dados>"`
+
+---
+**Atualizar Ecossistema**  
+Comando: `mytoolkit update`
 
 Opções:
 - `--profile <nome_do_perfil>`  

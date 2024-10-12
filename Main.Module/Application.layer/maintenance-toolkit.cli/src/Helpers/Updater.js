@@ -5,22 +5,22 @@ const NPM_DEPENDENCIES =  require("../Configs/npm-dependencies.json")
 
 const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfiles")
 
-const Installer = async ({ 
+const Updater = async ({ 
     profile, 
     installationPath,
     LoaderScript
 }) => {
     
     const PrintDataLog = LoaderScript("print-data-log.lib/src/PrintDataLog")
-    const InstallEcosystemByProfile = LoaderScript("ecosystem-install-utilities.lib/src/InstallEcosystemByProfile")
+    const UpdateEcosystemByProfile = LoaderScript("ecosystem-install-utilities.lib/src/UpdateEcosystemByProfile")
 
     const installationProfiles = LoadAllInstalationProfiles()
     
     const loggerEmitter = new EventEmitter()
-	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "setup-wizard - Installer"))
+	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "setup-wizard - Updater"))
 
     try{
-        await InstallEcosystemByProfile({
+        await UpdateEcosystemByProfile({
             ecosystemDefaults : ECOSYSTEM_DEFAULTS,
             npmDependencies : NPM_DEPENDENCIES,
             installationProfile : installationProfiles[profile],
@@ -29,14 +29,21 @@ const Installer = async ({
             loggerEmitter
         })
     } catch(e){
+       
         loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "Installer",
+            sourceName: "Updater",
             type: "error",
-            message: `A instalação cancelada!`
+            message: e
         })
-        console.error(e)
+
+        loggerEmitter && loggerEmitter.emit("log", {
+            sourceName: "Updater",
+            type: "error",
+            message: `A atualização cancelada!`
+        })
+
+        throw e
     }
-    
 }
 
-module.exports = Installer
+module.exports = Updater
