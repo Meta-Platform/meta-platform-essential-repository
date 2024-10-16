@@ -1,9 +1,9 @@
+const path = require("path")
+
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 
 const grpc = SmartRequire('@grpc/grpc-js')
 const protoLoader = SmartRequire('@grpc/proto-loader')
-
-const { resolve, join } = require("path")
 
 const ConvertTaskResponseToTask = require("./ConvertTaskResponseToTask")
 
@@ -15,7 +15,7 @@ const ConvertTaskListResponsetoTaskList = (response) => {
     return tasksList.map((response) => ConvertTaskResponseToTask(response))
 }
 
-const PROTO_PATH = join(__dirname, "..", "IDL", "PackageExecutorRPCSpec.proto")
+const PROTO_PATH = path.join(__dirname, "..", "IDL", "PackageExecutorRPCSpec.proto")
 
 const PackageExecutorRPCSDefinition = protoLoader.loadSync(PROTO_PATH, {
 	keepCase: true,
@@ -33,9 +33,7 @@ const PackageExecutorRPCService = PackageExecutorGrpcObject.PackageExecutorRPCSp
 const CreateClient = (socketFilePath) => 
     new PackageExecutorRPCService(`unix:${socketFilePath}`, grpc.credentials.createInsecure())
 
-const CreateCommunicationInterface = async (socketFilename) => {
-
-    const socketFilePath = resolve(process.env.SUPERVISOR_SOCKETS_DIRPATH, socketFilename)
+const CreateCommunicationInterface = async (socketFilePath) => {
 
     const daemonClient = await CreateClient(socketFilePath)
     
