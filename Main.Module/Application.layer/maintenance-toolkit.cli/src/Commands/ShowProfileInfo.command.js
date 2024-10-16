@@ -1,5 +1,8 @@
 
-const ShowProfileInfoCommand = async ({ profile }) => {
+const ShowProfileInfoCommand = async ({ args }) => {
+    
+    const { profile } = args
+
     const INSTALL_PROFILES = {
         "dev-minimal": require("../InstallationProfiles/dev-minimal.install.json"),
         "dev-standard": require("../InstallationProfiles/dev-standard.install.json"),
