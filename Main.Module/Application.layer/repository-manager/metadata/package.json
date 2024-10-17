@@ -1,9 +1,0 @@
-{
-    "namespace": "@/setup-wizard.cli",
-    "executables": [
-        {
-            "executableName": "mytoolkit",
-            "commands": "ExecutableDefinitions/mytoolkit.commandGroup.json"
-        }
-    ]
-}

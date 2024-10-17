@@ -1,0 +1,8 @@
+[
+    {
+        "namespace": "ListSources",
+        "path": "Commands/ListSources.command",
+        "command" : "list sources",
+        "description": "Listar fontes de instalção de repositórios"
+    }
+]

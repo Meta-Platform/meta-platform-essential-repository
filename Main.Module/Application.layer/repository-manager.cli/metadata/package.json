@@ -1,0 +1,9 @@
+{
+    "namespace": "@/repository-manager.cli",
+    "executables": [
+        {
+            "executableName": "repo",
+            "commands": "ExecutableDefinitions/repo.commandGroup.json"
+        }
+    ]
+}

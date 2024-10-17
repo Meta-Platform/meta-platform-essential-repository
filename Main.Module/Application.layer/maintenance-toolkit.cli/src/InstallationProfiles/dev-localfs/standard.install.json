@@ -49,7 +49,7 @@
                     "appType":"CLI",
                     "executable":"repoex",
                     "packageNamespace":"Main.Module/Application.layer/repository-explorer.cli",
-                    "supervisorSocketFileName":"myrepo.sock"
+                    "supervisorSocketFileName":"repoex.sock"
                 },
                 {
                     "appType":"CLI",
