@@ -2,30 +2,20 @@ const colors = require("colors")
 const SOURCES = require("../Configs/repository-sources.json")
 
 const ListSourcesCommand = async () => {  
-
-    console.log(`\n${colors.underline.bold("Lista de fontes de repositórios")}\n`)
-
     Object.entries(SOURCES)
     .forEach(([repositoryNamespace, sources]) => {
-        
-        console.log(`\t${colors.bold(repositoryNamespace)}`)
+        console.log("\n================================================================================")
+        console.log(`\n  ${colors.bold(repositoryNamespace)} \n`)
         sources.forEach((source) => {
-
-            const { sourceType } = source
-
-            const renderOutputInfo = sourceType === "LOCAL_FS"
-             ? source.path
-             : sourceType === "GITHUB_RELEASE"
-                ? `${source.repositoryOwner}/${source.repositoryName}`
-                : sourceType === "GOOGLE_DRIVE"
-                    ? source.fileId
-                    : ""
-
-            console.log(`\t\t${colors.italic.inverse(` ${sourceType} `)} ${colors.dim(renderOutputInfo)}`)
+            console.log('  ----------------------------------------------------------------------------')  
+            const paramsNameList = Object.keys(source)
+            paramsNameList.forEach((paramName) => {
+                const paramValueRender = paramName !== "sourceType" ? colors.dim(source[paramName]) : colors.bold(source[paramName])
+                console.log(`   ${colors.italic(paramName)} ${colors.bold("->")} ${paramValueRender}`)
+            })
         })
-
+        console.log("\n================================================================================\n")
     })
-    
 }
 
 module.exports = ListSourcesCommand

@@ -2,7 +2,7 @@
     {
         "namespace": "ListSources",
         "path": "Commands/ListSources.command",
-        "command" : "list sources",
+        "command" : "sources",
         "description": "Listar fontes de instalção de repositórios"
     }
 ]
