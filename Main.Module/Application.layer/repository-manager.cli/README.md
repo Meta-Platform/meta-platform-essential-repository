@@ -14,3 +14,13 @@ O **Repository Manager Command-Line** é responsável por todo o gerenciamento e
 - **Gerenciamento Completo de Repositórios**: Controle total sobre a instalação, atualização e remoção de repositórios.
 - **Suporte a Múltiplas Fontes**: Capacidade de registrar e gerenciar repositórios de diferentes fontes e tipos.
 
+
+
+## Comandos
+
+### Mostra informações sobre fontes
+Exibe todas as informações sobre todas as fontes de repositórios disponiveis para instalação
+
+```bash
+repo sources
+```
