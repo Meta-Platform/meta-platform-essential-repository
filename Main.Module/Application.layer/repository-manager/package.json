@@ -1,0 +1,9 @@
+{
+  "name": "repository-manager.cli",
+  "version": "0.0.2",
+  "description": "Gerenciador de repositórios",
+  "author": "Kaio Cezar <kadisk.shark@gmail.com>",
+  "dependencies": {
+    "@npmcli/arborist": "^7.5.3"
+  }
+}

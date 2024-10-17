@@ -1,7 +1,20 @@
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 
 const colors = SmartRequire("colors")
-const GetColorLogByType = require("./GetColorLogByType")
+const GetColorLogByType = (type) => {
+    switch(type){
+        case "success":
+            return "bgGreen"
+        case "info":
+            return "bgBlue"
+        case "warning":
+            return "bgYellow"
+        case "error":
+            return "bgRed"
+        default:
+            return undefined
+    }
+}
 
 const FormatterDataLog = async (dataLog) => {
 	const { sourceName, type, message } = dataLog
