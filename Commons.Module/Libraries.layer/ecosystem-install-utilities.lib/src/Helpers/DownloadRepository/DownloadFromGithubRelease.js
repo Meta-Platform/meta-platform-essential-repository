@@ -1,13 +1,16 @@
 const GetReleaseLatestData = require("../../../../download-file.lib/src/GetReleaseLatestData")
 
-const DownloadFromGithubRelease = async (repository, destinationRepoPath) => {
+const DownloadFromGithubRelease = async ({
+    sourceData,
+    destinationRepoPath
+}) => {
 
-    const { source } = repository
-    const releaseData = await GetReleaseLatestData(source.repository.owner, source.repository.name)
+
+    const releaseData = await GetReleaseLatestData(sourceData.repository.owner, sourceData.repository.name)
     releaseData
     /*return await DownloadLatestGithubRelease({
-        repoName: source.repository.name,
-        repoOwner: source.repository.owner,
+        repoName: sourceData.repository.name,
+        repoOwner: sourceData.repository.owner,
         urlKeyword: "tarball_url",
         localPath: destinationRepoPath
     })*/

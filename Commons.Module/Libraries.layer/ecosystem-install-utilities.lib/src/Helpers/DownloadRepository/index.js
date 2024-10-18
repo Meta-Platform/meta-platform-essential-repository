@@ -8,43 +8,43 @@ const DownloadFromGithubRelease = require("./DownloadFromGithubRelease")
 
 //TODO colocar log aqui
 const DownloadRepository = async ({
-    repositoryToInstall,
+    repositoryNamespace,
+    sourceData,
     ECO_DIRPATH_INSTALL_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
     loggerEmitter
 }) => {
-
-    const {
-        repository
-    } = repositoryToInstall
     
-    const { source } = repository
+    const { 
+        type: sourceType
+     } = sourceData
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "DownloadRepository",
         type: "info",
-        message: `Baixando repositório ${colors.bold(repository.namespace)}...`
+        message: `Baixando repositório ${colors.bold(repositoryNamespace)}...`
     })
 
-    const REPOS_PATH = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
+    const destinationRepoPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
 
     const DownloadFrom = {
-        "LOCAL_FS"       : (repository, REPOS_PATH) => DownloadFromLocalFS(repository, REPOS_PATH),
-        "GOOGLE_DRIVE"   : (repository, REPOS_PATH) => DownloadFromGoogleDrive(repository, REPOS_PATH),
-        "GITHUB_RELEASE" : (repository, REPOS_PATH) => DownloadFromGithubRelease(repository, REPOS_PATH)
+        "LOCAL_FS"       : (args) => DownloadFromLocalFS(args),
+        "GOOGLE_DRIVE"   : (args) => DownloadFromGoogleDrive(args),
+        "GITHUB_RELEASE" : (args) => DownloadFromGithubRelease(args)
     }
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "DownloadRepository",
         type: "info",
-        message: `A fonte do tipo ${colors.bold(source.type)} selecionada`
+        message: `A fonte do tipo ${colors.bold(sourceType)} selecionada`
     })
 
-    const destinationPath =  DownloadFrom[source.type](repository, REPOS_PATH)
+    const destinationPath =  DownloadFrom[sourceType]({ repositoryNamespace, sourceData, destinationRepoPath })
+    
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "DownloadRepository",
         type: "info",
-        message: `Download do repositório ${colors.bold(repository.namespace)} foi concluído!`
+        message: `Download do repositório ${colors.bold(repositoryNamespace)} foi concluído!`
     })
     return destinationPath
 }

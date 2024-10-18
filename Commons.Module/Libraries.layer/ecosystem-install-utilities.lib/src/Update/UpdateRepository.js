@@ -27,25 +27,26 @@ const UpdateRepository = async ({
     } = repositoryToInstall
 
     const { 
-        namespace,
-        source
+        namespace: repositoryNamespace,
+        source: sourceData
     } = repositoryData
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
         type: "info",
-        message: `Atualizando o repositório ${colors.bold(namespace)}...`
+        message: `Atualizando o repositório ${colors.bold(repositoryNamespace)}...`
     })
 
     await CleanOldRepository({
-        namespace,
+        namespace: repositoryNamespace,
         ECO_DIRPATH_INSTALL_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
 
     const deployedRepoPath = await DownloadRepository({
-        repositoryToInstall,
+        repositoryNamespace,
+        sourceData,
         ECO_DIRPATH_INSTALL_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
@@ -55,7 +56,7 @@ const UpdateRepository = async ({
         const supervisorSocketDirPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
             await ReinstallApplication({
-                namespace,
+                namespace: repositoryNamespace,
                 appToInstall,
                 ECO_DIRPATH_INSTALL_DATA,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
@@ -68,7 +69,7 @@ const UpdateRepository = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
         type: "info",
-        message: `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(source.type)}] foi concluída!`
+        message: `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.type)}] foi concluída!`
     })
 }
 

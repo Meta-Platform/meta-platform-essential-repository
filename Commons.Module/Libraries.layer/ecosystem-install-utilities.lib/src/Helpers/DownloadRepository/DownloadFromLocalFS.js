@@ -7,10 +7,13 @@ const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)
     .replace('~', os.homedir())
 
-const DownloadFromLocalFS = (repository, destinationRepoPath) => {
-    const { namespace, source } = repository
-    const { path: repoPath } = source
-    const destinationPath = path.join(destinationRepoPath, namespace)
+const DownloadFromLocalFS = ({
+    repositoryNamespace, 
+    sourceData,
+    destinationRepoPath
+}) => {
+    const { path: repoPath } = sourceData
+    const destinationPath = path.join(destinationRepoPath, repositoryNamespace)
     const sourcePath = ConvertPathToAbsolutPath(repoPath)
     CopyDirectory(sourcePath, destinationPath)
     return destinationPath
