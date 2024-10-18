@@ -1,8 +1,34 @@
 [
     {
+        "namespace": "ShowSourceInformation",
+        "path": "Commands/ShowSourceInformation.command",
+        "command" : "show sources info",
+        "description": "Mostra informações sobre as fontes disponível para instalação agreagada pelo repositório"
+    },
+    {
         "namespace": "ListSources",
         "path": "Commands/ListSources.command",
-        "command" : "sources",
-        "description": "Listar fontes de instalção de repositórios"
+        "command" : "list sources",
+        "description": "Lista as fontes disponíveis para instalação"
+    },
+    {
+        "namespace": "InstallRepository",
+        "path": "Commands/InstallRepository.command",
+        "command" : "install [repositoryName] [sourceType]",
+        "description": "Instala um novo repositório no econsystema",
+        "parameters": [
+            {
+                "key":"repositoryName",
+                "paramType":"positional",
+                "valueType":"string",
+                "describe":"nome do repositório"
+            },
+            {
+                "key":"sourceType",
+                "paramType":"positional",
+                "valueType":"string",
+                "describe":"tipo de fonte"
+            }
+        ]
     }
 ]
