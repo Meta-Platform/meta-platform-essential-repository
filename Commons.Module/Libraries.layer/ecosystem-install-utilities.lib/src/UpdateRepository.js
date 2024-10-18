@@ -1,12 +1,14 @@
 const path = require("path")
-const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
+
+const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
-const RegisterRepository = require("../../../register-repository.lib/src/RegisterRepository")
 
-const InstallApplication = require("./InstallApplication")
-const DownloadRepository = require("../Helpers/DownloadRepository")
+const ReinstallApplication = require("./Update/ReinstallApplication")
+const DownloadRepository = require("./Helpers/DownloadRepository")
 
-const InstallRepository = async ({
+const CleanOldRepository = require("./Helpers/CleanOldRepository")
+
+const UpdateRepository = async ({
     repositoryNamespace,
     sourceData,
     appsToInstall,
@@ -15,18 +17,23 @@ const InstallRepository = async ({
     loggerEmitter
 }) => {
 
-
     const { 
-        REPOS_CONF_FILENAME_REPOS_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
         ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
     } = ecosystemDefaults
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallRepository",
+        sourceName: "UpdateRepository",
         type: "info",
-        message: `Instalando o repositório ${colors.bold(repositoryNamespace)}...`
+        message: `Atualizando o repositório ${colors.bold(repositoryNamespace)}...`
+    })
+
+    await CleanOldRepository({
+        namespace: repositoryNamespace,
+        absolutInstallDataDirPath,
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        loggerEmitter
     })
 
     const deployedRepoPath = await DownloadRepository({
@@ -37,18 +44,10 @@ const InstallRepository = async ({
         loggerEmitter
     })
 
-    await RegisterRepository({
-        namespace: repositoryNamespace, 
-        path : path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, repositoryNamespace), 
-        absolutInstallDataDirPath,
-        REPOS_CONF_FILENAME_REPOS_DATA,
-        loggerEmitter
-    })
-
     if(appsToInstall){
         const supervisorSocketDirPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
-            await InstallApplication({
+            await ReinstallApplication({
                 namespace: repositoryNamespace,
                 appToInstall,
                 absolutInstallDataDirPath,
@@ -60,10 +59,10 @@ const InstallRepository = async ({
     }
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallRepository",
+        sourceName: "UpdateRepository",
         type: "info",
-        message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.type)}] foi concluída!`
+        message: `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.type)}] foi concluída!`
     })
 }
 
-module.exports = InstallRepository
+module.exports = UpdateRepository
