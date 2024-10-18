@@ -4,7 +4,7 @@ const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
 const InstallEcosystem = require("./Install/InstallEcosystem")
-const InstallRepository = require("./Install/InstallRepository")
+const InstallRepository = require("./InstallRepository")
 
 const SynchronizeNodejsDependencies = require("./Helpers/SynchronizeNodejsDependencies")
 const PrepareContext                = require("./Helpers/PrepareContext")

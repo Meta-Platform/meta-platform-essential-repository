@@ -1,10 +1,9 @@
 const path = require("path")
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
-const FetchInstalledRepositoriesInfo = require("./Helpers/FetchInstalledRepositoriesInfo")
 
 const UpdateEcosystem = require("./Update/UpdateEcosystem")
-const UpdateRepository = require("./Update/UpdateRepository")
+const UpdateRepository = require("./UpdateRepository")
 const PrepareContext  = require("./Helpers/PrepareContext")
 const SynchronizeNodejsDependencies = require("./Helpers/SynchronizeNodejsDependencies")
 
