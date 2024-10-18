@@ -5,20 +5,20 @@ const UpdateRepositoriesFile = require("./Helpers/UpdateRepositoriesFile")
 const RegisterRepository = async ({
     namespace, 
     path, 
-    ECO_DIRPATH_INSTALL_DATA,
+    absolutInstallDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
     try{
         await PrepareRepositoriesFileJson({
-            ECO_DIRPATH_INSTALL_DATA,
+            absolutInstallDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter
         })
         await UpdateRepositoriesFile({
             namespace, 
             path, 
-            ECO_DIRPATH_INSTALL_DATA,
+            absolutInstallDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter
         })

@@ -53,9 +53,20 @@ const InstallEcosystemByProfile = async ({
         } = installationProfile
     
         for (const repositoryToInstall of repositoriesToInstall) {
+
+            const { 
+                repository: {
+                    namespace: repositoryNamespace,
+                    source: sourceData,
+                },
+                appsToInstall
+             } = repositoryToInstall
+
             await InstallRepository({
-                repositoryToInstall,
-                ECO_DIRPATH_INSTALL_DATA: absolutInstallDataDirPath,
+                repositoryNamespace,
+                sourceData,
+                appsToInstall,
+                absolutInstallDataDirPath,
                 ecosystemDefaults,
                 loggerEmitter
             })

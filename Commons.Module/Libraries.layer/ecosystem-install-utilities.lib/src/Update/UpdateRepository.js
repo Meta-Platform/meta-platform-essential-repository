@@ -9,8 +9,10 @@ const DownloadRepository = require("../Helpers/DownloadRepository")
 const CleanOldRepository = require("../Helpers/CleanOldRepository")
 
 const UpdateRepository = async ({
-    repositoryToInstall,
-    ECO_DIRPATH_INSTALL_DATA,
+    repositoryNamespace,
+    sourceData,
+    appsToInstall,
+    absolutInstallDataDirPath,
     ecosystemDefaults,
     loggerEmitter
 }) => {
@@ -21,16 +23,6 @@ const UpdateRepository = async ({
         ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
     } = ecosystemDefaults
 
-    const {
-        repository:repositoryData,
-        appsToInstall
-    } = repositoryToInstall
-
-    const { 
-        namespace: repositoryNamespace,
-        source: sourceData
-    } = repositoryData
-
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
         type: "info",
@@ -39,7 +31,7 @@ const UpdateRepository = async ({
 
     await CleanOldRepository({
         namespace: repositoryNamespace,
-        ECO_DIRPATH_INSTALL_DATA,
+        absolutInstallDataDirPath,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
@@ -47,18 +39,18 @@ const UpdateRepository = async ({
     const deployedRepoPath = await DownloadRepository({
         repositoryNamespace,
         sourceData,
-        ECO_DIRPATH_INSTALL_DATA,
+        absolutInstallDataDirPath,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
 
     if(appsToInstall){
-        const supervisorSocketDirPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
+        const supervisorSocketDirPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
             await ReinstallApplication({
                 namespace: repositoryNamespace,
                 appToInstall,
-                ECO_DIRPATH_INSTALL_DATA,
+                absolutInstallDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 supervisorSocketDirPath,
                 loggerEmitter

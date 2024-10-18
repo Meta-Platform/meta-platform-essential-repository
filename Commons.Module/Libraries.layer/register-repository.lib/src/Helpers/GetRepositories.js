@@ -5,11 +5,11 @@ const {
 const GetRepositoriesFilePath = require("./GetRepositoriesFilePath")
 
 const GetRepositories = async ({
-    ECO_DIRPATH_INSTALL_DATA,
+    absolutInstallDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
     const filePath = GetRepositoriesFilePath({
-        ECO_DIRPATH_INSTALL_DATA,
+        absolutInstallDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA
     })
     const content = await readFile(filePath, { encoding: 'utf8' })

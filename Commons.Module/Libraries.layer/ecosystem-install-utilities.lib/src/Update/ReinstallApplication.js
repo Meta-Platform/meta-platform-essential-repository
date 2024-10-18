@@ -9,7 +9,7 @@ const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildComman
 const ReinstallApplication = async ({
     namespace,
     appToInstall,
-    ECO_DIRPATH_INSTALL_DATA,
+    absolutInstallDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
     supervisorSocketDirPath,
     loggerEmitter
@@ -58,7 +58,7 @@ const ReinstallApplication = async ({
             supervisorSocketFilePath
         })
     
-        const fullScriptPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
+        const fullScriptPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
         await RecreateExecutableScript(fullScriptPath, scriptContent, loggerEmitter)
 
         loggerEmitter && loggerEmitter.emit("log", {

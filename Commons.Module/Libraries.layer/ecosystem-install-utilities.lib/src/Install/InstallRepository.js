@@ -7,8 +7,10 @@ const InstallApplication = require("./InstallApplication")
 const DownloadRepository = require("../Helpers/DownloadRepository")
 
 const InstallRepository = async ({
-    repositoryToInstall,
-    ECO_DIRPATH_INSTALL_DATA,
+    repositoryNamespace,
+    sourceData,
+    appsToInstall,
+    absolutInstallDataDirPath,
     ecosystemDefaults,
     loggerEmitter
 }) => {
@@ -21,14 +23,6 @@ const InstallRepository = async ({
         ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
     } = ecosystemDefaults
 
-    const {
-        repository:{
-            namespace: repositoryNamespace,
-            source: sourceData
-        },
-        appsToInstall
-    } = repositoryToInstall
-
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallRepository",
         type: "info",
@@ -38,26 +32,26 @@ const InstallRepository = async ({
     const deployedRepoPath = await DownloadRepository({
         repositoryNamespace,
         sourceData,
-        ECO_DIRPATH_INSTALL_DATA,
+        absolutInstallDataDirPath,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
 
     await RegisterRepository({
         namespace: repositoryNamespace, 
-        path : path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, repositoryNamespace), 
-        ECO_DIRPATH_INSTALL_DATA,
+        path : path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, repositoryNamespace), 
+        absolutInstallDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         loggerEmitter
     })
 
     if(appsToInstall){
-        const supervisorSocketDirPath = path.join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
+        const supervisorSocketDirPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
             await InstallApplication({
                 namespace: repositoryNamespace,
                 appToInstall,
-                ECO_DIRPATH_INSTALL_DATA,
+                absolutInstallDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 supervisorSocketDirPath,
                 loggerEmitter
