@@ -14,11 +14,11 @@
     {
         "namespace": "InstallRepository",
         "path": "Commands/InstallRepository.command",
-        "command" : "install [repositoryName] [sourceType]",
+        "command" : "install [repositoryNamespace] [sourceType]",
         "description": "Instala um novo repositório no econsystema",
         "parameters": [
             {
-                "key":"repositoryName",
+                "key":"repositoryNamespace",
                 "paramType":"positional",
                 "valueType":"string",
                 "describe":"nome do repositório"

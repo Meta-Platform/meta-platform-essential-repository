@@ -16,7 +16,7 @@ const DownloadRepository = async ({
 }) => {
     
     const { 
-        type: sourceType
+        sourceType
      } = sourceData
 
     loggerEmitter && loggerEmitter.emit("log", {
