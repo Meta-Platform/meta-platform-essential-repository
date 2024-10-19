@@ -26,7 +26,7 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
         if (path) {
             const CommandFunction = _GetCommandFunction(path)
             return CommandFunction 
-                ? (args) => CommandFunction({args, startupParams})
+                ? (args) => CommandFunction({ args, startupParams })
                 : (args) => {}
         } else {
             return (args) => {}

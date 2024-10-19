@@ -62,7 +62,7 @@ const InstallRepository = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallRepository",
         type: "info",
-        message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.type)}] foi concluída!`
+        message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.sourceType)}] foi concluída!`
     })
 }
 

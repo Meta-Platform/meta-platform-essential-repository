@@ -6,7 +6,9 @@ const PrintDataLog = require("../../../../../Commons.Module/Libraries.layer/prin
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
-const InstallRepositoryCommand = async ({ args }) => {
+const InstallRepositoryCommand = async ({ args, startupParams  }) => {
+
+    const { absolutInstallDataDirPath } = startupParams
 
     const { 
         repositoryNamespace,
@@ -26,7 +28,6 @@ const InstallRepositoryCommand = async ({ args }) => {
         ecosystemDefaults: ECOSYSTEM_DEFAULTS,
         loggerEmitter
     })
-
     
 }
 

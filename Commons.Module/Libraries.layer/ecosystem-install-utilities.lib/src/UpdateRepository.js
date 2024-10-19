@@ -61,7 +61,7 @@ const UpdateRepository = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "UpdateRepository",
         type: "info",
-        message: `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.type)}] foi concluída!`
+        message: `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.sourceType)}] foi concluída!`
     })
 }
 
