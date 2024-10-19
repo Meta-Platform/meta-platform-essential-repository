@@ -15,7 +15,27 @@
         "namespace": "InstallRepository",
         "path": "Commands/InstallRepository.command",
         "command" : "install [repositoryNamespace] [sourceType]",
-        "description": "Instala um novo repositório no econsystema",
+        "description": "Instala um novo repositório no ecosistema",
+        "parameters": [
+            {
+                "key":"repositoryNamespace",
+                "paramType":"positional",
+                "valueType":"string",
+                "describe":"nome do repositório"
+            },
+            {
+                "key":"sourceType",
+                "paramType":"positional",
+                "valueType":"string",
+                "describe":"tipo de fonte"
+            }
+        ]
+    },
+    {
+        "namespace": "UpdateRepository",
+        "path": "Commands/UpdateRepository.command",
+        "command" : "update [repositoryNamespace] [sourceType]",
+        "description": "Atualiza um repositório já instalado no ecosistema",
         "parameters": [
             {
                 "key":"repositoryNamespace",

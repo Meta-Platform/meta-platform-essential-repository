@@ -1,12 +1,12 @@
 const EventEmitter = require('node:events')
 
-const InstallRepository = require("../../../../../Commons.Module/Libraries.layer/ecosystem-install-utilities.lib/src/InstallRepository")
+const UpdateRepository = require("../../../../../Commons.Module/Libraries.layer/ecosystem-install-utilities.lib/src/UpdateRepository")
 const PrintDataLog = require("../../../../../Commons.Module/Libraries.layer/print-data-log.lib/src/PrintDataLog")
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
-const InstallRepositoryCommand = async ({ args, startupParams  }) => {
+const UpdateRepositoryCommand = async ({ args, startupParams  }) => {
 
     const { absolutInstallDataDirPath } = startupParams
 
@@ -16,12 +16,12 @@ const InstallRepositoryCommand = async ({ args, startupParams  }) => {
     } = args
     
     const loggerEmitter = new EventEmitter()
-	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "InstallRepositoryCommand"))
+	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "UpdateRepositoryCommand"))
 
     const sourcesList = REPOSITORY_SOURCES[repositoryNamespace]
     const sourceData = sourcesList.find((sourceData) => sourceData.sourceType === sourceType)
 
-    await InstallRepository({
+    await UpdateRepository({
         repositoryNamespace,
         sourceData,
         absolutInstallDataDirPath,
@@ -31,4 +31,4 @@ const InstallRepositoryCommand = async ({ args, startupParams  }) => {
     
 }
 
-module.exports = InstallRepositoryCommand
+module.exports = UpdateRepositoryCommand
