@@ -31,7 +31,16 @@ repo list sources
 ```
 
 ### Instalar um repositório
-
 ```bash
-repo install 
+repo install [repositoryNamespace] [sourceType]
+```
+```bash
+repo install EcosystemCore LOCAL_FS
+```
+### Atualizar um repositório instaldo
+```bash
+repo update [repositoryNamespace] [sourceType]
+```
+```bash
+repo update EcosystemCore LOCAL_FS
 ```
