@@ -10,7 +10,7 @@ const DownloadFromGithubRelease = require("./DownloadFromGithubRelease")
 const DownloadRepository = async ({
     repositoryNamespace,
     sourceData,
-    absolutInstallDataDirPath,
+    installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
     loggerEmitter
 }) => {
@@ -25,7 +25,7 @@ const DownloadRepository = async ({
         message: `Baixando repositório ${colors.bold(repositoryNamespace)}...`
     })
 
-    const destinationRepoPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
+    const destinationRepoPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
 
     const DownloadFrom = {
         "LOCAL_FS"       : (args) => DownloadFromLocalFS(args),

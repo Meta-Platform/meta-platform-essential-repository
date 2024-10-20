@@ -5,12 +5,12 @@ const {
 const GetRepositoriesFilePath = require("./GetRepositoriesFilePath")
 
 const VerifyRepoFile = async ({
-    absolutInstallDataDirPath,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA, 
     loggerEmitter
 }) => {
     const filePath = GetRepositoriesFilePath({
-        absolutInstallDataDirPath,
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA
     })
     try{

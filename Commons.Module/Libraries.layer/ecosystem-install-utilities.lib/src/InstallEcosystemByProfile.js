@@ -31,13 +31,13 @@ const InstallEcosystemByProfile = async ({
     })
 
     const {
-        absolutInstallDataDirPath,
+        installDataDirPath,
         npmDependenciesContextPath
     } = context
 
     await InstallEcosystem({
         ecosystemDefaults,
-        ECO_DIRPATH_INSTALL_DATA: absolutInstallDataDirPath,
+        ECO_DIRPATH_INSTALL_DATA: installDataDirPath,
         loggerEmitter
     })
 
@@ -66,7 +66,7 @@ const InstallEcosystemByProfile = async ({
                 repositoryNamespace,
                 sourceData,
                 appsToInstall,
-                absolutInstallDataDirPath,
+                installDataDirPath,
                 ecosystemDefaults,
                 loggerEmitter
             })

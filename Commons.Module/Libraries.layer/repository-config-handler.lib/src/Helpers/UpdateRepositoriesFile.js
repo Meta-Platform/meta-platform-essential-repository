@@ -4,12 +4,12 @@ const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson")
 const UpdateRepositoriesFile = async ({
     namespace, 
     path, 
-    absolutInstallDataDirPath,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
     const repositories = await GetRepositories({
-        absolutInstallDataDirPath,
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
     })
         if(!repositories[namespace]){
@@ -19,7 +19,7 @@ const UpdateRepositoriesFile = async ({
             }
             await WriteRepositoriesFileJson({ 
                 content: newRepositories,
-                absolutInstallDataDirPath,
+                installDataDirPath,
                 REPOS_CONF_FILENAME_REPOS_DATA,
                 loggerEmitter
             })

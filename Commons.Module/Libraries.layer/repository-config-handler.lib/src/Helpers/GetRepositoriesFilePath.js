@@ -1,11 +1,11 @@
 const { resolve } = require("path")
 
 const GetRepositoriesFilePath = ({
-    absolutInstallDataDirPath,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
     const filename = REPOS_CONF_FILENAME_REPOS_DATA
-    const configPath = absolutInstallDataDirPath
+    const configPath = installDataDirPath
     const filePath = resolve(configPath, filename)
     return filePath
 }

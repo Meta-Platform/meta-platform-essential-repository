@@ -9,7 +9,7 @@ const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildComman
 const InstallApplication = async ({
     namespace,
     appToInstall,
-    absolutInstallDataDirPath,
+    installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
     supervisorSocketDirPath,
     loggerEmitter
@@ -58,7 +58,7 @@ const InstallApplication = async ({
             supervisorSocketFilePath
         })
     
-    const fullScriptPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
+    const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
     await CreateExecutableScript(fullScriptPath, scriptContent, loggerEmitter)
 
     loggerEmitter && loggerEmitter.emit("log", {

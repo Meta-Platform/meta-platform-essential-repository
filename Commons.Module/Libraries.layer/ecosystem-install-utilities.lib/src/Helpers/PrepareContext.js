@@ -20,7 +20,7 @@ const PrepareContext = ({
     const npmDependenciesContextPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES)
 
     return {
-        absolutInstallDataDirPath,
+        installDataDirPath: absolutInstallDataDirPath,
         npmDependenciesContextPath
     }
 }

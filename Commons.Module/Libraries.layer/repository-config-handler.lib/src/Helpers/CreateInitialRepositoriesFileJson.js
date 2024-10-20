@@ -1,7 +1,7 @@
 const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson")
 
 const CreateInitialRepositoriesFileJson = async ({
-    absolutInstallDataDirPath,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
@@ -9,7 +9,7 @@ const CreateInitialRepositoriesFileJson = async ({
     try{
         await WriteRepositoriesFileJson({ 
             content:initialContent,
-            absolutInstallDataDirPath,
+            installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter
         })

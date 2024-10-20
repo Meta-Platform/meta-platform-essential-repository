@@ -3,13 +3,13 @@ const VerifyRepoFile = require("./Helpers/VerifyRepoFile")
 const CreateInitialRepositoriesFileJson = require("./Helpers/CreateInitialRepositoriesFileJson")
 
 const PrepareRepositoriesFileJson = async ({
-    absolutInstallDataDirPath,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
     
     const repofileExit = await VerifyRepoFile({
-        absolutInstallDataDirPath,
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         loggerEmitter
     })
@@ -17,12 +17,12 @@ const PrepareRepositoriesFileJson = async ({
         return
     } else {
         await CreateInitialRepositoriesFileJson({
-            absolutInstallDataDirPath,
+            installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter
         })
         await PrepareRepositoriesFileJson({
-            absolutInstallDataDirPath,
+            installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter
         })

@@ -4,12 +4,12 @@ const WriteObjectToFile = require("../../../write-object-to-file.lib/src/WriteOb
 
 const WriteRepositoriesFileJson = async ({ 
     content,
-    absolutInstallDataDirPath,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
     const filePath = GetRepositoriesFilePath({
-        absolutInstallDataDirPath,
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA
     })
     try{
