@@ -1,7 +1,7 @@
 const path = require("path")
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
-const RegisterRepository = require("../../register-repository.lib/src/RegisterRepository")
+const RegisterRepository = require("../../repository-config-handler.lib/src/RegisterRepository")
 
 const InstallApplication = require("./Install/InstallApplication")
 const DownloadRepository = require("./Helpers/DownloadRepository")
