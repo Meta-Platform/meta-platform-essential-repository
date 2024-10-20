@@ -10,7 +10,7 @@ const InstallRepository = async ({
     repositoryNamespace,
     sourceData,
     appsToInstall,
-    absolutInstallDataDirPath,
+    installDataDirPath,
     ecosystemDefaults,
     loggerEmitter
 }) => {
@@ -32,26 +32,27 @@ const InstallRepository = async ({
     const deployedRepoPath = await DownloadRepository({
         repositoryNamespace,
         sourceData,
-        absolutInstallDataDirPath,
+        installDataDirPath,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
 
     await RegisterRepository({
-        namespace: repositoryNamespace, 
-        path : path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, repositoryNamespace), 
-        absolutInstallDataDirPath,
+        repositoryNamespace,
+        sourceData,
+        //path : path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, repositoryNamespace), 
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         loggerEmitter
     })
 
     if(appsToInstall){
-        const supervisorSocketDirPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
+        const supervisorSocketDirPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
             await InstallApplication({
                 namespace: repositoryNamespace,
                 appToInstall,
-                absolutInstallDataDirPath,
+                installDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 supervisorSocketDirPath,
                 loggerEmitter

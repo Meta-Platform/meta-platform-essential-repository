@@ -31,13 +31,13 @@ const UpdateEcosystemByProfile = async ({
     })
 
     const {
-        absolutInstallDataDirPath,
+        installDataDirPath,
         npmDependenciesContextPath
     } = context
 
     await UpdateEcosystem({
         ecosystemDefaults,
-        ECO_DIRPATH_INSTALL_DATA: absolutInstallDataDirPath,
+        ECO_DIRPATH_INSTALL_DATA: installDataDirPath,
         loggerEmitter
     })
 
@@ -53,7 +53,7 @@ const UpdateEcosystemByProfile = async ({
 
         const areAllRepositoriesRegistered = await VerifyIfAllRepositoriesAreRegistered({
             repositoriesToInstall,
-            installationPath: absolutInstallDataDirPath,
+            installationPath: installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA: ecosystemDefaults.REPOS_CONF_FILENAME_REPOS_DATA
         })
 
@@ -76,7 +76,7 @@ const UpdateEcosystemByProfile = async ({
                     repositoryNamespace,
                     sourceData,
                     appsToInstall,
-                    absolutInstallDataDirPath,
+                    installDataDirPath,
                     ecosystemDefaults,
                     loggerEmitter
                 })

@@ -12,7 +12,7 @@ const UpdateRepository = async ({
     repositoryNamespace,
     sourceData,
     appsToInstall,
-    absolutInstallDataDirPath,
+    installDataDirPath,
     ecosystemDefaults,
     loggerEmitter
 }) => {
@@ -31,7 +31,7 @@ const UpdateRepository = async ({
 
     await CleanOldRepository({
         namespace: repositoryNamespace,
-        absolutInstallDataDirPath,
+        installDataDirPath,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
@@ -39,18 +39,18 @@ const UpdateRepository = async ({
     const deployedRepoPath = await DownloadRepository({
         repositoryNamespace,
         sourceData,
-        absolutInstallDataDirPath,
+        installDataDirPath,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
 
     if(appsToInstall){
-        const supervisorSocketDirPath = path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
+        const supervisorSocketDirPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
         for (const appToInstall of appsToInstall) {
             await ReinstallApplication({
                 namespace: repositoryNamespace,
                 appToInstall,
-                absolutInstallDataDirPath,
+                installDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 supervisorSocketDirPath,
                 loggerEmitter

@@ -3,12 +3,12 @@ const path = require('path')
 
 const CleanOldRepository = async ({
     namespace,
-    absolutInstallDataDirPath,
+    installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
     loggerEmitter
 }) => {
     try {
-        const allReposPath = path.resolve(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
+        const allReposPath = path.resolve(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
         const repoPath = path.resolve(allReposPath, namespace)
 
         try {

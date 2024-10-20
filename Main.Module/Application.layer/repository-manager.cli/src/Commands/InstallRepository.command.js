@@ -8,7 +8,7 @@ const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
 const InstallRepositoryCommand = async ({ args, startupParams  }) => {
 
-    const { absolutInstallDataDirPath } = startupParams
+    const { installDataDirPath } = startupParams
 
     const { 
         repositoryNamespace,
@@ -24,7 +24,7 @@ const InstallRepositoryCommand = async ({ args, startupParams  }) => {
     await InstallRepository({
         repositoryNamespace,
         sourceData,
-        absolutInstallDataDirPath,
+        installDataDirPath,
         ecosystemDefaults: ECOSYSTEM_DEFAULTS,
         loggerEmitter
     })
