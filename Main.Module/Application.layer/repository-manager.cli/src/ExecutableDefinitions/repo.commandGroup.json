@@ -6,10 +6,22 @@
         "description": "Mostra informações sobre as fontes disponível para instalação agreagada pelo repositório"
     },
     {
-        "namespace": "ListSources",
-        "path": "Commands/ListSources.command",
-        "command" : "list sources",
-        "description": "Lista as fontes disponíveis para instalação"
+        "namespace": "List",
+        "command" : "list",
+        "childCommands": [
+                {
+                    "namespace": "ListSources",
+                    "path": "Commands/ListSources.command",
+                    "command" : "sources",
+                    "description": "Lista as fontes disponíveis para instalação"
+                },
+                {
+                    "namespace": "ListInstalledRepositories",
+                    "path": "Commands/ListInstalledRepositories.command",
+                    "command" : "installed",
+                    "description": "Exibe todos os repositórios que estão instalados e disponíveis para uso."
+                }
+           ]
     },
     {
         "namespace": "InstallRepository",

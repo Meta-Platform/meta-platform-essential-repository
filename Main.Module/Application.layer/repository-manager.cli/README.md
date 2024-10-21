@@ -86,7 +86,6 @@ repo update sources
 Exibe todos os repositórios que estão instalados e disponíveis para uso.
 
 ```bash
-# PEDENDENTE
 repo list installed
 ```
 
@@ -132,7 +131,7 @@ repo update [repositoryNamespace] [sourceType]
 **Exemplo:**
 
 ```bash
-repo update EcosystemCore GIT_REPO
+repo update EssentialRepo LOCAL_FS
 ```
 
 #### Atualizar Todos os Repositórios Instalados

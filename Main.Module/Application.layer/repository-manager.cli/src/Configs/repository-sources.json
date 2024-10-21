@@ -1,5 +1,5 @@
 {
-    "Essential": [
+    "EssentialRepo": [
         {
             "sourceType":"LOCAL_FS",
             "path": "~/Workspaces/meta-platform-repo/repos/meta-platform-essential-repository"
@@ -17,7 +17,7 @@
             "fileId": "12PKZU1Uea1yYnhO7R26Il9eyF__v6MAc"
         }
     ],
-    "EcosystemCore": [
+    "EcosystemCoreRepo": [
         {
             "sourceType":"LOCAL_FS",
             "path": "~/Workspaces/meta-platform-repo/repos/meta-platform-ecosystem-core-repository"
@@ -35,7 +35,7 @@
             "fileId": "1-PuPdjU36acGmoPgusYWrMuhyGyMnoRI"
         }
     ],
-    "PlaformApplications": [
+    "PlaformApplicationsRepo": [
         {
             "sourceType":"LOCAL_FS",
             "path": "~/Workspaces/meta-platform-repo/repos/PlaformApplicationsRepo"
