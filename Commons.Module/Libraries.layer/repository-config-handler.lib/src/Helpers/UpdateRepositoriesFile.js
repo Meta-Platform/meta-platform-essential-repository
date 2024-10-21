@@ -32,7 +32,7 @@ const UpdateRepositoriesFile = async ({
             loggerEmitter && loggerEmitter.emit("log", {
                 sourceName: "UpdateRepositoriesFile",
                 type: "info",
-                message: `arquivo de repositório atualizado com [${repositoryNamespace}] => [${path}]`
+                message: `arquivo de repositório atualizado com [${repositoryNamespace}] => [${repositoryInstallationPath}]`
             })
         } else {
             throw `ATENÇÃO: repositório [${repositoryNamespace}] já está registrado!`

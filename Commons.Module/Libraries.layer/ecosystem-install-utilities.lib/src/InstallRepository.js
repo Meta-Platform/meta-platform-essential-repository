@@ -15,7 +15,6 @@ const InstallRepository = async ({
     loggerEmitter
 }) => {
 
-
     const { 
         REPOS_CONF_FILENAME_REPOS_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
@@ -43,6 +42,7 @@ const InstallRepository = async ({
         appsToInstall,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
 
