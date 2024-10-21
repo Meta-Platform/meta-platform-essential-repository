@@ -1,14 +1,18 @@
-
+const path = require("path")
 const PrepareRepositoriesFileJson = require("./PrepareRepositoriesFileJson")
 const UpdateRepositoriesFile = require("./Helpers/UpdateRepositoriesFile")
 
 const RegisterRepository = async ({
-    namespace, 
-    //path, 
+    repositoryNamespace,
+    sourceData,
+    appsToInstall,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
+
+    const repositoryInstallationPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, repositoryNamespace)
+
     try{
         await PrepareRepositoriesFileJson({
             installDataDirPath,
@@ -16,8 +20,10 @@ const RegisterRepository = async ({
             loggerEmitter
         })
         await UpdateRepositoriesFile({
-            namespace, 
-            path, 
+            repositoryNamespace,
+            sourceData,
+            repositoryInstallationPath, 
+            appsToInstall,
             installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter
@@ -25,7 +31,7 @@ const RegisterRepository = async ({
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "RegisterRepository",
             type: "info",
-            message: `repositório [${namespace}] registrado com sucesso!`
+            message: `repositório [${repositoryNamespace}] registrado com sucesso!`
         })
     } catch(e) {
         loggerEmitter && loggerEmitter.emit("log", {

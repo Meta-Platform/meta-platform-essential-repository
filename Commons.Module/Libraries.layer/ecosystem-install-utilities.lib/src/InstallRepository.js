@@ -40,7 +40,7 @@ const InstallRepository = async ({
     await RegisterRepository({
         repositoryNamespace,
         sourceData,
-        //path : path.join(absolutInstallDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES, repositoryNamespace), 
+        appsToInstall,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         loggerEmitter
