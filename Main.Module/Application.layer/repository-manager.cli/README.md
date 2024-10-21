@@ -30,6 +30,13 @@ Lista todas as fontes disponíveis para instalação
 repo list sources
 ```
 
+### Adicionar um nova fonte de dados
+```bash
+repo add source [sourceType]
+# aqui deverá abrir um formulário para completar o registro da nova fonte de um repositório
+```
+
+
 ### Instalar um repositório
 ```bash
 repo install [repositoryNamespace] [sourceType]

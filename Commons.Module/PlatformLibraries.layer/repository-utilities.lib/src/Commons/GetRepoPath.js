@@ -9,8 +9,8 @@ const GetRepoPath = async ({
         ECO_DIRPATH_INSTALL_DATA,
         REPOS_CONF_FILENAME_REPOS_DATA
     })
-    const { path } = registeredRepositories[namespace]
-    return path
+    const { installationPath } = registeredRepositories[namespace]
+    return installationPath
 }
 
 module.exports = GetRepoPath
