@@ -159,22 +159,6 @@ repo uninstall [repositoryNamespace]
 repo uninstall EcosystemCore
 ```
 
-#### Configurar Repositório
-
-Permite ajustar configurações específicas de um repositório instalado.
-
-```bash
-# PEDENDENTE
-repo config [repositoryNamespace]
-# Um formulário ou interface será aberto para configurar o repositório.
-```
-
-**Exemplo:**
-
-```bash
-repo config EcosystemCore
-```
-
 ## Exemplos de Uso
 
 - **Instalar um Repositório do GitHub**
@@ -188,12 +172,6 @@ repo config EcosystemCore
 
   ```bash
   repo update all
-  ```
-
-- **Configurar um Repositório Instalado**
-
-  ```bash
-  repo config MyRepo
   ```
 
 - **Remover uma Fonte de Repositório**
