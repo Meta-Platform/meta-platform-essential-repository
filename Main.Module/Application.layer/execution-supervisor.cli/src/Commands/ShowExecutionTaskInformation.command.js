@@ -1,30 +1,18 @@
 const path = require("path")
 
-const SetupCLIScriptLoader = require("meta-platform-cli-script-loader-library/SetupCLIScriptLoader")
-const APP_PARAMS = require("../Configs/app-params-dev.json")
-const NPM_DEPENDENCIES =  require("../Configs/npm-dependencies.json")
-const META_PLATFORM_DEPENDENCIES = require("../Configs/meta-platform-dependencies.json")
+const CreateCommunicationInterface      = require("../../../../Libraries.layer/supervisor.lib/src/CreateCommunicationInterface")
+const RenderGeneralInformationTaskTable = require("../../../../Libraries.layer/supervisor.lib/src/RenderGeneralInformationTaskTable")
+const RenderStaticParametersTaskTable   = require("../../../../Libraries.layer/supervisor.lib/src/RenderStaticParametersTaskTable")
+const RenderLinkedParametersTaskTable   = require("../../../../Libraries.layer/supervisor.lib/src/RenderLinkedParametersTaskTable")
+const RenderAgentLinkRulesTaskTable     = require("../../../../Libraries.layer/supervisor.lib/src/RenderAgentLinkRulesTaskTable")
+const RenderActivationRulesTaskTable    = require("../../../../Libraries.layer/supervisor.lib/src/RenderActivationRulesTaskTable")
 
-const ShowExecutionTaskInformationCommand = async ({taskId, socket}) => {
+const ShowExecutionTaskInformationCommand = async ({args, startupParams}) => {
 
-	const LoaderScript = await SetupCLIScriptLoader( {
-        npmDependenciesDirname   : APP_PARAMS.NPM_DEPENDENCIES_DIRNAME,
-        npmDependencies          : NPM_DEPENDENCIES,
-        metaPlatformDependencies : META_PLATFORM_DEPENDENCIES,
-        sourceType               : APP_PARAMS.MINIMUM_REPO_SOURCE_TYPE,
-        repoPath                 : APP_PARAMS.MINIMUM_REPO_PATH,
-        repoNamespace            : APP_PARAMS.MINIMUM_REPO_NAMESPACE,
-        fileId                   : APP_PARAMS.MINIMUM_REPO_FILE_ID
-    })
+	const { taskId, socket } = args
+	const { supervisorSocketsDirPath } = startupParams
 
-	const CreateCommunicationInterface      = LoaderScript("supervisor.lib/src/CreateCommunicationInterface")
-    const RenderGeneralInformationTaskTable = LoaderScript("supervisor.lib/src/RenderGeneralInformationTaskTable")
-    const RenderStaticParametersTaskTable   = LoaderScript("supervisor.lib/src/RenderStaticParametersTaskTable")
-    const RenderLinkedParametersTaskTable   = LoaderScript("supervisor.lib/src/RenderLinkedParametersTaskTable")
-    const RenderAgentLinkRulesTaskTable     = LoaderScript("supervisor.lib/src/RenderAgentLinkRulesTaskTable")
-    const RenderActivationRulesTaskTable    = LoaderScript("supervisor.lib/src/RenderActivationRulesTaskTable")
-
-    const socketFilePath = path.resolve(APP_PARAMS.SUPERVISOR_SOCKETS_DIRPATH, socket)
+    const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
 
     const daemonClient = await CreateCommunicationInterface(socketFilePath)
     const task = await daemonClient.GetTask(taskId)
