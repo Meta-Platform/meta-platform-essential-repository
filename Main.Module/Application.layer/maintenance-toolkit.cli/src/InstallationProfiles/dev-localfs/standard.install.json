@@ -30,7 +30,7 @@
                 {
                     "appType":"APP",
                     "executable":"start-platform",
-                    "packageNamespace":"Main.Module/Application.layer/platform-main-application.app",
+                    "packageNamespace":"Main.Module/Application.layer/ecosystem-instance-manager.app",
                     "supervisorSocketFileName":"daemon.sock"
                 },
                 {
