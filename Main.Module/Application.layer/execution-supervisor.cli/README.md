@@ -1,45 +1,69 @@
+[Meta Platform Essential Repository](../../../README.md) / [Main Module](../../README.md)
+
 # Execution Supervisor
 
-Ferramenta para monitoramento e supervisão de uma instancia sendo executa pelo package-executor, acessando a instancia atraves do arquivo .sock especificado na hora da execução do package executor.
-
-## Instalação
-
-Para começar a usar o Daemon Management Command-line do Meta Platform no seu sistema, siga os passos abaixo:
-
-1. Abra o terminal.
-2. Execute os comandos a seguir para instalar a ferramenta e configurar os links simbólicos necessários:
-
-```bash
-npm install
-npm link
-```
-
-Após a instalação, você será capaz de acessar os comandos do Daemon Management do Meta Platform de qualquer lugar no seu sistema.
+O ***Execution Supervisor*** é responsável pela análise e supervisão de aplicações compatíveis com o ecossistema **Meta Platform**, especificamente aquelas executadas pelo *package-executor*. As aplicações gerenciadas por ele podem expor um socket de comunicação, permitindo que o supervisor interaja diretamente com a aplicação em execução. Essa interação é facilitada pelo acesso à instância por meio de um arquivo `.sock`, que é especificado no momento da execução da instância.
 
 ## Comandos Disponíveis
-
-A ferramenta oferece uma série de comandos para gerenciar diversos aspectos do Daemon. Abaixo, você encontrará uma descrição detalhada de cada comando e exemplos de uso.
-
-
-### Gerenciamento de um instancia do package-executor
-
 ```bash
 
-# Mostrar status do execução do pacote
-mysup status
+# Listar sockets
+supervisor sockets
 
-# Visualiza o log do daemon
-mysup log
+# Mostrar status
+supervisor status --socket [SOCKET_FILENAME]
 
-# Reiniciar o Daemon do Ecossistema
-mysup restart -> vai para o ecosystem-instance-manager
+# Listar tarefas
+supervisor tasks --socket [SOCKET_FILENAME]
 
-# Interromper o Daemon do Ecossistema
-mysup kill -> vai para o ecosystem-instance-manager
+# Visualizar logs
+supervisor log --socket [SOCKET_FILENAME]
 
-# Listar Tarefas no Task Executor do Daemon**
-mysup tasks
+# Matar Execução
+supervisor kill --socket [SOCKET_FILENAME]
 
-# Obter Informações sobre uma Tarefa Específica do Daemon  
-mysup show task [TASK_ID]
+# Detalhar informações de tarefas
+supervisor show task [TASK_ID] --socket "<SOCKET_FILENAME>"
+
+```
+
+
+## Gerenciamento de uma instância do package-executor
+
+A ferramenta oferece uma série de comandos para gerenciar diversos aspectos da aplicação. Abaixo, você encontrará uma descrição detalhada de cada comando e exemplos de uso.
+
+### Listar sockets
+Lista todos os sockets de todas as instâncias em execução
+```bash
+supervisor sockets
+```
+
+### Mostrar status
+ Mostra status de um instância em execução
+```bash
+supervisor status --socket [SOCKET_FILENAME]
+```
+
+### Listar tarefas
+Lista todas as tarefas de um instância em execução
+```bash
+supervisor tasks --socket [SOCKET_FILENAME]
+```
+
+### Visualizar logs
+Fica exibindo o logs de uma instância em execução
+```bash
+supervisor log --socket [SOCKET_FILENAME]
+```
+
+### Matar Execução
+Mata a execução de uma instância.
+```bash
+supervisor kill --socket [SOCKET_FILENAME]
+```
+
+### Detalhar informações de tarefas
+Mostra informações detalhada de uma tarefas específica
+```bash
+supervisor show task [TASK_ID] --socket "<SOCKET_FILENAME>"
 ```
