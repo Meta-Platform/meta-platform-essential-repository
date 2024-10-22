@@ -23,7 +23,7 @@ supervisor log --socket [SOCKET_FILENAME]
 supervisor kill --socket [SOCKET_FILENAME]
 
 # Detalhar informações de tarefas
-supervisor show task [TASK_ID] --socket "<SOCKET_FILENAME>"
+supervisor show task [TASK_ID] --socket [SOCKET_FILENAME]
 
 ```
 
@@ -64,5 +64,5 @@ supervisor kill --socket [SOCKET_FILENAME]
 ### Detalhar informações de tarefas
 Mostra informações detalhada de uma tarefas específica
 ```bash
-supervisor show task [TASK_ID] --socket [SOCKET_FILENAME]CÉSAR LENZI
+supervisor show task [TASK_ID] --socket [SOCKET_FILENAME]
 ```
