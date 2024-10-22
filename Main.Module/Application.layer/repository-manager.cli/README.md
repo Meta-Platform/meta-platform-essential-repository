@@ -28,7 +28,7 @@ O **Repository Manager Command-Line** é responsável pelo gerenciamento e confi
 Exibe todas as informações sobre as fontes de repositórios disponíveis para instalação.
 
 ```bash
-repo show sources info
+repo sources info
 ```
 
 #### Listar Fontes
@@ -89,19 +89,18 @@ Exibe todos os repositórios que estão instalados e disponíveis para uso.
 repo list installed
 ```
 
-#### Exibir Detalhes de um Repositório
+#### Exibir Detalhes de um Repositório instalado
 
-Mostra informações detalhadas sobre um repositório específico.
+Mostra informações detalhadas sobre um repositório específico instalado.
 
 ```bash
-# PEDENDENTE
 repo show [repositoryNamespace]
 ```
 
 **Exemplo:**
 
 ```bash
-repo show EcosystemCore
+repo show EssentialRepo
 ```
 
 #### Instalar um Repositório
@@ -116,7 +115,7 @@ repo install [repositoryNamespace] [sourceType]
 **Exemplo:**
 
 ```bash
-repo install EcosystemCore LOCAL_FS
+repo install EssentialRepo LOCAL_FS
 ```
 
 #### Atualizar um Repositório Instalado
@@ -155,7 +154,7 @@ repo uninstall [repositoryNamespace]
 **Exemplo:**
 
 ```bash
-repo uninstall EcosystemCore
+repo uninstall EssentialRepo
 ```
 
 ## Exemplos de Uso
