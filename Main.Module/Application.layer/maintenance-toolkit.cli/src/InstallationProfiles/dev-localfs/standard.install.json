@@ -47,9 +47,9 @@
                 },
                 {
                     "appType":"CLI",
-                    "executable":"repo",
+                    "executable":"explorer",
                     "packageNamespace":"Main.Module/Application.layer/repository-explorer.cli",
-                    "supervisorSocketFileName":"repo.sock"
+                    "supervisorSocketFileName":"explorer.sock"
                 },
                 {
                     "appType":"CLI",
