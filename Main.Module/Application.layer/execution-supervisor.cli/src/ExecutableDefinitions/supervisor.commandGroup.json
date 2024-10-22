@@ -1,0 +1,8 @@
+[
+    {
+        "namespace": "ListSockets",
+        "path": "Commands/ListSockets.command",
+        "command" : "sockets",
+        "description": "Listar todos os sockets de supervisão"
+    }
+]

@@ -27,7 +27,6 @@ supervisor show task [TASK_ID] --socket "<SOCKET_FILENAME>"
 
 ```
 
-
 ## Gerenciamento de uma instância do package-executor
 
 A ferramenta oferece uma série de comandos para gerenciar diversos aspectos da aplicação. Abaixo, você encontrará uma descrição detalhada de cada comando e exemplos de uso.
@@ -65,5 +64,5 @@ supervisor kill --socket [SOCKET_FILENAME]
 ### Detalhar informações de tarefas
 Mostra informações detalhada de uma tarefas específica
 ```bash
-supervisor show task [TASK_ID] --socket "<SOCKET_FILENAME>"
+supervisor show task [TASK_ID] --socket [SOCKET_FILENAME]CÉSAR LENZI
 ```
