@@ -2,8 +2,8 @@
     "namespace": "@/execution-supervisor-cli",
     "executables": [
         {
-            "executableName": "mysup",
-            "commands": "ExecutableDefinitions/mysup.commandGroup.json"
+            "executableName": "supervisor",
+            "commands": "ExecutableDefinitions/supervisor.commandGroup.json"
         }
     ]
 }
