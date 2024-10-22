@@ -9,7 +9,7 @@ const GetRepositories = async ({
     REPOS_CONF_FILENAME_REPOS_DATA,
 }) => {
     const filePath = GetRepositoriesFilePath({
-        ECO_DIRPATH_INSTALL_DATA,
+        installDataDirPath: ECO_DIRPATH_INSTALL_DATA,
         REPOS_CONF_FILENAME_REPOS_DATA
     })
     const content = await readFile(filePath, { encoding: 'utf8' })
