@@ -39,46 +39,6 @@ Lista todas as fontes registradas.
 repo list sources
 ```
 
-#### Adicionar uma Nova Fonte de Dados
-
-Permite adicionar uma nova fonte de repositório especificando seu tipo.
-
-```bash
-# PEDENDENTE
-repo add source [sourceType]
-# Um formulário será aberto para completar o registro da nova fonte.
-```
-
-**Exemplo:**
-
-```bash
-repo add source GIT_REPO
-```
-
-#### Remover Fonte
-
-Permite remover uma fonte de repositório registrada.
-
-```bash
-# PEDENDENTE
-repo remove source [sourceType]
-```
-
-**Exemplo:**
-
-```bash
-repo remove source LOCAL_FS
-```
-
-#### Atualizar Todas as Fontes
-
-Atualiza a lista de repositórios disponíveis consultando todas as fontes registradas.
-
-```bash
-# PEDENDENTE
-repo update sources
-```
-
 ### Gerenciamento de Repositórios
 
 #### Listar Repositórios Instalados
@@ -108,14 +68,13 @@ repo show EssentialRepo
 Instala um repositório especificado a partir de uma fonte.
 
 ```bash
-# PEDENDENTE
 repo install [repositoryNamespace] [sourceType]
 ```
 
 **Exemplo:**
 
 ```bash
-repo install EssentialRepo LOCAL_FS
+repo install EcosystemCoreRepo LOCAL_FS
 ```
 
 #### Atualizar um Repositório Instalado
@@ -123,7 +82,6 @@ repo install EssentialRepo LOCAL_FS
 Atualiza um repositório instalado para a versão mais recente disponível na fonte especificada.
 
 ```bash
-# PEDENDENTE
 repo update [repositoryNamespace] [sourceType]
 ```
 
@@ -132,48 +90,3 @@ repo update [repositoryNamespace] [sourceType]
 ```bash
 repo update EssentialRepo LOCAL_FS
 ```
-
-#### Atualizar Todos os Repositórios Instalados
-
-Atualiza todos os repositórios instalados para suas versões mais recentes.
-
-```bash
-# PEDENDENTE
-repo update all
-```
-
-#### Desinstalar um Repositório
-
-Remove um repositório instalado do ecossistema.
-
-```bash
-# PEDENDENTE
-repo uninstall [repositoryNamespace]
-```
-
-**Exemplo:**
-
-```bash
-repo uninstall EssentialRepo
-```
-
-## Exemplos de Uso
-
-- **Instalar um Repositório do GitHub**
-
-  ```bash
-  repo add source GIT_REPO
-  repo install MyRepo GIT_REPO
-  ```
-
-- **Atualizar Todos os Repositórios Instalados**
-
-  ```bash
-  repo update all
-  ```
-
-- **Remover uma Fonte de Repositório**
-
-  ```bash
-  repo remove source GIT_REPO
-  ```
