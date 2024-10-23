@@ -31,7 +31,7 @@
                     "appType":"APP",
                     "executable":"start-instance-manager",
                     "packageNamespace":"Main.Module/Application.layer/ecosystem-instance-manager.app",
-                    "supervisorSocketFileName":"daemon.sock"
+                    "supervisorSocketFileName":"instance-manager.sock"
                 },
                 {
                     "appType":"CLI",
