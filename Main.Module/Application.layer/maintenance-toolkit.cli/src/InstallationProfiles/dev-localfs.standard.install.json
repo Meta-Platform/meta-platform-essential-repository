@@ -1,0 +1,15 @@
+{
+    "installationDataDir":"~/Workspaces/meta-platform-repo/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "namespace": "EssentialRepo",
+            "sourceType":"LOCAL_FS",
+            "executableToInstall": ["supervisor", "mytoolkit", "repo"]
+        },
+        {
+            "namespace": "EcosystemCoreRepo",
+            "sourceType":"LOCAL_FS",
+            "executableToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "installationDataDir": "~/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "namespace": "EssentialRepo",
+            "sourceType":"GOOGLE_DRIVE",
+            "executableToInstall": ["supervisor", "mytoolkit", "repo"]
+        }
+    ]
+}

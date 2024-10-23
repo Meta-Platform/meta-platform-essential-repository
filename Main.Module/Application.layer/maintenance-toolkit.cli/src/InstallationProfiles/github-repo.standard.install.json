@@ -1,0 +1,15 @@
+{
+    "installationDataDir": "~/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "namespace": "EssentialRepo",
+            "sourceType":"GITHUB_REPO",
+            "executableToInstall": ["supervisor", "mytoolkit", "repo"]
+        },
+        {
+            "namespace": "EcosystemCoreRepo",
+            "sourceType":"GITHUB_REPO",
+            "executableToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
+        }
+    ]
+}

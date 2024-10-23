@@ -1,0 +1,44 @@
+{
+    "EssentialRepo": [
+        {
+            "sourceType":"LOCAL_FS",
+            "path": "~/Workspaces/meta-platform-repo/repos/meta-platform-essential-repository"
+        },
+        {
+            "sourceType":"GITHUB_RELEASE",
+            "repositoryName":"meta-platform-essential-repository",
+            "repositoryOwner": "Meta-Platform"
+        },
+        {
+            "sourceType":"GITHUB_REPO"
+        },
+        {
+            "sourceType":"GOOGLE_DRIVE",
+            "fileId": "12PKZU1Uea1yYnhO7R26Il9eyF__v6MAc"
+        }
+    ],
+    "EcosystemCoreRepo": [
+        {
+            "sourceType":"LOCAL_FS",
+            "path": "~/Workspaces/meta-platform-repo/repos/meta-platform-ecosystem-core-repository"
+        },
+        {
+            "sourceType":"GITHUB_RELEASE",
+            "repositoryName":"meta-platform-ecosystem-core-repository",
+            "repositoryOwner": "Meta-Platform"
+        },
+        {
+            "sourceType":"GITHUB_REPO"
+        },
+        {
+            "sourceType":"GOOGLE_DRIVE",
+            "fileId": "1-PuPdjU36acGmoPgusYWrMuhyGyMnoRI"
+        }
+    ],
+    "PlaformApplicationsRepo": [
+        {
+            "sourceType":"LOCAL_FS",
+            "path": "~/Workspaces/meta-platform-repo/repos/PlaformApplicationsRepo"
+        }
+    ]
+}

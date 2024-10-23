@@ -1,0 +1,15 @@
+{
+    "installationDataDir": "~/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "namespace": "EssentialRepo",
+            "sourceType":"GOOGLE_DRIVE",
+            "executableToInstall": ["supervisor", "mytoolkit", "repo"]
+        },
+        {
+            "namespace": "EcosystemCoreRepo",
+            "sourceType":"GOOGLE_DRIVE",
+            "executableToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+[
+    {
+        "appType":"CLI",
+        "executable":"supervisor",
+        "packageNamespace":"Main.Module/Application.layer/execution-supervisor.cli",
+        "supervisorSocketFileName":"supervisor.sock"
+    },
+    {
+        "appType":"CLI",
+        "executable":"mytoolkit",
+        "packageNamespace":"Main.Module/Application.layer/maintenance-toolkit.cli",
+        "supervisorSocketFileName":"mytoolkit.sock"
+    },
+    {
+        "appType":"CLI",
+        "executable":"repo",
+        "packageNamespace":"Main.Module/Application.layer/repository-manager.cli",
+        "supervisorSocketFileName":"repo.sock"
+    }
+]

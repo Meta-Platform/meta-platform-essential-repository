@@ -1,0 +1,10 @@
+{
+    "installationDataDir":"~/Workspaces/meta-platform-repo/EcosystemData",
+    "repositoriesToInstall":[
+        {
+            "namespace": "EssentialRepo",
+            "sourceType":"GITHUB_RELEASE",
+            "executableToInstall": ["supervisor", "mytoolkit", "repo"]
+        }
+    ]
+}
