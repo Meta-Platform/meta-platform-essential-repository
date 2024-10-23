@@ -2,11 +2,11 @@
     "EssentialRepo": [
         {
             "sourceType":"LOCAL_FS",
-            "path": "~/Workspaces/meta-platform-repo/repos/meta-platform-essential-repository"
+            "path": "~/Workspaces/meta-platform-repo/repos/essential-repository"
         },
         {
             "sourceType":"GITHUB_RELEASE",
-            "repositoryName":"meta-platform-essential-repository",
+            "repositoryName":"essential-repository",
             "repositoryOwner": "Meta-Platform"
         },
         {
@@ -20,11 +20,11 @@
     "EcosystemCoreRepo": [
         {
             "sourceType":"LOCAL_FS",
-            "path": "~/Workspaces/meta-platform-repo/repos/meta-platform-ecosystem-core-repository"
+            "path": "~/Workspaces/meta-platform-repo/repos/ecosystem-core-repository"
         },
         {
             "sourceType":"GITHUB_RELEASE",
-            "repositoryName":"meta-platform-ecosystem-core-repository",
+            "repositoryName":"ecosystem-core-repository",
             "repositoryOwner": "Meta-Platform"
         },
         {
