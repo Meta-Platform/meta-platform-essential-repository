@@ -12,7 +12,7 @@ const ListRunningTasksCommand = async ({args, startupParams}) => {
 
     const daemonClient = await CreateCommunicationInterface(socketFilePath)
     const taskList = await daemonClient.ListTasks()
-    const table = await MountTaskTable(taskList, LoaderScript)
+    const table = await MountTaskTable(taskList)
     console.log(table.toString())
 }
 

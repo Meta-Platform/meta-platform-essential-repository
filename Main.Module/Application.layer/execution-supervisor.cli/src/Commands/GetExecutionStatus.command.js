@@ -2,7 +2,7 @@ const path = require("path")
 
 const CreateCommunicationInterface = require("../../../../Libraries.layer/supervisor.lib/src/CreateCommunicationInterface")
 
-const GetExecutionStatusCommand = async ({args, startupParams}) => {
+const GetExecutionStatusCommand = async ({ args, startupParams }) => {
 
 	const { socket } = args
 	const { supervisorSocketsDirPath } = startupParams

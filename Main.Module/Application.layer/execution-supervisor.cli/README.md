@@ -11,19 +11,19 @@ O ***Execution Supervisor*** é responsável pela análise e supervisão de apli
 supervisor sockets
 
 # Mostrar status
-supervisor status --socket [SOCKET_FILENAME]
+supervisor status [SOCKET_FILENAME]
 
 # Listar tarefas
-supervisor tasks --socket [SOCKET_FILENAME]
+supervisor tasks [SOCKET_FILENAME]
 
 # Visualizar logs
-supervisor log --socket [SOCKET_FILENAME]
+supervisor log [SOCKET_FILENAME]
 
 # Matar Execução
-supervisor kill --socket [SOCKET_FILENAME]
+supervisor kill [SOCKET_FILENAME]
 
 # Detalhar informações de tarefas
-supervisor show task [TASK_ID] --socket [SOCKET_FILENAME]
+supervisor show task [TASK_ID] [SOCKET_FILENAME]
 
 ```
 
@@ -40,29 +40,29 @@ supervisor sockets
 ### Mostrar status
  Mostra status de um instância em execução
 ```bash
-supervisor status --socket [SOCKET_FILENAME]
+supervisor status [SOCKET_FILENAME]
 ```
 
 ### Listar tarefas
 Lista todas as tarefas de um instância em execução
 ```bash
-supervisor tasks --socket [SOCKET_FILENAME]
+supervisor tasks [SOCKET_FILENAME]
 ```
 
 ### Visualizar logs
 Fica exibindo o logs de uma instância em execução
 ```bash
-supervisor log --socket [SOCKET_FILENAME]
+supervisor log [SOCKET_FILENAME]
 ```
 
 ### Matar Execução
 Mata a execução de uma instância.
 ```bash
-supervisor kill --socket [SOCKET_FILENAME]
+supervisor kill [SOCKET_FILENAME]
 ```
 
 ### Detalhar informações de tarefas
 Mostra informações detalhada de uma tarefas específica
 ```bash
-supervisor show task [TASK_ID] --socket [SOCKET_FILENAME]
+supervisor show task [TASK_ID] [SOCKET_FILENAME]
 ```

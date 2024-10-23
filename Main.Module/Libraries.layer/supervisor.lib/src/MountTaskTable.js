@@ -4,9 +4,10 @@ const Table = SmartRequire("cli-table3")
 const colors = SmartRequire("colors")
 const { basename } = require("path")
 
-const MountTaskTable = async (taskList, LoaderScript) => {
+const GetColorLogByStatus = require("./GetColorLogByStatus")
 
-    const GetColorLogByStatus = LoaderScript("supervisor.lib/src/GetColorLogByStatus")
+const MountTaskTable = async (taskList) => {
+
 
     const table = new Table({
         head: [
