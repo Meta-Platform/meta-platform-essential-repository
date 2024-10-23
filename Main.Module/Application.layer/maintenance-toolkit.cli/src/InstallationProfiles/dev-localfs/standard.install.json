@@ -41,9 +41,9 @@
                 },
                 {
                     "appType":"CLI",
-                    "executable":"myexec",
+                    "executable":"executor",
                     "packageNamespace":"Main.Module/Application.layer/instance-executor.cli",
-                    "supervisorSocketFileName":"myexec.sock"
+                    "supervisorSocketFileName":"executor.sock"
                 },
                 {
                     "appType":"CLI",
