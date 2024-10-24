@@ -4,14 +4,14 @@
 
 | **Perfil**                    | **Descrição**                                                                                      |
 |-------------------------------|----------------------------------------------------------------------------------------------------|
-| `dev-minimal-localfs`          | Configuração mínima, instalada no local de execução do comando, utilizando sistema de arquivo local |
-| `dev-standard-localfs`         | Configuração padrão, instalada no local de execução do comando, utilizando sistema de arquivo local |
-| `minimal-github-release`       | Configuração mínima, instala baixando do release hospedado no GitHub                               |
-| `standard-github-release`      | Configuração padrão, instala baixando do release hospedado no GitHub                               |
-| `minimal-github-repo`          | Configuração mínima, instala clonando do repositório do GitHub                                     |
-| `standard-github-repo`         | Configuração padrão, instala clonando do repositório do GitHub                                     |
-| `minimal-google-drive`         | Configuração mínima, instala baixando do Google Drive                                              |
-| `standard-google-drive`        | Configuração padrão, instala baixando do Google Drive                                              |
+| `dev-localfs-minimal`          | Configuração mínima, instalada no local de execução do comando, utilizando sistema de arquivo local |
+| `dev-localfs-standard`         | Configuração padrão, instalada no local de execução do comando, utilizando sistema de arquivo local |
+| `github-release-minimal`       | Configuração mínima, instala baixando do release hospedado no GitHub                               |
+| `github-release-standard`      | Configuração padrão, instala baixando do release hospedado no GitHub                               |
+| `github-repo-minimal`          | Configuração mínima, instala clonando do repositório do GitHub                                     |
+| `github-repo-standard`         | Configuração padrão, instala clonando do repositório do GitHub                                     |
+| `google-drive-minimal`         | Configuração mínima, instala baixando do Google Drive                                              |
+| `google-drive-standard`        | Configuração padrão, instala baixando do Google Drive                                              |
 
 ---
 

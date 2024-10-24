@@ -6,14 +6,14 @@ O **Maintenance Toolkit Command-line** é uma ferramenta usada para configuraç�
 
 ## Perfis de Instalação
 
-- **dev-minimal-localfs** Configuração mínima, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
-- **dev-standard-localfs** Configuração padrão, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
-- **minimal-github-release** Configuração mínima, instala baixando do release hospedada no github
-- **standard-github-release** Configuração padrão, instala baixando do release hospedada no github
-- **minimal-github-repo** Configuração mínima, instala clonando do repositório do github
-- **standard-github-repo** Configuração padrão, instala clonando do repositório do github
-- **minimal-google-drive** Configuração mínima, instala baixando do google drive
-- **standard-google-drive** Configuração padrão, instala baixando do google drive
+- **dev-localfs-minimal** Configuração mínima, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
+- **dev-localfs-standard** Configuração padrão, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
+- **github-release-minimal** Configuração mínima, instala baixando do release hospedada no github
+- **github-release-standard** Configuração padrão, instala baixando do release hospedada no github
+- **github-repo-minimal** Configuração mínima, instala clonando do repositório do github
+- **github-repo-standard** Configuração padrão, instala clonando do repositório do github
+- **google-drive-minimal** Configuração mínima, instala baixando do google drive
+- **google-drive-standard** Configuração padrão, instala baixando do google drive
 
 ## Comandos Disponíveis
 ### Exibir Perfis de Instalação Disponíveis
@@ -32,7 +32,7 @@ mytoolkit install
 
 #### Exemplo:
 ```bash
-mytoolkit install --profile standard-github-release
+mytoolkit install --profile github-release-standard
 ```
 
 ### Exibir Detalhes de um Perfil
@@ -56,10 +56,10 @@ mytoolkit install --profile "<nome_do_perfil>"
 
 #### Exemplos:
 ```bash
-mytoolkit install --profile dev-minimal-localfs
-mytoolkit install --profile dev-standard-localfs
-mytoolkit install --profile minimal-github-release
-mytoolkit install --profile standard-github-release
+mytoolkit install --profile dev-localfs-minimal
+mytoolkit install --profile dev-localfs-standard
+mytoolkit install --profile github-release-minimal
+mytoolkit install --profile github-release-standard
 ```
 
 ### Alterar o Caminho dos Dados de Instalação
