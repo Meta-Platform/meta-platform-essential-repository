@@ -52,7 +52,7 @@ const InstallRepository = async ({
         path: deployedRepoPath
     })
 
-    const { applications: applicationsMetadata } = metadataContent
+    const { applications: applicationsMetadata } = metadataContent || {}
 
     await RegisterRepository({
         repositoryNamespace,
@@ -64,13 +64,11 @@ const InstallRepository = async ({
         loggerEmitter
     })
 
-    
-
-    if(executablesToInstall){
+    if(executablesToInstall && metadataContent){
         const supervisorSocketDirPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
 
         const applicationsDataFiltered = 
-            FilterApplicationsMetadataByExecutablesToInstall = ({
+            FilterApplicationsMetadataByExecutablesToInstall({
                 executablesToInstall,
                 applicationsMetadata
             })
