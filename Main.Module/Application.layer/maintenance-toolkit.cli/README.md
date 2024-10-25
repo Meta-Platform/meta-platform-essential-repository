@@ -6,6 +6,8 @@ O **Maintenance Toolkit Command-line** é uma ferramenta usada para configuraç�
 
 ## Perfis de Instalação
 
+- **localfs-minimal** Configuração mínima, instalada no diretório *home*, usando o sistema de arquivo local como fonte
+- **localfs-standard** Configuração padrão, instalada no diretório *home*, usando o sistema de arquivo local como fonte
 - **dev-localfs-minimal** Configuração mínima, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
 - **dev-localfs-standard** Configuração padrão, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
 - **github-release-minimal** Configuração mínima, instala baixando do release hospedada no github
@@ -56,6 +58,8 @@ mytoolkit install --profile "<nome_do_perfil>"
 
 #### Exemplos:
 ```bash
+mytoolkit install --profile localfs-minimal
+mytoolkit install --profile localfs-standard
 mytoolkit install --profile dev-localfs-minimal
 mytoolkit install --profile dev-localfs-standard
 mytoolkit install --profile github-release-minimal

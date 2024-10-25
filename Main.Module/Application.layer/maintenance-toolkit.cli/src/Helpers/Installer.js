@@ -2,6 +2,7 @@ const EventEmitter = require('events')
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 const NPM_DEPENDENCIES =  require("../Configs/npm-dependencies.json")
+const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
 const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfiles")
 
