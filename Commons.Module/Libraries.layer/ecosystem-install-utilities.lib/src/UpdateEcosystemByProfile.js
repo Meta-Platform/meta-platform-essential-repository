@@ -12,9 +12,10 @@ const VerifyIfAllRepositoriesAreRegistered = require("./Helpers/VerifyIfAllRepos
 const UpdateEcosystemByProfile = async ({
     ecosystemDefaults,
     npmDependencies,
-    profileData,
-    installationPath,
     profile,
+    installationDataDir,
+    repositoriesInstallData,
+    installationPath,
     loggerEmitter
 }) => {
 
@@ -25,7 +26,7 @@ const UpdateEcosystemByProfile = async ({
     })
 
     const context = PrepareContext({
-        profileData,
+        installationDataDir,
         ecosystemDefaults,
         installationPath
     })
@@ -47,35 +48,28 @@ const UpdateEcosystemByProfile = async ({
         loggerEmitter
     })
 
-    if(profileData?.repositoriesToInstall){
-
-        const { repositoriesToInstall } = profileData
+    if(repositoriesInstallData){
 
         const areAllRepositoriesRegistered = await VerifyIfAllRepositoriesAreRegistered({
-            repositoriesToInstall,
+            repositoriesInstallData,
             installationPath: installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA: ecosystemDefaults.REPOS_CONF_FILENAME_REPOS_DATA
         })
 
         if(areAllRepositoriesRegistered) {
-            const {
-                repositoriesToInstall
-            } = profileData
-            
-            for (const repositoryToInstall of repositoriesToInstall) {
+ 
+            for (const repositoryInstallData of repositoriesInstallData) {
 
                 const { 
-                    repository: {
-                        namespace: repositoryNamespace,
-                        source: sourceData,
-                    },
-                    appsToInstall
-                 } = repositoryToInstall
+                    namespace: repositoryNamespace,
+                    sourceData,
+                    executablesToInstall
+                 } = repositoryInstallData
 
                 await UpdateRepository({
                     repositoryNamespace,
                     sourceData,
-                    appsToInstall,
+                    executablesToInstall,
                     installDataDirPath,
                     ecosystemDefaults,
                     loggerEmitter

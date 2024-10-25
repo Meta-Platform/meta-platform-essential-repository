@@ -8,7 +8,7 @@ const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildComman
 
 const ReinstallApplication = async ({
     namespace,
-    appToInstall,
+    applicationData,
     installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
     supervisorSocketDirPath,
@@ -20,7 +20,7 @@ const ReinstallApplication = async ({
         executable,
         packageNamespace,
         supervisorSocketFileName
-    } = appToInstall
+    } = applicationData
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "ReinstallApplication",
@@ -32,9 +32,9 @@ const ReinstallApplication = async ({
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "ReinstallApplication",
             type: "error",
-            message: `appToInstall.appType é obrigatório`
+            message: `applicationData.appType é obrigatório`
         })
-        throw "appToInstall.appType é obrigatório"
+        throw "applicationData.appType é obrigatório"
     }
 
     loggerEmitter && loggerEmitter.emit("log", {

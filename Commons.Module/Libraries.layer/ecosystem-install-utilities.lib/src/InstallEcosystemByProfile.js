@@ -49,15 +49,12 @@ const InstallEcosystemByProfile = async ({
     })
 
     if(repositoriesInstallData){
-    
         for (const repositoryInstallData of repositoriesInstallData) {
-
             const { 
                 namespace: repositoryNamespace,
                 sourceData,
                 executablesToInstall
              } = repositoryInstallData
-
             await InstallRepository({
                 repositoryNamespace,
                 sourceData,

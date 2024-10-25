@@ -1,20 +1,15 @@
 const path = require("path")
+
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
+
 const RegisterRepository = require("../../repository-config-handler.lib/src/RegisterRepository")
 const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir")
 
 const InstallApplication = require("./Install/InstallApplication")
 const DownloadRepository = require("./Helpers/DownloadRepository")
 
-
-const FilterApplicationsMetadataByExecutablesToInstall = ({
-    executablesToInstall,
-    applicationsMetadata
-}) => {
-    return applicationsMetadata.filter(item => executablesToInstall.includes(item.executable))
-}
-
+const FilterApplicationsMetadataByExecutablesToInstall = require("./Helpers/FilterApplicationsMetadataByExecutablesToInstall")
 
 const InstallRepository = async ({
     repositoryNamespace,
@@ -65,6 +60,7 @@ const InstallRepository = async ({
     })
 
     if(executablesToInstall && metadataContent){
+
         const supervisorSocketDirPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
 
         const applicationsDataFiltered = 
@@ -83,6 +79,7 @@ const InstallRepository = async ({
                 supervisorSocketDirPath,
                 loggerEmitter
             })
+            
         }
     }
 

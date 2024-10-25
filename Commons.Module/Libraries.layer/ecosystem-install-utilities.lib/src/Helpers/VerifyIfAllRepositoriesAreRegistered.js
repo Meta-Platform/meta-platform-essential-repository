@@ -1,7 +1,7 @@
 const FetchInstalledRepositoriesInfo = require("./FetchInstalledRepositoriesInfo")
 
 const VerifyIfAllRepositoriesAreRegistered = async ({
-    repositoriesToInstall,
+    repositoriesInstallData,
     installationPath,
     REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
@@ -13,14 +13,10 @@ const VerifyIfAllRepositoriesAreRegistered = async ({
 
     const namespacesInstalled = Object.keys(repositoriesInfo)
 
-    const areAllRepositoriesRegistered = repositoriesToInstall
-        .reduce(async (acc, repositoryToInstall) => {
+    const areAllRepositoriesRegistered = repositoriesInstallData
+        .reduce(async (acc, repositoryInstallData) => {
             if(acc){
-                const {
-                    repository: { namespace }
-                } = repositoryToInstall
-                
-                return namespacesInstalled.includes(namespace)
+                return namespacesInstalled.includes(repositoryInstallData.namespace)
             }
             return acc
         }, true)

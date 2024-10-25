@@ -3,15 +3,19 @@ const path = require("path")
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
+const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir") 
+
 const ReinstallApplication = require("./Update/ReinstallApplication")
 const DownloadRepository = require("./Helpers/DownloadRepository")
 
 const CleanOldRepository = require("./Helpers/CleanOldRepository")
 
+const FilterApplicationsMetadataByExecutablesToInstall = require("./Helpers/FilterApplicationsMetadataByExecutablesToInstall")
+
 const UpdateRepository = async ({
     repositoryNamespace,
     sourceData,
-    appsToInstall,
+    executablesToInstall,
     installDataDirPath,
     ecosystemDefaults,
     loggerEmitter
@@ -21,6 +25,7 @@ const UpdateRepository = async ({
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
         ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
+        REPOS_CONF_DIRNAME_METADATA
     } = ecosystemDefaults
 
     loggerEmitter && loggerEmitter.emit("log", {
@@ -44,18 +49,36 @@ const UpdateRepository = async ({
         loggerEmitter
     })
 
-    if(appsToInstall){
+    const metadataContent = await LoadMetadataDir({
+        metadataDirName: REPOS_CONF_DIRNAME_METADATA,
+        path: deployedRepoPath
+    })
+
+    const { applications: applicationsMetadata } = metadataContent || {}
+
+    if(executablesToInstall && metadataContent){
+
         const supervisorSocketDirPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
-        for (const appToInstall of appsToInstall) {
+
+        const applicationsDataFiltered = 
+            FilterApplicationsMetadataByExecutablesToInstall({
+                executablesToInstall,
+                applicationsMetadata
+            })
+        
+        for (const applicationData of applicationsDataFiltered) {
+
             await ReinstallApplication({
                 namespace: repositoryNamespace,
-                appToInstall,
+                applicationData,
                 installDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 supervisorSocketDirPath,
                 loggerEmitter
             })
+
         }
+
     }
 
     loggerEmitter && loggerEmitter.emit("log", {
