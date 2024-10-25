@@ -22,7 +22,7 @@ const Updater = async ({
         await UpdateEcosystemByProfile({
             ecosystemDefaults : ECOSYSTEM_DEFAULTS,
             npmDependencies : NPM_DEPENDENCIES,
-            installationProfile : installationProfiles[profile],
+            profileData : installationProfiles[profile],
             profile,
             installationPath,
             loggerEmitter

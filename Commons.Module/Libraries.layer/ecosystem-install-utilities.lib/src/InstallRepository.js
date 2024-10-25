@@ -2,14 +2,24 @@ const path = require("path")
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 const RegisterRepository = require("../../repository-config-handler.lib/src/RegisterRepository")
+const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir")
 
 const InstallApplication = require("./Install/InstallApplication")
 const DownloadRepository = require("./Helpers/DownloadRepository")
 
+
+const FilterApplicationsMetadataByExecutablesToInstall = ({
+    executablesToInstall,
+    applicationsMetadata
+}) => {
+    return applicationsMetadata.filter(item => executablesToInstall.includes(item.executable))
+}
+
+
 const InstallRepository = async ({
     repositoryNamespace,
     sourceData,
-    appsToInstall,
+    executablesToInstall,
     installDataDirPath,
     ecosystemDefaults,
     loggerEmitter
@@ -20,6 +30,7 @@ const InstallRepository = async ({
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
         ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
+        REPOS_CONF_DIRNAME_METADATA
     } = ecosystemDefaults
 
     loggerEmitter && loggerEmitter.emit("log", {
@@ -36,22 +47,39 @@ const InstallRepository = async ({
         loggerEmitter
     })
 
+    const metadataContent = await LoadMetadataDir({
+        metadataDirName: REPOS_CONF_DIRNAME_METADATA,
+        path: deployedRepoPath
+    })
+
+    const { applications: applicationsMetadata } = metadataContent
+
     await RegisterRepository({
         repositoryNamespace,
         sourceData,
-        appsToInstall,
+        applicationsMetadata,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
 
-    if(appsToInstall){
+    
+
+    if(executablesToInstall){
         const supervisorSocketDirPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR)
-        for (const appToInstall of appsToInstall) {
+
+        const applicationsDataFiltered = 
+            FilterApplicationsMetadataByExecutablesToInstall = ({
+                executablesToInstall,
+                applicationsMetadata
+            })
+
+        for (const applicationData of applicationsDataFiltered) {
+
             await InstallApplication({
                 namespace: repositoryNamespace,
-                appToInstall,
+                applicationData,
                 installDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 supervisorSocketDirPath,

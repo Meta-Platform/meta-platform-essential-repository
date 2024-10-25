@@ -8,7 +8,7 @@ const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildComman
 
 const InstallApplication = async ({
     namespace,
-    appToInstall,
+    applicationData,
     installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
     supervisorSocketDirPath,
@@ -20,7 +20,7 @@ const InstallApplication = async ({
         executable,
         packageNamespace,
         supervisorSocketFileName
-    } = appToInstall
+    } = applicationData
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallApplication",
@@ -32,9 +32,9 @@ const InstallApplication = async ({
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "InstallApplication",
             type: "error",
-            message: `appToInstall.appType é obrigatório`
+            message: `applicationData.appType é obrigatório`
         })
-        throw "appToInstall.appType é obrigatório"
+        throw "applicationData.appType é obrigatório"
     }
 
     loggerEmitter && loggerEmitter.emit("log", {

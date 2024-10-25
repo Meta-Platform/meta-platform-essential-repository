@@ -12,7 +12,7 @@ const VerifyIfAllRepositoriesAreRegistered = require("./Helpers/VerifyIfAllRepos
 const UpdateEcosystemByProfile = async ({
     ecosystemDefaults,
     npmDependencies,
-    installationProfile,
+    profileData,
     installationPath,
     profile,
     loggerEmitter
@@ -25,7 +25,7 @@ const UpdateEcosystemByProfile = async ({
     })
 
     const context = PrepareContext({
-        installationProfile,
+        profileData,
         ecosystemDefaults,
         installationPath
     })
@@ -47,9 +47,9 @@ const UpdateEcosystemByProfile = async ({
         loggerEmitter
     })
 
-    if(installationProfile?.repositoriesToInstall){
+    if(profileData?.repositoriesToInstall){
 
-        const { repositoriesToInstall } = installationProfile
+        const { repositoriesToInstall } = profileData
 
         const areAllRepositoriesRegistered = await VerifyIfAllRepositoriesAreRegistered({
             repositoriesToInstall,
@@ -60,7 +60,7 @@ const UpdateEcosystemByProfile = async ({
         if(areAllRepositoriesRegistered) {
             const {
                 repositoriesToInstall
-            } = installationProfile
+            } = profileData
             
             for (const repositoryToInstall of repositoriesToInstall) {
 

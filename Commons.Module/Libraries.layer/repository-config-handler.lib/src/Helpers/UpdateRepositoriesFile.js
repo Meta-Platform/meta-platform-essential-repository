@@ -6,7 +6,7 @@ const UpdateRepositoriesFile = async ({
     sourceData,
     repositoryInstallationPath, 
     installDataDirPath,
-    appsToInstall,
+    applicationsMetadata,
     REPOS_CONF_FILENAME_REPOS_DATA,
     loggerEmitter
 }) => {
@@ -20,7 +20,7 @@ const UpdateRepositoriesFile = async ({
                 [repositoryNamespace]: { 
                     installationPath: repositoryInstallationPath,
                     sourceData,
-                    installedApplications: appsToInstall
+                    installedApplications: applicationsMetadata
                  }
             }
             await WriteRepositoriesFileJson({ 

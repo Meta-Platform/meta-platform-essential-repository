@@ -5,7 +5,7 @@ const UpdateRepositoriesFile = require("./Helpers/UpdateRepositoriesFile")
 const RegisterRepository = async ({
     repositoryNamespace,
     sourceData,
-    appsToInstall,
+    applicationsMetadata,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
@@ -24,7 +24,7 @@ const RegisterRepository = async ({
             repositoryNamespace,
             sourceData,
             repositoryInstallationPath, 
-            appsToInstall,
+            applicationsMetadata,
             installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter

@@ -4,12 +4,12 @@
         {
             "namespace": "EssentialRepo",
             "sourceType":"LOCAL_FS",
-            "executableToInstall": ["supervisor", "mytoolkit", "repo"]
+            "executablesToInstall": ["supervisor", "mytoolkit", "repo"]
         },
         {
             "namespace": "EcosystemCoreRepo",
             "sourceType":"LOCAL_FS",
-            "executableToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
+            "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
         }
     ]
 }
