@@ -8,22 +8,30 @@ const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfile
 const PrintDataLog = require("../../../../../Commons.Module/Libraries.layer/print-data-log.lib/src/PrintDataLog")
 const InstallEcosystemByProfile = require("../../../../../Commons.Module/Libraries.layer/ecosystem-install-utilities.lib/src/InstallEcosystemByProfile")
 
+const BuildRepositoriesInstallData = require("./BuildRepositoriesInstallData")
+
 const Installer = async ({ 
     profile, 
     installationPath
 }) => {
 
-    const installationProfiles = LoadAllInstalationProfiles()
-    
     const loggerEmitter = new EventEmitter()
 	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "maintenance-toolkit|Installer"))
 
+    const installationProfiles = LoadAllInstalationProfiles()
+    const instalationData = installationProfiles[profile]
+    const { repositoriesToInstall, installationDataDir } = instalationData
+
+    const repositoriesInstallData = 
+        BuildRepositoriesInstallData({ repositoriesToInstall, sources: REPOSITORY_SOURCES}) 
+    
     try{
         await InstallEcosystemByProfile({
             ecosystemDefaults : ECOSYSTEM_DEFAULTS,
             npmDependencies : NPM_DEPENDENCIES,
-            profileData : installationProfiles[profile],
             profile,
+            installationDataDir,
+            repositoriesInstallData,
             installationPath,
             loggerEmitter
         })
