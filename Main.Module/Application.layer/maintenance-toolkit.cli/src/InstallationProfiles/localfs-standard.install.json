@@ -1,0 +1,15 @@
+{
+    "installationDataDir":"~",
+    "repositoriesToInstall":[
+        {
+            "namespace": "EssentialRepo",
+            "sourceType":"LOCAL_FS",
+            "executablesToInstall": ["supervisor", "mytoolkit", "repo"]
+        },
+        {
+            "namespace": "EcosystemCoreRepo",
+            "sourceType":"LOCAL_FS",
+            "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
+        }
+    ]
+}

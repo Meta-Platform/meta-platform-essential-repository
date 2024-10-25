@@ -1,0 +1,10 @@
+{
+    "installationDataDir":"~",
+    "repositoriesToInstall":[
+        {
+            "namespace": "EssentialRepo",
+            "sourceType":"LOCAL_FS",
+            "executablesToInstall": ["supervisor", "mytoolkit", "repo"]
+        }
+    ]
+}

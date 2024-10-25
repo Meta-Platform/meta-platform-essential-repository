@@ -1,6 +1,9 @@
 const LoadAllInstalationProfiles = () => {
 
     const INSTALLATION_PROFILES = {
+        "localfs-full"            : require("../InstallationProfiles/localfs-full.install.json"),
+        "localfs-minimal"         : require("../InstallationProfiles/localfs-minimal.install.json"),
+        "localfs-standard"        : require("../InstallationProfiles/localfs-standard.install.json"),
         "dev-localfs-full"        : require("../InstallationProfiles/dev-localfs-full.install.json"),
         "dev-localfs-minimal"     : require("../InstallationProfiles/dev-localfs-minimal.install.json"),
         "dev-localfs-standard"    : require("../InstallationProfiles/dev-localfs-standard.install.json"),
