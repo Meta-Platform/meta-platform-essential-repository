@@ -1,0 +1,12 @@
+{
+    "executables":[
+        {
+            "dependency": "@//command-group",
+            "executableName": "mytoolkit",
+            "bound-params": {
+                "ecosystemInstallUtilitiesLib": "@/ecosystem-install-utilities.lib",
+                "printDataLogLib": "@/print-data-log.lib"
+            }
+        }
+    ]
+}

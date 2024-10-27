@@ -1,9 +1,17 @@
 const colors = require("colors")
-const FetchInstalledRepositoriesInfo = require("../../../../../Commons.Module/Libraries.layer/ecosystem-install-utilities.lib/src/Helpers/FetchInstalledRepositoriesInfo")
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
-const ListInstalledRepositoriesCommand = async ({ startupParams }) => {
+const ListInstalledRepositoriesCommand = async ({ 
+    startupParams,
+    params 
+}) => {
+    
+    const {
+        ecosystemInstallUtilitiesLib
+    } = params
+
+    const FetchInstalledRepositoriesInfo = ecosystemInstallUtilitiesLib.require("Helpers/FetchInstalledRepositoriesInfo")
     
     const { REPOS_CONF_FILENAME_REPOS_DATA } = ECOSYSTEM_DEFAULTS
 

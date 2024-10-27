@@ -6,15 +6,17 @@ const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
 const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfiles")
 
-const PrintDataLog = require("../../../../../Commons.Module/Libraries.layer/print-data-log.lib/src/PrintDataLog")
-const UpdateEcosystemByProfile = require("../../../../../Commons.Module/Libraries.layer/ecosystem-install-utilities.lib/src/UpdateEcosystemByProfile")
-
 const BuildRepositoriesInstallData = require("./BuildRepositoriesInstallData")
 
 const Updater = async ({ 
     profile, 
-    installationPath
+    installationPath,
+    ecosystemInstallUtilitiesLib,
+    printDataLogLib
 }) => {
+
+    const UpdateEcosystemByProfile = ecosystemInstallUtilitiesLib.require("UpdateEcosystemByProfile")
+    const PrintDataLog = printDataLogLib.require("PrintDataLog")  
     
     const loggerEmitter = new EventEmitter()
 	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "maintenance-toolkit|Updater"))

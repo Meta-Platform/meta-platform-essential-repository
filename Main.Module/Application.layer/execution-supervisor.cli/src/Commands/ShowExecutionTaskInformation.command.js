@@ -1,16 +1,21 @@
 const path = require("path")
 
-const CreateCommunicationInterface      = require("../../../../Libraries.layer/supervisor.lib/src/CreateCommunicationInterface")
-const RenderGeneralInformationTaskTable = require("../../../../Libraries.layer/supervisor.lib/src/RenderGeneralInformationTaskTable")
-const RenderStaticParametersTaskTable   = require("../../../../Libraries.layer/supervisor.lib/src/RenderStaticParametersTaskTable")
-const RenderLinkedParametersTaskTable   = require("../../../../Libraries.layer/supervisor.lib/src/RenderLinkedParametersTaskTable")
-const RenderAgentLinkRulesTaskTable     = require("../../../../Libraries.layer/supervisor.lib/src/RenderAgentLinkRulesTaskTable")
-const RenderActivationRulesTaskTable    = require("../../../../Libraries.layer/supervisor.lib/src/RenderActivationRulesTaskTable")
-
-const ShowExecutionTaskInformationCommand = async ({args, startupParams}) => {
+const ShowExecutionTaskInformationCommand = async ({
+    args, 
+    startupParams,
+    params
+}) => {
 
 	const { taskId, socket } = args
 	const { supervisorSocketsDirPath } = startupParams
+    const { supervisorLib } = params
+
+    const CreateCommunicationInterface      = supervisorLib.require("CreateCommunicationInterface")
+    const RenderGeneralInformationTaskTable = supervisorLib.require("RenderGeneralInformationTaskTable")
+    const RenderStaticParametersTaskTable   = supervisorLib.require("RenderStaticParametersTaskTable")
+    const RenderLinkedParametersTaskTable   = supervisorLib.require("RenderLinkedParametersTaskTable")
+    const RenderAgentLinkRulesTaskTable     = supervisorLib.require("RenderAgentLinkRulesTaskTable")
+    const RenderActivationRulesTaskTable    = supervisorLib.require("RenderActivationRulesTaskTable")
 
     const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
 

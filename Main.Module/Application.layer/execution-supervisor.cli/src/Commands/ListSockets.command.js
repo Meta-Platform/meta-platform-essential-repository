@@ -1,8 +1,9 @@
-const ListSocketFilesName = require("../../../../Libraries.layer/supervisor.lib/src/ListSocketFilesName")
-
-const ListSocketsCommand = async ({ startupParams }) => {
+const ListSocketsCommand = async ({ startupParams, params }) => {
 
     const { supervisorSocketsDirPath } = startupParams
+    const { supervisorLib } = params
+
+    const ListSocketFilesName = supervisorLib.require("ListSocketFilesName")
 
     const socketFileNameList = await ListSocketFilesName(supervisorSocketsDirPath)
 

@@ -1,0 +1,113 @@
+{
+    "bound-params":[
+        "supervisorLib"
+    ],
+    "executables": [
+        {
+            "namespace": "ListSockets",
+            "path": "Commands/ListSockets.command",
+            "command" : "sockets",
+            "description": "Listar todos os sockets de supervisão",
+            "bound-params": {
+                "supervisorLib": "supervisorLib"
+            }
+        },
+        {
+            "namespace": "GetExecutionStatus",
+            "path": "Commands/GetExecutionStatus.command",
+            "command" : "status [socket]",
+            "description": "Mostrar status do execução da instancia",
+            "parameters": [
+                {
+                    "key":"socket",
+                    "paramType":"positional",
+                    "valueType":"string",
+                    "describe":"Nome do arquivo de sockets"
+                }
+            ],
+            "bound-params": {
+                "supervisorLib": "supervisorLib"
+            }
+        },
+        {
+            "namespace": "ListRunningTasks",
+            "path": "Commands/ListRunningTasks.command",
+            "command" : "tasks [socket]",
+            "description": "Listar tarefas carregadas no task executor da instância",
+            "parameters": [
+                {
+                    "key":"socket",
+                    "paramType":"positional",
+                    "valueType":"string",
+                    "describe":"Nome do arquivo de sockets"
+                }
+            ],
+            "bound-params": {
+                "supervisorLib": "supervisorLib"
+            }
+        },
+        {
+            "namespace": "LogExecution",
+            "path": "Commands/LogExecution.command",
+            "command" : "log [socket]",
+            "description": "Visualizar log da instância",
+            "parameters": [
+                {
+                    "key":"socket",
+                    "paramType":"positional",
+                    "valueType":"string",
+                    "describe":"Nome do arquivo de sockets"
+                }
+            ],
+            "bound-params": {
+                "supervisorLib": "supervisorLib"
+            }
+        },
+        {
+            "namespace": "KillExecution",
+            "path": "Commands/KillExecution.command",
+            "command" : "kill [socket]",
+            "description": "Matar o instância",
+            "parameters": [
+                {
+                    "key":"socket",
+                    "paramType":"positional",
+                    "valueType":"string",
+                    "describe":"Nome do arquivo de sockets"
+                }
+            ],
+            "bound-params": {
+                "supervisorLib": "supervisorLib"
+            }
+        },
+        {
+            "namespace": "Show",
+            "command" : "show",
+            "childCommands": [
+                    {
+                        "namespace": "ShowExecutionTaskInformation",
+                        "path": "Commands/ShowExecutionTaskInformation.command",
+                        "command" : "task [taskId] [socket]",
+                        "description": "Mostra informação sobre uma tarefa específica da instância",
+                        "parameters": [
+                            {
+                                "key":"taskId",
+                                "paramType":"positional",
+                                "valueType":"string",
+                                "describe":"id da tarefa"
+                            },
+                            {
+                                "key":"socket",
+                                "paramType":"positional",
+                                "valueType":"string",
+                                "describe":"Nome do arquivo de sockets"
+                            }
+                        ],
+                        "bound-params": {
+                            "supervisorLib": "supervisorLib"
+                        }
+                    }
+               ]
+        }
+    ]
+}

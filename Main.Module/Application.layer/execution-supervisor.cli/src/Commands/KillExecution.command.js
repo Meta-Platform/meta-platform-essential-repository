@@ -1,13 +1,18 @@
 const EventEmitter = require('events')
 const path = require("path")
 
-const CreateCommunicationInterface = require("../../../../Libraries.layer/supervisor.lib/src/CreateCommunicationInterface")
-const FormatterDataLog = require("../../../../Libraries.layer/supervisor.lib/src/FormatterDataLog")
-
-const KillExecutionCommand = async ({args, startupParams}) => {
+const KillExecutionCommand = async ({
+	args, 
+	startupParams,
+	params
+}) => {
 
 	const { socket } = args
 	const { supervisorSocketsDirPath } = startupParams
+	const { supervisorLib } = params
+	
+	const CreateCommunicationInterface = supervisorLib.require("CreateCommunicationInterface")
+	const FormatterDataLog             = supervisorLib.require("FormatterDataLog")
 
 	const loggerEmitter = new EventEmitter()
 	loggerEmitter.on("log", async (dataLog) => 

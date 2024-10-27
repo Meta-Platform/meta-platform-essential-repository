@@ -1,12 +1,17 @@
 const EventEmitter = require('node:events')
 
-const UpdateRepository = require("../../../../../Commons.Module/Libraries.layer/ecosystem-install-utilities.lib/src/UpdateRepository")
-const PrintDataLog = require("../../../../../Commons.Module/Libraries.layer/print-data-log.lib/src/PrintDataLog")
-
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
 const UpdateRepositoryCommand = async ({ args, startupParams  }) => {
+
+    const {
+        ecosystemInstallUtilitiesLib,
+        printDataLogLib
+    } = params
+
+    const UpdateRepository = ecosystemInstallUtilitiesLib.require("UpdateRepository")
+    const PrintDataLog = printDataLogLib.require("PrintDataLog")    
 
     const { installDataDirPath } = startupParams
 

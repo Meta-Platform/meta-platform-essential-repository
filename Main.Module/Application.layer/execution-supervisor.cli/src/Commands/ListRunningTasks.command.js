@@ -1,12 +1,17 @@
 const path = require("path")
 
-const CreateCommunicationInterface = require("../../../../Libraries.layer/supervisor.lib/src/CreateCommunicationInterface")
-const MountTaskTable = require("../../../../Libraries.layer/supervisor.lib/src/MountTaskTable")
-
-const ListRunningTasksCommand = async ({args, startupParams}) => {
+const ListRunningTasksCommand = async ({
+    args, 
+    startupParams,
+    params
+}) => {
 
 	const { socket } = args
 	const { supervisorSocketsDirPath } = startupParams
+    const { supervisorLib } = params
+	
+	const CreateCommunicationInterface = supervisorLib.require("CreateCommunicationInterface")
+    const MountTaskTable               = supervisorLib.require("MountTaskTable")
 
     const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
 

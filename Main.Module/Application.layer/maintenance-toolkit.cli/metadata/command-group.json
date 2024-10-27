@@ -1,0 +1,95 @@
+{
+    "bound-params":[
+        "ecosystemInstallUtilitiesLib", 
+        "printDataLogLib"
+    ],
+    "executables": [
+        {
+            "namespace": "ListProfiles",
+            "path": "Commands/ListProfiles.command",
+            "command" : "list profiles",
+            "description": "Lista os perfis de instalação disponíveis"
+        },
+        {
+            "namespace": "Install",
+            "path": "Commands/Install.command",
+            "command" : "install [profile]",
+            "description": "Instala um ecosistema conforme o perfil especificado",
+            "parameters": [
+                {
+                    "key":"profile",
+                    "paramType":"positional",
+                    "valueType":"string",
+                    "describe":"perfil de instalação"
+                },
+                {
+                    "key":"profile-file",
+                    "paramType":"option",
+                    "valueType":"string",
+                    "describe":"endereço do arquivo de perfil de instalação"
+                },
+                {
+                    "key":"installation-path",
+                    "paramType":"option",
+                    "valueType":"string",
+                    "describe":"local aonde a plataforma será instalada"
+                }
+            ],
+            "bound-params": {
+                "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib",
+                "printDataLogLib": "printDataLogLib"
+            }
+        },
+        {
+            "namespace": "Update",
+            "path": "Commands/Update.command",
+            "command" : "update [profile]",
+            "description": "Atualizar um ecosistema conforme o perfil especificado",
+            "parameters": [
+                {
+                    "key":"profile",
+                    "paramType":"positional",
+                    "valueType":"string",
+                    "describe":"perfil de instalação"
+                },
+                {
+                    "key":"profile-file",
+                    "paramType":"option",
+                    "valueType":"string",
+                    "describe":"endereço do arquivo de perfil de instalação"
+                },
+                {
+                    "key":"installation-path",
+                    "paramType":"option",
+                    "valueType":"string",
+                    "describe":"local aonde a plataforma será atualizada"
+                }
+            ],
+            "bound-params": {
+                "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib",
+                "printDataLogLib": "printDataLogLib"
+            }
+        },
+        {
+            "namespace": "Show",
+            "command" : "show",
+            "description": "Comandos relacionados à visualização de informações",
+            "childCommands": [
+                 {
+                     "namespace": "ShowProfileInfo",
+                     "path": "Commands/ShowProfileInfo.command",
+                     "command" : "profile [profile]",
+                     "description": "Mostra informações sobre um perfil especifico",
+                     "parameters": [
+                         {
+                                "key":"profile",
+                                "paramType":"positional",
+                                "valueType":"string",
+                                "describe":"Nome do perfil"
+                         }
+                     ]
+                 }
+            ]
+        }
+    ]
+}

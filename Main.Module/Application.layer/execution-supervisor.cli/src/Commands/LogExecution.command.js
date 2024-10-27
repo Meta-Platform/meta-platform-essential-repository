@@ -1,17 +1,22 @@
 const EventEmitter = require('events')
 const path = require("path")
 
-const CreateCommunicationInterface = require("../../../../Libraries.layer/supervisor.lib/src/CreateCommunicationInterface")
-const FormatterDataLog             = require("../../../../Libraries.layer/supervisor.lib/src/FormatterDataLog")
-const TryConnectLogStreaming       = require("../../../../Libraries.layer/supervisor.lib/src/TryConnectLogStreaming")
-
 const MAX_CONNECT_RETRIES = 1000
 const RETRY_DELAY_MS = 500
 
-const LogExecutionCommand = async ({args, startupParams}) => {
+const LogExecutionCommand = async ({
+    args, 
+    startupParams,
+    params
+}) => {
 
 	const { socket } = args
 	const { supervisorSocketsDirPath } = startupParams
+    const { supervisorLib } = params
+
+    const CreateCommunicationInterface = supervisorLib.require("CreateCommunicationInterface")
+    const FormatterDataLog             = supervisorLib.require("FormatterDataLog")
+    const TryConnectLogStreaming       = supervisorLib.require("TryConnectLogStreaming")
 
     const loggerEmitter = new EventEmitter()
 
