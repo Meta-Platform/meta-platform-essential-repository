@@ -1,10 +1,12 @@
 const ComputeObjectHash = require("../../../../../Commons.Module/Utilities.layer/compute-object-hash.lib/src/ComputeObjectHash")
 
 const ConstructMetadataDependencyList = (metadataNodeList) => {
+
     const listAllPaths = metadataNodeList.map(({ path }) => path)
     const listPaths = Array.from(new Set(listAllPaths))
 
     const _FindNode = (_path) => metadataNodeList.find(({path}) => path === _path)
+
     const _ConvertNodeToMetadata = (node) => {
         return Object.keys(node)
         .filter((property) => property !== "children")
@@ -18,6 +20,7 @@ const ConstructMetadataDependencyList = (metadataNodeList) => {
             dependency:_ConvertNodeToMetadata(metadataNode)
         }
     }) 
+    
 }
 
 module.exports = ConstructMetadataDependencyList

@@ -10,7 +10,9 @@ const CreateLinkedMetadataGraph = (rawGraph, listData) => {
         : {}
 
     const _MountNode = ({ path, children }) => ({ [ _FindCodeByPath(path) ]:_MountNodeChildren(children) })
+
     return _MountNode(rawGraph)
+    
 }
 
 module.exports = CreateLinkedMetadataGraph
