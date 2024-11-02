@@ -1,12 +1,12 @@
-const ExtractNamespaceFromDependency          = require("./ExtractNamespaceFromDependency")
-const FindMetadata                            = require("./FindMetadata")
-const ExtractMetadataFromMetadataByType       = require("./ExtractMetadataFromMetadataByType")
-const IsValidMetadata                         = require("./IsValidMetadata")
-const ConvertTypeTaskParamsToObjectLoaderType = require("./ConvertTypeTaskParamsToObjectLoaderType")
-const RemapAllParams                          = require("./RemapAllParams")
-const ResolveMetadataParams                   = require("./ResolveMetadataParams")
-const ResolveMetadataBoundParamsNamespace     = require("./ResolveMetadataBoundParamsNamespace")
-const ExtractNamespaceListByBoundParams       = require("./ExtractNamespaceListByBoundParams")
+const ExtractNamespaceFromDependency          = require("../ExtractNamespaceFromDependency")
+const FindMetadata                            = require("../FindMetadata")
+const ExtractMetadataFromMetadataByType       = require("../ExtractMetadataFromMetadataByType")
+const ConvertTypeTaskParamsToObjectLoaderType = require("../ConvertTypeTaskParamsToObjectLoaderType")
+const ExtractNamespaceListByBoundParams       = require("../ExtractNamespaceListByBoundParams")
+const IsValidMetadata                         = require("./IsValidMetadata")//
+const RemapAllParams                          = require("./RemapAllParams")//
+const ResolveMetadataParams                   = require("./ResolveMetadataParams")//
+const ResolveMetadataBoundParamsNamespace     = require("./ResolveMetadataBoundParamsNamespace")//
 
 const MountParams = ({
     typeMetadata,
