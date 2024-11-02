@@ -2,61 +2,8 @@ const GetMetadataRootNode = require("../../../../../Runtime.Module/MetadataHelpe
 
 const CheckIfHaveBoot = require("./CheckIfHaveBoot")
 const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
-const CheckIfHaveChildren = require("./CheckIfHaveChildren")
-const CreateChildren = require("./CreateChildren")
 
-const CreateApplicationInstanceTaskParamWithBoot = ({
-    startupParams,
-    namespace,
-    rootPath,
-    bootMetadata,
-    metadataHierarchy
-}) => {
-    return {
-        objectLoaderType: "application-instance",
-        "staticParameters": {
-            startupParams,
-            namespace,
-            rootPath
-        },
-        ...CheckIfHaveChildren(bootMetadata)
-            ? { children: CreateChildren(metadataHierarchy) }
-            : {}
-    }
-}
-
-const CreateCommandLineApplicationInstanceTaskParam = ({
-    startupParams,
-    namespace,
-    executables,
-    rootPath,
-    executableName,
-    commandLineArgs
-}) => {
-    return {
-        objectLoaderType: "command-application",
-        "staticParameters": {
-            startupParams,
-            namespace,
-            executables,
-            rootPath,
-            executableName,
-            commandLineArgs
-        },
-        "linkedParameters": {
-			"nodejsPackageHandler": namespace
-		},
-        "agentLinkRules":[{
-            referenceName: namespace,
-            requirement:{
-                "&&": [
-                    { "property": "params.tag", "=": namespace },
-                    { "property": "status", "=": "ACTIVE" }
-                ]
-            }
-        }] 
-    }
-}
+const CreateApplicationInstanceTaskParamWithBoot = require("./CreateApplicationInstanceTaskParamWithBoot")
 
 const GenerateExecutionParamsForApplicationService = ({
     metadataHierarchy, 
@@ -73,28 +20,20 @@ const GenerateExecutionParamsForApplicationService = ({
         const { 
             boot:bootMetadata,
             "startup-params":startupParams,
-            package: { namespace, executables }
+            package: { namespace }
         } = rootMetadata
 
         const applicationInstanceTaskParam = 
-            bootMetadata 
-                ? CreateApplicationInstanceTaskParamWithBoot({
-                        startupParams,
-                        namespace,
-                        rootPath,
-                        bootMetadata,
-                        metadataHierarchy
-                    })
-                : (CheckIfHaveExecutables(metadataHierarchy) && executableName && executables?.length > 0)
-                    ? CreateCommandLineApplicationInstanceTaskParam({
-                        startupParams,
-                        namespace,
-                        executables,
-                        rootPath,
-                        executableName,
-                        commandLineArgs
-                    })
-                    : undefined
+            CreateApplicationInstanceTaskParamWithBoot({
+                startupParams,
+                namespace,
+                rootPath,
+                bootMetadata,
+                metadataHierarchy, 
+                executableName,
+                commandLineArgs
+            })
+
         return applicationInstanceTaskParam
     }
 }
