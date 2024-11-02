@@ -17,13 +17,13 @@ const ConvertToProtoTasksParams = ({ typeMetadata, metadataHierarchy }) => {
         } else if(typeMetadata === "endpoints"){
             const protoTasksParams = bootMetadataSelected
                 .reduce((protoTasksParamsAcc, bootEndpointGroupMetadata) => [
-                ...protoTasksParamsAcc,
-                ...CreateListEndpointTaskParams({ 
-                    typeMetadata, 
-                    bootEndpointGroupMetadata, 
-                    metadataHierarchy 
-                })
-            ], [])
+                    ...protoTasksParamsAcc,
+                    ...CreateListEndpointTaskParams({ 
+                            typeMetadata, 
+                            bootEndpointGroupMetadata, 
+                            metadataHierarchy 
+                        })
+                ], [])
             return protoTasksParams
         }
         return []        

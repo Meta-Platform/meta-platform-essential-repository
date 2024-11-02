@@ -7,19 +7,50 @@ const CheckParamsIsValid                = require("./CheckParamsIsValid")
 const CreateEndpointTaskParams          = require("./CreateEndpointTaskParams")
 const ExtractStartupParamstMetadata     = require("./ExtractStartupParamstMetadata")
 
-const CreateListEndpointTaskParams = ({ typeMetadata, bootEndpointGroupMetadata, metadataHierarchy }) => {
-    const namespaceDependency = ExtractNamespaceFromDependency(bootEndpointGroupMetadata.dependency, metadataHierarchy)
-    const metadataDependency = ExtractMetadataFromMetadataByType({ 
-        type: typeMetadata, 
-        dependency: bootEndpointGroupMetadata.dependency, 
-        dependencyMetadata: FindMetadata(namespaceDependency, metadataHierarchy)
-    })   
-    
+const ResolveParams = ({
+    params,
+    metadataHierarchy
+}) => {
+    const startupParamsMetadata = ExtractStartupParamstMetadata(metadataHierarchy)
+    const processedParams = GetPopulatedParameters(params, startupParamsMetadata)
+    return processedParams
+}
+
+const RemapEndpointParamsProperty = (params) => {
+    const remappedParams =  {
+        ...params["api-template"]
+        ? {
+            apiTemplate: params["api-template"]
+        }
+        : {},
+        ...params["controller-params"]
+        ? {
+            controllerParams: params["controller-params"]
+        }
+        : {}
+    }
+
+    const remainingParams = Object
+    .keys(params)
+    .filter((property) => {
+        return property !== "api-template" 
+        && property !== "controller-params" 
+    })
+    .reduce((paramsAcc, property) => ({...paramsAcc, [property]:params[property]}), {})
+    return { ...remappedParams, ...remainingParams}
+}
+
+
+const ResolveBoundParamsNamespace = ({
+    endpointBoundParams,
+    metadataDependency,
+    bootEndpointGroupMetadata
+}) => {
+
     const { 
-        endpoints, 
         "bound-params": boundParamsNameListDependency
     } = metadataDependency
-       
+
     const _MountBoundParamsRef = () =>  (boundParamsNameListDependency || [])
     .reduce((boundParamsNameListDependencyAcc, boundParamNamespace) => {
         const bootBoundParams = bootEndpointGroupMetadata["bound-params"]
@@ -29,7 +60,6 @@ const CreateListEndpointTaskParams = ({ typeMetadata, bootEndpointGroupMetadata,
         }
 
     }, {})
-
 
     const _MountBoundParams = (boundParams, boundParamsRef) => {
 
@@ -51,80 +81,83 @@ const CreateListEndpointTaskParams = ({ typeMetadata, bootEndpointGroupMetadata,
         }, {})
     }
 
-    const _ResolveBoundParamsNamespace = (endpointBoundParams) => {
-        const boundParamsRef = _MountBoundParamsRef()
-        const boundParams = _MountBoundParams(endpointBoundParams, boundParamsRef)
-        return boundParams
-    }
 
-    const _IsValid = (metadata, metadataDepencency) => {
+    const boundParamsRef = _MountBoundParamsRef()
+    const boundParams = _MountBoundParams(endpointBoundParams, boundParamsRef)
+    return boundParams
+}
 
-        const __IsParamsValid = () => {
-            const { params } = metadata
-            const { params:paramsDependency } = metadataDepencency
+const IsValid = ({
+    metadata, 
+    metadataDependency
+}) => {
 
-            if(paramsDependency){
-                return CheckParamsIsValid(params, paramsDependency)
-            }
-            return true
+    const _IsParamsValid = () => {
+        const { params } = metadata
+        const { params:paramsDependency } = metadataDependency
+
+        if(paramsDependency){
+            return CheckParamsIsValid(params, paramsDependency)
         }
+        return true
+    }
 
-        const __IsBoundParamsValid = () => {
-            const { "bound-params":boundParams } = metadata
-            const { "bound-params":boundParamsDependency } = metadataDepencency
+    const _IsBoundParamsValid = () => {
+        const { "bound-params":boundParams } = metadata
+        const { "bound-params":boundParamsDependency } = metadataDependency
 
-            if(boundParamsDependency){
-                return CheckParamsIsValid(boundParams, boundParamsDependency)
-            }
-            return true
+        if(boundParamsDependency){
+            return CheckParamsIsValid(boundParams, boundParamsDependency)
         }
-
-        return __IsParamsValid() && __IsBoundParamsValid()
+        return true
     }
 
-    const _ResolveParams = (params) => {
-        const startupParamsMetadata = ExtractStartupParamstMetadata(metadataHierarchy)
-        const processedParams = GetPopulatedParameters(params, startupParamsMetadata)
-        return processedParams
-    }
+    return _IsParamsValid() && _IsBoundParamsValid()
+}
 
-    const _Remap = (params) => {
-        const remappedParams =  {
-            ...params["api-template"]
-            ? {
-                apiTemplate: params["api-template"]
-            }
-            : {},
-            ...params["controller-params"]
-            ? {
-                controllerParams: params["controller-params"]
-            }
-            : {}
-        }
+const CreateListEndpointTaskParams = ({ typeMetadata, bootEndpointGroupMetadata, metadataHierarchy }) => {
 
-        const remainingParams = Object
-        .keys(params)
-        .filter((property) => {
-            return property !== "api-template" 
-            && property !== "controller-params" 
-        })
-        .reduce((paramsAcc, property) => ({...paramsAcc, [property]:params[property]}), {})
-        return { ...remappedParams, ...remainingParams}
-    }
+    const namespaceDependency = ExtractNamespaceFromDependency(bootEndpointGroupMetadata.dependency, metadataHierarchy)
+
+    const metadataDependency = ExtractMetadataFromMetadataByType({ 
+        type: typeMetadata, 
+        dependency: bootEndpointGroupMetadata.dependency, 
+        dependencyMetadata: FindMetadata(namespaceDependency, metadataHierarchy)
+    })   
+    
+    const { endpoints } = metadataDependency
 
     if(endpoints && endpoints.length > 0){
-        if(_IsValid(bootEndpointGroupMetadata, metadataDependency)){
+        if(IsValid({ metadata: bootEndpointGroupMetadata, metadataDependency })){
+
             return endpoints.map((endpointMetadata) => {
+
+                const [
+                    boundParams,
+                    params
+                ] = [
+                    ResolveBoundParamsNamespace({
+                        endpointBoundParams: RemapEndpointParamsProperty(endpointMetadata["bound-params"]),
+                        metadataDependency,
+                        bootEndpointGroupMetadata
+                    }),
+                    ResolveParams({
+                        params: RemapEndpointParamsProperty(endpointMetadata.params),
+                        metadataHierarchy
+                    })
+                ]
 
                 return CreateEndpointTaskParams(({ 
                     typeMetadata,
                     url: endpointMetadata.url, 
                     type: endpointMetadata.type, 
-                    boundParams:_ResolveBoundParamsNamespace(_Remap(endpointMetadata["bound-params"])),
-                    params: _ResolveParams(_Remap(endpointMetadata.params)), 
+                    boundParams,
+                    params, 
                     namespaceDependency
                 }))
+                
             })
+
         }
         return []
     }
