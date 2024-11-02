@@ -3,6 +3,7 @@
         "ecosystemInstallUtilitiesLib", 
         "printDataLogLib"
     ],
+    "params":["installDataDirPath"],
     "executables": [
         {
             "command-name": "ShowSourceInformation",
@@ -27,6 +28,9 @@
                         "description": "Exibe todos os repositórios que estão instalados e disponíveis para uso.",
                         "bound-params": {
                             "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib"
+                        },
+                        "params":{
+                            "installDataDirPath":"{{installDataDirPath}}"
                         }
                     }
                ]
@@ -53,6 +57,9 @@
             "bound-params": {
                 "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib",
                 "printDataLogLib": "printDataLogLib"
+            },
+            "params":{
+                "installDataDirPath":"{{installDataDirPath}}"
             }
         },
         {
@@ -77,6 +84,9 @@
             "bound-params": {
                 "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib",
                 "printDataLogLib": "printDataLogLib"
+            },
+            "params":{
+                "installDataDirPath":"{{installDataDirPath}}"
             }
         },
         {
@@ -94,6 +104,9 @@
             ],
             "bound-params": {
                 "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib"
+            },
+            "params":{
+                "installDataDirPath":"{{installDataDirPath}}"
             }
         }
     ]

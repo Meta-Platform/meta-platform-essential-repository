@@ -1,4 +1,5 @@
 {
+    "params": ["installDataDirPath"],
     "executables":[
         {
             "dependency": "@//command-group",
@@ -6,6 +7,9 @@
             "bound-params": {
                 "ecosystemInstallUtilitiesLib": "@/ecosystem-install-utilities.lib",
                 "printDataLogLib": "@/print-data-log.lib"
+            },
+            "params":{
+                "installDataDirPath":"{{installDataDirPath}}"
             }
         }
     ]

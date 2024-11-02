@@ -1,7 +1,6 @@
 {
-    "bound-params":[
-        "supervisorLib"
-    ],
+    "bound-params":["supervisorLib"],
+    "params":["supervisorSocketsDirPath"],
     "executables": [
         {
             "namespace": "ListSockets",
@@ -10,6 +9,9 @@
             "description": "Listar todos os sockets de supervisão",
             "bound-params": {
                 "supervisorLib": "supervisorLib"
+            },
+            "params":{
+                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
             }
         },
         {
@@ -27,6 +29,9 @@
             ],
             "bound-params": {
                 "supervisorLib": "supervisorLib"
+            },
+            "params":{
+                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
             }
         },
         {
@@ -44,6 +49,9 @@
             ],
             "bound-params": {
                 "supervisorLib": "supervisorLib"
+            },
+            "params":{
+                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
             }
         },
         {
@@ -61,6 +69,9 @@
             ],
             "bound-params": {
                 "supervisorLib": "supervisorLib"
+            },
+            "params":{
+                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
             }
         },
         {
@@ -78,6 +89,9 @@
             ],
             "bound-params": {
                 "supervisorLib": "supervisorLib"
+            },
+            "params":{
+                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
             }
         },
         {
@@ -105,6 +119,9 @@
                         ],
                         "bound-params": {
                             "supervisorLib": "supervisorLib"
+                        },
+                        "params":{
+                            "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
                         }
                     }
                ]
