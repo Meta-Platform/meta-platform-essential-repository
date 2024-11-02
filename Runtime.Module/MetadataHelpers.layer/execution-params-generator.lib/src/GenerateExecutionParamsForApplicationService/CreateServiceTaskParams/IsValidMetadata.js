@@ -1,4 +1,4 @@
-const CheckParamsIsValid = require("../CheckParamsIsValid")
+const CheckParamsIsValid = require("../Commons/CheckParamsIsValid")
 
 const IsValidMetadata = (metadataArg, metadataParams) => {
 

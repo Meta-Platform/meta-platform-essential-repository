@@ -1,4 +1,4 @@
-const GetMetadataRootNode = require("../../../../../Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/src/GetMetadataRootNode")
+const GetMetadataRootNode = require("../../../../../../Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/src/GetMetadataRootNode")
 
 const ExtractNamespaceFromDependency = (dependency, metadataHierarchy) => {
     const rootDependency = GetMetadataRootNode(metadataHierarchy)

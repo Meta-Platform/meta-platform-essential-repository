@@ -1,4 +1,4 @@
-const ExtractRootMetadata = require("./ExtractRootMetadata")
+const ExtractRootMetadata = require("./Commons/ExtractRootMetadata")
 
 const CheckIfHaveBoot = (metadataHierarchy) => {
     try{
