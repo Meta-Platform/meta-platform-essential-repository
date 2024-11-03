@@ -3,7 +3,7 @@
         "ecosystemInstallUtilitiesLib", 
         "printDataLogLib"
     ],
-    "executables": [
+    "commands": [
         {
             "namespace": "ListProfiles",
             "path": "Commands/ListProfiles.command",

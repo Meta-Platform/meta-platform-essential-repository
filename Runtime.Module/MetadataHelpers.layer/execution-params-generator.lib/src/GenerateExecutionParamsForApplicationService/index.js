@@ -1,6 +1,5 @@
 const CheckIfHaveBoot = require("./CheckIfHaveBoot")
 const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
-const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
 const CreateDefaultApplicationTaskParam = require("./CreateDefaultApplicationTaskParam")
 const CreateCommandApplicarionTaskParam = require("./CreateCommandApplicarionTaskParam")
 

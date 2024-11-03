@@ -4,7 +4,7 @@
         "printDataLogLib"
     ],
     "params":["installDataDirPath"],
-    "executables": [
+    "commands": [
         {
             "commandName": "ShowSourceInformation",
             "path": "Commands/ShowSourceInformation.command",
