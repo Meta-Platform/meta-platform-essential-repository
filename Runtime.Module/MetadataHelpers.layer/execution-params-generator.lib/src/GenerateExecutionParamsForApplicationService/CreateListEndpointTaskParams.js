@@ -1,12 +1,11 @@
-const ExtractNamespaceFromDependency    = require("../Commons/ExtractNamespaceFromDependency")
-const FindMetadata                      = require("../Commons/FindMetadata")
-const ExtractMetadataFromMetadataByType = require("../Commons/ExtractMetadataFromMetadataByType")
-const CreateEndpointTaskParams          = require("../Commons/CreateEndpointTaskParams")
-
-const ResolveParams               = require("./ResolveParams")
-const RemapAllParams              = require("../Commons/RemapAllParams")
-const ResolveBoundParamsNamespace = require("./ResolveBoundParamsNamespace")
-const IsValid                     = require("./IsValid")
+const ExtractNamespaceFromDependency      = require("./Commons/ExtractNamespaceFromDependency")
+const FindMetadata                        = require("./Commons/FindMetadata")
+const ExtractMetadataFromMetadataByType   = require("./Commons/ExtractMetadataFromMetadataByType")
+const CreateEndpointTaskParams            = require("./Commons/CreateEndpointTaskParams")
+const ResolveMetadataParams               = require("./Commons/ResolveMetadataParams")
+const RemapAllParams                      = require("./Commons/RemapAllParams")
+const ResolveMetadataBoundParamsNamespace = require("./Commons/ResolveMetadataBoundParamsNamespace")
+const IsValidMetadata                     = require("./Commons/IsValidMetadata")
 
 const CreateListEndpointTaskParams = ({ 
     typeMetadata, 
@@ -25,7 +24,7 @@ const CreateListEndpointTaskParams = ({
     const { endpoints } = metadataDependency
 
     if(endpoints && endpoints.length > 0){
-        if(IsValid({ metadata: bootEndpointGroupMetadata, metadataDependency })){
+        if(IsValidMetadata(bootEndpointGroupMetadata, metadataDependency)){
 
             return endpoints.map((endpointMetadata) => {
 
@@ -33,12 +32,12 @@ const CreateListEndpointTaskParams = ({
                     boundParams,
                     params
                 ] = [
-                    ResolveBoundParamsNamespace({
-                        endpointBoundParams: RemapAllParams(endpointMetadata["bound-params"]),
-                        metadataDependency,
-                        bootEndpointGroupMetadata
+                    ResolveMetadataBoundParamsNamespace({
+                        boundParamsNames: metadataDependency["bound-params"],
+                        bootMetadata: bootEndpointGroupMetadata,
+                        boundParams: RemapAllParams(endpointMetadata["bound-params"])
                     }),
-                    ResolveParams({
+                    ResolveMetadataParams({
                         params: RemapAllParams(endpointMetadata.params),
                         metadataHierarchy
                     })

@@ -4,15 +4,15 @@ const RemapAllParams = (params) => {
     if(params) {
         const remappedParams =  {
             ...params["api-template"]
-            ? {
-                apiTemplate: params["api-template"]
-            }
-            : {},
+                ? {
+                        apiTemplate: params["api-template"]
+                    }
+                : {},
             ...params["controller-params"]
-            ? {
-                controllerParams: params["controller-params"]
-            }
-            : {}
+                ? {
+                    controllerParams: params["controller-params"]
+                }
+                : {}
         }
     
         const remainingParams = Object

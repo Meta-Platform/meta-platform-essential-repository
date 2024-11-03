@@ -1,8 +1,10 @@
 const GetMetadataRootNode = require("../../../../../Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/src/GetMetadataRootNode")
 
-const ExtractNamespaceFromDependency    = require("./Commons/ExtractNamespaceFromDependency")
-const FindMetadata                      = require("./Commons/FindMetadata")
-const ExtractMetadataFromMetadataByType = require("./Commons/ExtractMetadataFromMetadataByType")
+const ExtractNamespaceFromDependency      = require("./Commons/ExtractNamespaceFromDependency")
+const FindMetadata                        = require("./Commons/FindMetadata")
+const ExtractMetadataFromMetadataByType   = require("./Commons/ExtractMetadataFromMetadataByType")
+const ResolveMetadataParams               = require("./Commons/ResolveMetadataParams")
+const ResolveMetadataBoundParamsNamespace = require("./Commons/ResolveMetadataBoundParamsNamespace")
 
 
 const ExtractRootData = (metadataHierarchy) => {
@@ -54,16 +56,18 @@ const CreateCommandApplicarionTaskParam = ({
         boundParams,
         params
     ] = [
-        ResolveBoundParamsNamespace({
-            endpointBoundParams: RemapAllParams(endpointMetadata["bound-params"]),
-            metadataDependency,
-            bootEndpointGroupMetadata
+        ResolveMetadataBoundParamsNamespace({
+            boundParamsNames: metadataDependency["bound-params"],
+            bootMetadata: bootExecutableMetadata,
+            boundParams: bootExecutableMetadata["bound-params"]
         }),
-        ResolveParams({
-            params: RemapAllParams(endpointMetadata.params),
+        ResolveMetadataParams({
+            params: bootExecutableMetadata.params,
             metadataHierarchy
         })
     ]
+
+    
         
     debugger
 
