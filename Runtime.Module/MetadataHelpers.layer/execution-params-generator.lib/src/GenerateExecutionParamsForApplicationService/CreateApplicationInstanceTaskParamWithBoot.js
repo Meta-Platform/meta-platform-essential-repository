@@ -1,5 +1,5 @@
 const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
-const GetDefaultApplicationTaskParam = require("./GetDefaultApplicationTaskParam")
+const GenerateDefaultApplicationTaskParam = require("./GenerateDefaultApplicationTaskParam")
 
 const GetCommandApplicarionTaskParam = ({
     startupParams,
@@ -9,13 +9,14 @@ const GetCommandApplicarionTaskParam = ({
     executableName,
     commandLineArgs
 }) => {
+    
     return {
         objectLoaderType: "command-application",
         "staticParameters": {
             startupParams,
             namespace,
-            executables,
             rootPath,
+            executables: bootMetadata.executables,
             executableName,
             commandLineArgs
         },
@@ -53,7 +54,7 @@ const CreateApplicationInstanceTaskParamWithBoot = ({
                 executableName,
                 commandLineArgs
             })
-        : GetDefaultApplicationTaskParam({
+        : GenerateDefaultApplicationTaskParam({
                 startupParams,
                 namespace,
                 rootPath,

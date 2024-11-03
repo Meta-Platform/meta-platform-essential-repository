@@ -2,21 +2,26 @@ const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/T
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const yargs = SmartRequire('yargs/yargs')
 
+const FindExecutableByName = (name, executables) => 
+    executables.find(({executableName}) => executableName === name)
+
 const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
 
     const {
         startupParams,
+        namespace,
         executables,
+        rootPath,
         executableName,
-        commandLineArgs,
-        nodejsPackageHandler
+        commandLineArgs
     } = loaderParams
 
-    const _GetExecutableDataByName = (name) => 
+    const FindExecutableByName = (name) => 
         executables.find(({executableName}) => executableName === name)
 
     const _GetCommandGroupData = (executableName) => {
-        const executableData = _GetExecutableDataByName(executableName)
+        const executableData = FindExecutableByName(executableName)
+        debugger
         return nodejsPackageHandler.require(executableData.commands)
     }
     
