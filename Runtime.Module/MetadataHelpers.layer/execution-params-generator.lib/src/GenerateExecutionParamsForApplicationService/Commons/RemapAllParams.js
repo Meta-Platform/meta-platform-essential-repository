@@ -1,3 +1,5 @@
+
+//TODO Melhorar remap, como deep remap
 const RemapAllParams = (params) => {
     if(params) {
         const remappedParams =  {

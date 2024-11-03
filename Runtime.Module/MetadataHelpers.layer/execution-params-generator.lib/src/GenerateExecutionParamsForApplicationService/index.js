@@ -1,9 +1,8 @@
-const GetMetadataRootNode = require("../../../../../Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/src/GetMetadataRootNode")
-
 const CheckIfHaveBoot = require("./CheckIfHaveBoot")
 const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
-
-const CreateApplicationInstanceTaskParamWithBoot = require("./CreateApplicationInstanceTaskParamWithBoot")
+const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
+const CreateDefaultApplicationTaskParam = require("./CreateDefaultApplicationTaskParam")
+const CreateCommandApplicarionTaskParam = require("./CreateCommandApplicarionTaskParam")
 
 const GenerateExecutionParamsForApplicationService = ({
     metadataHierarchy, 
@@ -12,29 +11,16 @@ const GenerateExecutionParamsForApplicationService = ({
 }) => {
 
     if(CheckIfHaveBoot(metadataHierarchy) || (CheckIfHaveExecutables(metadataHierarchy) && executableName)){
-        const {
-            metadata:rootMetadata,
-            path:rootPath
-        } = GetMetadataRootNode(metadataHierarchy)
-        
-        const { 
-            boot:bootMetadata,
-            "startup-params":startupParams,
-            package: { namespace }
-        } = rootMetadata
 
-        const applicationInstanceTaskParam = 
-            CreateApplicationInstanceTaskParamWithBoot({
-                startupParams,
-                namespace,
-                rootPath,
-                bootMetadata,
-                metadataHierarchy, 
+        const taskParam = CheckIfHaveExecutables(metadataHierarchy) && executableName
+        ? CreateCommandApplicarionTaskParam({
+                metadataHierarchy,
                 executableName,
                 commandLineArgs
             })
+        : CreateDefaultApplicationTaskParam(metadataHierarchy)
 
-        return applicationInstanceTaskParam
+            return taskParam
     }
 }
 
