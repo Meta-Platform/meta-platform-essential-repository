@@ -82,8 +82,13 @@ const CreateCommandApplicationTaskParam = ({
             namespace,
             rootPath,
             commands: metadataDependency.commands,
+            ...params ? params : {},
             executableName,
-            commandLineArgs
+            commandLineArgs,
+            commandParameterNames: [
+                ...metadataDependency["params"] || [],
+                ...metadataDependency["bound-params"] || []
+            ]
         },
         "linkedParameters": {
             "nodejsPackageHandler": namespace, 
