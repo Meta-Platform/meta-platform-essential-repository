@@ -74,7 +74,7 @@
             "namespace": "Show",
             "command" : "show",
             "description": "Comandos relacionados à visualização de informações",
-            "childCommands": [
+            "children": [
                  {
                      "namespace": "ShowProfileInfo",
                      "path": "Commands/ShowProfileInfo.command",

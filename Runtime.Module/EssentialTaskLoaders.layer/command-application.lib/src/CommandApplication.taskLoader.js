@@ -2,8 +2,7 @@ const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/T
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const yargs = SmartRequire('yargs/yargs')
 
-const FindExecutableByName = (name, executables) => 
-    executables.find(({executableName}) => executableName === name)
+
 
 const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
 
@@ -48,10 +47,10 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
         _yargs[paramType](key, {describe, type:valueType})
     }
 
-    const _GetCommandBuilder = ({parameters, childCommands}) => {
+    const _GetCommandBuilder = ({parameters, children}) => {
         return (_yargs) => {
             parameters?.forEach(param => _BuiderParameter(_yargs, param))
-            childCommands?.forEach(childCommandData => {
+            children?.forEach(childCommandData => {
                 const childCommandModule = _ConfigCommand(childCommandData)
                 _yargs.command(childCommandModule)
             })
@@ -63,7 +62,7 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
             path,
             command,
             parameters,
-            childCommands,
+            children,
             description = ''
         } = commandData
 
@@ -72,7 +71,7 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
         }
 
         const handler = _GetCommandHandler(path)
-        const builder = _GetCommandBuilder({parameters, childCommands})
+        const builder = _GetCommandBuilder({parameters, children})
 
         const commandModule = {
             command,

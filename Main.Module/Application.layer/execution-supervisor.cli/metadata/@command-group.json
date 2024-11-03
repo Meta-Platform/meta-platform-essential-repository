@@ -97,7 +97,7 @@
         {
             "namespace": "Show",
             "command" : "show",
-            "childCommands": [
+            "children": [
                     {
                         "namespace": "ShowExecutionTaskInformation",
                         "path": "Commands/ShowExecutionTaskInformation.command",
