@@ -1,6 +1,6 @@
 const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
-const GenerateDefaultApplicationTaskParam = require("./GenerateDefaultApplicationTaskParam")
-const GenerateCommandApplicarionTaskParam = require("./GenerateCommandApplicarionTaskParam")
+const CreateDefaultApplicationTaskParam = require("./CreateDefaultApplicationTaskParam")
+const CreateCommandApplicarionTaskParam = require("./CreateCommandApplicarionTaskParam")
 
 const CreateApplicationInstanceTaskParamWithBoot = ({
     startupParams,
@@ -13,7 +13,7 @@ const CreateApplicationInstanceTaskParamWithBoot = ({
 }) => {
 
     const taskParam = CheckIfHaveExecutables(metadataHierarchy) && executableName
-        ? GenerateCommandApplicarionTaskParam({
+        ? CreateCommandApplicarionTaskParam({
                 startupParams,
                 namespace,
                 rootPath,
@@ -21,7 +21,7 @@ const CreateApplicationInstanceTaskParamWithBoot = ({
                 executableName,
                 commandLineArgs
             })
-        : GenerateDefaultApplicationTaskParam({
+        : CreateDefaultApplicationTaskParam({
                 startupParams,
                 namespace,
                 rootPath,

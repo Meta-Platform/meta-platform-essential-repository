@@ -1,4 +1,4 @@
-const GenerateCommandApplicarionTaskParam = ({
+const CreateCommandApplicarionTaskParam = ({
     startupParams,
     namespace,
     rootPath,
@@ -33,4 +33,4 @@ const GenerateCommandApplicarionTaskParam = ({
 }
 
 
-module.exports = GenerateCommandApplicarionTaskParam
+module.exports = CreateCommandApplicarionTaskParam

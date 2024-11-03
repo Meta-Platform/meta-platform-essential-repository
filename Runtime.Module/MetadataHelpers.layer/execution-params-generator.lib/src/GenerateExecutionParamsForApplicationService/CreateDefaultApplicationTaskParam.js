@@ -1,7 +1,7 @@
 const CheckIfHaveChildren = require("./CheckIfHaveChildren")
 const CreateChildren = require("./CreateChildren")
 
-const GenerateDefaultApplicationTaskParam = ({
+const CreateDefaultApplicationTaskParam = ({
     startupParams,
     namespace,
     rootPath,
@@ -22,4 +22,4 @@ const GenerateDefaultApplicationTaskParam = ({
     }
 }
 
-module.exports = GenerateDefaultApplicationTaskParam
+module.exports = CreateDefaultApplicationTaskParam
