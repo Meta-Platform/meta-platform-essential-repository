@@ -17,7 +17,7 @@ const CreateApplicationInstanceTaskParamWithBoot = ({
                 startupParams,
                 namespace,
                 rootPath,
-                bootMetadata,
+                bootCommandGroupMetadata:bootMetadata.executables,
                 executableName,
                 commandLineArgs
             })

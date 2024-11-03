@@ -4,7 +4,7 @@ const ExtractMetadataFromMetadataByType = require("../Commons/ExtractMetadataFro
 const CreateEndpointTaskParams          = require("../Commons/CreateEndpointTaskParams")
 
 const ResolveParams               = require("./ResolveParams")
-const RemapEndpointParamsProperty = require("./RemapEndpointParamsProperty")
+const RemapAllParams              = require("../Commons/RemapAllParams")
 const ResolveBoundParamsNamespace = require("./ResolveBoundParamsNamespace")
 const IsValid                     = require("./IsValid")
 
@@ -34,12 +34,12 @@ const CreateListEndpointTaskParams = ({
                     params
                 ] = [
                     ResolveBoundParamsNamespace({
-                        endpointBoundParams: RemapEndpointParamsProperty(endpointMetadata["bound-params"]),
+                        endpointBoundParams: RemapAllParams(endpointMetadata["bound-params"]),
                         metadataDependency,
                         bootEndpointGroupMetadata
                     }),
                     ResolveParams({
-                        params: RemapEndpointParamsProperty(endpointMetadata.params),
+                        params: RemapAllParams(endpointMetadata.params),
                         metadataHierarchy
                     })
                 ]

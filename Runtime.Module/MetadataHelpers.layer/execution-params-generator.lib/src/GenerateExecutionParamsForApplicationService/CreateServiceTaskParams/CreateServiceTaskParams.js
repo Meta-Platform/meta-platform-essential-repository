@@ -3,10 +3,10 @@ const FindMetadata                            = require("../Commons/FindMetadata
 const ExtractMetadataFromMetadataByType       = require("../Commons/ExtractMetadataFromMetadataByType")
 const ConvertTypeTaskParamsToObjectLoaderType = require("../Commons/ConvertTypeTaskParamsToObjectLoaderType")
 const ExtractNamespaceListByBoundParams       = require("../Commons/ExtractNamespaceListByBoundParams")
-const IsValidMetadata                         = require("./IsValidMetadata")//
-const RemapAllParams                          = require("./RemapAllParams")//
-const ResolveMetadataParams                   = require("./ResolveMetadataParams")//
-const ResolveMetadataBoundParamsNamespace     = require("./ResolveMetadataBoundParamsNamespace")//
+const IsValidMetadata                         = require("./IsValidMetadata")
+const RemapAllParams                          = require("../Commons/RemapAllParams")
+const ResolveMetadataParams                   = require("./ResolveMetadataParams")
+const ResolveMetadataBoundParamsNamespace     = require("./ResolveMetadataBoundParamsNamespace")
 
 const MountParams = ({
     typeMetadata,
