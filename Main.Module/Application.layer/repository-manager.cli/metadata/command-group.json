@@ -6,23 +6,23 @@
     "params":["installDataDirPath"],
     "commands": [
         {
-            "command-name": "ShowSourceInformation",
+            "commandName": "ShowSourceInformation",
             "path": "Commands/ShowSourceInformation.command",
             "command" : "sources info",
             "description": "Mostra informações sobre as fontes disponível para instalação agreagada pelo repositório"
         },
         {
-            "command-name": "List",
+            "commandName": "List",
             "command" : "list",
             "children": [
                     {
-                        "command-name": "ListSources",
+                        "commandName": "ListSources",
                         "path": "Commands/ListSources.command",
                         "command" : "sources",
                         "description": "Lista as fontes disponíveis para instalação"
                     },
                     {
-                        "command-name": "ListInstalledRepositories",
+                        "commandName": "ListInstalledRepositories",
                         "path": "Commands/ListInstalledRepositories.command",
                         "command" : "installed",
                         "description": "Exibe todos os repositórios que estão instalados e disponíveis para uso.",
@@ -36,7 +36,7 @@
                ]
         },
         {
-            "command-name": "InstallRepository",
+            "commandName": "InstallRepository",
             "path": "Commands/InstallRepository.command",
             "command" : "install [repositoryNamespace] [sourceType]",
             "description": "Instala um novo repositório no ecosistema",
@@ -63,7 +63,7 @@
             }
         },
         {
-            "command-name": "UpdateRepository",
+            "commandName": "UpdateRepository",
             "path": "Commands/UpdateRepository.command",
             "command" : "update [repositoryNamespace] [sourceType]",
             "description": "Atualiza um repositório já instalado no ecosistema",
@@ -90,7 +90,7 @@
             }
         },
         {
-            "command-name": "ShowRepositoryDetails",
+            "commandName": "ShowRepositoryDetails",
             "path": "Commands/ShowRepositoryDetails.command",
             "command" : "show [repositoryNamespace]",
             "description": "Mostra informações detalhadas sobre um repositório específico instalado",

@@ -74,14 +74,14 @@ const CreateCommandApplicationTaskParam = ({
     ]
 
     const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
-
+    
     return {
         objectLoaderType: "command-application",
         "staticParameters": {
             startupParams,
             namespace,
             rootPath,
-            commands: bootMetadata.commands,
+            commands: metadataDependency.commands,
             executableName,
             commandLineArgs
         },

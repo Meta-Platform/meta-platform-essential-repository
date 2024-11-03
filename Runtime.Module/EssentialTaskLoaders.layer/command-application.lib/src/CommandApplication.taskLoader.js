@@ -2,114 +2,130 @@ const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/T
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const yargs = SmartRequire('yargs/yargs')
 
+//const _GetCommandFunction = (path) => 
 
+
+const BuiderParameter = (_yargs, param) => {
+    const {
+        key,
+        paramType,
+        valueType,
+        describe
+    } = param
+    _yargs[paramType](key, {describe, type:valueType})
+}
+
+const GetCommandBuilder = ({parameters, children}) => {
+    return (_yargs) => {
+        parameters?.forEach(param => BuiderParameter(_yargs, param))
+        children?.forEach(childCommandData => {
+            const childCommandModule = ConfigCommand(childCommandData)
+            _yargs.command(childCommandModule)
+        })
+    }
+}
+
+const GetCommandHandler = ({
+    path, 
+    startupParams, 
+    nodejsPackageHandler
+}) => {
+    if (path) {
+        const CommandFunction = path && nodejsPackageHandler.require(path)
+        return CommandFunction 
+            ? (args) => CommandFunction({ args, startupParams })
+            : (args) => {}
+    } else {
+        return (args) => {}
+    }
+}
+
+
+const ConfigCommand = ({ 
+    commandMetadata, 
+    startupParams, 
+    nodejsPackageHandler
+}) => {
+    const {
+        path,
+        command,
+        parameters,
+        children,
+        description = ''
+    } = commandMetadata
+
+    if (!command) {
+        throw new Error('O campo "command" é obrigatório.')
+    }
+
+    const handler = GetCommandHandler({
+        path, 
+        startupParams, 
+        nodejsPackageHandler
+    })
+    const builder = GetCommandBuilder({parameters, children})
+
+    const commandModule = {
+        command,
+        describe: description,
+        builder,
+        handler
+    }
+
+    return commandModule
+}
+
+const ExecuteCommand = ({
+    commandsMetadata, 
+    commandLineArgs, 
+    startupParams, 
+    nodejsPackageHandler
+}) => {
+    const _yargs = yargs(commandLineArgs)
+
+    commandsMetadata.forEach(commandMetadata => {
+        const commandModule = ConfigCommand({ 
+            commandMetadata, 
+            startupParams, 
+            nodejsPackageHandler
+        })
+        _yargs.command(commandModule)
+    })
+
+    const mainCommandData = commandsMetadata.find(({ isMainCommand }) => isMainCommand)
+    if (mainCommandData) {
+        const {
+            path
+        } = mainCommandData
+        const CommandFunction = path && nodejsPackageHandler.require(path)
+        CommandFunction()
+    }
+
+    _yargs.argv
+}
 
 const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
 
     const {
         startupParams,
-        namespace,
-        executables,
-        rootPath,
-        executableName,
-        commandLineArgs
+        commands,
+        commandLineArgs,
+        nodejsPackageHandler
     } = loaderParams
-
-    const FindExecutableByName = (name) => 
-        executables.find(({executableName}) => executableName === name)
-
-    const _GetCommandGroupData = (executableName) => {
-        const executableData = FindExecutableByName(executableName)
-        debugger
-        return nodejsPackageHandler.require(executableData.commands)
-    }
-    
-    const _GetCommandFunction = (path) => path && nodejsPackageHandler.require(path)
-
-    const _GetCommandHandler = (path) => {
-        if (path) {
-            const CommandFunction = _GetCommandFunction(path)
-            return CommandFunction 
-                ? (args) => CommandFunction({ args, startupParams })
-                : (args) => {}
-        } else {
-            return (args) => {}
-        }
-    }
-
-    const _BuiderParameter = (_yargs, param) => {
-        const {
-            key,
-            paramType,
-            valueType,
-            describe
-        } = param
-        _yargs[paramType](key, {describe, type:valueType})
-    }
-
-    const _GetCommandBuilder = ({parameters, children}) => {
-        return (_yargs) => {
-            parameters?.forEach(param => _BuiderParameter(_yargs, param))
-            children?.forEach(childCommandData => {
-                const childCommandModule = _ConfigCommand(childCommandData)
-                _yargs.command(childCommandModule)
-            })
-        }
-    }
-
-    const _ConfigCommand = (commandData) => {
-        const {
-            path,
-            command,
-            parameters,
-            children,
-            description = ''
-        } = commandData
-
-        if (!command) {
-            throw new Error('O campo "command" é obrigatório.')
-        }
-
-        const handler = _GetCommandHandler(path)
-        const builder = _GetCommandBuilder({parameters, children})
-
-        const commandModule = {
-            command,
-            describe: description,
-            builder,
-            handler
-        }
-
-        return commandModule
-    }
-
-    const _ExecuteCommand = (commadGroupData, commandLineArgs) => {
-        const _yargs = yargs(commandLineArgs)
-
-        commadGroupData.forEach(commandData => {
-            const commandModule = _ConfigCommand(commandData)
-            _yargs.command(commandModule)
-        })
-
-        const mainCommandData = commadGroupData.find(({ isMainCommand }) => isMainCommand)
-        if (mainCommandData) {
-            const {
-                path
-            } = mainCommandData
-            const CommandFunction = _GetCommandFunction(path)
-            CommandFunction()
-        }
-
-        _yargs.argv
-    }
 
     const Start = () => {
         executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
         
         try {
-            const commadGroupData = _GetCommandGroupData(executableName)
-            _ExecuteCommand(commadGroupData, commandLineArgs)
+
+            ExecuteCommand({
+                commandsMetadata: commands, 
+                commandLineArgs, 
+                startupParams, 
+                nodejsPackageHandler
+            })
             executorCommandChannel.emit("status", TaskStatusTypes.FINISHED)
+
         } catch (e) {
             executorCommandChannel.emit("status", TaskStatusTypes.FAILURE)
             console.error(e)
