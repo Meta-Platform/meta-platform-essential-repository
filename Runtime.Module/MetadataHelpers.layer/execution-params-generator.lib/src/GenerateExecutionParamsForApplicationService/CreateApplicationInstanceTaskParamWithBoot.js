@@ -1,39 +1,6 @@
 const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
 const GenerateDefaultApplicationTaskParam = require("./GenerateDefaultApplicationTaskParam")
-
-const GetCommandApplicarionTaskParam = ({
-    startupParams,
-    namespace,
-    rootPath,
-    bootMetadata,
-    executableName,
-    commandLineArgs
-}) => {
-    
-    return {
-        objectLoaderType: "command-application",
-        "staticParameters": {
-            startupParams,
-            namespace,
-            rootPath,
-            executables: bootMetadata.executables,
-            executableName,
-            commandLineArgs
-        },
-        "linkedParameters": {
-            "nodejsPackageHandler": namespace
-        },
-        "agentLinkRules":[{
-            referenceName: namespace,
-            requirement:{
-                "&&": [
-                    { "property": "params.tag", "=": namespace },
-                    { "property": "status", "=": "ACTIVE" }
-                ]
-            }
-        }] 
-    }
-}
+const GenerateCommandApplicarionTaskParam = require("./GenerateCommandApplicarionTaskParam")
 
 const CreateApplicationInstanceTaskParamWithBoot = ({
     startupParams,
@@ -46,7 +13,7 @@ const CreateApplicationInstanceTaskParamWithBoot = ({
 }) => {
 
     const taskParam = CheckIfHaveExecutables(metadataHierarchy) && executableName
-        ? GetCommandApplicarionTaskParam({
+        ? GenerateCommandApplicarionTaskParam({
                 startupParams,
                 namespace,
                 rootPath,
