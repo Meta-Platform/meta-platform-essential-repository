@@ -5,7 +5,7 @@ const FindMetadata                        = require("./Commons/FindMetadata")
 const ExtractMetadataFromMetadataByType   = require("./Commons/ExtractMetadataFromMetadataByType")
 const ResolveMetadataParams               = require("./Commons/ResolveMetadataParams")
 const ResolveMetadataBoundParamsNamespace = require("./Commons/ResolveMetadataBoundParamsNamespace")
-
+const ExtractNamespaceListByBoundParams   = require("./Commons/ExtractNamespaceListByBoundParams")
 
 const ExtractRootData = (metadataHierarchy) => {
     const {
@@ -21,6 +21,7 @@ const ExtractRootData = (metadataHierarchy) => {
 
     return {
         namespace,
+        rootPath,
         bootMetadata,
         startupParams,
     }
@@ -29,7 +30,7 @@ const ExtractRootData = (metadataHierarchy) => {
 const FindBootExecutableMetadataByName = (name, executables) => 
     executables.find(({executableName}) => executableName === name)
 
-const CreateCommandApplicarionTaskParam = ({
+const CreateCommandApplicationTaskParam = ({
     metadataHierarchy,
     executableName,
     commandLineArgs
@@ -37,6 +38,7 @@ const CreateCommandApplicarionTaskParam = ({
 
     const {
         namespace,
+        rootPath,
         bootMetadata,
         startupParams,
     } = ExtractRootData(metadataHierarchy)
@@ -51,6 +53,10 @@ const CreateCommandApplicarionTaskParam = ({
         dependency         : bootExecutableMetadata.dependency, 
         dependencyMetadata : FindMetadata(namespaceDependency, metadataHierarchy)
     })
+
+    if(!metadataDependency){
+        throw `A dependencia ${dependency} não foi encontrado`
+    }
 
     const [
         boundParams,
@@ -67,9 +73,7 @@ const CreateCommandApplicarionTaskParam = ({
         })
     ]
 
-    
-        
-    debugger
+    const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
 
     return {
         objectLoaderType: "command-application",
@@ -82,19 +86,46 @@ const CreateCommandApplicarionTaskParam = ({
             commandLineArgs
         },
         "linkedParameters": {
-            "nodejsPackageHandler": namespace
+            "nodejsPackageHandler": namespace, 
+            ...boundParams ? boundParams : {}
         },
-        "agentLinkRules":[{
-            referenceName: namespace,
-            requirement:{
-                "&&": [
-                    { "property": "params.tag", "=": namespace },
-                    { "property": "status", "=": "ACTIVE" }
-                ]
-            }
-        }] 
+        "agentLinkRules":[
+            {
+                referenceName: namespace,
+                requirement:{
+                    "&&": [
+                        { "property": "params.tag", "=": namespace },
+                        { "property": "status", "=": "ACTIVE" }
+                    ]
+                }
+            },
+            ...namespaceDependency 
+                ? [{
+                    referenceName: namespaceDependency,
+                    requirement:{
+                        "&&": [
+                            { "property": "params.tag", "=": namespaceDependency },
+                            { "property": "status", "=": "ACTIVE" }
+                        ]
+                    }
+                }] 
+                : [],
+            ...namespaceList 
+                ? namespaceList.map( (namespace) =>  {
+                        return {
+                            referenceName: namespace,
+                            requirement:{
+                                "&&": [
+                                    { "property": "params.tag", "=": namespace },
+                                    { "property": "status", "=": "ACTIVE" }
+                                ]
+                            }
+                        }
+                    })    
+                : []
+        ] 
     }
 }
 
 
-module.exports = CreateCommandApplicarionTaskParam
+module.exports = CreateCommandApplicationTaskParam

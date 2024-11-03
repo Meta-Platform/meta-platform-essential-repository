@@ -1,5 +1,5 @@
-const ConvertTypeTaskParamsToObjectLoaderType = require("./ConvertTypeTaskParamsToObjectLoaderType")
-const ExtractNamespaceListByBoundParams = require("./ExtractNamespaceListByBoundParams")
+const ConvertTypeTaskParamsToObjectLoaderType = require("./Commons/ConvertTypeTaskParamsToObjectLoaderType")
+const ExtractNamespaceListByBoundParams = require("./Commons/ExtractNamespaceListByBoundParams")
 
 const CreateEndpointTaskParams = ({ 
     typeMetadata,

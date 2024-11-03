@@ -1,7 +1,7 @@
 const CheckIfHaveBoot = require("./CheckIfHaveBoot")
 const CheckIfHaveExecutables = require("./CheckIfHaveExecutables")
 const CreateDefaultApplicationTaskParam = require("./CreateDefaultApplicationTaskParam")
-const CreateCommandApplicarionTaskParam = require("./CreateCommandApplicarionTaskParam")
+const CreateCommandApplicationTaskParam = require("./CreateCommandApplicationTaskParam")
 
 const GenerateExecutionParamsForApplicationService = ({
     metadataHierarchy, 
@@ -12,7 +12,7 @@ const GenerateExecutionParamsForApplicationService = ({
     if(CheckIfHaveBoot(metadataHierarchy) || (CheckIfHaveExecutables(metadataHierarchy) && executableName)){
 
         const taskParam = CheckIfHaveExecutables(metadataHierarchy) && executableName
-        ? CreateCommandApplicarionTaskParam({
+        ? CreateCommandApplicationTaskParam({
                 metadataHierarchy,
                 executableName,
                 commandLineArgs

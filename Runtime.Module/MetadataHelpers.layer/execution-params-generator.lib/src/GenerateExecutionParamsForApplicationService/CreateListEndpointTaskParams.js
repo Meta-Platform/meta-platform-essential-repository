@@ -1,11 +1,12 @@
 const ExtractNamespaceFromDependency      = require("./Commons/ExtractNamespaceFromDependency")
 const FindMetadata                        = require("./Commons/FindMetadata")
 const ExtractMetadataFromMetadataByType   = require("./Commons/ExtractMetadataFromMetadataByType")
-const CreateEndpointTaskParams            = require("./Commons/CreateEndpointTaskParams")
 const ResolveMetadataParams               = require("./Commons/ResolveMetadataParams")
 const RemapAllParams                      = require("./Commons/RemapAllParams")
 const ResolveMetadataBoundParamsNamespace = require("./Commons/ResolveMetadataBoundParamsNamespace")
 const IsValidMetadata                     = require("./Commons/IsValidMetadata")
+
+const CreateEndpointTaskParams            = require("./CreateEndpointTaskParams")
 
 const CreateListEndpointTaskParams = ({ 
     typeMetadata, 
