@@ -2,7 +2,7 @@
     {
         "appType":"CLI",
         "executable":"supervisor",
-        "packageNamespace":"Main.Module/Application.layer/execution-supervisor.cli",
+        "packageNamespace":"Main.Module/Application.layer/instance-supervisor.cli",
         "supervisorSocketFileName":"supervisor.sock"
     },
     {
