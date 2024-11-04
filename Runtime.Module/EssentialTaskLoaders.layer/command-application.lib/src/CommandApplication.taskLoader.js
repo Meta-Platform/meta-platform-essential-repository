@@ -1,4 +1,6 @@
-const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
+
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const yargs = SmartRequire('yargs/yargs')
 
@@ -135,14 +137,14 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
 
     const Start = async () => {
 
-        executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
 
         try {
             await ExecuteCommand(loaderParams)
-            executorCommandChannel.emit("status", TaskStatusTypes.FINISHED)
-            executorCommandChannel.emit("exit")
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
+            executorCommandChannel.emit(CommandChannelEventTypes.STOP_ALL_TASKS)
         } catch (e) {
-            executorCommandChannel.emit("status", TaskStatusTypes.FAILURE)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
         }
 
@@ -152,8 +154,8 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
         console.log("CommandApplicationTaskLoader PAROU")
     }
     
-    executorCommandChannel.on("start", Start)
-    executorCommandChannel.on("stop", Stop)
+    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => {}
 }

@@ -1,15 +1,16 @@
-const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
 const ApplicationInstanceTaskLoader  = (loaderParams, executorCommandChannel) => {
 
     const Start = () => 
-        executorCommandChannel.emit("status", TaskStatusTypes.ACTIVE)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
 
     const Stop = () =>
-        executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
     
-    executorCommandChannel.on("start", Start)
-    executorCommandChannel.on("stop", Stop)
+    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => {}
 }

@@ -19,7 +19,7 @@ const StartControllerService = (loaderParams, executorCommandChannel) => {
         apiTemplate: apiTemplateData,
         service: ControllerService(controllerParams, executionData)
     })
-    executorCommandChannel.emit("status", TaskStatusTypes.ACTIVE)
+    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
 }
 
 module.exports = StartControllerService

@@ -1,4 +1,5 @@
 const TaskStatusTypes = require("./TaskStatusTypes")
+const CommandChannelEventTypes = require("./CommandChannelEventTypes")
 
 const IsTaskActivatable = require("./TaskHandlers/IsTaskActivatable")
 
@@ -24,7 +25,7 @@ const ProcessChangeTaskEvents = ({
 
     const EnableStatusChangeListening = (taskId) => 
         GetCommandChannel(taskId)
-            .on("status", (status) => ChangeTaskStatus(taskId, status))
+            .on(CommandChannelEventTypes.CHANGE_TASK_STATUS, (status) => ChangeTaskStatus(taskId, status))
 
     const EnableExitEventListening = (taskId) => {
         GetCommandChannel(taskId)
@@ -57,7 +58,7 @@ const ProcessChangeTaskEvents = ({
 
     const StartTask = (taskId) => {
         const { executorCommandChannel } = GetTask(taskId)
-        executorCommandChannel.emit("start")
+        executorCommandChannel.emit(CommandChannelEventTypes.START_TASK)
     }
 
     const GetTasksAwaitingConditions = () => 

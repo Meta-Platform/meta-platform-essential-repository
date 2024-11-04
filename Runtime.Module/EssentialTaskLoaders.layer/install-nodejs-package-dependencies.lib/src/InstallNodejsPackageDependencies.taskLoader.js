@@ -3,7 +3,8 @@ const EventEmitter = require('node:events')
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
-const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
 const InstallNpmPackage = require("./InstallNpmPackage")
 const ReadPackageJsonFile = require("./ReadPackageJsonFile")
@@ -45,9 +46,9 @@ const InstallNodejsPackageDependenciesTaskLoader  = (params, executorCommandChan
         EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
     } = params
 
-    const start = async () => {
+    const Start = async () => {
         hasBeenActivated=true
-        executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         try{
             const dependencies = await GetDependenciesFromPackageJsonFile(path)
             const packageName = ResolvePackageName(namespace)
@@ -91,24 +92,24 @@ const InstallNodejsPackageDependenciesTaskLoader  = (params, executorCommandChan
                 })
             }
 
-            if(wasStopped) executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
-            else executorCommandChannel.emit("status", TaskStatusTypes.FINISHED)
+            if(wasStopped) executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+            else executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
 
         }catch(e){
             if(wasStopped)
-                executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
+                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
             else {
                 console.log(e)
-                executorCommandChannel.emit("status", TaskStatusTypes.FAILURE)
+                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             }
         }
     }
 
-    const stop = () => {
+    const Stop = () => {
         if(!hasBeenActivated || hasBeenFinished)
-            executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
         else
-            executorCommandChannel.emit("status", TaskStatusTypes.STOPPING)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
         
     }
 
@@ -118,9 +119,9 @@ const InstallNodejsPackageDependenciesTaskLoader  = (params, executorCommandChan
         if(status === TaskStatusTypes.FINISHED) hasBeenFinished=true
     }
 
-    executorCommandChannel.on("start", start)
-    executorCommandChannel.on("stop", stop)
-    executorCommandChannel.on("status", handleChangeStatus)
+    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    executorCommandChannel.on(CommandChannelEventTypes.CHANGE_TASK_STATUS, handleChangeStatus)
 
     return () => {}
 

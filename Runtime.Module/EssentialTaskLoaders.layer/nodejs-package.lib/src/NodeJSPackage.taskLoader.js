@@ -3,7 +3,8 @@ const { join } = require("path")
 const ReadJsonFile = require("../../../../Commons.Module/Libraries.layer/json-file-utilities.lib/src/ReadJsonFile")
 const ResolvePackageName = require("../../../MetadataHelpers.layer/resolve-package-name.lib/src/ResolvePackageName")
 
-const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
 const PACKAGEJSON_FILENAME = "package.json"
 
@@ -40,29 +41,29 @@ const NodeJSPackageTaskLoader  = (params, executorCommandChannel) => {
     let serviceObject = {}
 
     const Start = async () => {
-        executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         try{
             const { path, environmentPath, tag, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES} = params
             const packageJsonFileContent = await GetPackageJsonContent(path)
             if(packageJsonFileContent){
                 SetupServiceObject(serviceObject, { path, environmentPath, tag , EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES})
-                executorCommandChannel.emit("status", TaskStatusTypes.ACTIVE)
+                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
             } else {
-                executorCommandChannel.emit("status", TaskStatusTypes.FAILURE)
+                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             }
         }catch(e){
-            executorCommandChannel.emit("status", TaskStatusTypes.FAILURE)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
         }
     }
 
     const Stop = () => {
         serviceObject = undefined
-        executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
     }
 
-    executorCommandChannel.on("start", Start)
-    executorCommandChannel.on("stop", Stop)
+    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => serviceObject
     

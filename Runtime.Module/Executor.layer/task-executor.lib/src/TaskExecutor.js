@@ -1,6 +1,8 @@
 
 
-const TaskStatusTypes = require("./TaskStatusTypes")
+const TaskStatusTypes          = require("./TaskStatusTypes")
+const CommandChannelEventTypes = require("./CommandChannelEventTypes")
+
 const CreateTaskStateManager = require("./CreateTaskStateManager")
 const ProcessChangeTaskEvents = require("./ProcessChangeTaskEvents")
 const AssembleNewBodyForTask = require("./TaskHandlers/AssembleNewBodyForTask")
@@ -29,7 +31,7 @@ const TaskExecutor = (params) => {
         const task = GetTask(taskId)
         if (task.status === TaskStatusTypes.AWAITING_PRECONDITIONS)
             ChangeTaskStatus(taskId, TaskStatusTypes.TERMINATED)
-        else task.executorCommandChannel.emit("stop")
+        else task.executorCommandChannel.emit(CommandChannelEventTypes.STOP_TASK)
     }
 
     const StopTasks = (taskIdList) => 

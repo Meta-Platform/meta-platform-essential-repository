@@ -43,14 +43,14 @@ Para exemplificar como os Parâmetros Estáticos são implementados e utilizados
 ```javascript
 const PrintParamsTaskLoader = (params, executorCommandChannel) => {
     const Start = () => {
-        executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         console.log("Parameters passed to the loader:")
         console.log(params)
-        executorCommandChannel.emit("status", TaskStatusTypes.FINISHED)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
     }
-    const Stop = () => executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
-    executorCommandChannel.on("start", Start)
-    executorCommandChannel.on("stop", Stop)
+    const Stop = () => executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
     return () => {}
 }
 ```

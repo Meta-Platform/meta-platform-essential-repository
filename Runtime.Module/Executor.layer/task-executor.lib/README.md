@@ -25,27 +25,27 @@ const ExpressServerTaskLoader = (params, executorCommandChannel) => {
 
     // Inicia o servidor Express
     const Start = () => {
-        executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         app.get('/', (req, res) => res.send('Express server is running!'))
         server = app.listen(params.port, () => {
             console.log(`Express server is listening on port ${params.port}`)
-            executorCommandChannel.emit("status", TaskStatusTypes.ACTIVE)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
         })
     }
 
     // Para o servidor Express
     const Stop = () => {
         if (server) {
-            executorCommandChannel.emit("status", TaskStatusTypes.STOPPING)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
             server.close(() => {
                 console.log('Express server has been stopped')
-                executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
+                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
             })
         }
     }
 
-    executorCommandChannel.on("start", Start)
-    executorCommandChannel.on("stop", Stop)
+    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => {}
 }

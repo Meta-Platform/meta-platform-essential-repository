@@ -3,7 +3,8 @@ const EventEmitter = require('node:events')
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
-const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
 const StartControllerService = require("./StartControllerService")
 const StartWebGraphicUserInterfaceService = require("./StartWebGraphicUserInterfaceService")
@@ -29,7 +30,7 @@ const EndpointInstanceTaskLoader = (loaderParams, executorCommandChannel) => {
     const { type } = loaderParams
 
     const Start = async () => {
-        executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
+        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
 
         try{
             const { url, serverService } = loaderParams
@@ -59,26 +60,26 @@ const EndpointInstanceTaskLoader = (loaderParams, executorCommandChannel) => {
                 const output = await StartWebGraphicUserInterfaceService({loaderParams, loggerEmitter})
                 if(!wasStopped){
                     serverService.AddStaticEndpoint({path:url, staticDir: output})
-                    executorCommandChannel.emit("status", TaskStatusTypes.ACTIVE)
+                    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
                 } else {
-                    executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
+                    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
                 }
             } else throw `Tipo de endpoint "${type}" não encontrado`
             
         }catch(e){
-            executorCommandChannel.emit("status", TaskStatusTypes.FAILURE)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
         }
     }
 
     const Stop = () => {
         if(type === "controller" || isActive) {
-            executorCommandChannel.emit("status", TaskStatusTypes.TERMINATED)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
         }
         else if(type === "web-graphic-user-interface"){
-            executorCommandChannel.emit("status", TaskStatusTypes.STOPPING)
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
         } else 
-            executorCommandChannel.emit("status", TaskStatusTypes.FAILURE) 
+            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE) 
     }
 
     const handleChangeStatus = (status) => {
@@ -86,9 +87,9 @@ const EndpointInstanceTaskLoader = (loaderParams, executorCommandChannel) => {
         if(status === TaskStatusTypes.ACTIVE) isActive=true
     }
 
-    executorCommandChannel.on("start", Start)
-    executorCommandChannel.on("stop", Stop)
-    executorCommandChannel.on("status", handleChangeStatus)
+    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    executorCommandChannel.on(CommandChannelEventTypes.CHANGE_TASK_STATUS, handleChangeStatus)
 
     return () => {}
 }
