@@ -4,15 +4,32 @@ const IsTaskActivatable = require("./TaskHandlers/IsTaskActivatable")
 
 const AssembleTaskParameters = require("./TaskHandlers/AssembleTaskParameters")
 
-const ProcessChangeTaskEvents = ({taskStateManager, taskLoaders, taskId, status}) => {
+const ProcessChangeTaskEvents = ({
+    StopAllTasks,
+    taskStateManager, 
+    taskLoaders, 
+    taskId, 
+    status
+}) => {
 
     const {
         GetTask,
         ListTasks,
         ChangeTaskStatus,
         UpdateTaskProperty,
-        EnableTaskEventListening,
     } = taskStateManager
+
+    const GetCommandChannel = (taskId) =>
+        GetTask(taskId).executorCommandChannel
+
+    const EnableStatusChangeListening = (taskId) => 
+        GetCommandChannel(taskId)
+            .on("status", (status) => ChangeTaskStatus(taskId, status))
+
+    const EnableExitEventListening = (taskId) => {
+        GetCommandChannel(taskId)
+        .on("exit", () => StopAllTasks())
+    }
 
     const MountServiceObject = (task) => {
         const ObjectLoader = taskLoaders[task.objectLoaderType]
@@ -25,13 +42,17 @@ const ProcessChangeTaskEvents = ({taskStateManager, taskLoaders, taskId, status}
     }
 
     const PrepareTaskForActivation = (taskId) => {
+
         const task = GetTask(taskId)
 
         UpdateTaskProperty(taskId, "params", AssembleTaskParameters(taskStateManager, task))
         UpdateTaskProperty(taskId, "getServiceObject", MountServiceObject(task))
-        EnableTaskEventListening(taskId)
+
+        EnableExitEventListening(taskId)
+        EnableStatusChangeListening(taskId)
 
         ChangeTaskStatus(taskId, TaskStatusTypes.PREPPED_TO_START)
+        
     }
 
     const StartTask = (taskId) => {

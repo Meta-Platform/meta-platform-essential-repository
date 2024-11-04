@@ -31,18 +31,12 @@ const CreateTaskStateManager = () => {
         eventEmitter.emit(TASK_STATUS_CHANGE, { taskId, status, objectLoaderType: GetTask(taskId).objectLoaderType} )
     }
 
-    const EnableTaskEventListening = (taskId) => 
-        GetTask(taskId)
-            .executorCommandChannel
-            .on("status", (status) => ChangeTaskStatus(taskId, status))
-
     return {
         ChangeTaskStatus,
         AddTaskStatusListener,
         CreateEmptyTask,
         ListTasks: () => taskList,
         GetTask,
-        EnableTaskEventListening,
         UpdateTaskProperty
     }
 }

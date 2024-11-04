@@ -58,7 +58,7 @@ const GetCommandHandler = ({
         const params = GetCommandParams(loaderParams, commandParameterNames)
 
         return CommandFunction 
-            ? (args) => CommandFunction({ args, startupParams, params })
+            ? async (args) => await CommandFunction({ args, startupParams, params })
             : (args) => {}
 
     } else {
@@ -67,7 +67,7 @@ const GetCommandHandler = ({
 
 }
 
-const ConfigCommand = ({ 
+const ConfigCommand = async ({ 
     commandMetadata, 
     loaderParams
 }) => {
@@ -84,7 +84,7 @@ const ConfigCommand = ({
         throw new Error('O campo "command" é obrigatório.')
     }
 
-    const handler = GetCommandHandler({
+    const handler = await GetCommandHandler({
         path, 
         loaderParams
     })
@@ -101,7 +101,7 @@ const ConfigCommand = ({
     return commandModule
 }
 
-const ExecuteCommand = (loaderParams) => {
+const ExecuteCommand = async (loaderParams) => {
 
     const {
         commands: commandsMetadata, 
@@ -111,13 +111,14 @@ const ExecuteCommand = (loaderParams) => {
 
     const _yargs = yargs(commandLineArgs)
 
-    commandsMetadata.forEach(commandMetadata => {
-        const commandModule = ConfigCommand({ 
+    for (const commandMetadata of commandsMetadata) {
+
+        const commandModule = await ConfigCommand({ 
             commandMetadata, 
             loaderParams
         })
         _yargs.command(commandModule)
-    })
+    }
 
     const mainCommandData = commandsMetadata.find(({ isMainCommand }) => isMainCommand)
     if (mainCommandData) {
@@ -125,20 +126,21 @@ const ExecuteCommand = (loaderParams) => {
             path
         } = mainCommandData
         const CommandFunction = path && nodejsPackageHandler.require(path)
-        CommandFunction()
+        await CommandFunction()
     }
     _yargs.argv
 }
 
 const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
 
-    const Start = () => {
+    const Start = async () => {
 
         executorCommandChannel.emit("status", TaskStatusTypes.STARTING)
 
         try {
-            ExecuteCommand(loaderParams)
+            await ExecuteCommand(loaderParams)
             executorCommandChannel.emit("status", TaskStatusTypes.FINISHED)
+            executorCommandChannel.emit("exit")
         } catch (e) {
             executorCommandChannel.emit("status", TaskStatusTypes.FAILURE)
             console.error(e)
