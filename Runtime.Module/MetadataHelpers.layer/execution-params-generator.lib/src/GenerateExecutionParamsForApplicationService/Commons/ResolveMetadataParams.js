@@ -5,10 +5,13 @@ const ResolveMetadataParams = ({
     params,
     metadataHierarchy
 }) => {
-
-    const startupParamsMetadata = ExtractStartupParamstMetadata(metadataHierarchy)
-    const processedParams = GetPopulatedParameters(params, startupParamsMetadata)
-    return processedParams
+    
+    if(params){
+        const startupParamsMetadata = ExtractStartupParamstMetadata(metadataHierarchy)
+        const processedParams = GetPopulatedParameters(params, startupParamsMetadata)
+        return processedParams
+    }
+    return {}
     
 }
 

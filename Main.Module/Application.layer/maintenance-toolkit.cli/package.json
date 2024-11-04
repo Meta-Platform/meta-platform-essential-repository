@@ -1,6 +1,6 @@
 {
-  "name": "setup-wizard.cli",
-  "version": "0.0.2",
+  "name": "maintenance-toolkit.cli",
+  "version": "0.0.3",
   "description": "Asissitente de Instalação e configuração de ecosistemas",
   "author": "Kaio Cezar <kadisk.shark@gmail.com>",
   "dependencies": {

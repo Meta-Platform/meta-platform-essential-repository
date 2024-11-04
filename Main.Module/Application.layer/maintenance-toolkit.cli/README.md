@@ -34,36 +34,36 @@ mytoolkit install
 
 #### Exemplo:
 ```bash
-mytoolkit install --profile github-release-standard
+mytoolkit install github-release-standard
 ```
 
 ### Exibir Detalhes de um Perfil
 Exibe informações detalhadas sobre um perfil específico, como componentes incluídos e configurações recomendadas.
 
 ```bash
-mytoolkit show-profile --profile <nome_do_perfil>
+mytoolkit show profile <nome_do_perfil>
 ```
 
 #### Exemplo:
 ```bash
-mytoolkit show-profile --profile dev-standard
+mytoolkit show profile dev-standard
 ```
 
 ### Instalar com Perfis Específicos
 Escolha o perfil de instalação desejado para ajustar a configuração do ecossistema de acordo com suas necessidades.
 
 ```bash
-mytoolkit install --profile "<nome_do_perfil>"
+mytoolkit install "<nome_do_perfil>"
 ```
 
 #### Exemplos:
 ```bash
-mytoolkit install --profile localfs-minimal
-mytoolkit install --profile localfs-standard
-mytoolkit install --profile dev-localfs-minimal
-mytoolkit install --profile dev-localfs-standard
-mytoolkit install --profile github-release-minimal
-mytoolkit install --profile github-release-standard
+mytoolkit install localfs-minimal
+mytoolkit install localfs-standard
+mytoolkit install dev-localfs-minimal
+mytoolkit install dev-localfs-standard
+mytoolkit install github-release-minimal
+mytoolkit install github-release-standard
 ```
 
 ### Alterar o Caminho dos Dados de Instalação
