@@ -150,9 +150,7 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
 
     }
         
-    const Stop = () => {
-        console.log("CommandApplicationTaskLoader PAROU")
-    }
+    const Stop = () => process.exit(0)
     
     executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
     executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)

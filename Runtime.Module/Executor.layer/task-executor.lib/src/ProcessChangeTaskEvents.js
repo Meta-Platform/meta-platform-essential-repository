@@ -29,7 +29,7 @@ const ProcessChangeTaskEvents = ({
 
     const EnableExitEventListening = (taskId) => {
         GetCommandChannel(taskId)
-        .on("exit", () => StopAllTasks())
+        .on(CommandChannelEventTypes.STOP_ALL_TASKS, () => StopAllTasks())
     }
 
     const MountServiceObject = (task) => {
