@@ -3,7 +3,7 @@ const EventEmitter = require('node:events')
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
-const UpdateRepositoryCommand = async ({ args, startupParams  }) => {
+const UpdateRepositoryCommand = async ({ args, startupParams, params }) => {
 
     const {
         ecosystemInstallUtilitiesLib,

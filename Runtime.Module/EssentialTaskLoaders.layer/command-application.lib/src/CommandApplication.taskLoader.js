@@ -30,15 +30,19 @@ const BuiderParameter = (_yargs, param) => {
 
 const GetCommandBuilder = ({parameters, children, loaderParams}) => {
 
-    return (_yargs) => {
+    return async (_yargs) => {
         parameters?.forEach(param => BuiderParameter(_yargs, param))
-        children?.forEach(childCommandData => {
-            const childCommandModule = ConfigCommand({ 
-                commandMetadata: childCommandData, 
-                loaderParams
-            })
-            _yargs.command(childCommandModule)
-        })
+
+        if(children){
+            for(childCommandData of children){
+                const childCommandModule = await ConfigCommand({ 
+                    commandMetadata: childCommandData, 
+                    loaderParams
+                })
+                _yargs.command(childCommandModule)
+            }
+        }
+
     }
 
 }
