@@ -130,7 +130,8 @@ const ExecuteCommand = async (loaderParams) => {
         const CommandFunction = path && nodejsPackageHandler.require(path)
         await CommandFunction()
     }
-    _yargs.argv
+    
+    await _yargs.parseAsync(commandLineArgs)
 }
 
 const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {

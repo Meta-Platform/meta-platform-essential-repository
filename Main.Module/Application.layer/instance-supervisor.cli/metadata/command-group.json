@@ -3,7 +3,7 @@
     "params":["supervisorSocketsDirPath"],
     "commands": [
         {
-            "namespace": "ListSockets",
+            "commandName": "ListSockets",
             "path": "Commands/ListSockets.command",
             "command" : "sockets",
             "description": "Listar todos os sockets de supervisão",
@@ -15,7 +15,7 @@
             }
         },
         {
-            "namespace": "GetExecutionStatus",
+            "commandName": "GetExecutionStatus",
             "path": "Commands/GetExecutionStatus.command",
             "command" : "status [socket]",
             "description": "Mostrar status do execução da instancia",
@@ -35,7 +35,7 @@
             }
         },
         {
-            "namespace": "ListRunningTasks",
+            "commandName": "ListRunningTasks",
             "path": "Commands/ListRunningTasks.command",
             "command" : "tasks [socket]",
             "description": "Listar tarefas carregadas no task executor da instância",
@@ -55,7 +55,7 @@
             }
         },
         {
-            "namespace": "LogExecution",
+            "commandName": "LogExecution",
             "path": "Commands/LogExecution.command",
             "command" : "log [socket]",
             "description": "Visualizar log da instância",
@@ -75,7 +75,7 @@
             }
         },
         {
-            "namespace": "KillExecution",
+            "commandName": "KillExecution",
             "path": "Commands/KillExecution.command",
             "command" : "kill [socket]",
             "description": "Matar o instância",
@@ -95,11 +95,11 @@
             }
         },
         {
-            "namespace": "Show",
+            "commandName": "Show",
             "command" : "show",
             "children": [
                     {
-                        "namespace": "ShowExecutionTaskInformation",
+                        "commandName": "ShowExecutionTaskInformation",
                         "path": "Commands/ShowExecutionTaskInformation.command",
                         "command" : "task [taskId] [socket]",
                         "description": "Mostra informação sobre uma tarefa específica da instância",

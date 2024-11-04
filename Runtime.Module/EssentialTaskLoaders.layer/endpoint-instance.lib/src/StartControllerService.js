@@ -1,4 +1,5 @@
-const TaskStatusTypes = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
+const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
 const StartControllerService = (loaderParams, executorCommandChannel) => {
     const {

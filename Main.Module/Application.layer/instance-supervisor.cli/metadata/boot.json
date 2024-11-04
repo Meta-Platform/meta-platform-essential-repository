@@ -7,8 +7,7 @@
             "dependency": "@//command-group",
             "executableName": "supervisor",
             "bound-params": {
-                "ecosystemInstallUtilitiesLib": "@/ecosystem-install-utilities.lib",
-                "printDataLogLib": "@/print-data-log.lib"
+                "supervisorLib": "@/supervisor.lib"
             },
             "params":{
                 "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
