@@ -5,5 +5,5 @@
   "scripts": {
     "test": "node --test tests/"
   },
-  "license": "ISC"
+  "license": "BSD-3-Clause"
 }
