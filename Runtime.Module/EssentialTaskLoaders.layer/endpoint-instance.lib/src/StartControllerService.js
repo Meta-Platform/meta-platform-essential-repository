@@ -1,7 +1,7 @@
 const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
-const StartControllerService = (loaderParams, executorCommandChannel) => {
+const StartControllerService = (loaderParams, executorChannel) => {
     const {
         serverService,
         url,
@@ -20,7 +20,7 @@ const StartControllerService = (loaderParams, executorCommandChannel) => {
         apiTemplate: apiTemplateData,
         service: ControllerService(controllerParams, executionData)
     })
-    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
+    executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
 }
 
 module.exports = StartControllerService

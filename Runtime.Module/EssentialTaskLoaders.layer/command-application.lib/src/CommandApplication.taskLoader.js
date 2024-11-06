@@ -138,18 +138,18 @@ const ExecuteCommand = async (loaderParams) => {
     await _yargs.parseAsync(commandLineArgs)
 }
 
-const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
+const CommandApplicationTaskLoader = (loaderParams, executorChannel) => {
 
     const Start = async () => {
 
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
 
         try {
             await ExecuteCommand(loaderParams)
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
-            executorCommandChannel.emit(CommandChannelEventTypes.STOP_ALL_TASKS)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
+            executorChannel.emit(CommandChannelEventTypes.STOP_ALL_TASKS)
         } catch (e) {
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
         }
 
@@ -157,8 +157,8 @@ const CommandApplicationTaskLoader = (loaderParams, executorCommandChannel) => {
         
     const Stop = () => process.exit(0)
     
-    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
-    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => {}
 }

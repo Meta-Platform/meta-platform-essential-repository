@@ -21,7 +21,7 @@ const ProcessChangeTaskEvents = ({
     } = taskStateManager
 
     const GetCommandChannel = (taskId) =>
-        GetTask(taskId).executorCommandChannel
+        GetTask(taskId).executorChannel
 
     const EnableStatusChangeListening = (taskId) => 
         GetCommandChannel(taskId)
@@ -34,7 +34,7 @@ const ProcessChangeTaskEvents = ({
 
     const MountServiceObject = (task) => {
         const ObjectLoader = taskLoaders[task.objectLoaderType]
-        return ObjectLoader(task.params, task.executorCommandChannel)
+        return ObjectLoader(task.params, task.executorChannel)
     }
 
     const CheckActivationConditions = (taskId) => {
@@ -57,8 +57,8 @@ const ProcessChangeTaskEvents = ({
     }
 
     const StartTask = (taskId) => {
-        const { executorCommandChannel } = GetTask(taskId)
-        executorCommandChannel.emit(CommandChannelEventTypes.START_TASK)
+        const { executorChannel } = GetTask(taskId)
+        executorChannel.emit(CommandChannelEventTypes.START_TASK)
     }
 
     const GetTasksAwaitingConditions = () => 

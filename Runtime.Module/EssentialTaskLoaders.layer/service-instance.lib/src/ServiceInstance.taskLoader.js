@@ -1,7 +1,7 @@
 const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
-const ServiceInstanceObjectLoader = (loaderParams, executorCommandChannel) => {
+const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
 
     let serviceObject = {}
 
@@ -37,11 +37,11 @@ const ServiceInstanceObjectLoader = (loaderParams, executorCommandChannel) => {
             serviceObject = Service({ 
                 ..._GetServiceParams(), 
                 onReady: () => {
-                    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
+                    executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
                 },
                 onClose: () => {
                     serviceObject=undefined
-                    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+                    executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
                 }
             }, loaderParams.executionData)
         }catch(e){
@@ -50,27 +50,27 @@ const ServiceInstanceObjectLoader = (loaderParams, executorCommandChannel) => {
     }
 
     const Start = async () => {
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         try{
             _CreateServiceObject()
         }catch(e){
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
         }
     }
 
     const Stop = () => {
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
         if(serviceObject.Close) {
             serviceObject.Close()
         } else {
             serviceObject=undefined
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
         }
     }
 
-    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
-    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => serviceObject
 }

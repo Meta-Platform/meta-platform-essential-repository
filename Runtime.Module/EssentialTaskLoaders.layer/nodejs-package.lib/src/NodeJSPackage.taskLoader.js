@@ -36,34 +36,34 @@ const SetupServiceObject = (serviceObject, { path, environmentPath, tag, EXECUTI
     serviceObject.getNodeModulesPath = _GetNodeModulesPath
 }
 
-const NodeJSPackageTaskLoader  = (params, executorCommandChannel) => {
+const NodeJSPackageTaskLoader  = (params, executorChannel) => {
 
     let serviceObject = {}
 
     const Start = async () => {
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         try{
             const { path, environmentPath, tag, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES} = params
             const packageJsonFileContent = await GetPackageJsonContent(path)
             if(packageJsonFileContent){
                 SetupServiceObject(serviceObject, { path, environmentPath, tag , EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES})
-                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
+                executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
             } else {
-                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
+                executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             }
         }catch(e){
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
         }
     }
 
     const Stop = () => {
         serviceObject = undefined
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
     }
 
-    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
-    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => serviceObject
     

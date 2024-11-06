@@ -15,7 +15,7 @@ const AssembleNewBodyForTask = ({ taskId, pTaskId, executionParams }) => {
         ...pTaskId ? { pTaskId } : {}, 
         hasChildTasks: !!children && children.length > 0,
         objectLoaderType,
-        executorCommandChannel: new EventEmitter(),
+        executorChannel: new EventEmitter(),
         ...staticParameters ? { staticParameters } : {},
         ...linkedParameters ? { linkedParameters } : {},
         ...agentLinkRules ? { agentLinkRules } : {},

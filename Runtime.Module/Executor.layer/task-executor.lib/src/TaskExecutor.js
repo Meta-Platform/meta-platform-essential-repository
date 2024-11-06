@@ -31,7 +31,7 @@ const TaskExecutor = (params) => {
         const task = GetTask(taskId)
         if (task.status === TaskStatusTypes.AWAITING_PRECONDITIONS)
             ChangeTaskStatus(taskId, TaskStatusTypes.TERMINATED)
-        else task.executorCommandChannel.emit(CommandChannelEventTypes.STOP_TASK)
+        else task.executorChannel.emit(CommandChannelEventTypes.STOP_TASK)
     }
 
     const StopTasks = (taskIdList) => 

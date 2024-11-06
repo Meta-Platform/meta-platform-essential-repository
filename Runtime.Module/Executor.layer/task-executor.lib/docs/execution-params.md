@@ -41,16 +41,16 @@ Os Parâmetros Estáticos são informações estruturadas, tipicamente formatada
 Para exemplificar como os Parâmetros Estáticos são implementados e utilizados na prática, considere o uso do `PrintParamsTaskLoader`. Este carregador foi desenvolvido especificamente para demonstrar a passagem desses parâmetros pelo Executor de Tarefas, ilustrando seu papel crítico na configuração da tarefa.
 
 ```javascript
-const PrintParamsTaskLoader = (params, executorCommandChannel) => {
+const PrintParamsTaskLoader = (params, executorChannel) => {
     const Start = () => {
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         console.log("Parameters passed to the loader:")
         console.log(params)
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
     }
-    const Stop = () => executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
-    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
-    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    const Stop = () => executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+    executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
     return () => {}
 }
 ```

@@ -22,7 +22,7 @@ const GetColorLogByType = (type) => {
     }
   }
 
-const EndpointInstanceTaskLoader = (loaderParams, executorCommandChannel) => {
+const EndpointInstanceTaskLoader = (loaderParams, executorChannel) => {
 
     let wasStopped=false
     let isActive=false
@@ -30,13 +30,13 @@ const EndpointInstanceTaskLoader = (loaderParams, executorCommandChannel) => {
     const { type } = loaderParams
 
     const Start = async () => {
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
 
         try{
             const { url, serverService } = loaderParams
 
             if(type === "controller") 
-                StartControllerService(loaderParams, executorCommandChannel)
+                StartControllerService(loaderParams, executorChannel)
             else if(type === "web-graphic-user-interface") {
                 const loggerEmitter = new EventEmitter()
                 loggerEmitter.on("log", (dataLog) => {
@@ -60,26 +60,26 @@ const EndpointInstanceTaskLoader = (loaderParams, executorCommandChannel) => {
                 const output = await StartWebGraphicUserInterfaceService({loaderParams, loggerEmitter})
                 if(!wasStopped){
                     serverService.AddStaticEndpoint({path:url, staticDir: output})
-                    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
+                    executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
                 } else {
-                    executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+                    executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
                 }
             } else throw `Tipo de endpoint "${type}" não encontrado`
             
         }catch(e){
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
         }
     }
 
     const Stop = () => {
         if(type === "controller" || isActive) {
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
         }
         else if(type === "web-graphic-user-interface"){
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
         } else 
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE) 
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE) 
     }
 
     const handleChangeStatus = (status) => {
@@ -87,9 +87,9 @@ const EndpointInstanceTaskLoader = (loaderParams, executorCommandChannel) => {
         if(status === TaskStatusTypes.ACTIVE) isActive=true
     }
 
-    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
-    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
-    executorCommandChannel.on(CommandChannelEventTypes.CHANGE_TASK_STATUS, handleChangeStatus)
+    executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    executorChannel.on(CommandChannelEventTypes.CHANGE_TASK_STATUS, handleChangeStatus)
 
     return () => {}
 }

@@ -19,33 +19,33 @@ const TaskStatusTypes = require("task-executor.lib/src/TaskStatusTypes")
 const TaskExecutor = require("task-executor.lib/src/TaskExecutor")
 
 // Define um loader personalizado para o servidor Express
-const ExpressServerTaskLoader = (params, executorCommandChannel) => {
+const ExpressServerTaskLoader = (params, executorChannel) => {
     const app = express()
     let server
 
     // Inicia o servidor Express
     const Start = () => {
-        executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
+        executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         app.get('/', (req, res) => res.send('Express server is running!'))
         server = app.listen(params.port, () => {
             console.log(`Express server is listening on port ${params.port}`)
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
         })
     }
 
     // Para o servidor Express
     const Stop = () => {
         if (server) {
-            executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
             server.close(() => {
                 console.log('Express server has been stopped')
-                executorCommandChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+                executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
             })
         }
     }
 
-    executorCommandChannel.on(CommandChannelEventTypes.START_TASK, Start)
-    executorCommandChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
+    executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
+    executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
     return () => {}
 }
