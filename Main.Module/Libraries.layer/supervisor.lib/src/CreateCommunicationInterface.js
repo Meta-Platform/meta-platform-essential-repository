@@ -37,12 +37,17 @@ const CreateCommunicationInterface = async (socketFilePath) => {
 
     const daemonClient = await CreateClient(socketFilePath)
     
-    const Kill = () => daemonClient.Kill({}, () => {})
+    const Kill = () => new Promise((resolve, reject) => {
+        daemonClient.Kill({}, (err, response) => {
+            if (err) reject(err)
+            else resolve(response.status)
+        })
+    })
 
     const GetStatus = () => new Promise((resolve, reject) => {
-        daemonClient.GetStatus({}, (err, executionStatusResponse) => {
+        daemonClient.GetStatus({}, (err, response) => {
             if (err) reject(err)
-            else resolve(executionStatusResponse.status)
+            else resolve(response.status)
         })
     })
 
@@ -55,10 +60,10 @@ const CreateCommunicationInterface = async (socketFilePath) => {
     })
 
     const GetTask = (taskId) => new Promise((resolve, reject) => {
-        daemonClient.GetTask({ taskId }, (err, taskResponse) => {
+        daemonClient.GetTask({ taskId }, (err, response) => {
             if (err) reject(err)
             else {
-                const taskInformation = ConvertTaskResponseToTask(taskResponse)
+                const taskInformation = ConvertTaskResponseToTask(response)
                 resolve(taskInformation)}
         })
     })
