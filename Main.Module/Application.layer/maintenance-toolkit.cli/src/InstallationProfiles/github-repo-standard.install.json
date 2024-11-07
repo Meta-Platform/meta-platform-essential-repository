@@ -9,7 +9,7 @@
         {
             "namespace": "EcosystemCoreRepo",
             "sourceType":"GITHUB_REPO",
-            "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
+            "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer"]
         }
     ]
 }

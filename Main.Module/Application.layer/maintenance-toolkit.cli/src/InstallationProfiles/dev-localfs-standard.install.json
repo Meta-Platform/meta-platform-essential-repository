@@ -9,7 +9,7 @@
         {
             "namespace": "EcosystemCoreRepo",
             "sourceType":"LOCAL_FS",
-            "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer", "mysup"]
+            "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer"]
         }
     ]
 }
