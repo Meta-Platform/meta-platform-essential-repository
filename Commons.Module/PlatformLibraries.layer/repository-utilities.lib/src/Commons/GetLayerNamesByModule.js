@@ -4,15 +4,15 @@ const GetModulePath = require("./GetModulePath")
 const GetLayerNamesByModule = async ({ 
     namespaceRepo, 
     moduleName,
-        ECO_DIRPATH_INSTALL_DATA,
-        REPOS_CONF_FILENAME_REPOS_DATA,
-        REPOS_CONF_EXT_MODULE_DIR,
-        REPOS_CONF_EXT_LAYER_DIR
+    installDataDirPath,
+    REPOS_CONF_FILENAME_REPOS_DATA,
+    REPOS_CONF_EXT_MODULE_DIR,
+    REPOS_CONF_EXT_LAYER_DIR
 }) => {
     const path = await GetModulePath({
         namespaceRepo, 
         moduleName,
-        ECO_DIRPATH_INSTALL_DATA,
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         REPOS_CONF_EXT_MODULE_DIR
     })

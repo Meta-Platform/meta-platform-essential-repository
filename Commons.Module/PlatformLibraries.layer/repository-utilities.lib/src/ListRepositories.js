@@ -1,11 +1,11 @@
 const GetRepositories = require("./Commons/GetRepositories")
 
 const ListRepositories = async ({
-    ECO_DIRPATH_INSTALL_DATA,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
 }) => {
     const registeredRepositories = await GetRepositories({
-        ECO_DIRPATH_INSTALL_DATA,
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
     })
     const listNamespace = Object.keys(registeredRepositories)

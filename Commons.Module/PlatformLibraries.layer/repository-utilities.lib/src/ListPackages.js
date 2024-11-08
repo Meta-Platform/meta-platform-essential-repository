@@ -11,7 +11,7 @@ const ListPackages = async ({
 }) => {
     
     const listLayers = await ListLayers({
-        ECO_DIRPATH_INSTALL_DATA,
+        installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         REPOS_CONF_EXT_MODULE_DIR,
         REPOS_CONF_EXT_LAYER_DIR
@@ -25,7 +25,7 @@ const ListPackages = async ({
                 namespaceRepo, 
                 moduleName,
                 REPOS_CONF_EXT_LAYER_DIR,
-                ECO_DIRPATH_INSTALL_DATA,
+                installDataDirPath,
                 REPOS_CONF_FILENAME_REPOS_DATA,
                 REPOS_CONF_EXT_MODULE_DIR,
                 REPOS_CONF_EXT_GROUP_DIR,
