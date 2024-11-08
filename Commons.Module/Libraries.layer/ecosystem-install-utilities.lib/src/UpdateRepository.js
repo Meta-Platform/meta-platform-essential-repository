@@ -6,7 +6,7 @@ const colors = SmartRequire("colors")
 const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir") 
 
 const ReinstallApplication = require("./Update/ReinstallApplication")
-const DownloadRepository = require("./Helpers/DownloadRepository")
+const ObtainRepository = require("./Helpers/ObtainRepository")
 
 const CleanOldRepository = require("./Helpers/CleanOldRepository")
 
@@ -41,7 +41,7 @@ const UpdateRepository = async ({
         loggerEmitter
     })
 
-    const deployedRepoPath = await DownloadRepository({
+    const deployedRepoPath = await ObtainRepository({
         repositoryNamespace,
         sourceData,
         installDataDirPath,

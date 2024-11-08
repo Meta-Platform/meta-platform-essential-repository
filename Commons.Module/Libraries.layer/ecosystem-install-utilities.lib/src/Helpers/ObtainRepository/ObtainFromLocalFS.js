@@ -7,7 +7,7 @@ const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)
     .replace('~', os.homedir())
 
-const DownloadFromLocalFS = (args) => {
+const ObtainFromLocalFS = (args) => {
 
     const {
         repositoryNamespace, 
@@ -22,4 +22,4 @@ const DownloadFromLocalFS = (args) => {
     return destinationPath
 }
 
-module.exports = DownloadFromLocalFS
+module.exports = ObtainFromLocalFS

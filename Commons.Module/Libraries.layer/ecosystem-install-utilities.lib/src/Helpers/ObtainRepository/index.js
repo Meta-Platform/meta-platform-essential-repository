@@ -2,12 +2,12 @@ const path = require("path")
 const SmartRequire = require("../../../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
-const DownloadFromLocalFS       = require("./DownloadFromLocalFS")
+const ObtainFromLocalFS         = require("./ObtainFromLocalFS")
 const DownloadFromGoogleDrive   = require("./DownloadFromGoogleDrive")
 const DownloadFromGithubRelease = require("./DownloadFromGithubRelease")
 
 //TODO colocar log aqui
-const DownloadRepository = async ({
+const ObtainRepository = async ({
     repositoryNamespace,
     sourceData,
     installDataDirPath,
@@ -20,33 +20,33 @@ const DownloadRepository = async ({
      } = sourceData
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "DownloadRepository",
+        sourceName: "ObtainRepository",
         type: "info",
         message: `Baixando repositório ${colors.bold(repositoryNamespace)}...`
     })
 
     const destinationRepoPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES)
 
-    const DownloadFrom = {
-        "LOCAL_FS"       : (args) => DownloadFromLocalFS(args),
+    const ObtainFrom = {
+        "LOCAL_FS"       : (args) => ObtainFromLocalFS(args),
         "GOOGLE_DRIVE"   : (args) => DownloadFromGoogleDrive(args),
         "GITHUB_RELEASE" : (args) => DownloadFromGithubRelease(args)
     }
 
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "DownloadRepository",
+        sourceName: "ObtainRepository",
         type: "info",
         message: `A fonte do tipo ${colors.bold(sourceType)} selecionada`
     })
 
-    const destinationPath =  DownloadFrom[sourceType]({ repositoryNamespace, sourceData, destinationRepoPath })
+    const destinationPath =  ObtainFrom[sourceType]({ repositoryNamespace, sourceData, destinationRepoPath })
     
     loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "DownloadRepository",
+        sourceName: "ObtainRepository",
         type: "info",
         message: `Download do repositório ${colors.bold(repositoryNamespace)} foi concluído!`
     })
     return destinationPath
 }
 
-module.exports = DownloadRepository
+module.exports = ObtainRepository

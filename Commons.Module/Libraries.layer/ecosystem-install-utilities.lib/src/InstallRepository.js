@@ -7,7 +7,7 @@ const RegisterRepository = require("../../repository-config-handler.lib/src/Regi
 const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir")
 
 const InstallApplication = require("./Install/InstallApplication")
-const DownloadRepository = require("./Helpers/DownloadRepository")
+const ObtainRepository = require("./Helpers/ObtainRepository")
 
 const FilterApplicationsMetadataByExecutablesToInstall = require("./Helpers/FilterApplicationsMetadataByExecutablesToInstall")
 
@@ -34,7 +34,7 @@ const InstallRepository = async ({
         message: `Instalando o repositório ${colors.bold(repositoryNamespace)}...`
     })
 
-    const deployedRepoPath = await DownloadRepository({
+    const deployedRepoPath = await ObtainRepository({
         repositoryNamespace,
         sourceData,
         installDataDirPath,
