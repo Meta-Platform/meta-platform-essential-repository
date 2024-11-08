@@ -1,6 +1,6 @@
 const { join } = require("path")
 
-const DownloadLatestGithubRelease = require("../../../../download-file.lib/src/DownloadLatestGithubRelease")
+const DownloadFirstAssetOfLatestReleaseFromGithub = require("../../../../download-file.lib/src/DownloadFirstAssetOfLatestReleaseFromGithub")
 
 const DownloadPackageExecutorBin = async ({
     ECO_DIRPATH_INSTALL_DATA,
@@ -12,7 +12,7 @@ const DownloadPackageExecutorBin = async ({
     const REPO_OWNER = "Meta-Platform"
     const REPO_NAME = "meta-platform-package-executor-command-line"
 
-    return await DownloadLatestGithubRelease({
+    return await DownloadFirstAssetOfLatestReleaseFromGithub({
         repoOwner: REPO_OWNER,
         repoName: REPO_NAME,
         localPath:path

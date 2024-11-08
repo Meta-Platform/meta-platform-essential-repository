@@ -6,7 +6,7 @@
         },
         {
             "sourceType":"GITHUB_RELEASE",
-            "repositoryName":"essential-repository",
+            "repositoryName":"meta-platform-essential-repository",
             "repositoryOwner": "Meta-Platform"
         },
         {
@@ -24,7 +24,7 @@
         },
         {
             "sourceType":"GITHUB_RELEASE",
-            "repositoryName":"ecosystem-core-repository",
+            "repositoryName":"meta-platform-ecosystem-core-repository",
             "repositoryOwner": "Meta-Platform"
         },
         {

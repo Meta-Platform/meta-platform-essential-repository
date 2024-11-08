@@ -1,19 +1,31 @@
 const GetReleaseLatestData = require("../../../../download-file.lib/src/GetReleaseLatestData")
+const DownloadBinary = require("../../../../download-file.lib/src/DownloadBinary")
 
-const DownloadFromGithubRelease = async ({
-    sourceData,
-    destinationRepoPath
-}) => {
+const DownloadFromGithubRelease = async (args) => {
 
+    const {
+        sourceData,
+        destinationRepoPath
+    } = args
 
-    const releaseData = await GetReleaseLatestData(sourceData.repository.owner, sourceData.repository.name)
-    releaseData
-    /*return await DownloadLatestGithubRelease({
-        repoName: sourceData.repository.name,
-        repoOwner: sourceData.repository.owner,
-        urlKeyword: "tarball_url",
-        localPath: destinationRepoPath
-    })*/
+    const {
+        repositoryOwner,
+        repositoryName
+    } = sourceData
+    
+    const releaseData = await GetReleaseLatestData(repositoryOwner, repositoryName)
+    const {
+        tarball_url
+    } = releaseData
+
+    const binaryPath = await DownloadBinary({
+        url: tarball_url, 
+        destinationPath: destinationRepoPath,
+        extName: "tar.gz"
+    })
+    debugger
+
+    return binaryPath
 
 }
 
