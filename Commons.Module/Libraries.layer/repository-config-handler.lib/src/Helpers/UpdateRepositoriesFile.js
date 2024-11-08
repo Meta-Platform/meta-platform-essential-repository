@@ -4,7 +4,7 @@ const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson")
 const UpdateRepositoriesFile = async ({
     repositoryNamespace,
     sourceData,
-    repositoryInstallationPath, 
+    deployedRepoPath, 
     installDataDirPath,
     applicationsMetadata,
     REPOS_CONF_FILENAME_REPOS_DATA,
@@ -18,7 +18,7 @@ const UpdateRepositoriesFile = async ({
             const newRepositories = {
                 ...repositories,
                 [repositoryNamespace]: { 
-                    installationPath: repositoryInstallationPath,
+                    installationPath: deployedRepoPath,
                     sourceData,
                     installedApplications: applicationsMetadata
                  }
@@ -32,7 +32,7 @@ const UpdateRepositoriesFile = async ({
             loggerEmitter && loggerEmitter.emit("log", {
                 sourceName: "UpdateRepositoriesFile",
                 type: "info",
-                message: `arquivo de repositório atualizado com [${repositoryNamespace}] => [${repositoryInstallationPath}]`
+                message: `arquivo de repositório atualizado com [${repositoryNamespace}] => [${deployedRepoPath}]`
             })
         } else {
             throw `ATENÇÃO: repositório [${repositoryNamespace}] já está registrado!`

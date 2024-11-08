@@ -1,5 +1,6 @@
 const GetReleaseLatestData = require("../../../../download-file.lib/src/GetReleaseLatestData")
-const DownloadBinary = require("../../../../download-file.lib/src/DownloadBinary")
+const DownloadBinary       = require("../../../../download-file.lib/src/DownloadBinary")
+const ExtractTarGz         = require("../../../../extract-tar-gz.lib/src/ExtractTarGz")
 
 const DownloadFromGithubRelease = async (args) => {
 
@@ -23,9 +24,9 @@ const DownloadFromGithubRelease = async (args) => {
         destinationPath: destinationRepoPath,
         extName: "tar.gz"
     })
-    debugger
 
-    return binaryPath
+    const repoPathExtract = await ExtractTarGz(binaryPath, destinationRepoPath)
+    return repoPathExtract
 
 }
 

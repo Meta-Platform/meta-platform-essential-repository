@@ -55,7 +55,7 @@ const InstallRepository = async ({
         applicationsMetadata,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        deployedRepoPath,
         loggerEmitter
     })
 
