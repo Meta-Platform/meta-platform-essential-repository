@@ -1,4 +1,4 @@
-const GetRepositories = require("./GetRepositories")
+const GetRepositories = require("../../../../Libraries.layer/repository-config-handler.lib/src/GetRepositories")
 
 const GetRepoPath = async ({
     namespace,

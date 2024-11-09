@@ -1,4 +1,4 @@
-const GetRepositories = require("./Commons/GetRepositories")
+const GetRepositories = require("../../../Libraries.layer/repository-config-handler.lib/src/GetRepositories")
 
 const ListRepositories = async ({
     installDataDirPath,

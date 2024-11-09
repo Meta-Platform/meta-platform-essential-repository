@@ -2,11 +2,11 @@ const {
     readFile 
 } = require('node:fs/promises')
 
-const GetRepositoriesFilePath = require("./GetRepositoriesFilePath")
+const GetRepositoriesFilePath = require("./Helpers/GetRepositoriesFilePath")
 
 const GetRepositories = async ({
     installDataDirPath,
-    REPOS_CONF_FILENAME_REPOS_DATA,
+    REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
     const filePath = GetRepositoriesFilePath({
         installDataDirPath,

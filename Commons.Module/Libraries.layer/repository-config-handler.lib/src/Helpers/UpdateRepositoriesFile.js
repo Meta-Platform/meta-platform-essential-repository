@@ -1,4 +1,4 @@
-const GetRepositories = require("./GetRepositories")
+const GetRepositories = require("../GetRepositories")
 const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson")
 
 const UpdateRepositoriesFile = async ({
