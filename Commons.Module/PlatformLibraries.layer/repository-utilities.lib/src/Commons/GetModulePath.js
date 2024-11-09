@@ -1,6 +1,6 @@
 const { resolve } = require("path")
 
-const GetRepoPath = require("./GetRepoPath")
+const GetRepositoriesPath = require("./GetRepositoriesPath")
 
 const GetModulePath = async ({ 
     namespaceRepo, 
@@ -9,7 +9,7 @@ const GetModulePath = async ({
     REPOS_CONF_FILENAME_REPOS_DATA,
     REPOS_CONF_EXT_MODULE_DIR
 }) => {
-    const repoPath = await GetRepoPath({
+    const repoPath = await GetRepositoriesPath({
         namespace: namespaceRepo,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA

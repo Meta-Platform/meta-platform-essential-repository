@@ -1,6 +1,6 @@
 
 const ListValidDir = require("./ListValidDir")
-const GetRepoPath = require("./GetRepoPath")
+const GetRepositoriesPath = require("./GetRepositoriesPath")
 
 const GetModuleNamesByRepo = async ({
     namespace,
@@ -8,7 +8,7 @@ const GetModuleNamesByRepo = async ({
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
-    const repoPath = await GetRepoPath({
+    const repoPath = await GetRepositoriesPath({
         namespace,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA

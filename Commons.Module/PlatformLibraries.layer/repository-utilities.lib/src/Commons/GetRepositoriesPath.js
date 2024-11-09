@@ -1,6 +1,6 @@
 const GetRepositories = require("../../../../Libraries.layer/repository-config-handler.lib/src/GetRepositories")
 
-const GetRepoPath = async ({
+const GetRepositoriesPath = async ({
     namespace,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
@@ -13,4 +13,4 @@ const GetRepoPath = async ({
     return installationPath
 }
 
-module.exports = GetRepoPath
+module.exports = GetRepositoriesPath
