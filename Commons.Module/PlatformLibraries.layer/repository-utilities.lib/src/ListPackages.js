@@ -2,7 +2,7 @@ const ListLayers = require("./ListLayers")
 const GetPackagesByLayer = require("./Commons/GetPackagesByLayer")
 
 const ListPackages = async ({
-    ECO_DIRPATH_INSTALL_DATA,
+    installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
     REPOS_CONF_EXT_MODULE_DIR,
     REPOS_CONF_EXT_LAYER_DIR,
