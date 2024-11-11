@@ -5,13 +5,13 @@ const colors = SmartRequire("colors")
 const WriteObjectToFile = require("../../../../write-object-to-file.lib/src/WriteObjectToFile")
 
 const CreateEcosystemDefaultsJsonFile = async ({
-    ECO_DIRPATH_INSTALL_DATA, 
+    installationDataDir, 
     ecosystemDefaults,
     loggerEmitter
 }) => {
     const { ECOSYSTEMDATA_CONF_DIRNAME_CONFIGURATIONS_DIR } = ecosystemDefaults
     const FILENAME = "ecosystem-defaults.json"
-    const filePath = join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_CONFIGURATIONS_DIR, FILENAME)
+    const filePath = join(installationDataDir, ECOSYSTEMDATA_CONF_DIRNAME_CONFIGURATIONS_DIR, FILENAME)
     await WriteObjectToFile(filePath, ecosystemDefaults)
 
     loggerEmitter && loggerEmitter.emit("log", {

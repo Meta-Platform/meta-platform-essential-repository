@@ -8,7 +8,7 @@ const {
 const BuildObjectFromPrefix = require("../Helpers/BuildObjectFromPrefix")
 
 const ConstructEcosystemStructure = async ({
-    ECO_DIRPATH_INSTALL_DATA,
+    installationDataDir,
     ecosystemDefaults,
     loggerEmitter
 }) => {
@@ -16,11 +16,11 @@ const ConstructEcosystemStructure = async ({
     const ecosystemDefaultsConfDirname = BuildObjectFromPrefix(ecosystemDefaults, "ECOSYSTEMDATA_CONF_DIRNAME_")
 
     try{
-        await mkdir(ECO_DIRPATH_INSTALL_DATA, { recursive: true })
+        await mkdir(installationDataDir, { recursive: true })
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "ConstructEcosystemStructure",
             type: "info",
-            message: `O diretório de dados do ecosistema criado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
+            message: `O diretório de dados do ecosistema criado com sucesso em ${colors.bold(installationDataDir)}`
         })
 
         for (const configKey of Object.keys(ecosystemDefaultsConfDirname)) {
@@ -32,7 +32,7 @@ const ConstructEcosystemStructure = async ({
             })
             
            const dirname = ecosystemDefaultsConfDirname[configKey]
-           await mkdir(resolve(ECO_DIRPATH_INSTALL_DATA, dirname))
+           await mkdir(resolve(installationDataDir, dirname))
            loggerEmitter && loggerEmitter.emit("log", {
                 sourceName: "ConstructEcosystemStructure",
                 type: "info",
@@ -44,7 +44,7 @@ const ConstructEcosystemStructure = async ({
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "ConstructEcosystemStructure",
             type: "error",
-            message: `erro ao criar diretório de dados do ecosistema ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
+            message: `erro ao criar diretório de dados do ecosistema ${colors.bold(installationDataDir)}`
         })
         loggerEmitter && loggerEmitter.emit("log", {
             sourceName: "ConstructEcosystemStructure",

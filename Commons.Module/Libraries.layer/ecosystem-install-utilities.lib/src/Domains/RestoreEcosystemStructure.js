@@ -6,12 +6,12 @@ const VerifyDirExit = require("../Helpers/VerifyDirExit")
 const RestoreDir = require("../Helpers/RestoreDir")
 
 const RestoreEcosystemStructure = async ({
-    ECO_DIRPATH_INSTALL_DATA,
+    installationDataDir,
     ecosystemDefaults,
     loggerEmitter
 }) => {
 
-    if(await VerifyDirExit(ECO_DIRPATH_INSTALL_DATA)){
+    if(await VerifyDirExit(installationDataDir)){
         const ecosystemDefaultsConfDirname = BuildObjectFromPrefix(ecosystemDefaults, "ECOSYSTEMDATA_CONF_DIRNAME_")
         try{
         
@@ -25,7 +25,7 @@ const RestoreEcosystemStructure = async ({
                 })
                 
                 await RestoreDir({
-                    installDataPath: ECO_DIRPATH_INSTALL_DATA,
+                    installDataPath: installationDataDir,
                     dirname,
                     loggerEmitter
                 })
@@ -36,7 +36,7 @@ const RestoreEcosystemStructure = async ({
             loggerEmitter && loggerEmitter.emit("log", {
                 sourceName: "RestoreEcosystemStructure",
                 type: "error",
-                message: `erro ao criar diretório de dados do ecosistema ${ECO_DIRPATH_INSTALL_DATA}`
+                message: `erro ao criar diretório de dados do ecosistema ${installationDataDir}`
             })
             throw e
         }

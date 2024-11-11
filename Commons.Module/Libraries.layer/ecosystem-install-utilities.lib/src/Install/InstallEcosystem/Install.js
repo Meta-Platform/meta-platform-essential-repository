@@ -13,7 +13,7 @@ const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFi
 
 const Install = async ({
     ecosystemDefaults,
-    ECO_DIRPATH_INSTALL_DATA,
+    installationDataDir,
     loggerEmitter
 }) => {
 
@@ -24,13 +24,13 @@ const Install = async ({
     })
 
     await ConstructEcosystemStructure({
-        ECO_DIRPATH_INSTALL_DATA,
+        installationDataDir,
         ecosystemDefaults,
         loggerEmitter
     })
 
     await CreateEcosystemDefaultsJsonFile({
-        ECO_DIRPATH_INSTALL_DATA, 
+        installationDataDir, 
         ecosystemDefaults,
         loggerEmitter
     })
@@ -40,7 +40,7 @@ const Install = async ({
     } = ecosystemDefaults
 
     const packageExecutorBinFilePath = await InstallPackageExecutor({
-        ECO_DIRPATH_INSTALL_DATA,
+        installationDataDir,
         ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
         loggerEmitter
     })
@@ -48,7 +48,7 @@ const Install = async ({
     const packageExecutorBinaryName = path.basename(packageExecutorBinFilePath)
 
     await CreatePackageExecutableScript({
-        ECO_DIRPATH_INSTALL_DATA,
+        installationDataDir,
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetApplicationExecutionContent,
@@ -57,7 +57,7 @@ const Install = async ({
     })
 
     await CreatePackageExecutableScript({
-        ECO_DIRPATH_INSTALL_DATA,
+        installationDataDir,
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
@@ -69,7 +69,7 @@ const Install = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallEcosystem",
         type: "info",
-        message: `Ecosistema instalado com sucesso em ${colors.bold(ECO_DIRPATH_INSTALL_DATA)}`
+        message: `Ecosistema instalado com sucesso em ${colors.bold(installationDataDir)}`
     })
     
 

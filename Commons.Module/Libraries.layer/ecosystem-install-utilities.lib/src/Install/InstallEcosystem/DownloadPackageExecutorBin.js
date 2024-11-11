@@ -3,11 +3,11 @@ const { join } = require("path")
 const DownloadFirstAssetOfLatestReleaseFromGithub = require("../../../../download-file.lib/src/DownloadFirstAssetOfLatestReleaseFromGithub")
 
 const DownloadPackageExecutorBin = async ({
-    ECO_DIRPATH_INSTALL_DATA,
+    installationDataDir,
     ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
 }) => {
 
-    const path = join(ECO_DIRPATH_INSTALL_DATA, ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR)
+    const path = join(installationDataDir, ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR)
 
     const REPO_OWNER = "Meta-Platform"
     const REPO_NAME = "meta-platform-package-executor-command-line"

@@ -6,7 +6,7 @@ const SmartRequire = require("../../../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
 const InstallPackageExecutor = async ({
-    ECO_DIRPATH_INSTALL_DATA,
+    installationDataDir,
     ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
     loggerEmitter
 }) => {
@@ -17,7 +17,7 @@ const InstallPackageExecutor = async ({
         message: `Instalando o ${colors.bold("Package Executor")}...`
     })
     const packageExecutorBinFilePath = await DownloadPackageExecutorBin({
-        ECO_DIRPATH_INSTALL_DATA,
+        installationDataDir,
         ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
     })
     await MakeFileExecutable(packageExecutorBinFilePath, loggerEmitter)
