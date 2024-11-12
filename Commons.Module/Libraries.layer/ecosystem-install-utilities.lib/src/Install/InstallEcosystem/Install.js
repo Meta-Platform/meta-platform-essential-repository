@@ -10,10 +10,12 @@ const GetCommandLineApplicationExecutionContent = require("../../../../script-fi
 const ConstructEcosystemStructure     = require("../../Domains/ConstructEcosystemStructure")
 const InstallPackageExecutor          = require("./InstallPackageExecutor")
 const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
+const CreateRepositorySource          = require("./CreateRepositorySource")
 
 const Install = async ({
     ecosystemDefaults,
     installationDataDir,
+    initialRepositorySource,
     loggerEmitter
 }) => {
 
@@ -33,6 +35,14 @@ const Install = async ({
         installationDataDir, 
         ecosystemDefaults,
         loggerEmitter
+    })
+
+    const { REPOS_CONF_FILENAME_SOURCE_DATA } = ecosystemDefaults
+
+    await CreateRepositorySource({
+        installationDataDir,
+        sourceData: initialRepositorySource,
+        REPOS_CONF_FILENAME_SOURCE_DATA
     })
 
     const {

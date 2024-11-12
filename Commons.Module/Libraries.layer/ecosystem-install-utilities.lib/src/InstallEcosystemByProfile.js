@@ -12,6 +12,7 @@ const PrepareContext                = require("./Helpers/PrepareContext")
 const InstallEcosystemByProfile = async ({
     ecosystemDefaults,
     npmDependencies,
+    initialRepositorySource,
     profile,
     installationDataDir,
     repositoriesInstallData,
@@ -38,7 +39,8 @@ const InstallEcosystemByProfile = async ({
 
     await InstallEcosystem({
         ecosystemDefaults,
-        ECO_DIRPATH_INSTALL_DATA: installDataDirPath,
+        installationDataDir:installDataDirPath,
+        initialRepositorySource,
         loggerEmitter
     })
 
