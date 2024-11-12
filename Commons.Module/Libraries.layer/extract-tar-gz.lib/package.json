@@ -4,6 +4,6 @@
     "author": "Kaio Cezar <kadisk.shark@gmail.com>",
     "license": "BSD-3-Clause",
     "dependencies": {
-      "tar": "^7.4.0"
+      "tar": "^7.4.3"
     }
 }

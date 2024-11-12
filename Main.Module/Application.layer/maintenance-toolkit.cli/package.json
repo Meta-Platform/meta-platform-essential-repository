@@ -4,6 +4,6 @@
   "description": "Asissitente de Instalação e configuração de ecosistemas",
   "author": "Kaio Cezar <kadisk.shark@gmail.com>",
   "dependencies": {
-    "@npmcli/arborist": "^7.5.3"
+    "@npmcli/arborist": "^8.0.0"
   }
 }
