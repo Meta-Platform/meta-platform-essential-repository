@@ -41,6 +41,7 @@ const Install = async ({
 
     await CreateRepositorySource({
         installationDataDir,
+        loggerEmitter,
         sourceData: initialRepositorySource,
         REPOS_CONF_FILENAME_SOURCE_DATA
     })

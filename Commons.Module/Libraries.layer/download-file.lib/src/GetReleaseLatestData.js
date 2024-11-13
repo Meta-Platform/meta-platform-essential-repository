@@ -1,7 +1,3 @@
-const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
-
-const fetch = SmartRequire("node-fetch")
-
 const RequestData = async (url) => {
   const response = await fetch(url)
 

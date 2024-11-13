@@ -1,6 +1,3 @@
-const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
-
-const fetch = SmartRequire("node-fetch")
 const fs = require("fs")
 const { join } = require("path")
 

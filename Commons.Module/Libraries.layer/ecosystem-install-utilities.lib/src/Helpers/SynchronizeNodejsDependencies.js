@@ -1,3 +1,4 @@
+process.env.NODE_OPTIONS = "--dns-result-order=ipv4first"
 const SmartRequire = require("../../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 const Arborist = SmartRequire("@npmcli/arborist")

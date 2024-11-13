@@ -6,6 +6,7 @@ const WriteObjectToFile = require("../../../../write-object-to-file.lib/src/Writ
 
 const CreateRepositorySource = async ({
     installationDataDir,
+    loggerEmitter,
     sourceData,
     REPOS_CONF_FILENAME_SOURCE_DATA
 }) => {
@@ -15,7 +16,7 @@ const CreateRepositorySource = async ({
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "CreateRepositorySource",
         type: "info",
-        message: `${colors.bold(FILENAME)} criado com sucesso!`
+        message: `${colors.bold(REPOS_CONF_FILENAME_SOURCE_DATA)} criado com sucesso!`
     })
 }
 
