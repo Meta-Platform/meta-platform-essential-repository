@@ -26,7 +26,6 @@ const CreateInitialRepositoriesFileJson = async ({
             type: "error",
             message: e
         })
-        thorw `erro ao criar arquivo ${filePath}!`
     }
 }
 
