@@ -28,7 +28,7 @@ O **Repository Manager Command-Line** é responsável pelo gerenciamento e confi
 Exibe todas as informações sobre as fontes de repositórios disponíveis para instalação.
 
 ```bash
-repo sources info
+repo sources
 ```
 
 #### Listar Fontes
