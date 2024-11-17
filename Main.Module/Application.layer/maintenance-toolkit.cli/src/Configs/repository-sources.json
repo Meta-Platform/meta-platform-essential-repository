@@ -10,9 +10,6 @@
             "repositoryOwner": "Meta-Platform"
         },
         {
-            "sourceType":"GITHUB_REPO"
-        },
-        {
             "sourceType":"GOOGLE_DRIVE",
             "fileId": "12PKZU1Uea1yYnhO7R26Il9eyF__v6MAc"
         }
@@ -26,9 +23,6 @@
             "sourceType":"GITHUB_RELEASE",
             "repositoryName":"meta-platform-ecosystem-core-repository",
             "repositoryOwner": "Meta-Platform"
-        },
-        {
-            "sourceType":"GITHUB_REPO"
         },
         {
             "sourceType":"GOOGLE_DRIVE",

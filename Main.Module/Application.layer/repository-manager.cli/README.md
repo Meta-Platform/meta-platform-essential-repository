@@ -38,6 +38,19 @@ Lista todas as fontes registradas.
 ```bash
 repo list sources
 ```
+#### Adicionar uma Nova Fonte de Dados
+
+Permite adicionar uma nova fonte de repositório especificando seu nome e tipo.
+
+```bash
+
+repo add source [repositoryNamespace] [sourceType] --paramA "valueA" --paramB "value"
+
+repo add source MyPersonalRepo LOCAL_FS --dirPath "~/my-personal-repo"
+repo add source MyPersonalRepo GITHUB_RELEASE --repoName "my-personal-repo" --repoOwner "my-user"
+repo add source MyPersonalRepo GOOGLE_DRIVE --fileId "AaBbCcDdEeFe123456__--qwertyuAAAA"
+
+```
 
 ### Gerenciamento de Repositórios
 

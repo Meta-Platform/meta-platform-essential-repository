@@ -1,7 +1,6 @@
 const EventEmitter = require('node:events')
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
-const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
 
 const InstallRepositoryCommand = async ({ 
     args, 
@@ -9,13 +8,17 @@ const InstallRepositoryCommand = async ({
     params
 }) => {
 
+    const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
+
     const {
         ecosystemInstallUtilitiesLib,
+        jsonFileUtilitiesLib,
         printDataLogLib
     } = params
 
     const InstallRepository = ecosystemInstallUtilitiesLib.require("InstallRepository")
     const PrintDataLog = printDataLogLib.require("PrintDataLog")    
+    const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
 
     const { installDataDirPath } = startupParams
 
@@ -27,7 +30,10 @@ const InstallRepositoryCommand = async ({
     const loggerEmitter = new EventEmitter()
 	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "InstallRepositoryCommand"))
 
-    const sourcesList = REPOSITORY_SOURCES[repositoryNamespace]
+    const sourcePath = resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
+    const sourcesDataInformation = await ReadJsonFile(sourcePath)
+
+    const sourcesList = sourcesDataInformation[repositoryNamespace]
     const sourceData = sourcesList.find((sourceData) => sourceData.sourceType === sourceType)
 
     await InstallRepository({

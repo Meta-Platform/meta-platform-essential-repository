@@ -1,9 +1,26 @@
 const colors = require("colors")
-const SOURCES = require("../Configs/repository-sources.json")
+const { resolve } = require("path")
+const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
-const ListSourcesCommand = async () => {
+const ListSourcesCommand = async ({
+    startupParams,
+    params
+}) => {
+    const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
+
+    const {
+        jsonFileUtilitiesLib
+    } = params
+
+    const { installDataDirPath } = startupParams
+
+    const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
+
+    const sourcePath = resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
+    const sourcesDataInformation = await ReadJsonFile(sourcePath)
+
     let count = 1
-    Object.entries(SOURCES)
+    Object.entries(sourcesDataInformation)
     .forEach(([repositoryNamespace, sources]) => {
         sources.forEach((source) => {
             console.log(`\t${count++}. ${colors.bold(repositoryNamespace.padEnd(15))} ${colors.bold("->")} ${source["sourceType"]}`) 

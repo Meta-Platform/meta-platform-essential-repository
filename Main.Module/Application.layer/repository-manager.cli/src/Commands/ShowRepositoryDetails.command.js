@@ -27,13 +27,13 @@ const ShowRepositoryDetailsCommand = async ({
 
     const infoDetails = repositoriesInfo[repositoryNamespace]
     const { sourceData } = infoDetails
-    console.log(` ${colors.underline.bold(repositoryNamespace)}\n`)
+    console.log(`${colors.underline.bold(repositoryNamespace)}`)
 
     const paramsNameList = Object.keys(sourceData)
 
     paramsNameList.forEach((paramName) => {
         const paramValueRender = paramName !== "sourceType" ? colors.dim(sourceData[paramName]) : colors.bold(sourceData[paramName])
-        console.log(`\t${colors.italic(paramName.padEnd(15))} ${colors.bold("->")} ${paramValueRender}`)
+        console.log(`  ${colors.italic(paramName.padEnd(15))} ${colors.bold("->")} ${paramValueRender}`)
     })
 }
 
