@@ -8,7 +8,7 @@
         {
             "commandName": "ShowSourceInformation",
             "path": "Commands/ShowSourceInformation.command",
-            "command" : "sources info",
+            "command" : "sources",
             "description": "Mostra informações sobre as fontes disponível para instalação agreagada pelo repositório"
         },
         {
