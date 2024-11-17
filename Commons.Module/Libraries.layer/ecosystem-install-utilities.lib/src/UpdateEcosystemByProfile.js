@@ -38,7 +38,7 @@ const UpdateEcosystemByProfile = async ({
 
     await UpdateEcosystem({
         ecosystemDefaults,
-        ECO_DIRPATH_INSTALL_DATA: installDataDirPath,
+        installDataDirPath,
         loggerEmitter
     })
 

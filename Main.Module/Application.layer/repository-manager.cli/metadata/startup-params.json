@@ -1,3 +1,4 @@
 {
-    "installDataDirPath":"/home/kadisk/Workspaces/meta-platform-repo/EcosystemData"
+    "installDataDirPath":"/home/kadisk/Workspaces/meta-platform-repo/EcosystemData",
+    "REPOS_CONF_FILENAME_SOURCE_DATA": "sources.json"
 }

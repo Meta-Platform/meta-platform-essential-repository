@@ -10,7 +10,7 @@ const GetCommandLineApplicationExecutionContent = require("../../../../script-fi
 
 const Update = async ({
     ecosystemDefaults,
-    installationDataDir,
+    installDataDirPath,
     loggerEmitter
 }) => {
 
@@ -21,7 +21,7 @@ const Update = async ({
     })
 
     await RestoreEcosystemStructure({
-        installationDataDir,
+        installDataDirPath,
         ecosystemDefaults,
         loggerEmitter
     })

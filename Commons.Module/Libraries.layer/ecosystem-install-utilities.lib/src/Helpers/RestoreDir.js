@@ -7,12 +7,12 @@ const colors = SmartRequire("colors")
 const VerifyDirExit = require("../Helpers/VerifyDirExit")
 
 const RestoreDir = async ({
-    installDataPath,
+    installDataDirPath,
     dirname,
     loggerEmitter
 }) => {
 
-    const dirPath = resolve(installDataPath, dirname)
+    const dirPath = resolve(installDataDirPath, dirname)
 
     if(!await VerifyDirExit(dirPath)){
         loggerEmitter && loggerEmitter.emit("log", {
