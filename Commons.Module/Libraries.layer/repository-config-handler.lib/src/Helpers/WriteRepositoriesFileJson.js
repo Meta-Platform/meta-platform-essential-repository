@@ -1,6 +1,6 @@
 const GetRepositoriesFilePath = require("./GetRepositoriesFilePath")
 
-const WriteObjectToFile = require("../../../write-object-to-file.lib/src/WriteObjectToFile")
+const WriteObjectToFile = require("../../../json-file-utilities.lib/src/WriteObjectToFile")
 
 const WriteRepositoriesFileJson = async ({ 
     content,

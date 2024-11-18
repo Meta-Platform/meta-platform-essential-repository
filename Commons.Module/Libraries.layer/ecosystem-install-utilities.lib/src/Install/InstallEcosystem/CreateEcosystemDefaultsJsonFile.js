@@ -2,7 +2,7 @@ const { join } = require("path")
 const SmartRequire = require("../../../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
-const WriteObjectToFile = require("../../../../write-object-to-file.lib/src/WriteObjectToFile")
+const WriteObjectToFile = require("../../../../json-file-utilities.lib/src/WriteObjectToFile")
 
 const CreateEcosystemDefaultsJsonFile = async ({
     installationDataDir, 
