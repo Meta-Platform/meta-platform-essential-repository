@@ -4,22 +4,7 @@ const colors = require("colors")
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
-const VerifySourceIsRegistered = ({
-    repositoryNamespace,
-    sourceType,
-    sourcesDataInformation
-}) => {
-    const repositorySources = sourcesDataInformation[repositoryNamespace]
-
-    if(repositorySources && repositorySources.length > 0){
-        const source = repositorySources
-            .find(({sourceType: _sourceType}) => sourceType === _sourceType)
-
-        return !!source
-    }
-
-    return false
-}
+const VerifySourceIsRegistered = require("../Helpers/VerifySourceIsRegistered")
 
 const GetNewSource = (args) => {
     const {
@@ -64,17 +49,18 @@ const RegisterNewSourceCommand = async ({
 
     const { installDataDirPath } = startupParams
 
+    const {
+        jsonFileUtilitiesLib,
+        printDataLogLib
+    } = params
+
     const loggerEmitter = new EventEmitter()
+
+    const PrintDataLog = printDataLogLib.require("PrintDataLog")
+        loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "RegisterNewSourceCommand"))
 	
     try {
-        const {
-            jsonFileUtilitiesLib,
-            printDataLogLib
-        } = params
-
-        const PrintDataLog = printDataLogLib.require("PrintDataLog")
-        loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "RegisterNewSourceCommand"))
-    
+        
         const WriteObjectToFile = jsonFileUtilitiesLib.require("WriteObjectToFile")
         const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
         const {
