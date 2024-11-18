@@ -161,7 +161,10 @@
                     "valueType":"string",
                     "describe":"id do arquivo tar.gz com o repositório hospedado no google drive"
                 }
-            ]
+            ],
+            "bound-params": {
+                "jsonFileUtilitiesLib":"jsonFileUtilitiesLib"
+            }
         }
     ]
 }

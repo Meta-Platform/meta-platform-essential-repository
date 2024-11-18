@@ -16,11 +16,11 @@ const InstallRepositoryCommand = async ({
         printDataLogLib
     } = params
 
-    const InstallRepository = ecosystemInstallUtilitiesLib.require("InstallRepository")
-    const PrintDataLog = printDataLogLib.require("PrintDataLog")    
-    const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
-
     const { installDataDirPath } = startupParams
+
+    const InstallRepository = ecosystemInstallUtilitiesLib.require("InstallRepository")
+    const PrintDataLog = printDataLogLib.require("PrintDataLog")
+    const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
 
     const { 
         repositoryNamespace,
