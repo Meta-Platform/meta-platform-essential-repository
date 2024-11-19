@@ -35,10 +35,10 @@
                     "describe":"local aonde a plataforma será instalada"
                 }
             ],
-            "bound-params": {
-                "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib",
-                "printDataLogLib": "printDataLogLib"
-            }
+            "parametersToLoad": [
+                "ecosystemInstallUtilitiesLib",
+                "printDataLogLib"
+            ]
         },
         {
             "commandName": "Update",
@@ -65,10 +65,10 @@
                     "describe":"local aonde a plataforma será atualizada"
                 }
             ],
-            "bound-params": {
-                "ecosystemInstallUtilitiesLib": "ecosystemInstallUtilitiesLib",
-                "printDataLogLib": "printDataLogLib"
-            }
+            "parametersToLoad": [
+                "ecosystemInstallUtilitiesLib",
+                "printDataLogLib"
+            ]
         },
         {
             "commandName": "Show",

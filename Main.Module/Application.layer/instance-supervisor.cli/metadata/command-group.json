@@ -7,12 +7,10 @@
             "path": "Commands/ListSockets.command",
             "command" : "sockets",
             "description": "Listar todos os sockets de supervisão",
-            "bound-params": {
-                "supervisorLib": "supervisorLib"
-            },
-            "params":{
-                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
-            }
+            "parametersToLoad": [
+                "supervisorLib",
+                "supervisorSocketsDirPath"
+            ]
         },
         {
             "commandName": "GetExecutionStatus",
@@ -27,12 +25,10 @@
                     "describe":"Nome do arquivo de sockets"
                 }
             ],
-            "bound-params": {
-                "supervisorLib": "supervisorLib"
-            },
-            "params":{
-                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
-            }
+            "parametersToLoad": [
+                "supervisorLib",
+                "supervisorSocketsDirPath"
+            ]
         },
         {
             "commandName": "ListRunningTasks",
@@ -47,12 +43,10 @@
                     "describe":"Nome do arquivo de sockets"
                 }
             ],
-            "bound-params": {
-                "supervisorLib": "supervisorLib"
-            },
-            "params":{
-                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
-            }
+            "parametersToLoad": [
+                "supervisorLib",
+                "supervisorSocketsDirPath"
+            ]
         },
         {
             "commandName": "LogExecution",
@@ -67,12 +61,10 @@
                     "describe":"Nome do arquivo de sockets"
                 }
             ],
-            "bound-params": {
-                "supervisorLib": "supervisorLib"
-            },
-            "params":{
-                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
-            }
+            "parametersToLoad": [
+                "supervisorLib",
+                "supervisorSocketsDirPath"
+            ]
         },
         {
             "commandName": "KillExecution",
@@ -87,12 +79,10 @@
                     "describe":"Nome do arquivo de sockets"
                 }
             ],
-            "bound-params": {
-                "supervisorLib": "supervisorLib"
-            },
-            "params":{
-                "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
-            }
+            "parametersToLoad": [
+                "supervisorLib",
+                "supervisorSocketsDirPath"
+            ]
         },
         {
             "commandName": "Show",
@@ -117,12 +107,10 @@
                                 "describe":"Nome do arquivo de sockets"
                             }
                         ],
-                        "bound-params": {
-                            "supervisorLib": "supervisorLib"
-                        },
-                        "params":{
-                            "supervisorSocketsDirPath":"{{supervisorSocketsDirPath}}"
-                        }
+                        "parametersToLoad": [
+                            "supervisorLib",
+                            "supervisorSocketsDirPath"
+                        ]
                     }
                ]
         }
