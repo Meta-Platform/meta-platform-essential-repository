@@ -4,7 +4,7 @@ const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const yargs = SmartRequire('yargs/yargs')
 
-const GetCommandParams = (loaderParams, parameterNames) => {
+const FilteredCommandParams = (loaderParams, parameterNames) => {
 
     const serviceParams = parameterNames
     .reduce((serviceParamsAcc, parameterName) => ({ 
@@ -49,6 +49,7 @@ const GetCommandBuilder = ({parameters, children, loaderParams}) => {
 
 const GetCommandHandler = ({
     path, 
+    parametersToLoad,
     loaderParams
 }) => {
 
@@ -57,11 +58,11 @@ const GetCommandHandler = ({
             startupParams, 
             nodejsPackageHandler, 
             commandParameterNames
-
          } = loaderParams
 
         const CommandFunction = path && nodejsPackageHandler.require(path)
-        const params = GetCommandParams(loaderParams, commandParameterNames)
+        const allParams = FilteredCommandParams(loaderParams, commandParameterNames)
+        const params = FilteredCommandParams(allParams, parametersToLoad)
 
         return CommandFunction 
             ? async (args) => await CommandFunction({ args, startupParams, params })
@@ -83,7 +84,8 @@ const ConfigCommand = async ({
         command,
         parameters,
         children,
-        description = ''
+        description = '',
+        parametersToLoad
     } = commandMetadata
 
     if (!command) {
@@ -91,7 +93,8 @@ const ConfigCommand = async ({
     }
 
     const handler = await GetCommandHandler({
-        path, 
+        path,
+        parametersToLoad,
         loaderParams
     })
     
