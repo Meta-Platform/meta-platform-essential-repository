@@ -59,9 +59,9 @@ Permite remover uma fonte de um repositório registrado.
 ```bash
 repo remove source [repositoryNamespace] [sourceType]
 
-repo register source MyPersonalRepo LOCAL_FS
-repo register source MyPersonalRepo GITHUB_RELEASE
-repo register source MyPersonalRepo GOOGLE_DRIVE
+repo remove source MyPersonalRepo LOCAL_FS
+repo remove source MyPersonalRepo GITHUB_RELEASE
+repo remove source MyPersonalRepo GOOGLE_DRIVE
 ```
 
 ### Gerenciamento de Repositórios
