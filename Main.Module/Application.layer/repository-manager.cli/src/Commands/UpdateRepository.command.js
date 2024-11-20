@@ -1,3 +1,4 @@
+const { resolve } = require("path")
 const EventEmitter = require('node:events')
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
