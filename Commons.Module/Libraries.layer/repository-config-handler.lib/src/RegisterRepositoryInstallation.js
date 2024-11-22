@@ -1,10 +1,9 @@
 const PrepareRepositoriesFileJson = require("./PrepareRepositoriesFileJson")
-const UpdateRepositoriesFile = require("./Helpers/UpdateRepositoriesFile")
+const AddNewRepositoryRecordToFile = require("./Helpers/AddNewRepositoryRecordToFile")
 
 const RegisterRepositoryInstallation = async ({
     repositoryNamespace,
     sourceData,
-    applicationsMetadata,
     installDataDirPath,
     deployedRepoPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
@@ -16,11 +15,10 @@ const RegisterRepositoryInstallation = async ({
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter
         })
-        await UpdateRepositoriesFile({
+        await AddNewRepositoryRecordToFile({
             repositoryNamespace,
             sourceData,
-            deployedRepoPath, 
-            applicationsMetadata,
+            deployedRepoPath,
             installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA,
             loggerEmitter

@@ -52,7 +52,6 @@ const InstallRepository = async ({
     await RegisterRepositoryInstallation({
         repositoryNamespace,
         sourceData,
-        applicationsMetadata,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
         deployedRepoPath,
