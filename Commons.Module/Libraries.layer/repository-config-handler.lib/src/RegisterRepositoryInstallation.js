@@ -1,7 +1,7 @@
 const PrepareRepositoriesFileJson = require("./PrepareRepositoriesFileJson")
 const UpdateRepositoriesFile = require("./Helpers/UpdateRepositoriesFile")
 
-const RegisterRepository = async ({
+const RegisterRepositoryInstallation = async ({
     repositoryNamespace,
     sourceData,
     applicationsMetadata,
@@ -26,22 +26,22 @@ const RegisterRepository = async ({
             loggerEmitter
         })
         loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RegisterRepository",
+            sourceName: "RegisterRepositoryInstallation",
             type: "info",
-            message: `repositório [${repositoryNamespace}] registrado com sucesso!`
+            message: `a instalação do repositório [${repositoryNamespace}] registrada com sucesso!`
         })
     } catch(e) {
         loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RegisterRepository",
+            sourceName: "RegisterRepositoryInstallation",
             type: "error",
             message: e
         })
         loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RegisterRepository",
+            sourceName: "RegisterRepositoryInstallation",
             type: "error",
             message: `Erro ao registrar repositório`
         })
     }
 }
 
-module.exports = RegisterRepository
+module.exports = RegisterRepositoryInstallation

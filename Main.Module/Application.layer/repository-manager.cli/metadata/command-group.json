@@ -59,6 +59,12 @@
                     "paramType": "positional",
                     "valueType": "string",
                     "describe": "tipo de fonte"
+                },
+                {
+                    "key": "executables",
+                    "paramType": "option",
+                    "valueType": "array",
+                    "describe": "nome dos executáveis a serem instalados"
                 }
             ],
             "parametersToLoad": [
