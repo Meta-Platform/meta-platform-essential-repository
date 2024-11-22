@@ -3,7 +3,7 @@ const path = require("path")
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 const colors = SmartRequire("colors")
 
-const RegisterRepository = require("../../repository-config-handler.lib/src/RegisterRepository")
+const RegisterRepositoryInstallation = require("../../repository-config-handler.lib/src/RegisterRepositoryInstallation")
 const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir")
 
 const InstallApplication = require("./Install/InstallApplication")
@@ -49,7 +49,7 @@ const InstallRepository = async ({
 
     const { applications: applicationsMetadata } = metadataContent || {}
 
-    await RegisterRepository({
+    await RegisterRepositoryInstallation({
         repositoryNamespace,
         sourceData,
         applicationsMetadata,
