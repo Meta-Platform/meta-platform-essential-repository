@@ -25,7 +25,8 @@ const InstallRepositoryCommand = async ({
 
     const { 
         repositoryNamespace,
-        sourceType 
+        sourceType,
+        executables
     } = args
     
     const loggerEmitter = new EventEmitter()
@@ -40,6 +41,7 @@ const InstallRepositoryCommand = async ({
     await InstallRepository({
         repositoryNamespace,
         sourceData,
+        executablesToInstall: executables,
         installDataDirPath,
         ecosystemDefaults: ECOSYSTEM_DEFAULTS,
         loggerEmitter

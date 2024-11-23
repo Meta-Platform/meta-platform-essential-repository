@@ -5,12 +5,14 @@ const colors = SmartRequire("colors")
 const CreateExecutableScript = require("../../../script-file-utilities.lib/src/CreateExecutableScript")
 const BuildApplicationScriptContent = require("../Helpers/BuildApplicationScriptContent")
 const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildCommandLineApplicationScriptContent")
+const RegisterExecutableInstallation = require("../../../repository-config-handler.lib/src/Helpers/RegisterExecutableInstallation")
 
 const InstallApplication = async ({
     namespace,
     applicationData,
     installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
+    REPOS_CONF_FILENAME_REPOS_DATA,
     supervisorSocketDirPath,
     loggerEmitter
 }) => {
@@ -36,6 +38,15 @@ const InstallApplication = async ({
         })
         throw "applicationData.appType é obrigatório"
     }
+
+
+    await RegisterExecutableInstallation({
+        installDataDirPath,
+        repositoryNamespace:namespace,
+        REPOS_CONF_FILENAME_REPOS_DATA,
+        applicationData,
+        loggerEmitter
+    })
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallApplication",
