@@ -29,10 +29,10 @@
             "fileId": "1-PuPdjU36acGmoPgusYWrMuhyGyMnoRI"
         }
     ],
-    "PlaformApplicationsRepo": [
+    "PlatformApplicationsRepo": [
         {
             "sourceType":"LOCAL_FS",
-            "path": "~/Workspaces/meta-platform-repo/repos/PlaformApplicationsRepo"
+            "path": "~/Workspaces/meta-platform-repo/repos/PlatformApplicationsRepo"
         }
     ]
 }

@@ -12,7 +12,7 @@
             "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer"]
         },
         {
-            "namespace": "PlaformApplicationsRepo",
+            "namespace": "PlatformApplicationsRepo",
             "sourceType":"LOCAL_FS"
         }
     ]
