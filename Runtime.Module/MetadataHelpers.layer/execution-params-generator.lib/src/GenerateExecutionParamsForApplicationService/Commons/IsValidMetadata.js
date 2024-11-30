@@ -22,7 +22,12 @@ const IsValidMetadata = (metadataArg, metadataParams) => {
         return true
     }
 
-    return _IsParamsValid() && _IsBoundParamsValid()
+    try{
+        return _IsParamsValid() && _IsBoundParamsValid()
+    } catch(e){
+
+        throw `Erro na depêndencia ${metadataArg.dependency}: "${e}"`
+    }
 }
 
 

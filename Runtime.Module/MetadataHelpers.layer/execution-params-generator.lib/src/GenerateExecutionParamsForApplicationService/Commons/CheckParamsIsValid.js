@@ -1,11 +1,11 @@
 const CheckParamsIsValid = (params, listParamsName) => {
-    if(params){
+    if(listParamsName && listParamsName.length){
         const isValid = listParamsName
         .reduce((returnAcc, paramName) => {
+            const erroMessage =  `O parâmetro [${paramName}] não foi encontrado!`
+            if(!params) throw erroMessage
             const isValid = (returnAcc && !!params[paramName]) || paramName.charAt(0) === "?"
-            if(!isValid){
-                throw `O parametro "${paramName}" não foi encontrado`
-            }
+            if(!isValid) throw erroMessage
             return isValid
         }, true)
         return isValid
