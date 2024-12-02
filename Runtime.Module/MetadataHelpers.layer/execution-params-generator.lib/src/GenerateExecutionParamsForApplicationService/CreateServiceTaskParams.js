@@ -60,18 +60,18 @@ const MountParams = ({
 
 const CreateServiceTaskParams = ({ 
     typeMetadata, 
-    bootServiceMetadata, 
+    itemMetadata, 
     metadataHierarchy 
 }) => {
     const { 
         dependency, 
-    } = bootServiceMetadata
+    } = itemMetadata
     
-    const namespaceDependency = ExtractNamespaceFromDependency(bootServiceMetadata.dependency, metadataHierarchy)
+    const namespaceDependency = ExtractNamespaceFromDependency(itemMetadata.dependency, metadataHierarchy)
 
     const metadataDependency = ExtractMetadataFromMetadataByType({ 
         type: typeMetadata, 
-        dependency:bootServiceMetadata.dependency, 
+        dependency:itemMetadata.dependency, 
         dependencyMetadata:FindMetadata(namespaceDependency, metadataHierarchy)
     })
 
@@ -79,20 +79,20 @@ const CreateServiceTaskParams = ({
         throw `A dependencia ${dependency} não foi encontrado`
     }
     
-    if(metadataDependency && IsValidMetadata(bootServiceMetadata, metadataDependency)){
+    if(metadataDependency && IsValidMetadata(itemMetadata, metadataDependency)){
 
         const { boundParams, params } = 
             ResolveAllParamsMetadata({
                 boundParamsNames : metadataDependency["bound-params"],
-                itemMetadata     : bootServiceMetadata,
-                boundParams      : RemapAllParams(bootServiceMetadata["bound-params"]),
-                params           : RemapAllParams(bootServiceMetadata.params),
+                itemMetadata,
+                boundParams      : RemapAllParams(itemMetadata["bound-params"]),
+                params           : RemapAllParams(itemMetadata.params),
                 metadataHierarchy
             })
      
         return MountParams({
             typeMetadata,
-            namespace: bootServiceMetadata.namespace,
+            namespace: itemMetadata.namespace,
             serviceParameterNames: [
                 ...metadataDependency["params"] || [],
                 ...metadataDependency["bound-params"] || []

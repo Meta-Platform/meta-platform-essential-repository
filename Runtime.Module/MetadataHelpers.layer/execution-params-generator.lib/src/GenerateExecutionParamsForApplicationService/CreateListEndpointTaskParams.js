@@ -9,29 +9,29 @@ const CreateEndpointTaskParams            = require("./CreateEndpointTaskParams"
 
 const CreateListEndpointTaskParams = ({ 
     typeMetadata, 
-    bootEndpointGroupMetadata, 
+    itemMetadata, 
     metadataHierarchy
 }) => {
 
-    const namespaceDependency = ExtractNamespaceFromDependency(bootEndpointGroupMetadata.dependency, metadataHierarchy)
+    const namespaceDependency = ExtractNamespaceFromDependency(itemMetadata.dependency, metadataHierarchy)
 
     const metadataDependency = ExtractMetadataFromMetadataByType({ 
         type               : typeMetadata, 
-        dependency         : bootEndpointGroupMetadata.dependency, 
+        dependency         : itemMetadata.dependency, 
         dependencyMetadata : FindMetadata(namespaceDependency, metadataHierarchy)
     })   
     
     const { endpoints } = metadataDependency
 
     if(endpoints && endpoints.length > 0){
-        if(IsValidMetadata(bootEndpointGroupMetadata, metadataDependency)){
+        if(IsValidMetadata(itemMetadata, metadataDependency)){
 
             return endpoints.map((endpointMetadata) => {
 
                 const { boundParams, params } = 
                     ResolveAllParamsMetadata({
                         boundParamsNames : metadataDependency["bound-params"],
-                        itemMetadata     : bootEndpointGroupMetadata,
+                        itemMetadata,
                         boundParams      : RemapAllParams(endpointMetadata["bound-params"]),
                         params           : RemapAllParams(endpointMetadata.params),
                         metadataHierarchy
