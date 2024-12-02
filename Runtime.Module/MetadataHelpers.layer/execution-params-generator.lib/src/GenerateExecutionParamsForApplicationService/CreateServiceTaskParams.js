@@ -4,7 +4,9 @@ const ExtractMetadataFromMetadataByType       = require("./Commons/ExtractMetada
 const ConvertTypeTaskParamsToObjectLoaderType = require("./Commons/ConvertTypeTaskParamsToObjectLoaderType")
 const ExtractNamespaceListByBoundParams       = require("./Commons/ExtractNamespaceListByBoundParams")
 const RemapAllParams                          = require("./Commons/RemapAllParams")
-const ResolveAllParamsMetadata                = require("./Commons/ResolveAllParamsMetadata")
+const ResolveMetadataParamsWithStartupParams  = require("./Commons/ResolveMetadataParamsWithStartupParams")
+const ResolveMetadataBoundParamsNamespace     = require("./Commons/ResolveMetadataBoundParamsNamespace")
+
 const IsValidMetadata                         = require("./Commons/IsValidMetadata")
 
 const MountParams = ({
@@ -81,14 +83,16 @@ const CreateServiceTaskParams = ({
     
     if(metadataDependency && IsValidMetadata(itemMetadata, metadataDependency)){
 
-        const { boundParams, params } = 
-            ResolveAllParamsMetadata({
-                boundParamsNames : metadataDependency["bound-params"],
-                itemMetadata,
-                boundParams      : RemapAllParams(itemMetadata["bound-params"]),
-                params           : RemapAllParams(itemMetadata.params),
-                metadataHierarchy
-            })
+        const boundParamsResolved = ResolveMetadataBoundParamsNamespace({ 
+            boundParamsNames: metadataDependency["bound-params"],
+            argBoundParams: itemMetadata["bound-params"],
+            boundParams: RemapAllParams(itemMetadata["bound-params"])
+        })
+
+        const paramsResolved = ResolveMetadataParamsWithStartupParams({ 
+            params: RemapAllParams(itemMetadata.params), 
+            metadataHierarchy
+        })
      
         return MountParams({
             typeMetadata,
@@ -98,8 +102,8 @@ const CreateServiceTaskParams = ({
                 ...metadataDependency["bound-params"] || []
             ],
             path: metadataDependency.path,
-            boundParams,
-            params,
+            boundParams: boundParamsResolved,
+            params: paramsResolved,
             namespaceDependency
         })
     }

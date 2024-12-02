@@ -1,7 +1,7 @@
 const GetPopulatedParameters = require("../../Utils/GetPopulatedParameters")
-const ExtractStartupParamstMetadata = require("../Commons/ExtractStartupParamstMetadata")
+const ExtractStartupParamstMetadata = require("./ExtractStartupParamstMetadata")
 
-const ResolveMetadataParams = ({
+const ResolveMetadataParamsWithStartupParams = ({
     params,
     metadataHierarchy
 }) => {
@@ -15,4 +15,4 @@ const ResolveMetadataParams = ({
     
 }
 
-module.exports = ResolveMetadataParams
+module.exports = ResolveMetadataParamsWithStartupParams

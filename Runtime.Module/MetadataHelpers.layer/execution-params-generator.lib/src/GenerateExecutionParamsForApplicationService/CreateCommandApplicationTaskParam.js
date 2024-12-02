@@ -1,10 +1,11 @@
 const GetMetadataRootNode = require("../../../../../Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/src/GetMetadataRootNode")
 
-const ExtractNamespaceFromDependency    = require("./Commons/ExtractNamespaceFromDependency")
-const FindMetadata                      = require("./Commons/FindMetadata")
-const ExtractMetadataFromMetadataByType = require("./Commons/ExtractMetadataFromMetadataByType")
-const ExtractNamespaceListByBoundParams = require("./Commons/ExtractNamespaceListByBoundParams")
-const ResolveAllParamsMetadata          = require("./Commons/ResolveAllParamsMetadata")
+const ExtractNamespaceFromDependency         = require("./Commons/ExtractNamespaceFromDependency")
+const FindMetadata                           = require("./Commons/FindMetadata")
+const ExtractMetadataFromMetadataByType      = require("./Commons/ExtractMetadataFromMetadataByType")
+const ExtractNamespaceListByBoundParams      = require("./Commons/ExtractNamespaceListByBoundParams")
+const ResolveMetadataBoundParamsNamespace    = require("./Commons/ResolveMetadataBoundParamsNamespace")
+const ResolveMetadataParamsWithStartupParams = require("./Commons/ResolveMetadataParamsWithStartupParams")
 
 const ExtractRootData = (metadataHierarchy) => {
     const {
@@ -57,16 +58,18 @@ const CreateCommandApplicationTaskParam = ({
         throw `A dependencia ${dependency} não foi encontrado`
     }
 
-    const { boundParams, params } = 
-        ResolveAllParamsMetadata({
-            boundParamsNames : metadataDependency["bound-params"],
-            itemMetadata     : bootExecutableMetadata,
-            boundParams      : bootExecutableMetadata["bound-params"],
-            params           : bootExecutableMetadata.params,
-            metadataHierarchy
-        })
+    const boundParamsResolved = ResolveMetadataBoundParamsNamespace({ 
+        boundParamsNames: metadataDependency["bound-params"], 
+        argBoundParams: bootExecutableMetadata["bound-params"], 
+        boundParams: bootExecutableMetadata["bound-params"]
+    })
 
-    const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
+    const paramsResolved = ResolveMetadataParamsWithStartupParams({ 
+        params: bootExecutableMetadata.params,
+        metadataHierarchy
+    })
+
+    const namespaceList = boundParamsResolved && ExtractNamespaceListByBoundParams(boundParamsResolved)
     
     return {
         objectLoaderType: "command-application",
@@ -75,7 +78,7 @@ const CreateCommandApplicationTaskParam = ({
             namespace,
             rootPath,
             commands: metadataDependency.commands,
-            ...params ? params : {},
+            ...paramsResolved ? paramsResolved : {},
             executableName,
             commandLineArgs,
             commandParameterNames: [
@@ -85,7 +88,7 @@ const CreateCommandApplicationTaskParam = ({
         },
         "linkedParameters": {
             "nodejsPackageHandler": namespace, 
-            ...boundParams ? boundParams : {}
+            ...boundParamsResolved ? boundParamsResolved : {}
         },
         "agentLinkRules":[
             {
