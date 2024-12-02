@@ -4,8 +4,7 @@ const ExtractMetadataFromMetadataByType       = require("./Commons/ExtractMetada
 const ConvertTypeTaskParamsToObjectLoaderType = require("./Commons/ConvertTypeTaskParamsToObjectLoaderType")
 const ExtractNamespaceListByBoundParams       = require("./Commons/ExtractNamespaceListByBoundParams")
 const RemapAllParams                          = require("./Commons/RemapAllParams")
-const ResolveMetadataParams                   = require("./Commons/ResolveMetadataParams")
-const ResolveMetadataBoundParamsNamespace     = require("./Commons/ResolveMetadataBoundParamsNamespace")
+const ResolveAllParamsMetadata                = require("./Commons/ResolveAllParamsMetadata")
 const IsValidMetadata                         = require("./Commons/IsValidMetadata")
 
 const MountParams = ({
@@ -80,10 +79,16 @@ const CreateServiceTaskParams = ({
         throw `A dependencia ${dependency} não foi encontrado`
     }
     
-    if(
-        metadataDependency 
-        && IsValidMetadata(bootServiceMetadata, metadataDependency)
-        ){
+    if(metadataDependency && IsValidMetadata(bootServiceMetadata, metadataDependency)){
+
+        const { boundParams, params } = 
+            ResolveAllParamsMetadata({
+                boundParamsNames : metadataDependency["bound-params"],
+                itemMetadata     : bootServiceMetadata,
+                boundParams      : RemapAllParams(bootServiceMetadata["bound-params"]),
+                params           : RemapAllParams(bootServiceMetadata.params),
+                metadataHierarchy
+            })
      
         return MountParams({
             typeMetadata,
@@ -93,15 +98,8 @@ const CreateServiceTaskParams = ({
                 ...metadataDependency["bound-params"] || []
             ],
             path: metadataDependency.path,
-            boundParams : ResolveMetadataBoundParamsNamespace({
-                boundParamsNames: metadataDependency["bound-params"],
-                bootMetadata: bootServiceMetadata,
-                boundParams: RemapAllParams(bootServiceMetadata["bound-params"])
-            }),
-            params: ResolveMetadataParams({
-                params: RemapAllParams(bootServiceMetadata.params), 
-                metadataHierarchy
-            }),
+            boundParams,
+            params,
             namespaceDependency
         })
     }

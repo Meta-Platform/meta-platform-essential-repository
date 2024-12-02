@@ -1,8 +1,8 @@
-const MountBoundParamsRef = (boundParamsNames, bootMetadata) =>  
+const MountBoundParamsRef = (boundParamsNames, itemMetadata) =>  
     (boundParamsNames || [])
     .reduce((boundParamsNameListDependencyAcc, boundParamNamespace) => {
-        const bootBoundParams = bootMetadata["bound-params"]
-        if(!bootBoundParams) throw `O parâmetro linkado [${boundParamNamespace}] não esta sendo ligado a dependência ${bootMetadata.dependency}!`
+        const bootBoundParams = itemMetadata["bound-params"]
+        if(!bootBoundParams) throw `O parâmetro linkado [${boundParamNamespace}] não esta sendo ligado a dependência ${itemMetadata.dependency}!`
         return {
             ...boundParamsNameListDependencyAcc,
             [boundParamNamespace]: bootBoundParams[boundParamNamespace]
@@ -37,10 +37,10 @@ const MountBoundParams = (boundParamsChunck, boundParamsRef) => {
 
 const ResolveMetadataBoundParamsNamespace = ({
     boundParamsNames,
-    bootMetadata,
+    itemMetadata,
     boundParams: _boundParams
 }) => {
-    const boundParamsRef = MountBoundParamsRef(boundParamsNames, bootMetadata)
+    const boundParamsRef = MountBoundParamsRef(boundParamsNames, itemMetadata)
     const boundParams = MountBoundParams(_boundParams, boundParamsRef)
     return boundParams
 }

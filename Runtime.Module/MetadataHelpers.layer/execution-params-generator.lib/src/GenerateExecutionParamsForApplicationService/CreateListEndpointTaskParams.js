@@ -1,10 +1,9 @@
 const ExtractNamespaceFromDependency      = require("./Commons/ExtractNamespaceFromDependency")
 const FindMetadata                        = require("./Commons/FindMetadata")
 const ExtractMetadataFromMetadataByType   = require("./Commons/ExtractMetadataFromMetadataByType")
-const ResolveMetadataParams               = require("./Commons/ResolveMetadataParams")
 const RemapAllParams                      = require("./Commons/RemapAllParams")
-const ResolveMetadataBoundParamsNamespace = require("./Commons/ResolveMetadataBoundParamsNamespace")
 const IsValidMetadata                     = require("./Commons/IsValidMetadata")
+const ResolveAllParamsMetadata            = require("./Commons/ResolveAllParamsMetadata")
 
 const CreateEndpointTaskParams            = require("./CreateEndpointTaskParams")
 
@@ -29,21 +28,15 @@ const CreateListEndpointTaskParams = ({
 
             return endpoints.map((endpointMetadata) => {
 
-                const [
-                    boundParams,
-                    params
-                ] = [
-                    ResolveMetadataBoundParamsNamespace({
-                        boundParamsNames: metadataDependency["bound-params"],
-                        bootMetadata: bootEndpointGroupMetadata,
-                        boundParams: RemapAllParams(endpointMetadata["bound-params"])
-                    }),
-                    ResolveMetadataParams({
-                        params: RemapAllParams(endpointMetadata.params),
+                const { boundParams, params } = 
+                    ResolveAllParamsMetadata({
+                        boundParamsNames : metadataDependency["bound-params"],
+                        itemMetadata     : bootEndpointGroupMetadata,
+                        boundParams      : RemapAllParams(endpointMetadata["bound-params"]),
+                        params           : RemapAllParams(endpointMetadata.params),
                         metadataHierarchy
                     })
-                ]
-
+                    
                 return CreateEndpointTaskParams(({ 
                     typeMetadata,
                     url: endpointMetadata.url, 

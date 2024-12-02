@@ -1,11 +1,10 @@
 const GetMetadataRootNode = require("../../../../../Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/src/GetMetadataRootNode")
 
-const ExtractNamespaceFromDependency      = require("./Commons/ExtractNamespaceFromDependency")
-const FindMetadata                        = require("./Commons/FindMetadata")
-const ExtractMetadataFromMetadataByType   = require("./Commons/ExtractMetadataFromMetadataByType")
-const ResolveMetadataParams               = require("./Commons/ResolveMetadataParams")
-const ResolveMetadataBoundParamsNamespace = require("./Commons/ResolveMetadataBoundParamsNamespace")
-const ExtractNamespaceListByBoundParams   = require("./Commons/ExtractNamespaceListByBoundParams")
+const ExtractNamespaceFromDependency    = require("./Commons/ExtractNamespaceFromDependency")
+const FindMetadata                      = require("./Commons/FindMetadata")
+const ExtractMetadataFromMetadataByType = require("./Commons/ExtractMetadataFromMetadataByType")
+const ExtractNamespaceListByBoundParams = require("./Commons/ExtractNamespaceListByBoundParams")
+const ResolveAllParamsMetadata          = require("./Commons/ResolveAllParamsMetadata")
 
 const ExtractRootData = (metadataHierarchy) => {
     const {
@@ -58,20 +57,14 @@ const CreateCommandApplicationTaskParam = ({
         throw `A dependencia ${dependency} não foi encontrado`
     }
 
-    const [
-        boundParams,
-        params
-    ] = [
-        ResolveMetadataBoundParamsNamespace({
-            boundParamsNames: metadataDependency["bound-params"],
-            bootMetadata: bootExecutableMetadata,
-            boundParams: bootExecutableMetadata["bound-params"]
-        }),
-        ResolveMetadataParams({
-            params: bootExecutableMetadata.params,
+    const { boundParams, params } = 
+        ResolveAllParamsMetadata({
+            boundParamsNames : metadataDependency["bound-params"],
+            itemMetadata     : bootExecutableMetadata,
+            boundParams      : bootExecutableMetadata["bound-params"],
+            params           : bootExecutableMetadata.params,
             metadataHierarchy
         })
-    ]
 
     const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
     

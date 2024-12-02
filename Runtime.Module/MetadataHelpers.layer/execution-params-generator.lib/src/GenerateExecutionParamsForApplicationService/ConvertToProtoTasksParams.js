@@ -7,12 +7,13 @@ const ConvertToProtoTasksParams = ({ typeMetadata, metadataHierarchy }) => {
     const bootMetadataSelected = bootMetadata[typeMetadata]
     if(bootMetadataSelected){
         if(typeMetadata === "services"){
-            const protoTasksParams = bootMetadataSelected.map(bootServiceMetadata => 
-                CreateServiceTaskParams(({ 
-                    typeMetadata,
-                    bootServiceMetadata, 
-                    metadataHierarchy 
-                })))
+            const protoTasksParams = bootMetadataSelected
+                .map(bootServiceMetadata => 
+                    CreateServiceTaskParams(({ 
+                        typeMetadata,
+                        bootServiceMetadata, 
+                        metadataHierarchy 
+                    })))
             return protoTasksParams
         } else if(typeMetadata === "endpoints"){
             const protoTasksParams = bootMetadataSelected
