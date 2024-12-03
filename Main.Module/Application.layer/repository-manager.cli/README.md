@@ -102,7 +102,7 @@ repo install [repositoryNamespace] [sourceType] --executable exec1 "exec2" exec3
 ```bash
 repo install EcosystemCoreRepo LOCAL_FS
 repo install EssentialRepo LOCAL_FS --executable supervisor mytoolkit repo
-repo install EcosystemCoreRepo GITHUB_RELEASE --executable "start-instance-manager" "control-panel" explorer executor
+repo install EcosystemCoreRepo GITHUB_RELEASE --executable "executor-manager" "executor-panel" explorer executor
 ```
 
 #### Atualizar um Repositório Instalado

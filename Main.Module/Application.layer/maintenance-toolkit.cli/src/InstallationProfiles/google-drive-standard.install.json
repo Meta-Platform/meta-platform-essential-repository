@@ -9,7 +9,7 @@
         {
             "namespace": "EcosystemCoreRepo",
             "sourceType":"GOOGLE_DRIVE",
-            "executablesToInstall": ["start-instance-manager", "mylauncher", "executor", "explorer"]
+            "executablesToInstall": ["executor-manager", "mylauncher", "executor", "explorer"]
         }
     ]
 }
