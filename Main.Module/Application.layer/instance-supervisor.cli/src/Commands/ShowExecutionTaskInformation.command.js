@@ -8,14 +8,14 @@ const ShowExecutionTaskInformationCommand = async ({
 
 	const { taskId, socket } = args
 	const { supervisorSocketsDirPath } = startupParams
-    const { supervisorLib } = params
+    const { supervisorLib, taskTableRenderLib  } = params
 
     const CreateCommunicationInterface      = supervisorLib.require("CreateCommunicationInterface")
-    const RenderGeneralInformationTaskTable = supervisorLib.require("RenderGeneralInformationTaskTable")
-    const RenderStaticParametersTaskTable   = supervisorLib.require("RenderStaticParametersTaskTable")
-    const RenderLinkedParametersTaskTable   = supervisorLib.require("RenderLinkedParametersTaskTable")
-    const RenderAgentLinkRulesTaskTable     = supervisorLib.require("RenderAgentLinkRulesTaskTable")
-    const RenderActivationRulesTaskTable    = supervisorLib.require("RenderActivationRulesTaskTable")
+    const RenderGeneralInformationTaskTable = taskTableRenderLib.require("RenderGeneralInformationTaskTable")
+    const RenderStaticParametersTaskTable   = taskTableRenderLib.require("RenderStaticParametersTaskTable")
+    const RenderLinkedParametersTaskTable   = taskTableRenderLib.require("RenderLinkedParametersTaskTable")
+    const RenderAgentLinkRulesTaskTable     = taskTableRenderLib.require("RenderAgentLinkRulesTaskTable")
+    const RenderActivationRulesTaskTable    = taskTableRenderLib.require("RenderActivationRulesTaskTable")
 
     const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
 

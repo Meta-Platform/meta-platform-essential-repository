@@ -1,5 +1,5 @@
 {
-    "bound-params":["supervisorLib"],
+    "bound-params":["supervisorLib", "taskTableRenderLib"],
     "params":["supervisorSocketsDirPath"],
     "commands": [
         {
@@ -45,7 +45,8 @@
             ],
             "parametersToLoad": [
                 "supervisorLib",
-                "supervisorSocketsDirPath"
+                "supervisorSocketsDirPath",
+                "taskTableRenderLib"
             ]
         },
         {
@@ -109,7 +110,8 @@
                         ],
                         "parametersToLoad": [
                             "supervisorLib",
-                            "supervisorSocketsDirPath"
+                            "supervisorSocketsDirPath",
+                            "taskTableRenderLib"
                         ]
                     }
                ]
