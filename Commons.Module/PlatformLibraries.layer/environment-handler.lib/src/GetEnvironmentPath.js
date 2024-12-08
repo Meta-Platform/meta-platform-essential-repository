@@ -1,6 +1,6 @@
 const { join } = require('path')
 
 const GetEnvironmentPath = (environmentName, localPath) =>
-    `${join(localPath, environmentName)}.rtenv`
+    `${join(localPath, environmentName)}`
 
 module.exports = GetEnvironmentPath
