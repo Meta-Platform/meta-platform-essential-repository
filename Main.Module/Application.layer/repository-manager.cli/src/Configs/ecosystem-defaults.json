@@ -16,5 +16,6 @@
     "ECOSYSTEMDATA_CONF_DIRNAME_CONFIGURATIONS_DIR"           : "config-files",
     "ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES"             : "npm-dependencies",
     "ECOSYSTEMDATA_CONF_FILENAME_PKG_GRAPH_DATA"              : "metadata-hierarchy.json",
+    "ECOSYSTEMDATA_CONF_FILENAME_EXECUTION_PLAN_DATA"         : "execution-params.json",
     "EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES"                 : ".dependencies"
 }
