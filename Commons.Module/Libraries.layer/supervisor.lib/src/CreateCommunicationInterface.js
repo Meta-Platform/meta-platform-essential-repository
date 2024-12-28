@@ -33,10 +33,32 @@ const PackageExecutorRPCService = PackageExecutorGrpcObject.PackageExecutorRPCSp
 const CreateClient = (socketFilePath) => 
     new PackageExecutorRPCService(`unix:${socketFilePath}`, grpc.credentials.createInsecure())
 
-const CreateCommunicationInterface = async (socketFilePath) => {
+const WaitForConnectionReady = async (client, timeout = 5000) => {
+    return new Promise((resolve, reject) => {
+        const channel = client.getChannel()
+        const checkState = () => {
+            const state = channel.getConnectivityState(true)
+            if (state === grpc.connectivityState.READY) {
+                resolve()
+            } else if (state === grpc.connectivityState.TRANSIENT_FAILURE || state === grpc.connectivityState.SHUTDOWN) {
+                reject(new Error("Failed to connect: connectivity state is " + state))
+            } else {
+                setTimeout(checkState, 100)
+            }
+        }
+        checkState()
+    })
+}
 
-    const daemonClient = await CreateClient(socketFilePath)
-    
+const CreateCommunicationInterface = async (socketFilePath) => {
+    const daemonClient = CreateClient(socketFilePath)
+
+    try {
+        await WaitForConnectionReady(daemonClient)
+    } catch (err) {
+        throw new Error("Failed to connect to daemon: " + err.message)
+    }
+
     const Kill = () => new Promise((resolve, reject) => {
         daemonClient.Kill({}, (err, response) => {
             if (err) reject(err)
