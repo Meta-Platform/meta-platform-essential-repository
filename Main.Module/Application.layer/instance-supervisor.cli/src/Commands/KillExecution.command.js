@@ -21,7 +21,7 @@ const KillExecutionCommand = async ({
 	try {
 		const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
 		const daemonClient = await CreateCommunicationInterface(socketFilePath)
-		await daemonClient.Kill()
+		await daemonClient.KillInstance()
 		loggerEmitter 
             && loggerEmitter.emit("log", {sourceName: "execution-supervisor", type:"info", message: `Ecosystem Daemon foi terminado!`})
 	} catch(e){

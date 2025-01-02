@@ -59,8 +59,8 @@ const CreateCommunicationInterface = async (socketFilePath) => {
         throw new Error("Failed to connect to daemon: " + err.message)
     }
 
-    const Kill = () => new Promise((resolve, reject) => {
-        daemonClient.Kill({}, (err, response) => {
+    const KillInstance = () => new Promise((resolve, reject) => {
+        daemonClient.KillInstance({}, (err, response) => {
             if (err) reject(err)
             else resolve(response.status)
         })
@@ -111,7 +111,7 @@ const CreateCommunicationInterface = async (socketFilePath) => {
     return {
         GetLogStreaming,
         GetEventChangeListener,
-        Kill,
+        KillInstance,
         GetStatus,
         ListTasks,
         GetTask,
