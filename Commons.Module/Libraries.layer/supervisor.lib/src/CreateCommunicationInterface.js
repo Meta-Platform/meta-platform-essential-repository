@@ -73,6 +73,20 @@ const CreateCommunicationInterface = async (socketFilePath) => {
         })
     })
 
+    const GetStartupArguments = () => new Promise((resolve, reject) => {
+        daemonClient.GetStartupArguments({}, (err, response) => {
+            if (err) reject(err)
+            else resolve(response)
+        })
+    })
+
+    const GetProcessInformation = () => new Promise((resolve, reject) => {
+        daemonClient.GetProcessInformation({}, (err, response) => {
+            if (err) reject(err)
+            else resolve(response)
+        })
+    })
+
     const ListTasks = () => new Promise((resolve, reject) => {      
         daemonClient.ListTasks({}, (err, response) => {
             if (err) reject(err)
@@ -100,7 +114,9 @@ const CreateCommunicationInterface = async (socketFilePath) => {
         Kill,
         GetStatus,
         ListTasks,
-        GetTask
+        GetTask,
+        GetStartupArguments,
+        GetProcessInformation
     }
     
 }
