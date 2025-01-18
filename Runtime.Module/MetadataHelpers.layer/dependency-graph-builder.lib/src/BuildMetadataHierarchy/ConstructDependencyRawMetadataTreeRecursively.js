@@ -25,6 +25,9 @@ const ConstructDependencyRawMetadataTreeRecursively = async ({
 }) => {
     
     const metadata = await RetrieveAllPackageMetadata({ path, PKG_CONF_DIRNAME_METADATA })
+
+    if(!metadata) throw `Não foi encontrado metadata no pacote de caminho "${path}"`
+
     const isBootAvailable = HasBootConfiguration(metadata)
 
     const bootHasServices    = isBootAvailable && HasServices(metadata.boot)
