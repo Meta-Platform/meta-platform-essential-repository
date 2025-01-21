@@ -48,13 +48,13 @@ const ReinstallApplication = async ({
     const scriptContent = appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_NAMESPACE: namespace,
+            REPOSITORY_PATH: namespace,
             EXEC_NAME: executable,
             supervisorSocketFilePath
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_NAMESPACE: namespace,
+            REPOSITORY_PATH: namespace,
             supervisorSocketFilePath
         })
     
