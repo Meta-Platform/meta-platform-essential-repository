@@ -71,6 +71,7 @@ const UpdateRepository = async ({
             await ReinstallApplication({
                 namespace: repositoryNamespace,
                 applicationData,
+                deployedRepoPath,
                 installDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 supervisorSocketDirPath,

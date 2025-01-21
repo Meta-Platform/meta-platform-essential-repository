@@ -9,6 +9,7 @@ const RegisterExecutableInstallation = require("../../../repository-config-handl
 
 const InstallApplication = async ({
     namespace,
+    deployedRepoPath,
     applicationData,
     installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
@@ -59,13 +60,13 @@ const InstallApplication = async ({
     const scriptContent = appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_PATH: installDataDirPath,
+            REPOSITORY_PATH: deployedRepoPath,
             EXEC_NAME: executable,
             supervisorSocketFilePath
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_PATH: installDataDirPath,
+            REPOSITORY_PATH: deployedRepoPath,
             supervisorSocketFilePath
         })
     

@@ -9,6 +9,7 @@ const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildComman
 const ReinstallApplication = async ({
     namespace,
     applicationData,
+    deployedRepoPath,
     installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
     supervisorSocketDirPath,
@@ -48,13 +49,13 @@ const ReinstallApplication = async ({
     const scriptContent = appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_PATH: namespace,
+            REPOSITORY_PATH: deployedRepoPath,
             EXEC_NAME: executable,
             supervisorSocketFilePath
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_PATH: namespace,
+            REPOSITORY_PATH: deployedRepoPath,
             supervisorSocketFilePath
         })
     

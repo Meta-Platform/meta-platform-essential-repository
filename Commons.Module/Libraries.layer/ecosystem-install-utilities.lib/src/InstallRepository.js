@@ -72,6 +72,7 @@ const InstallRepository = async ({
 
             await InstallApplication({
                 namespace: repositoryNamespace,
+                deployedRepoPath,
                 applicationData,
                 installDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
