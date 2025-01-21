@@ -1,5 +1,5 @@
 const os = require('os')
-const { resolve } = require("path")
+const path = require("path")
 const EventEmitter = require('node:events')
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
@@ -25,7 +25,7 @@ const UpdateRepositoryCommand = async ({ args, startupParams, params }) => {
     const { installDataDirPath:installDataDirPathRaw } = startupParams
     const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
-    const sourcePath = resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
+    const sourcePath = path.resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
     const sourcesDataInformation = await ReadJsonFile(sourcePath)
 
     const { 
