@@ -1,7 +1,12 @@
+const os = require('os')
 const EventEmitter = require('node:events')
 const { resolve } = require("path")
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
+
+const ConvertPathToAbsolutPath = (_path) => path
+    .join(_path)
+    .replace('~', os.homedir())
 
 const InstallRepositoryCommand = async ({ 
     args, 
@@ -17,7 +22,8 @@ const InstallRepositoryCommand = async ({
         printDataLogLib
     } = params
 
-    const { installDataDirPath } = startupParams
+    const { installDataDirPath:installDataDirPathRaw } = startupParams
+    const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
     const InstallRepository = ecosystemInstallUtilitiesLib.require("InstallRepository")
     const PrintDataLog = printDataLogLib.require("PrintDataLog")

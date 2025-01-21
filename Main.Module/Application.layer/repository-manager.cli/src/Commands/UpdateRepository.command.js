@@ -1,7 +1,12 @@
+const os = require('os')
 const { resolve } = require("path")
 const EventEmitter = require('node:events')
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
+
+const ConvertPathToAbsolutPath = (_path) => path
+    .join(_path)
+    .replace('~', os.homedir())
 
 const UpdateRepositoryCommand = async ({ args, startupParams, params }) => {
 
@@ -17,7 +22,8 @@ const UpdateRepositoryCommand = async ({ args, startupParams, params }) => {
     const PrintDataLog = printDataLogLib.require("PrintDataLog")   
     const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile") 
 
-    const { installDataDirPath } = startupParams
+    const { installDataDirPath:installDataDirPathRaw } = startupParams
+    const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
     const sourcePath = resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
     const sourcesDataInformation = await ReadJsonFile(sourcePath)
