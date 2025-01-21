@@ -1,3 +1,3 @@
 {
-    "supervisorSocketsDirPath": "/home/kadisk/Workspaces/meta-platform-repo/EcosystemData/supervisor-sockets"
+    "supervisorSocketsDirPath": "~/EcosystemData/supervisor-sockets"
 }
