@@ -1,3 +1,6 @@
+const path = require("path")
+const os = require('os')
+
 const EventEmitter = require('node:events')
 const { resolve } = require("path")
 const colors = require("colors")
@@ -5,6 +8,11 @@ const colors = require("colors")
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
 const VerifySourceIsRegistered = require("../Helpers/VerifySourceIsRegistered")
+
+
+const ConvertPathToAbsolutPath = (_path) => path
+    .join(_path)
+    .replace('~', os.homedir())
 
 const GetNewSource = (args) => {
     const {
@@ -49,6 +57,8 @@ const RegisterNewSourceCommand = async ({
 
     const { installDataDirPath } = startupParams
 
+    const installDataDirAbsolutPath = ConvertPathToAbsolutPath(installDataDirPath)
+
     const {
         jsonFileUtilitiesLib,
         printDataLogLib
@@ -68,7 +78,7 @@ const RegisterNewSourceCommand = async ({
             sourceType
         } = args
     
-        const sourceFilePath = resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
+        const sourceFilePath = resolve(installDataDirAbsolutPath, REPOS_CONF_FILENAME_SOURCE_DATA)
         const sourcesDataInformation = await ReadJsonFile(sourceFilePath)
     
         const isSourceRegistered = VerifySourceIsRegistered({ repositoryNamespace, sourceType, sourcesDataInformation })
