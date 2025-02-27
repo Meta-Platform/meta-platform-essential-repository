@@ -1,3 +1,4 @@
+//TODO Muito especifico não deveria estar aqui
 const RequestData = async (url) => {
   const response = await fetch(url)
 
