@@ -5,7 +5,7 @@ const BuildApplicationScriptContent = ({
 }) => `#!/bin/bash
 
 PACKAGE_REPO_PATH="${PACKAGE_REPO_PATH}"
-SUPERVISOR_SOCKET_PATH="${supervisorSocketFilePath}"
+SUPERVISOR_SOCKET_PATH="unix:${supervisorSocketFilePath}"
 REPOSITORY_PATH="${REPOSITORY_PATH}"
 
 source execute-application "$@"
