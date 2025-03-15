@@ -9,7 +9,8 @@ const StartControllerService = (loaderParams, executorChannel) => {
         apiTemplate,
         controller,
         controllerParams,
-        executionData
+        executionData,
+        needsAuth
     } = loaderParams
 
     const apiTemplateData = nodejsPackageHandler.require(apiTemplate)
@@ -18,7 +19,8 @@ const StartControllerService = (loaderParams, executorChannel) => {
     serverService.AddServiceEndpoint({
         path: url,
         apiTemplate: apiTemplateData,
-        service: ControllerService(controllerParams, executionData)
+        service: ControllerService(controllerParams, executionData),
+        needsAuth
     })
     executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
 }

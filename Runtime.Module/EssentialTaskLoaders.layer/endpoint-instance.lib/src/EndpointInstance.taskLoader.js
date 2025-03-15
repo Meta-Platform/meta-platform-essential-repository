@@ -33,7 +33,7 @@ const EndpointInstanceTaskLoader = (loaderParams, executorChannel) => {
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
 
         try{
-            const { url, serverService } = loaderParams
+            const { url, serverService, needsAuth } = loaderParams
 
             if(type === "controller") 
                 StartControllerService(loaderParams, executorChannel)
@@ -57,9 +57,9 @@ const EndpointInstanceTaskLoader = (loaderParams, executorChannel) => {
                     const formattedMessage = `${colors.dim(`[${localISOTime}]`)} ${colors.bgCyan.black("[EndpointInstanceObjectLoader]")} ${colors[color](`[${typeFormatted}]`)} ${colors.inverse(`[${sourceName}]`)} ${message}`
                     console.log(formattedMessage)
                 })
-                const output = await StartWebGraphicUserInterfaceService({loaderParams, loggerEmitter})
+                const output = await StartWebGraphicUserInterfaceService({ loaderParams, loggerEmitter })
                 if(!wasStopped){
-                    serverService.AddStaticEndpoint({path:url, staticDir: output})
+                    serverService.AddStaticEndpoint({ path:url, staticDir: output, needsAuth })
                     executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
                 } else {
                     executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
