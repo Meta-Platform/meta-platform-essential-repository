@@ -1,5 +1,7 @@
 const path = require("path")
 
+const ConvertPathToAbsolutPath = require("../Utils/ConvertPathToAbsolutPath")
+
 const ShowExecutionTaskInformationCommand = async ({
     args, 
     startupParams,
@@ -10,6 +12,8 @@ const ShowExecutionTaskInformationCommand = async ({
 	const { supervisorSocketsDirPath } = startupParams
     const { supervisorLib, taskTableRenderLib  } = params
 
+    const absolutSupervisorSocketsDirPath = ConvertPathToAbsolutPath(supervisorSocketsDirPath)
+
     const CreateCommunicationInterface      = supervisorLib.require("CreateCommunicationInterface")
     const RenderGeneralInformationTaskTable = taskTableRenderLib.require("RenderGeneralInformationTaskTable")
     const RenderStaticParametersTaskTable   = taskTableRenderLib.require("RenderStaticParametersTaskTable")
@@ -17,7 +21,7 @@ const ShowExecutionTaskInformationCommand = async ({
     const RenderAgentLinkRulesTaskTable     = taskTableRenderLib.require("RenderAgentLinkRulesTaskTable")
     const RenderActivationRulesTaskTable    = taskTableRenderLib.require("RenderActivationRulesTaskTable")
 
-    const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
+    const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)
 
     const daemonClient = await CreateCommunicationInterface(socketFilePath)
     const task = await daemonClient.GetTask(taskId)

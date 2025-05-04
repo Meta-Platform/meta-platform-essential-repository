@@ -4,6 +4,8 @@ const path = require("path")
 const MAX_CONNECT_RETRIES = 1000
 const RETRY_DELAY_MS = 500
 
+const ConvertPathToAbsolutPath = require("../Utils/ConvertPathToAbsolutPath")
+
 const LogExecutionCommand = async ({
     args, 
     startupParams,
@@ -14,13 +16,15 @@ const LogExecutionCommand = async ({
 	const { supervisorSocketsDirPath } = startupParams
     const { supervisorLib } = params
 
+    const absolutSupervisorSocketsDirPath = ConvertPathToAbsolutPath(supervisorSocketsDirPath)
+
     const CreateCommunicationInterface = supervisorLib.require("CreateCommunicationInterface")
     const FormatterDataLog             = supervisorLib.require("FormatterDataLog")
     const TryConnectLogStreaming       = supervisorLib.require("TryConnectLogStreaming")
 
     const loggerEmitter = new EventEmitter()
 
-    const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
+    const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)
 
     const _OpenLogStream = async (socketFilePath, loggerEmitter) => {
         const rpcClient = await CreateCommunicationInterface(socketFilePath)

@@ -1,6 +1,8 @@
 const EventEmitter = require('events')
 const path = require("path")
 
+const ConvertPathToAbsolutPath = require("../Utils/ConvertPathToAbsolutPath")
+
 const KillExecutionCommand = async ({
 	args, 
 	startupParams,
@@ -10,6 +12,8 @@ const KillExecutionCommand = async ({
 	const { socket } = args
 	const { supervisorSocketsDirPath } = startupParams
 	const { supervisorLib } = params
+
+	const absolutSupervisorSocketsDirPath = ConvertPathToAbsolutPath(supervisorSocketsDirPath)
 	
 	const CreateCommunicationInterface = supervisorLib.require("CreateCommunicationInterface")
 	const FormatterDataLog             = supervisorLib.require("FormatterDataLog")
@@ -19,7 +23,7 @@ const KillExecutionCommand = async ({
 		console.log(await FormatterDataLog(dataLog)))
 
 	try {
-		const socketFilePath = path.resolve(supervisorSocketsDirPath, socket)
+		const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)
 		const daemonClient = await CreateCommunicationInterface(socketFilePath)
 		await daemonClient.KillInstance()
 		loggerEmitter 

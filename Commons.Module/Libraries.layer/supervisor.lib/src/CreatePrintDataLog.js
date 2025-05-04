@@ -11,7 +11,7 @@ const GetColorLogByType = (type) => {
 		case "error":
 			return "bgRed"
 		default:
-			return undefined
+			return "bgGray"
 	}
 }
 
