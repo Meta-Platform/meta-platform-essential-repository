@@ -19,13 +19,16 @@ const MountParams = ({
     namespaceDependency
 }) => {
     const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
+
+    const newServiceParameterNames = serviceParameterNames.map(paramName => paramName.charAt(0) === "?" ? paramName.slice(1) : paramName)
+
     return {
         objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata),
         staticParameters:{
             tag: namespace,
             ...params ? params : {},
             path,
-            serviceParameterNames
+            serviceParameterNames: newServiceParameterNames
         },
         linkedParameters:  {
             nodejsPackageHandler: namespaceDependency, 

@@ -1,17 +1,19 @@
 const MountBoundParamsRef = (boundParamsNames, argBoundParams) =>  
     (boundParamsNames || [])
     .reduce((boundParamsNameListDependencyAcc, boundParamNamespace) => {
+        
         if(!argBoundParams){
             if(boundParamNamespace.charAt(0) === "?"){
                 return {
                     ...boundParamsNameListDependencyAcc,
-                    [boundParamNamespace]: undefined
+                    [boundParamNamespace.slice(1)]: undefined
                 }
             } else throw `O parâmetro linkado [${boundParamNamespace}] não encontrado!`
         }
+        const newBoundParamNamespace = boundParamNamespace.charAt(0) === "?" ? boundParamNamespace.slice(1) : boundParamNamespace
         return {
             ...boundParamsNameListDependencyAcc,
-            [boundParamNamespace]: argBoundParams[boundParamNamespace]
+            [newBoundParamNamespace]: argBoundParams[newBoundParamNamespace]
         }
 
     }, {})

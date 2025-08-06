@@ -2,7 +2,9 @@ const ExtractNamespaceListByBoundParams = (boundParams) => {
     const list = Object
     .values(boundParams)
     .reduce((listAcc, value) => {
-        if(typeof value === "string"){
+        if(value === undefined){
+            return listAcc
+        } else if(typeof value === "string"){
             return [...listAcc, value]
         }else {
             return [...listAcc, ...ExtractNamespaceListByBoundParams(value)]
