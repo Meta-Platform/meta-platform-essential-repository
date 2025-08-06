@@ -1,5 +1,4 @@
 const path = require("path")
-const os = require('os')
 
 const EventEmitter = require('node:events')
 const { resolve } = require("path")
@@ -9,10 +8,7 @@ const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
 const VerifySourceIsRegistered = require("../Helpers/VerifySourceIsRegistered")
 
-
-const ConvertPathToAbsolutPath = (_path) => path
-    .join(_path)
-    .replace('~', os.homedir())
+const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
 const GetNewSource = (args) => {
     const {

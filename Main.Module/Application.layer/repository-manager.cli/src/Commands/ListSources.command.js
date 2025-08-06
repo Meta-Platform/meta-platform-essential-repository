@@ -1,6 +1,7 @@
 const colors = require("colors")
 const { resolve } = require("path")
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
+const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
 const ListSourcesCommand = async ({
     startupParams,
@@ -12,7 +13,8 @@ const ListSourcesCommand = async ({
         jsonFileUtilitiesLib
     } = params
 
-    const { installDataDirPath } = startupParams
+    const { installDataDirPath:installDataDirPathRaw } = startupParams
+    const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
     const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
 

@@ -1,12 +1,9 @@
-const os = require('os')
 const EventEmitter = require('node:events')
 const path = require("path")
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
-const ConvertPathToAbsolutPath = (_path) => path
-    .join(_path)
-    .replace('~', os.homedir())
+const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
 const InstallRepositoryCommand = async ({ 
     args, 

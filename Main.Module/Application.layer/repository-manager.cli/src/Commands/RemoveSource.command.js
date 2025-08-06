@@ -6,6 +6,8 @@ const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
 const VerifySourceIsRegistered = require("../Helpers/VerifySourceIsRegistered")
 
+const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
+
 const RemoveSourceCommand = async ({ 
     args, 
     startupParams,
@@ -14,7 +16,8 @@ const RemoveSourceCommand = async ({
 
     const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
 
-    const { installDataDirPath } = startupParams
+    const { installDataDirPath:installDataDirPathRaw } = startupParams
+    const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
     const {
         jsonFileUtilitiesLib,

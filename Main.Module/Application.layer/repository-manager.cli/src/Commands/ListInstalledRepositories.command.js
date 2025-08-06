@@ -2,6 +2,8 @@ const colors = require("colors")
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
+const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
+
 const ListInstalledRepositoriesCommand = async ({ 
     startupParams,
     params 
@@ -15,7 +17,8 @@ const ListInstalledRepositoriesCommand = async ({
     
     const { REPOS_CONF_FILENAME_REPOS_DATA } = ECOSYSTEM_DEFAULTS
 
-    const { installDataDirPath } = startupParams
+    const { installDataDirPath:installDataDirPathRaw } = startupParams
+    const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
     const repositoriesInfo = await FetchInstalledRepositoriesInfo({
         installationPath: installDataDirPath,
