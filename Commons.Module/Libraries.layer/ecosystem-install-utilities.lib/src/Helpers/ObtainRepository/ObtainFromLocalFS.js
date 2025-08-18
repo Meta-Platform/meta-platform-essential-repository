@@ -1,7 +1,7 @@
 const path = require("path")
 const os = require('os')
 
-const CopyDirectory = require("../../../../copy-directory.lib/src/CopyDirectory")
+const CopyDirRepository = require("../../../../copy-directory.lib/src/CopyDirRepository")
 
 const ConvertPathToAbsolutPath = (_path) => path
     .join(_path)
@@ -18,7 +18,7 @@ const ObtainFromLocalFS = (args) => {
     const { path: repoPath } = sourceData
     const destinationPath = path.join(destinationRepoPath, repositoryNamespace)
     const sourcePath = ConvertPathToAbsolutPath(repoPath)
-    CopyDirectory(sourcePath, destinationPath)
+    CopyDirRepository(sourcePath, destinationPath)
     return destinationPath
 }
 
