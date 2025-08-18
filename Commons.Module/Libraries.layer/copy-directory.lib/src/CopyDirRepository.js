@@ -1,22 +1,25 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs")
+const path = require("path")
 
-const CopyDirRepository = async (src, dest) => {
-    await fs.promises.mkdir(dest, { recursive: true })
-    const entries = await fs.promises.readdir(src, { withFileTypes: true })
+const CopyDirRepository = (source, destination) => {
+    
+    if (!fs.existsSync(destination)) {
+        fs.mkdirSync(destination, { recursive: true })
+    }
 
-    for (let entry of entries) {
+    const entries = fs.readdirSync(source, { withFileTypes: true })
+
+    for (const entry of entries) {
         if (entry.name === '.git' || entry.name === 'node_modules') continue
-        const srcPath = path.join(src, entry.name)
-        const destPath = path.join(dest, entry.name)
+        const srcPath = path.join(source, entry.name)
+        const destPath = path.join(destination, entry.name)
 
         if (entry.isDirectory()) {
-            await CopyDirRepository(srcPath, destPath)
+            CopyDirRepository(srcPath, destPath)
         } else {
-            await fs.promises.copyFile(srcPath, destPath)
+            fs.copyFileSync(srcPath, destPath)
         }
     }
 }
-
 
 module.exports = CopyDirRepository
