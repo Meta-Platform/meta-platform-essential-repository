@@ -49,7 +49,7 @@ const GetCommandBuilder = ({parameters, children, loaderParams}) => {
 
 const GetCommandHandler = ({
     path, 
-    parametersToLoad,
+    parametersToLoad=[],
     loaderParams
 }) => {
 

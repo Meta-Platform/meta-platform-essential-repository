@@ -94,15 +94,15 @@ Instala um repositório especificado a partir de uma fonte.
 
 ```bash
 repo install [repositoryNamespace] [sourceType]
-repo install [repositoryNamespace] [sourceType] --executable exec1 "exec2" exec3
+repo install [repositoryNamespace] [sourceType] --executables exec1 "exec2" exec3
 ```
 
 **Exemplo:**
 
 ```bash
 repo install EcosystemCoreRepo LOCAL_FS
-repo install EssentialRepo LOCAL_FS --executable supervisor mytoolkit repo
-repo install EcosystemCoreRepo GITHUB_RELEASE --executable "executor-manager" "executor-panel" explorer executor
+repo install EssentialRepo LOCAL_FS --executables supervisor mytoolkit repo
+repo install EcosystemCoreRepo GITHUB_RELEASE --executables "executor-manager" "executor-panel" explorer executor
 ```
 
 #### Atualizar um Repositório Instalado
