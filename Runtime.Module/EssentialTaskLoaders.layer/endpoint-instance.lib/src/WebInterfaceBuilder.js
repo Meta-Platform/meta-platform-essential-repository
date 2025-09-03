@@ -92,7 +92,8 @@ const GetCompiler = ({
             new HtmlWebpackPlugin({template:path.resolve(context, htmlTemplate),}),
             new webpack.DefinePlugin({
                 "process.env.HTTP_SERVER_MANAGER_ENDPOINT": JSON.stringify(url),
-                "process.env.SERVER_APP_NAME": JSON.stringify(serverAppName)
+                "process.env.SERVER_APP_NAME": JSON.stringify(serverAppName),
+                "process.env.BUILD_DATE": JSON.stringify(new Date().toISOString())
             }),
             new webpack.ProgressPlugin(onProgress)
         ]
