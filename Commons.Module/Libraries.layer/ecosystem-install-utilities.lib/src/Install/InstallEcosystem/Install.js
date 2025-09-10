@@ -71,8 +71,28 @@ const Install = async ({
         installationDataDir,
         ecosystemDefaults,
         packageExecutorBinaryName,
+        buildContentFunction: GetApplicationExecutionContent,
+        executableScriptFilename:"execute-application-dbg",
+        debugMode:true,
+        loggerEmitter
+    })
+
+    await CreatePackageExecutableScript({
+        installationDataDir,
+        ecosystemDefaults,
+        packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
         executableScriptFilename:"execute-command-line-application",
+        loggerEmitter
+    })
+
+    await CreatePackageExecutableScript({
+        installationDataDir,
+        ecosystemDefaults,
+        packageExecutorBinaryName,
+        buildContentFunction: GetCommandLineApplicationExecutionContent,
+        executableScriptFilename:"execute-command-line-application-dbg",
+        debugMode:true,
         loggerEmitter
     })
 

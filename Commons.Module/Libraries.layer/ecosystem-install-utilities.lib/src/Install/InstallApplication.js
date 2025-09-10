@@ -57,21 +57,28 @@ const InstallApplication = async ({
 
     const supervisorSocketFilePath = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
-    const scriptContent = appType.toUpperCase() === "CLI" 
+    const _CreateScriptContent = ({debugMode=false}) => {
+        return appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_PATH: deployedRepoPath,
             EXEC_NAME: executable,
-            supervisorSocketFilePath
+            supervisorSocketFilePath,
+            debugMode
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_PATH: deployedRepoPath,
-            supervisorSocketFilePath
+            supervisorSocketFilePath,
+            debugMode
         })
-    
+    }
+
     const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
-    await CreateExecutableScript(fullScriptPath, scriptContent, loggerEmitter)
+    await CreateExecutableScript(fullScriptPath, _CreateScriptContent(), loggerEmitter)
+
+    const fullScriptDbgPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable+"-dbg")
+    await CreateExecutableScript(fullScriptDbgPath, _CreateScriptContent({ debugMode:true }), loggerEmitter)
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallApplication",

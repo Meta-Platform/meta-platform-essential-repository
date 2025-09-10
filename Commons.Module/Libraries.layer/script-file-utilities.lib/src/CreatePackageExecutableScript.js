@@ -9,6 +9,7 @@ const CreatePackageExecutableScript = async ({
     packageExecutorBinaryName,
     buildContentFunction,
     executableScriptFilename,
+    debugMode=false,
     loggerEmitter
 }) => {
 
@@ -28,7 +29,8 @@ const CreatePackageExecutableScript = async ({
         RENDER_PKG_CONF_DIRNAME_METADATA           : PKG_CONF_DIRNAME_METADATA,
         RENDER_DIRNAME_MINIMAL_NODEJS_DEPENDENCIES : ECOSYSTEMDATA_CONF_DIRNAME_NPM_DEPENDENCIES,
         RENDER_DIRNAME_CONFIGURATIONS_DIR          : ECOSYSTEMDATA_CONF_DIRNAME_CONFIGURATIONS_DIR,
-        RENDER_DIRNAME_DOWNLOADED_REPOSITORIES     : ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES
+        RENDER_DIRNAME_DOWNLOADED_REPOSITORIES     : ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
+        debugMode
     })
 
     const fullScriptPath = join(installationDataDir, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executableScriptFilename)
