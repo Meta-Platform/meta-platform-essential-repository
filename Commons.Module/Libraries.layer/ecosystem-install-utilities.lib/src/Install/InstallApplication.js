@@ -75,7 +75,7 @@ const InstallApplication = async ({
     }
 
     const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
-    await CreateExecutableScript(fullScriptPath, _CreateScriptContent(), loggerEmitter)
+    await CreateExecutableScript(fullScriptPath, _CreateScriptContent({ debugMode:false }), loggerEmitter)
 
     const fullScriptDbgPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable+"-dbg")
     await CreateExecutableScript(fullScriptDbgPath, _CreateScriptContent({ debugMode:true }), loggerEmitter)
