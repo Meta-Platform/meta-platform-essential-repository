@@ -112,6 +112,8 @@ const ConfigCommand = async ({
 
 const ExecuteCommand = async (loaderParams) => {
 
+    let isStopAllTasks = true
+
     const {
         commands: commandsMetadata, 
         commandLineArgs,  
@@ -126,6 +128,15 @@ const ExecuteCommand = async (loaderParams) => {
             commandMetadata, 
             loaderParams
         })
+
+        const originalHandler = commandModule.handler
+        commandModule.handler = async function(args) {
+            if(commandMetadata.isNotStopAllTasks){
+                isStopAllTasks = false
+            }
+            return originalHandler(args)
+        }
+
         _yargs.command(commandModule)
     }
 
@@ -139,6 +150,9 @@ const ExecuteCommand = async (loaderParams) => {
     }
     
     await _yargs.parseAsync(commandLineArgs)
+
+    return isStopAllTasks
+    
 }
 
 const CommandApplicationTaskLoader = (loaderParams, executorChannel) => {
@@ -148,9 +162,11 @@ const CommandApplicationTaskLoader = (loaderParams, executorChannel) => {
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
 
         try {
-            await ExecuteCommand(loaderParams)
-            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
-            executorChannel.emit(CommandChannelEventTypes.STOP_ALL_TASKS)
+            const isStopAllTasks = await ExecuteCommand(loaderParams)
+            if(isStopAllTasks){
+                executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FINISHED)
+                executorChannel.emit(CommandChannelEventTypes.STOP_ALL_TASKS)
+            }
         } catch (e) {
             executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             console.error(e)
