@@ -25,13 +25,17 @@ const ListValidDirDescriptor = async ({ path, ext }) => {
 }
 
 const ListDirName = async ({ path, ext }) => {
-    const directories = await ListValidDirDescriptor({ path, ext })
-    const listName = directories.map(file => {
-        const filename       = file.name
-        const filenameLength = filename.length
-        return filename.slice(0, filenameLength-(ext.length+1))
-    })
-    return listName
+    try {
+        const directories = await ListValidDirDescriptor({ path, ext })
+        const listName = directories.map(file => {
+            const filename       = file.name
+            const filenameLength = filename.length
+            return filename.slice(0, filenameLength-(ext.length+1))
+        })
+        return listName
+    } catch (err) {
+        return []
+    }
 }
 
 const ListDirNameAndExt = async ({ path, ext }) => {
