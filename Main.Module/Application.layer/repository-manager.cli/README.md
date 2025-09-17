@@ -1,120 +1,103 @@
 [Meta Platform Essential Repository](../../../README.md) / [Main Module](../../README.md)
 # Repository Manager
-O **Repository Manager Command-Line** é responsável pelo gerenciamento e configuração de repositórios, atuando como um configurador centralizado. Ele permite:
 
-- **Listar Repositórios Registrados**: Exibe uma lista de todos os repositórios disponíveis, incluindo suas fontes, que podem ser locais ou remotas.
-- **Registrar Novas Fontes de Repositório**: Permite adicionar novas fontes de repositório e especificar seus tipos.
-- **Instalar Repositórios**: Instala repositórios selecionados.
-- **Atualizar Repositórios**: Atualiza repositórios instalados para as versões mais recentes.
-- **Listar Repositórios Instalados**: Exibe uma lista dos repositórios que já estão instalados e registrados para uso.
-- **Desinstalar Repositórios**: Remove repositórios do ecossistema.
-- **Exibir Detalhes de um Repositório**: Mostra informações detalhadas sobre um repositório específico.
-- **Configurar Repositórios**: Permite ajustar opções específicas de um repositório instalado.
-- **Gerenciar Fontes**: Possibilidade de adicionar, remover e listar fontes de repositórios.
+O **Repository Manager** é uma ferramenta de linha de comando para gerenciamento centralizado de repositórios, permitindo configurar, instalar, atualizar e remover repositórios de diversas fontes.
 
+## Estrutura de Comandos
 
-## Funcionalidades
+### Comandos Principais
 
-- **Gerenciamento Completo de Repositórios**: Controle total sobre a instalação, atualização e remoção de repositórios.
-- **Suporte a Múltiplas Fontes**: Capacidade de registrar e gerenciar repositórios de diferentes fontes e tipos.
-- **Atualizações Automatizadas**: Possibilidade de atualizar todos os repositórios instalados simultaneamente.
+#### `sources`
+**Descrição:** Mostra informações sobre as fontes disponíveis para instalação agregada pelo repositório
 
-## Comandos
+#### `list`
+**Comandos disponíveis:**
+- `list sources` - Lista as fontes disponíveis para instalação
+- `list installed` - Exibe todos os repositórios que estão instalados e disponíveis para uso
+
+#### `install [repositoryNamespace] [sourceType]`
+**Descrição:** Instala um novo repositório no ecossistema
+
+**Parâmetros:**
+- `repositoryNamespace` (positional, string) - nome do repositório
+- `sourceType` (positional, string) - tipo de fonte
+- `--executables` (option, array) - nome dos executáveis a serem instalados
+
+#### `update [repositoryNamespace]`
+**Descrição:** Atualiza um repositório já instalado no ecossistema
+
+**Parâmetros:**
+- `repositoryNamespace` (positional, string) - nome do repositório
+
+#### `show [repositoryNamespace]`
+**Descrição:** Mostra informações detalhadas sobre um repositório específico instalado
+
+**Parâmetros:**
+- `repositoryNamespace` (positional, string) - nome do repositório
+
+#### `register source [repositoryNamespace] [sourceType]`
+**Descrição:** Adiciona uma nova fonte de repositório para ser instalado
+
+**Parâmetros:**
+- `repositoryNamespace` (positional, string) - nome do repositório
+- `sourceType` (positional, string) - tipo de fonte
+- `--localPath` (option, string) - Caminho do repositório local
+- `--repoName` (option, string) - nome do repositório no github
+- `--repoOwner` (option, string) - owner do repositório no github (geralmente o username)
+- `--fileId` (option, string) - id do arquivo tar.gz com o repositório hospedado no google drive
+
+#### `remove source [repositoryNamespace] [sourceType]`
+**Descrição:** Remove uma fonte de repositório
+
+**Parâmetros:**
+- `repositoryNamespace` (positional, string) - nome do repositório
+- `sourceType` (positional, string) - tipo de fonte
+
+## Uso dos Comandos
 
 ### Gerenciamento de Fontes
 
-#### Mostrar Informações sobre Fontes
-
-Exibe todas as informações sobre as fontes de repositórios disponíveis para instalação.
-
 ```bash
+# Mostrar informações das fontes
 repo sources
-```
 
-#### Listar Fontes
-
-Lista todas as fontes registradas.
-
-```bash
+# Listar fontes disponíveis
 repo list sources
-```
-#### Registra uma Nova Fonte de Repositório
 
-Registra uma nova fonte de repositório para ser instalado.
+# Registrar nova fonte
+repo register source MyRepo LOCAL_FS --localPath "~/my-repo"
+repo register source MyRepo GITHUB_RELEASE --repoName "my-repo" --repoOwner "my-user"
 
-```bash
-
-repo register source [repositoryNamespace] [sourceType] --paramA "valueA" --paramB "value"
-
-repo register source MyPersonalRepo LOCAL_FS --localPath "~/my-personal-repo"
-repo register source MyPersonalRepo GITHUB_RELEASE --repoName "my-personal-repo" --repoOwner "my-user"
-repo register source MyPersonalRepo GOOGLE_DRIVE --fileId "AaBbCcDdEeFe123456__--qwertyuAAAA"
-
-```
-
-#### Remover Fonte
-
-Permite remover uma fonte de um repositório registrado.
-
-```bash
-repo remove source [repositoryNamespace] [sourceType]
-
-repo remove source MyPersonalRepo LOCAL_FS
-repo remove source MyPersonalRepo GITHUB_RELEASE
-repo remove source MyPersonalRepo GOOGLE_DRIVE
+# Remover fonte
+repo remove source MyRepo LOCAL_FS
 ```
 
 ### Gerenciamento de Repositórios
 
-#### Listar Repositórios Instalados
-
-Exibe todos os repositórios que estão instalados e disponíveis para uso.
-
 ```bash
+# Listar repositórios instalados
 repo list installed
+
+# Instalar repositório
+repo install MyRepo LOCAL_FS
+repo install MyRepo GITHUB_RELEASE --executables "tool1" "tool2"
+
+# Atualizar repositório
+repo update MyRepo
+
+# Mostrar detalhes do repositório
+repo show MyRepo
 ```
 
-#### Exibir Detalhes de um Repositório instalado
+## Tipos de Fonte Suportados
 
-Mostra informações detalhadas sobre um repositório específico instalado.
+- **LOCAL_FS**: Sistema de arquivos local
+- **GITHUB_RELEASE**: Repositórios do GitHub Releases
+- **GOOGLE_DRIVE**: Arquivos do Google Drive
 
-```bash
-repo show [repositoryNamespace]
-```
+## Funcionalidades
 
-**Exemplo:**
-
-```bash
-repo show EssentialRepo
-```
-
-#### Instalar um Repositório
-
-Instala um repositório especificado a partir de uma fonte.
-
-```bash
-repo install [repositoryNamespace] [sourceType]
-repo install [repositoryNamespace] [sourceType] --executables exec1 "exec2" exec3
-```
-
-**Exemplo:**
-
-```bash
-repo install EcosystemCoreRepo LOCAL_FS
-repo install EssentialRepo LOCAL_FS --executables supervisor mytoolkit repo
-repo install EcosystemCoreRepo GITHUB_RELEASE --executables "executor-manager" "executor-panel" explorer executor
-```
-
-#### Atualizar um Repositório Instalado
-
-Atualiza um repositório instalado para a versão mais recente disponível na fonte especificada.
-
-```bash
-repo update [repositoryNamespace]
-```
-
-**Exemplo:**
-
-```bash
-repo update EssentialRepo
-```
+- **Gerenciamento Completo**: Instalação, atualização e remoção de repositórios
+- **Suporte a Múltiplas Fontes**: Diferentes tipos de fontes com parâmetros específicos
+- **Atualizações Automatizadas**: Manutenção simplificada dos repositórios
+- **Configuração Flexível**: Opções específicas para diferentes tipos de fontes
