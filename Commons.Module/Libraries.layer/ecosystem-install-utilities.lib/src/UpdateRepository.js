@@ -5,6 +5,8 @@ const colors = SmartRequire("colors")
 
 const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir") 
 
+const GetRepositories = require("../../repository-config-handler.lib/src/GetRepositories")
+
 const ReinstallApplication = require("./Update/ReinstallApplication")
 const ObtainRepository = require("./Helpers/ObtainRepository")
 
@@ -14,7 +16,6 @@ const FilterApplicationsMetadataByExecutablesToInstall = require("./Helpers/Filt
 
 const UpdateRepository = async ({
     repositoryNamespace,
-    sourceData,
     executablesToInstall,
     installDataDirPath,
     ecosystemDefaults,
@@ -22,6 +23,7 @@ const UpdateRepository = async ({
 }) => {
 
     const { 
+        REPOS_CONF_FILENAME_REPOS_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
         ECOSYSTEMDATA_CONF_DIRNAME_SUPERVISOR_UNIX_SOCKET_DIR,
@@ -40,6 +42,11 @@ const UpdateRepository = async ({
         ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
         loggerEmitter
     })
+
+    const { sourceData } = (await GetRepositories({
+        installDataDirPath,
+        REPOS_CONF_FILENAME_REPOS_DATA,
+    }))[repositoryNamespace]
 
     const deployedRepoPath = await ObtainRepository({
         repositoryNamespace,

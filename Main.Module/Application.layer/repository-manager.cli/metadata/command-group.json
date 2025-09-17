@@ -77,7 +77,7 @@
         {
             "commandName": "UpdateRepository",
             "path": "Commands/UpdateRepository.command",
-            "command": "update [repositoryNamespace] [sourceType]",
+            "command": "update [repositoryNamespace]",
             "description": "Atualiza um repositório já instalado no ecosistema",
             "parameters": [
                 {
@@ -85,19 +85,11 @@
                     "paramType": "positional",
                     "valueType": "string",
                     "describe": "nome do repositório"
-                },
-                {
-                    "key": "sourceType",
-                    "paramType": "positional",
-                    "valueType": "string",
-                    "describe": "tipo de fonte"
                 }
             ],
             "parametersToLoad": [
                 "ecosystemInstallUtilitiesLib",
-                "jsonFileUtilitiesLib",
-                "printDataLogLib",
-                "installDataDirPath"
+                "printDataLogLib"
             ]
         },
         {

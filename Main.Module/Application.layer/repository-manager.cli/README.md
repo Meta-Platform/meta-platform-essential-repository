@@ -110,11 +110,11 @@ repo install EcosystemCoreRepo GITHUB_RELEASE --executables "executor-manager" "
 Atualiza um repositório instalado para a versão mais recente disponível na fonte especificada.
 
 ```bash
-repo update [repositoryNamespace] [sourceType]
+repo update [repositoryNamespace]
 ```
 
 **Exemplo:**
 
 ```bash
-repo update EssentialRepo LOCAL_FS
+repo update EssentialRepo
 ```
