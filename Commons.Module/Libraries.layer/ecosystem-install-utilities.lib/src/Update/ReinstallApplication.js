@@ -46,29 +46,36 @@ const ReinstallApplication = async ({
 
     const supervisorSocketFilePath = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
-    const scriptContent = appType.toUpperCase() === "CLI" 
+    const _CreateScriptContent = ({debugMode=false}) => {
+        return appType.toUpperCase() === "CLI" 
         ? BuildCommandLineApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_PATH: deployedRepoPath,
             EXEC_NAME: executable,
-            supervisorSocketFilePath
+            supervisorSocketFilePath,
+            debugMode
         })
         : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
             PACKAGE_REPO_PATH: packageNamespace,
             REPOSITORY_PATH: deployedRepoPath,
-            supervisorSocketFilePath
+            supervisorSocketFilePath,
+            debugMode
         })
+    }
     
-        const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
-        await RecreateExecutableScript(fullScriptPath, scriptContent, loggerEmitter)
+    const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
+    await RecreateExecutableScript(fullScriptPath, _CreateScriptContent({ debugMode:false }), loggerEmitter)
 
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "ReinstallApplication",
-            type: "info",
-            message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi reinstalado!`
-        })
+    const fullScriptDbgPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable+"-dbg")
+    await RecreateExecutableScript(fullScriptDbgPath, _CreateScriptContent({ debugMode:true }), loggerEmitter)
 
-        return fullScriptPath
+    loggerEmitter && loggerEmitter.emit("log", {
+        sourceName: "ReinstallApplication",
+        type: "info",
+        message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi reinstalado!`
+    })
+
+    return fullScriptPath
 }
 
 module.exports = ReinstallApplication
