@@ -4,9 +4,6 @@
         "jsonFileUtilitiesLib",
         "printDataLogLib"
     ],
-    "params": [
-        "installDataDirPath"
-    ],
     "commands": [
         {
             "commandName": "ShowSourceInformation",
@@ -36,8 +33,7 @@
                     "command": "installed",
                     "description": "Exibe todos os repositórios que estão instalados e disponíveis para uso.",
                     "parametersToLoad": [
-                        "ecosystemInstallUtilitiesLib",
-                        "installDataDirPath"
+                        "ecosystemInstallUtilitiesLib"
                     ]
                 }
             ]
@@ -70,8 +66,7 @@
             "parametersToLoad": [
                 "ecosystemInstallUtilitiesLib",
                 "jsonFileUtilitiesLib",
-                "printDataLogLib",
-                "installDataDirPath"
+                "printDataLogLib"
             ]
         },
         {
@@ -106,8 +101,7 @@
                 }
             ],
             "parametersToLoad": [
-                "ecosystemInstallUtilitiesLib",
-                "installDataDirPath"
+                "ecosystemInstallUtilitiesLib"
             ]
         },
         {
@@ -178,6 +172,31 @@
                 }
             ],
             "parametersToLoad": [
+                "jsonFileUtilitiesLib",
+                "printDataLogLib"
+            ]
+        },
+        {
+            "commandName": "ChangeRepositorySource",
+            "path": "Commands/ChangeRepositorySource.command",
+            "command": "change installed source [repositoryNamespace] [sourceType]",
+            "description": "Trocar fonte de um repositório instalado",
+            "parameters": [
+                {
+                    "key": "repositoryNamespace",
+                    "paramType": "positional",
+                    "valueType": "string",
+                    "describe": "nome do repositório"
+                },
+                {
+                    "key": "sourceType",
+                    "paramType": "positional",
+                    "valueType": "string",
+                    "describe": "tipo de fonte"
+                }
+            ],
+            "parametersToLoad": [
+                "ecosystemInstallUtilitiesLib",
                 "jsonFileUtilitiesLib",
                 "printDataLogLib"
             ]

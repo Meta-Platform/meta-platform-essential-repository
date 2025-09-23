@@ -7,7 +7,7 @@ const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
 const ExtractSourceData = require("../Helpers/ExtractSourceData")
 
-const InstallRepositoryCommand = async ({ 
+const ChangeRepositorySourceCommand = async ({ 
     args, 
     startupParams,
     params
@@ -24,18 +24,17 @@ const InstallRepositoryCommand = async ({
     const { installDataDirPath:installDataDirPathRaw } = startupParams
     const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
-    const InstallRepository = ecosystemInstallUtilitiesLib.require("InstallRepository")
+    const ChangeRepositorySource = ecosystemInstallUtilitiesLib.require("ChangeRepositorySource")
     const PrintDataLog = printDataLogLib.require("PrintDataLog")
     const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
 
     const { 
         repositoryNamespace,
-        sourceType,
-        executables
+        sourceType
     } = args
     
     const loggerEmitter = new EventEmitter()
-	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "InstallRepositoryCommand"))
+	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "ChangeRepositorySourceCommand"))
 
     const sourcePath = path.resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
     const sourcesDataInformation = await ReadJsonFile(sourcePath)
@@ -46,15 +45,15 @@ const InstallRepositoryCommand = async ({
         sourcesDataInformation
     })
 
-    await InstallRepository({
+    await ChangeRepositorySource({
         repositoryNamespace,
         sourceData,
-        executablesToInstall: executables,
         installDataDirPath,
         ecosystemDefaults: ECOSYSTEM_DEFAULTS,
         loggerEmitter
     })
-    
+
+
 }
 
-module.exports = InstallRepositoryCommand
+module.exports = ChangeRepositorySourceCommand

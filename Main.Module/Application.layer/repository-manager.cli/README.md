@@ -46,8 +46,12 @@ O **Repository Manager** é uma ferramenta de linha de comando para gerenciament
 - `--repoOwner` (option, string) - owner do repositório no github (geralmente o username)
 - `--fileId` (option, string) - id do arquivo tar.gz com o repositório hospedado no google drive
 
+#### `change installed source [repositoryNamespace] [sourceType]`
+**Descrição:** Trocar uma fonte de repositório instalado
+
 #### `remove source [repositoryNamespace] [sourceType]`
 **Descrição:** Remove uma fonte de repositório
+
 
 **Parâmetros:**
 - `repositoryNamespace` (positional, string) - nome do repositório
@@ -87,6 +91,11 @@ repo update MyRepo
 
 # Mostrar detalhes do repositório
 repo show MyRepo
+
+# Trocar fonte de atualização
+repo change installed source MyRepo GITHUB_RELEASE
+# Usa a nova fonte para atualizar
+repo update MyRepo
 ```
 
 ## Tipos de Fonte Suportados
