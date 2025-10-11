@@ -23,7 +23,7 @@ pkg-exec${debugMode ? "-dbg" : ""} --package "$PACKAGE_PATH" \
 --nodejsProjectDependencies "$NODEJS_DEPS_PATH" \
 --executableName "$EXEC_NAME" \
 --supervisorSocket "$SUPERVISOR_SOCKET_PATH" \
---commandLineArgs "$*"
+--commandLineArgs "$ARGS_STRING"
 `
 
 module.exports = GetCommandLineApplicationExecutionContent
