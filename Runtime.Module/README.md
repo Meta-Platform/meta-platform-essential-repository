@@ -1,21 +1,23 @@
 [Meta Platform Essential Repository](../README.md)
 # Runtime *Module*
 
+Peças de **tempo de execução**: o executor de tarefas, os *task loaders*
+(object loaders) e os utilitários de metadados que montam o plano de execução.
+
 - **Executor** *Layer*
     - [**task-executor** *library*](./Executor.layer/task-executor.lib/README.md)
-- **Essential Task Loaders** *Layer*
-    - **application-instance** *library*
-    - **command-application** *library*
-    - **endpoint-instance** *library*
-    - **install-nodejs-package-dependencies** *library*
-    - **nodejs-package** *library*
-    - **service-instanc** *library*
-- **Metadata Helpers.layer** *Layer*
+- **EssentialTaskLoaders** *Layer*
+    - [**application-instance** *library*](./EssentialTaskLoaders.layer/application-instance.lib/README.md)
+    - [**command-application** *library*](./EssentialTaskLoaders.layer/command-application.lib/README.md)
+    - [**endpoint-instance** *library*](./EssentialTaskLoaders.layer/endpoint-instance.lib/README.md)
+    - [**install-nodejs-package-dependencies** *library*](./EssentialTaskLoaders.layer/install-nodejs-package-dependencies.lib/README.md)
+    - [**nodejs-package** *library*](./EssentialTaskLoaders.layer/nodejs-package.lib/README.md)
+    - [**service-instance** *library*](./EssentialTaskLoaders.layer/service-instance.lib/README.md)
+- **MetadataHelpers** *Layer*
     - [**dependency-graph-builder** *library*](./MetadataHelpers.layer/dependency-graph-builder.lib/README.md)
     - [**execution-params-generator** *library*](./MetadataHelpers.layer/execution-params-generator.lib/README.md)
-    - **metadata-hierarchy-handler** *library*
-    - **resolve-package-name** *library*
+    - [**metadata-hierarchy-handler** *library*](./MetadataHelpers.layer/metadata-hierarchy-handler.lib/README.md)
+    - [**resolve-package-name** *library*](./MetadataHelpers.layer/resolve-package-name.lib/README.md)
 
-
-
-
+> Conceitos: [Tipos de Object Loader](../../../Meta-Platform/meta-platform-open-standard/concepts/tipos-de-object-loader.md)
+> e [Execution Params Standard](../../../Meta-Platform/meta-platform-open-standard/specifications/packages/execution-params-standard.md).
