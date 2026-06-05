@@ -2,7 +2,7 @@
 
 - **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/load-metatada-dir.lib`
 
-Carrega o conteúdo da pasta [`metadata/`](../../../../../Meta-Platform/meta-platform-open-standard/concepts/metadata.md)
+Carrega o conteúdo da pasta [`metadata/`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/metadata.md)
 de um pacote, tornando seus metadados disponíveis para a plataforma.
 
 ## Exports (`src/`)

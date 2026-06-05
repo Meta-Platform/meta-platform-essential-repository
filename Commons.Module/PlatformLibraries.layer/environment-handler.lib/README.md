@@ -4,7 +4,7 @@
 
 Cria e verifica o **diretório de dados do ecossistema** (`EcosystemData`) e os
 **ambientes de execução** isolados por pacote (`environments/`), conforme o
-[Ecosystem Data Directory Hierarchy Standard](../../../../../Meta-Platform/meta-platform-open-standard/specifications/ecosystem-data-directory-hierarchy-standard.md).
+[Ecosystem Data Directory Hierarchy Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/ecosystem-data-directory-hierarchy-standard.md).
 
 ## Exports (`src/`)
 

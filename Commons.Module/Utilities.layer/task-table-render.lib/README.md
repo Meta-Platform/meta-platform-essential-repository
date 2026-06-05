@@ -19,5 +19,5 @@ ativação e de *agent link*. Injetada como `taskTableRenderLib`.
 | `RenderAgentLinkRulesTaskTable.js` | Renderiza `agentLinkRules`. |
 | `GetColorLogByStatus.js` | Define a cor conforme o status da task. |
 
-> Campos de task: ver [Execution Params Standard](../../../../../Meta-Platform/meta-platform-open-standard/specifications/packages/execution-params-standard.md).
+> Campos de task: ver [Execution Params Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/packages/execution-params-standard.md).
 > [README do repositório](../../../README.md)

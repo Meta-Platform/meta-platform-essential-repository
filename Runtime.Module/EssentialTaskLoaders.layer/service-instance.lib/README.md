@@ -12,5 +12,5 @@ uma aplicação durante a execução de um plano pelo *task executor*.
 | `ServiceInstance.taskLoader.js` | Carrega/instancia o `service-instance`. |
 
 > Parâmetros e exemplo no `execution-params`: ver
-> [Tipos de Object Loader → `service-instance`](../../../../../Meta-Platform/meta-platform-open-standard/concepts/tipos-de-object-loader.md).
+> [Tipos de Object Loader → `service-instance`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md).
 > [README do repositório](../../../README.md)

@@ -11,5 +11,5 @@ montagem da hierarquia de metadados e do plano de execução.
 |--------|------------------|
 | `ResolvePackageName.js` | Resolve o nome do pacote a partir de uma referência. |
 
-> Convenções de namespace: ver [Package](../../../../../Meta-Platform/meta-platform-open-standard/concepts/package.md).
+> Convenções de namespace: ver [Package](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/package.md).
 > [README do repositório](../../../README.md)

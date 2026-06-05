@@ -15,5 +15,5 @@ suportadas pela plataforma (URL direta, Google Drive e releases do GitHub).
 | `GetReleaseLatestData.js` | Consulta os dados da *latest release* na API do GitHub. |
 
 > Relaciona-se aos `sourceType` `GITHUB_RELEASE`/`GOOGLE_DRIVE` (ver
-> [Meta Repository Standard](../../../../../Meta-Platform/meta-platform-open-standard/specifications/meta-repository-standard.md)).
+> [Meta Repository Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/meta-repository-standard.md)).
 > [README do repositório](../../../README.md)

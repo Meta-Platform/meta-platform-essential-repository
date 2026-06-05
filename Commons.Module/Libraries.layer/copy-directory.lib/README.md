@@ -12,4 +12,4 @@ de um repositório de pacotes.
 | `CopyDirectory.js` | Cópia recursiva genérica de um diretório. |
 | `CopyDirRepository.js` | Cópia da estrutura de um repositório. |
 
-> [README do repositório](../../../README.md) · [Arquitetura](../../../../../docs/ARQUITETURA.md)
+> [README do repositório](../../../README.md) · [Arquitetura](https://github.com/Meta-Platform/.github/blob/main/docs/ARQUITETURA.md)

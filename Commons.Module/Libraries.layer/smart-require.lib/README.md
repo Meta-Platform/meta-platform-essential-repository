@@ -11,5 +11,5 @@ externas (`EXTERNAL_NODE_MODULES_PATH`), com *fallback* para `node_modules`.
 |--------|------------------|
 | `SmartRequire.js` | Carrega um módulo pelo nome a partir do diretório de dependências configurado. |
 
-> A melhoria desse mecanismo é um item de planejamento (ver [`note.md`](../../../../../note.md)).
+> A melhoria desse mecanismo é um item de planejamento interno.
 > [README do repositório](../../../README.md)

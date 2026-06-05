@@ -18,6 +18,6 @@ streaming de log e suas tarefas. É a base da CLI `supervisor`
 | `ConvertTaskResponseToTask.js` | Converte a resposta gRPC de tarefa no modelo interno. |
 | `CreatePrintDataLog.js` / `FormatterDataLog.js` | Formatação/impressão dos logs recebidos. |
 
-> Contrato gRPC: [Package Executor RPC Standard](../../../../../Meta-Platform/meta-platform-open-standard/specifications/package-executor-rpc.md).
-> Existe um item de planejamento para remover o `MountTaskTable` desta lib (ver
-> [`note.md`](../../../../../note.md)). [README do repositório](../../../README.md)
+> Contrato gRPC: [Package Executor RPC Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/package-executor-rpc.md).
+> Existe um item de planejamento interno para remover o `MountTaskTable` desta
+> lib. [README do repositório](../../../README.md)

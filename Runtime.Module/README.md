@@ -19,5 +19,5 @@ Peças de **tempo de execução**: o executor de tarefas, os *task loaders*
     - [**metadata-hierarchy-handler** *library*](./MetadataHelpers.layer/metadata-hierarchy-handler.lib/README.md)
     - [**resolve-package-name** *library*](./MetadataHelpers.layer/resolve-package-name.lib/README.md)
 
-> Conceitos: [Tipos de Object Loader](../../../Meta-Platform/meta-platform-open-standard/concepts/tipos-de-object-loader.md)
-> e [Execution Params Standard](../../../Meta-Platform/meta-platform-open-standard/specifications/packages/execution-params-standard.md).
+> Conceitos: [Tipos de Object Loader](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md)
+> e [Execution Params Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/packages/execution-params-standard.md).

@@ -16,5 +16,5 @@ repositórios usada pelos serviços e CLIs de gerenciamento.
 | `ListPackages.js` | Lista os pacotes de uma layer/group. |
 | `Commons/`, `Configs/`, `Helpers/` | Apoio à navegação da hierarquia. |
 
-> Hierarquia formal: [Meta Repository Standard](../../../../../Meta-Platform/meta-platform-open-standard/specifications/meta-repository-standard.md).
+> Hierarquia formal: [Meta Repository Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/meta-repository-standard.md).
 > [README do repositório](../../../README.md)

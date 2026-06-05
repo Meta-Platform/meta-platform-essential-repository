@@ -13,5 +13,5 @@ pelo *task executor*.
 | `ApplicationInstance.taskLoader.js` | Carrega/instancia a `application-instance`. |
 
 > Parâmetros e exemplo no `execution-params`: ver
-> [Tipos de Object Loader → `application-instance`](../../../../../Meta-Platform/meta-platform-open-standard/concepts/tipos-de-object-loader.md).
+> [Tipos de Object Loader → `application-instance`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md).
 > [README do repositório](../../../README.md)
