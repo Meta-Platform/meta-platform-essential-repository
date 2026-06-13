@@ -71,6 +71,7 @@ repo list sources
 # Registrar nova fonte
 repo register source MyRepo LOCAL_FS --localPath "~/my-repo"
 repo register source MyRepo GITHUB_RELEASE --repoName "my-repo" --repoOwner "my-user"
+repo register source MyRepo GOOGLE_DRIVE --fileId "AaBbCcDdEeFe123456__--qwertyuAAAA"
 
 # Remover fonte
 repo remove source MyRepo LOCAL_FS
@@ -85,6 +86,10 @@ repo list installed
 # Instalar repositório
 repo install MyRepo LOCAL_FS
 repo install MyRepo GITHUB_RELEASE --executables "tool1" "tool2"
+
+# Exemplos com executáveis reais do ecossistema
+repo install EssentialRepo LOCAL_FS --executables supervisor mytoolkit repo
+repo install EcosystemCoreRepo GITHUB_RELEASE --executables "executor-manager" "executor-panel" explorer executor
 
 # Atualizar repositório
 repo update MyRepo
