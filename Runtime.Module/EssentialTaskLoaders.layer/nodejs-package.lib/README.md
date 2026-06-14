@@ -1,35 +1,20 @@
+# nodejs-package.lib
 
-# NodeJS Package
+- **Tipo:** biblioteca / *task loader* (`.lib`) · **Namespace:** `@/nodejs-package.lib`
 
-Define um pacote Node.js carregado e pronto para ser utilizado por outros componentes.
+*Object loader* do tipo **`nodejs-package`**: carrega um package Node.js e expõe
+um *handler* (service object) com `require`, para que outras tasks consumam o
+código do package durante a execução de um plano pelo *task executor*.
 
-**Parâmetros:**
-- `tag` (string): Identificador único do pacote (ex: `"@/service-orchestrator.app"`)
-- `path` (string): Caminho completo da pasta do pacote
-- `environmentPath` (string): Caminho do ambiente de execução
-- `EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES` (string): Nome do diretório de dependências
+## Exports (`src/`)
 
-**Exemplo no execution params:**
-```json
-{
-  "objectLoaderType": "nodejs-package",
-  "staticParameters": {
-    "tag": "@/service-orchestrator.app",
-    "path": "/home/kadisk/EcosystemData/repos/KADISKCorpRepo/VirtualDesk.Module/PlatformApplications.layer/service-orchestrator.app",
-    "environmentPath": "/home/kadisk/EcosystemData/environments/service-orchestrator.app-0d0885c5971916f98cc8359d4a308f0a916e24d83bf29340fc5c111a2a775d6a",
-    "EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES": ".dependencies"
-  },
-  "activationRules": {
-    "&&": [
-      {
-        "property": "params.namespace",
-        "=": "@/service-orchestrator.app"
-      },
-      {
-        "property": "status",
-        "=": "FINISHED"
-      }
-    ]
-  }
-}
-```
+| Módulo | Responsabilidade |
+|--------|------------------|
+| `NodeJSPackage.taskLoader.js` | Carrega o package e monta o handler (`require`, `getSourcePath`, `getEnvironmentPath`, `getNodeModulesPath`). |
+
+> Parâmetros e exemplo no `execution-params`: ver
+> [Tipos de Object Loader → `nodejs-package`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md#nodejs-package).
+> Para criar o seu próprio loader, veja o
+> [Guia: como criar e usar um Object Loader](../../Executor.layer/task-executor.lib/docs/guia-criar-object-loader.md).
+> [README do repositório](../../../README.md)
+</content>

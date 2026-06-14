@@ -3,6 +3,11 @@
 
 O Task Executor é uma biblioteca projetada para facilitar a gestão e execução de tarefas programáticas de maneira organizada e eficiente. Com foco na flexibilidade e escalabilidade, esta ferramenta oferece um conjunto robusto de funcionalidades para lidar com o ciclo de vida das tarefas, eventos associados, dependências e condições específicas, permitindo aos desenvolvedores construir sistemas complexos de execução de tarefas com facilidade.
 
+> **Guias e referências:**
+> [Guia: como criar e usar um Object Loader (Task Loader)](./docs/guia-criar-object-loader.md) ·
+> [ExecutionParams](./docs/execution-params.md) ·
+> [API de Referência](./docs/api-referencia.md).
+
 ## Características Principais
 
 - **Gerenciamento do Ciclo de Vida das Tarefas**: Suporte completo ao ciclo de vida de uma tarefa, incluindo criação, execução, pausa, e finalização.

@@ -66,16 +66,16 @@ const taskExecutor = TaskExecutor({
 
 taskExecutor.CreateTask({
     objectLoaderType: "print-params-task-loader",
-    staticParameters:{
+    staticParameters: {
         paramA: "valueA",
         paramB: 42,
         paramC: {
             paramX: "valueX",
-            paramY: { a:1, b:3, c:5 }
-            paramH: ["F", "G", {x:1, k:"t"}]
+            paramY: { a: 1, b: 3, c: 5 },
+            paramH: ["F", "G", { x: 1, k: "t" }],
             paramJ: [1, 2, 3]
-        }
-        paramI: ["W", "E", {T:1, b:"ç"}]
+        },
+        paramI: ["W", "E", { T: 1, b: "ç" }]
     }
 })
 ```
@@ -85,23 +85,98 @@ Parameters passed to the loader:
 {
   paramA: 'valueA',
   paramB: 42,
-  paramC: { paramX: 'valueX', paramY: { a: 1, b: 3, c: 5 } }
+  paramC: {
+    paramX: 'valueX',
+    paramY: { a: 1, b: 3, c: 5 },
+    paramH: [ 'F', 'G', { x: 1, k: 't' } ],
+    paramJ: [ 1, 2, 3 ]
+  },
+  paramI: [ 'W', 'E', { T: 1, b: 'ç' } ]
 }
 ```
 
 ## Parâmetros Vinculados (`linkedParameters`)
-Permitem que parâmetros dinâmicos sejam ajustados conforme mudanças ocorrem, mantendo a tarefa atualizada.(esta errado pois ele é um mapa de parametro que serão passados permite as tarefas compartilharem seu objetos ativos como servidores )
 
-"mostra uso do linkded para adicionando novas rotas a um task loader "
+Os `linkedParameters` **não** são "parâmetros que mudam sozinhos". Eles são um
+**mapa de referências** que permite a uma task receber, já no seu `loaderParams`,
+o **service object vivo de outra task** — por exemplo, um servidor HTTP que já
+está no ar, para que a task atual registre novas rotas nele.
+
+Cada chave do mapa aponta para uma referência (ex.: `"@@/server-service"`). O
+executor resolve essa referência em runtime: encontra a task que a satisfaz,
+chama o `getServiceObject()` dela e injeta o objeto resultante no `loaderParams`
+(ver
+[`AssembleLinkedTaskParameters`](../src/TaskHandlers/AssembleTaskParameters/AssembleLinkedTaskParameters.js)).
+O valor de cada chave pode ser uma string (referência direta) ou um objeto
+aninhado de referências.
+
+```json
+"linkedParameters": {
+  "nodejsPackageHandler": "@/server-manager.webservice",
+  "controllerParams": {
+    "httpServerService": "@@/server-service"
+  },
+  "serverService": "@@/server-service"
+}
+```
+
+No exemplo (extraído do `endpoint-instance`), `serverService` chega ao loader como
+o **objeto do servidor já ativo**, permitindo `serverService.AddStaticEndpoint(...)`.
+A resolução das referências depende dos `agentLinkRules` (abaixo). O passo a passo
+completo está no
+[Guia: como criar e usar um Object Loader](./guia-criar-object-loader.md#compartilhando-o-service-object-entre-tasks).
 
 ## Regras de Vinculação entre Agentes (`agentLinkRules`)
-Determinam como os parâmetros se conectam entre diferentes partes do sistema.
+
+São as regras que dizem **a qual task** cada referência de `linkedParameters`
+corresponde. Cada regra tem um `referenceName` (a mesma string usada no
+`linkedParameters`) e um `requirement` — uma expressão `&&` que a task referenciada
+precisa satisfazer (tipicamente `status = "ACTIVE"` e um `params.tag` específico):
+
+```json
+"agentLinkRules": [
+  {
+    "referenceName": "@@/server-service",
+    "requirement": {
+      "&&": [
+        { "property": "params.tag", "=": "@@/server-service" },
+        { "property": "status",     "=": "ACTIVE" }
+      ]
+    }
+  }
+]
+```
+
+Além de resolver a injeção do service object, os `agentLinkRules` **gatilham a
+ativação**: a task só sai de `AWAITING_PRECONDITIONS` quando as tasks referenciadas
+satisfazem seus requisitos (ver
+[`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.js)).
 
 ## Regras de Ativação (`activationRules`)
-Estabelecem quando a tarefa deve começar, baseado em condições específicas.
+
+Estabelecem condições que devem ser verdadeiras para a task ativar, sem injetar
+nenhum objeto (diferente de `agentLinkRules`). Usam a mesma sintaxe de expressão
+lógica (`&&` / `||`) sobre propriedades de outras tasks. Exemplo típico: um
+`nodejs-package` que só carrega depois que a instalação de dependências do mesmo
+package terminou (`status = "FINISHED"`).
+
+```json
+"activationRules": {
+  "&&": [
+    { "property": "params.namespace", "=": "@/service-orchestrator.app" },
+    { "property": "status",           "=": "FINISHED" }
+  ]
+}
+```
 
 ## Tarefas Filhas (`children`)
-Permite a criação de uma estrutura de tarefas, onde algumas dependem de outras.
+
+Array de `ExecutionParams` aninhados. As tasks filhas são criadas
+recursivamente com o `taskId` da task atual como `pTaskId` (ver
+[`CreateTask`](../src/TaskExecutor.js)). Uma task com filhas (típico de
+`application-instance`) só ativa quando **todas as filhas estão ativas** (ver
+[`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.js)),
+formando a hierarquia aplicação → serviços → endpoints.
 
 ## Como o Executor de Tarefas usa os ExecutionParams
 

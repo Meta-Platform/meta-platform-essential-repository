@@ -78,6 +78,9 @@ vida das tasks. Ver
 | [endpoint-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/endpoint-instance.lib/README.md) | `endpoint-instance` |
 | [command-application.lib](./Runtime.Module/EssentialTaskLoaders.layer/command-application.lib/README.md) | `command-application` |
 
+Para **criar um novo task loader (object loader)**, siga o
+[Guia: como criar e usar um Object Loader](./Runtime.Module/Executor.layer/task-executor.lib/docs/guia-criar-object-loader.md).
+
 ### Metadata helpers
 
 `Runtime.Module/MetadataHelpers.layer` — montam e traduzem os metadados:
