@@ -6,6 +6,7 @@ const colors = SmartRequire("colors")
 const CreatePackageExecutableScript             = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
 const GetApplicationExecutionContent            = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
 const GetCommandLineApplicationExecutionContent = require("../../../../script-file-utilities.lib/src/GetCommandLineApplicationExecutionContent")
+const GetDesktopApplicationExecutionContent     = require("../../../../script-file-utilities.lib/src/GetDesktopApplicationExecutionContent")
 
 const ConstructEcosystemStructure     = require("../../Domains/ConstructEcosystemStructure")
 const InstallPackageExecutor          = require("./InstallPackageExecutor")
@@ -92,6 +93,25 @@ const Install = async ({
         packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
         executableScriptFilename:"execute-command-line-application-dbg",
+        debugMode:true,
+        loggerEmitter
+    })
+
+    await CreatePackageExecutableScript({
+        installationDataDir,
+        ecosystemDefaults,
+        packageExecutorBinaryName,
+        buildContentFunction: GetDesktopApplicationExecutionContent,
+        executableScriptFilename:"execute-desktop-application",
+        loggerEmitter
+    })
+
+    await CreatePackageExecutableScript({
+        installationDataDir,
+        ecosystemDefaults,
+        packageExecutorBinaryName,
+        buildContentFunction: GetDesktopApplicationExecutionContent,
+        executableScriptFilename:"execute-desktop-application-dbg",
         debugMode:true,
         loggerEmitter
     })

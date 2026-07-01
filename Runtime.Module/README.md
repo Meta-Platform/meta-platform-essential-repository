@@ -9,6 +9,7 @@ Peças de **tempo de execução**: o executor de tarefas, os *task loaders*
 - **EssentialTaskLoaders** *Layer*
     - [**application-instance** *library*](./EssentialTaskLoaders.layer/application-instance.lib/README.md)
     - [**command-application** *library*](./EssentialTaskLoaders.layer/command-application.lib/README.md)
+    - [**desktop-window-instance** *library*](./EssentialTaskLoaders.layer/desktop-window-instance.lib/README.md)
     - [**endpoint-instance** *library*](./EssentialTaskLoaders.layer/endpoint-instance.lib/README.md)
     - [**install-nodejs-package-dependencies** *library*](./EssentialTaskLoaders.layer/install-nodejs-package-dependencies.lib/README.md)
     - [**nodejs-package** *library*](./EssentialTaskLoaders.layer/nodejs-package.lib/README.md)

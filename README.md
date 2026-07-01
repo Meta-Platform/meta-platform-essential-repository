@@ -77,6 +77,7 @@ vida das tasks. Ver
 | [service-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/service-instance.lib/README.md) | `service-instance` |
 | [endpoint-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/endpoint-instance.lib/README.md) | `endpoint-instance` |
 | [command-application.lib](./Runtime.Module/EssentialTaskLoaders.layer/command-application.lib/README.md) | `command-application` |
+| [desktop-window-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/desktop-window-instance.lib/README.md) | `desktop-window-instance` |
 
 Para **criar um novo task loader (object loader)**, siga o
 [Guia: como criar e usar um Object Loader](./Runtime.Module/Executor.layer/task-executor.lib/docs/guia-criar-object-loader.md).
@@ -96,7 +97,7 @@ e
 
 Confirmado em
 [`dependency-references.json`](https://github.com/Meta-Platform/meta-platform-package-executor-command-line/blob/main/src/Configs/dependency-references.json):
-`task-executor.lib`, os 6 task loaders, os 4 metadata helpers,
+`task-executor.lib`, os 7 task loaders, os 4 metadata helpers,
 `json-file-utilities.lib`, `repository-utilities.lib`, `environment-handler.lib` e
 `utilities.lib`.
 

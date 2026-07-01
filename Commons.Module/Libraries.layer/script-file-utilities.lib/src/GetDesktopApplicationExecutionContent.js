@@ -1,0 +1,28 @@
+const GetDesktopApplicationExecutionContent = ({
+    RENDER_BINARY_DIR_PATH,
+    RENDER_ECOSYSTEM_DATA_PATH,
+    RENDER_PKG_CONF_DIRNAME_METADATA,
+    RENDER_DIRNAME_MINIMAL_NODEJS_DEPENDENCIES,
+    RENDER_DIRNAME_CONFIGURATIONS_DIR,
+    debugMode=false
+}) =>
+`#!/bin/bash
+
+ECOSYSTEM_DATA_PATH="${RENDER_ECOSYSTEM_DATA_PATH}"
+
+ECOSYSTEM_DEFAULT="$ECOSYSTEM_DATA_PATH/${RENDER_DIRNAME_CONFIGURATIONS_DIR}/ecosystem-defaults.json"
+NODEJS_DEPS_PATH="$ECOSYSTEM_DATA_PATH/${RENDER_DIRNAME_MINIMAL_NODEJS_DEPENDENCIES}"
+
+PACKAGE_PATH="$REPOSITORY_PATH/$PACKAGE_REPO_PATH"
+STARTUP_JSON="$REPOSITORY_PATH/$PACKAGE_REPO_PATH/${RENDER_PKG_CONF_DIRNAME_METADATA}/startup-params.json"
+
+pkg-exec${debugMode ? "-dbg" : ""} --package "$PACKAGE_PATH" \
+--startupJson "$STARTUP_JSON" \
+--ecosystemDefault "$ECOSYSTEM_DEFAULT" \
+--ecosystemData "$ECOSYSTEM_DATA_PATH" \
+--nodejsProjectDependencies "$NODEJS_DEPS_PATH" \
+--verbose \
+--supervisorSocket "$SUPERVISOR_SOCKET_PATH"
+`
+
+module.exports = GetDesktopApplicationExecutionContent

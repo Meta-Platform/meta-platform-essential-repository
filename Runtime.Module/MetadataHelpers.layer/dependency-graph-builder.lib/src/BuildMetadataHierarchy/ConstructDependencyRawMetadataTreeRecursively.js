@@ -8,6 +8,7 @@ const ResolveDependenciesPathsByBoundParams = require("./ResolveDependenciesPath
 const HasEndpoints   = ({ endpoints })   => Boolean(endpoints && endpoints.length > 0)
 const HasServices    = ({ services })    => Boolean(services && services.length > 0)
 const HasExecutables = ({ executables }) => Boolean(executables && executables.length > 0)
+const HasWindows     = ({ windows })     => Boolean(windows && windows.length > 0)
 
 const HasBootConfiguration = ({ boot }) => Boolean(boot)
 
@@ -33,6 +34,7 @@ const ConstructDependencyRawMetadataTreeRecursively = async ({
     const bootHasServices    = isBootAvailable && HasServices(metadata.boot)
     const bootHasEndpoints   = isBootAvailable && HasEndpoints(metadata.boot)
     const bootHasExecutables = isBootAvailable && HasExecutables(metadata.boot)
+    const bootHasWindows     = isBootAvailable && HasWindows(metadata.boot)
 
     const _GetLocalNamespace = () => metadata.package.namespace
 
@@ -52,7 +54,11 @@ const ConstructDependencyRawMetadataTreeRecursively = async ({
 
             const dependency = _GetDependency(bootItemMetadata)
 
-            const path = await ResolveDependencyPath({ 
+            // Itens sem dependência (ex.: janelas .desktopapp com conteúdo local)
+            // não puxam outro package para a hierarquia.
+            if(!dependency) return []
+
+            const path = await ResolveDependencyPath({
                 packageList,
                 dependency, 
                 REPOS_CONF_EXT_GROUP_DIR
@@ -96,7 +102,8 @@ const ConstructDependencyRawMetadataTreeRecursively = async ({
     const children = [
         ...bootHasServices    ? await _GetExternalDependecies("services")    : [],
         ...bootHasEndpoints   ? await _GetExternalDependecies("endpoints")   : [],
-        ...bootHasExecutables ? await _GetExternalDependecies("executables") : []
+        ...bootHasExecutables ? await _GetExternalDependecies("executables") : [],
+        ...bootHasWindows     ? await _GetExternalDependecies("windows")     : []
     ]
 
     return {
