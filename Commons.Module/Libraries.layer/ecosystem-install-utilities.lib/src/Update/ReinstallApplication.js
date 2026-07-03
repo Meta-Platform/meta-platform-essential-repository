@@ -5,6 +5,7 @@ const colors = SmartRequire("colors")
 const RecreateExecutableScript = require("../../../script-file-utilities.lib/src/RecreateExecutableScript")
 const BuildApplicationScriptContent = require("../Helpers/BuildApplicationScriptContent")
 const BuildCommandLineApplicationScriptContent = require("../Helpers/BuildCommandLineApplicationScriptContent")
+const BuildDesktopAppScriptContent = require("../Helpers/BuildDesktopAppScriptContent")
 
 const ReinstallApplication = async ({
     namespace,
@@ -47,20 +48,32 @@ const ReinstallApplication = async ({
     const supervisorSocketFilePath = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
     const _CreateScriptContent = ({debugMode=false}) => {
-        return appType.toUpperCase() === "CLI" 
-        ? BuildCommandLineApplicationScriptContent({
-            PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_PATH: deployedRepoPath,
-            EXEC_NAME: executable,
-            supervisorSocketFilePath,
-            debugMode
-        })
-        : appType.toUpperCase() === "APP" && BuildApplicationScriptContent({
-            PACKAGE_REPO_PATH: packageNamespace,
-            REPOSITORY_PATH: deployedRepoPath,
-            supervisorSocketFilePath,
-            debugMode
-        })
+        switch(appType.toUpperCase()){
+            case "CLI":
+                return BuildCommandLineApplicationScriptContent({
+                    PACKAGE_REPO_PATH: packageNamespace,
+                    REPOSITORY_PATH: deployedRepoPath,
+                    EXEC_NAME: executable,
+                    supervisorSocketFilePath,
+                    debugMode
+                })
+            case "APP":
+                return BuildApplicationScriptContent({
+                    PACKAGE_REPO_PATH: packageNamespace,
+                    REPOSITORY_PATH: deployedRepoPath,
+                    supervisorSocketFilePath,
+                    debugMode
+                })
+            case "DESKTOP":
+                return BuildDesktopAppScriptContent({
+                    PACKAGE_REPO_PATH: packageNamespace,
+                    REPOSITORY_PATH: deployedRepoPath,
+                    supervisorSocketFilePath,
+                    debugMode
+                })
+            default:
+                throw `applicationData.appType inválido: ${appType}`
+        }
     }
     
     const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)

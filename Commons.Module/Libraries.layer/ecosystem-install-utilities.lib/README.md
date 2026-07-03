@@ -35,13 +35,19 @@ src/
 ├── Update/
 │   ├── ReinstallApplication.js
 │   └── UpdateEcosystem/
+│       ├── index.js
+│       ├── Update.js
+│       ├── UpdatePackageExecutor.js
 │       ├── CreateEcosystemDefaultsJsonFile.js
 │       └── DownloadPackageExecutorBin.js
 │
 ├── Helpers/
 │   ├── PrepareContext.js
 │   ├── ConvertPathToAbsolutPath.js
+│   ├── SynchronizeNodejsDependencies.js
+│   ├── BuildApplicationScriptContent.js
 │   ├── BuildCommandLineApplicationScriptContent.js
+│   ├── BuildDesktopAppScriptContent.js
 │   ├── BuildObjectFromPrefix.js
 │   ├── RestoreDir.js
 │   ├── VerifyDirExit.js
@@ -60,19 +66,26 @@ src/
     └── RestoreEcosystemStructure.js
 ```
 
+> As funções de construção de script incluem `BuildDesktopAppScriptContent.js`,
+> usada para instalar/reinstalar packages `.desktopapp` (`appType` `DESKTOP`),
+> além das variantes de CLI (`command-line`) e aplicação (`app`).
+
 ---
 
 ## API – Funções Públicas
 
-| Função                    | Módulo                         | Parâmetros                                 | Retorno       | Descrição                                                                                                  |
-| ------------------------- | ------------------------------ | ------------------------------------------ | ------------- | ---------------------------------------------------------------------------------------------------------- |
-| InstallEcosystemByProfile | InstallEcosystemByProfile.js   | profile:Object, options:Object             | Promise<void> | Instala um ecossistema completo a partir de um perfil declarativo, orquestrando repositórios e aplicações. |
-| UpdateEcosystemByProfile  | UpdateEcosystemByProfile.js    | profile:Object, options:Object             | Promise<void> | Atualiza um ecossistema existente preservando estado e compatibilidade.                                    |
-| InstallRepository         | InstallRepository.js           | repositoryConfig:Object, context:Object    | Promise<void> | Obtém, valida e registra um repositório no ecossistema.                                                    |
-| UpdateRepository          | UpdateRepository.js            | repositoryConfig:Object, context:Object    | Promise<void> | Atualiza um repositório já instalado aplicando regras de limpeza e migração.                               |
-| ChangeRepositorySource    | ChangeRepositorySource.js      | repositoryId:string, newSource:Object      | Promise<void> | Altera a origem de download de um repositório mantendo seu registro interno.                               |
-| InstallApplication        | Install/InstallApplication.js  | applicationMetadata:Object, context:Object | Promise<void> | Instala uma aplicação individual dentro de um repositório.                                                 |
-| ReinstallApplication      | Update/ReinstallApplication.js | applicationMetadata:Object, context:Object | Promise<void> | Reinstala uma aplicação garantindo estado limpo.                                                           |
+Todas as funções recebem **um único objeto** com parâmetros nomeados (não
+argumentos posicionais). O `loggerEmitter` (um `EventEmitter`) é opcional em todas.
+
+| Função | Módulo | Parâmetros (chaves do objeto) | Retorno | Descrição |
+| ------ | ------ | ----------------------------- | ------- | --------- |
+| InstallEcosystemByProfile | InstallEcosystemByProfile.js | `{ ecosystemDefaults, npmDependencies, initialRepositorySource, profile, installationDataDir, repositoriesInstallData, installationPath, loggerEmitter }` | `Promise<void>` | Instala um ecossistema completo a partir de um perfil declarativo, orquestrando repositórios e aplicações. |
+| UpdateEcosystemByProfile | UpdateEcosystemByProfile.js | objeto único de configuração (análogo a `InstallEcosystemByProfile`) | `Promise<void>` | Atualiza um ecossistema existente preservando estado e compatibilidade. |
+| InstallRepository | InstallRepository.js | `{ repositoryNamespace, sourceData, executablesToInstall, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Obtém, valida e registra um repositório e instala seus executáveis. |
+| UpdateRepository | UpdateRepository.js | `{ repositoryNamespace, executablesToInstall, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Atualiza um repositório já instalado aplicando limpeza e reinstalação. |
+| ChangeRepositorySource | ChangeRepositorySource.js | `{ repositoryNamespace, sourceData, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Altera a origem (`sourceData`) de um repositório mantendo seu registro interno. |
+| InstallApplication | Install/InstallApplication.js | `{ namespace, deployedRepoPath, applicationData, installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, REPOS_CONF_FILENAME_REPOS_DATA, supervisorSocketDirPath, loggerEmitter }` | `Promise<string>` (caminho do script do executável gerado) | Instala uma aplicação individual (`CLI`/`APP`/`DESKTOP`) dentro de um repositório. |
+| ReinstallApplication | Update/ReinstallApplication.js | `{ namespace, applicationData, deployedRepoPath, installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, supervisorSocketDirPath, loggerEmitter }` | `Promise<string>` (caminho do script do executável gerado) | Reinstala uma aplicação recriando o script do executável. |
 
 ---
 

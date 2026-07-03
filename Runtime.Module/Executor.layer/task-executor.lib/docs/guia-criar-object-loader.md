@@ -234,7 +234,7 @@ carregando cada loader como uma `.lib`:
 
 - [`StandardTaskExecutorMachine.service`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Main.Module/Services.layer/task-executor-machine.service/src/Services/StandardTaskExecutorMachine.service.js)
   (a máquina de execução usada pelo supervisor);
-- [`RunPackage.command`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Main.Module/Application.layer/package-runner.cli/src/Commands/RunPackage.command.js)
+- [`RunPackage.command`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Main.Module/PackageApplication.layer/package-runner.cli/src/Commands/RunPackage.command.js)
   (a CLI `package-runner`).
 
 Para que um **novo** loader essencial seja reconhecido pela plataforma, você o
@@ -300,7 +300,7 @@ Para criar o seu seguindo a mesma convenção:
 ```
 meu-loader.lib/
 ├── metadata/
-│   └── package.json        # metadados do pacote (namespace @/meu-loader.lib, type "lib")
+│   └── package.json        # metadados do pacote (apenas namespace, ex.: @/meu-loader.lib)
 ├── package.json
 ├── README.md
 └── src/
@@ -345,7 +345,7 @@ Estude os loaders essenciais — cada um ilustra um padrão:
 | [`service-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/service-instance.lib/src/ServiceInstance.taskLoader.js) | Serviço de longa duração | `onReady`/`onClose` → `ACTIVE`/`TERMINATED`; expor o objeto do serviço. |
 | [`endpoint-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/endpoint-instance.lib/src/EndpointInstance.taskLoader.js) | Consome service object | Receber `serverService` via `linkedParameters` e usá-lo. |
 | [`command-application`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/command-application.lib/src/CommandApplication.taskLoader.js) | CLI | `FINISHED` + `STOP_ALL_TASKS` para encerrar o plano inteiro. |
-| [`desktop-window-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/desktop-window-instance.lib/src/DesktopWindowInstance.taskLoader.js) | Serviço de longa duração + encerra o plano | `spawn` do Electron; abre a janela via `loadURL` (app web local que sobe junto) ou `loadFile` (HTML estático); `ACTIVE` enquanto a janela está aberta; `STOP_ALL_TASKS` ao fechá-la. |
+| [`desktop-window-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/desktop-window-instance.lib/src/DesktopWindowInstance.taskLoader.js) | Serviço de longa duração | `spawn` do Electron; abre a janela via `loadURL` (app web local que sobe junto) ou `loadFile` (HTML estático); `ACTIVE` enquanto a janela está aberta; emite `TERMINATED` (da própria task) quando a janela é fechada. |
 
 ---
 

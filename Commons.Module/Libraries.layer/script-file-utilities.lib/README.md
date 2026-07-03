@@ -15,7 +15,8 @@ Cria, recria e remove os **scripts executáveis** instalados em
 | `RemoveExecutableScript.js` | Remove um script executável. |
 | `MakeFileExecutable.js` | Torna um arquivo executável (permissões). |
 | `CreateUtf8TextFile.js` | Cria um arquivo de texto UTF-8. |
-| `GetApplicationExecutionContent.js` | Gera o conteúdo de execução de uma aplicação. |
-| `GetCommandLineApplicationExecutionContent.js` | Gera o conteúdo de execução de uma CLI. |
+| `GetApplicationExecutionContent.js` | Gera o conteúdo de execução de uma aplicação (`.app`). |
+| `GetCommandLineApplicationExecutionContent.js` | Gera o conteúdo de execução de uma CLI (`.cli`). |
+| `GetDesktopApplicationExecutionContent.js` | Gera o conteúdo de execução de uma aplicação desktop (`.desktopapp`). |
 
 > [README do repositório](../../../README.md)

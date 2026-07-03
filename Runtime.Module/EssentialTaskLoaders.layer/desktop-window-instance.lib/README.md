@@ -25,7 +25,7 @@ cada entrada da seção `windows` do `boot.json` vira uma task
 |--------|------------------|
 | `DesktopWindowInstance.taskLoader.js` | Carrega/instancia o `desktop-window-instance`; mantém a task `ACTIVE` enquanto a janela estiver aberta. |
 | `OpenElectronWindow.js` | Faz `spawn` do binário do Electron apontando para `electron-main.js`. |
-| `electron-main.js` | Processo *main* do Electron: cria a `BrowserWindow` e faz `loadFile` do HTML. |
+| `electron-main.js` | Processo *main* do Electron: cria a `BrowserWindow` e carrega o conteúdo — no modo `loadURL`, exibe uma tela de carregamento e faz *polling* HTTP até o servidor local responder antes de apontar para a `url`; no modo `loadFile`, carrega o HTML local. |
 
 ## Dependência
 

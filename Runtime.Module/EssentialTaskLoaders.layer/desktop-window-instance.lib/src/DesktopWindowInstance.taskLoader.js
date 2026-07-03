@@ -7,6 +7,7 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
 
     let windowProcess
     let wasStopped = false
+    let isProcessExitScheduled = false
 
     const {
         url,
@@ -17,6 +18,12 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
         height
     } = loaderParams
 
+    const ScheduleProcessExit = () => {
+        if(isProcessExitScheduled) return
+        isProcessExitScheduled = true
+        setTimeout(() => process.exit(0), 100)
+    }
+
     const Start = () => {
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         try{
@@ -25,6 +32,9 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
             windowProcess.on("exit", () => {
                 windowProcess = undefined
                 executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+                if(!wasStopped)
+                    executorChannel.emit(CommandChannelEventTypes.STOP_ALL_TASKS)
+                ScheduleProcessExit()
             })
 
             executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
@@ -41,6 +51,7 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
             windowProcess.kill()
         } else {
             executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+            ScheduleProcessExit()
         }
     }
 
