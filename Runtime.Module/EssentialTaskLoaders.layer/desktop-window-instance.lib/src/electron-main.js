@@ -1,7 +1,8 @@
-const { app, BrowserWindow, Menu, dialog, ipcMain, Notification } = require("electron")
+const { app, BrowserWindow, Menu, dialog, ipcMain, Notification, nativeImage } = require("electron")
 const http  = require("http")
 const https = require("https")
 const crypto = require("crypto")
+const fs = require("fs")
 const { join } = require("path")
 
 const DEFAULT_WIDTH  = 1024
@@ -58,10 +59,82 @@ const GetBundleSignature = async (targetUrl) => {
     return crypto.createHash("sha1").update(response.body).digest("hex")
 }
 
+// O Electron/nativeImage não suporta SVG. Como os pacotes só têm icon.svg, aqui
+// rasterizamos o SVG para PNG em runtime usando uma janela oculta do próprio
+// Electron (Chromium): desenha o SVG num <canvas> e exporta PNG. Sem dependência
+// externa. Retorna um nativeImage (ou undefined em falha).
+const RasterizeSvgToPng = async (svgPath, size = 256) => {
+    let svgContent
+    try {
+        svgContent = fs.readFileSync(svgPath, "utf8")
+    } catch(e) {
+        return undefined
+    }
+    // data URL do SVG (mesma origem → não "tainta" o canvas ao exportar PNG)
+    const svgDataUrl = `data:image/svg+xml;base64,${Buffer.from(svgContent).toString("base64")}`
+
+    // janela OCULTA (não offscreen) — mais confiável para rodar canvas/Image
+    const hidden = new BrowserWindow({
+        show: false,
+        width: size,
+        height: size,
+        webPreferences: {}
+    })
+
+    // nunca deixa uma etapa travar para sempre
+    const withTimeout = (promise, ms) => Promise.race([
+        Promise.resolve(promise).catch(() => undefined),
+        new Promise((resolve) => setTimeout(() => resolve(undefined), ms))
+    ])
+
+    try {
+        await withTimeout(hidden.loadURL("data:text/html;charset=utf-8,<html><body></body></html>"), 4000)
+        const pngDataUrl = await withTimeout(hidden.webContents.executeJavaScript(`
+            new Promise((resolve) => {
+                const img = new Image()
+                img.onload = () => {
+                    try {
+                        const canvas = document.createElement("canvas")
+                        canvas.width = ${size}; canvas.height = ${size}
+                        const ctx = canvas.getContext("2d")
+                        ctx.clearRect(0, 0, ${size}, ${size})
+                        ctx.drawImage(img, 0, 0, ${size}, ${size})
+                        resolve(canvas.toDataURL("image/png"))
+                    } catch(e) { resolve(null) }
+                }
+                img.onerror = () => resolve(null)
+                img.src = ${JSON.stringify(svgDataUrl)}
+            })
+        `, true), 5000)
+
+        if(!pngDataUrl) return undefined
+        const image = nativeImage.createFromDataURL(pngDataUrl)
+        return image.isEmpty() ? undefined : image
+    } catch(e) {
+        return undefined
+    } finally {
+        if(!hidden.isDestroyed()) hidden.destroy()
+    }
+}
+
+// Aplica o ícone do pacote SEM bloquear a abertura da janela: rasteriza em
+// segundo plano e faz setIcon quando pronto. Se falhar/demorar, a janela abre
+// normalmente (só sem ícone customizado).
+const ApplyPackageIcon = (window, iconPath) => {
+    if(!iconPath) return
+    RasterizeSvgToPng(iconPath)
+        .then((image) => { if(image && !window.isDestroyed()) window.setIcon(image) })
+        .catch(() => {})
+}
+
 const CreateWindow = () => {
 
     // Sem menu (não é uma aplicação de desenvolvimento).
     Menu.setApplicationMenu(null)
+
+    const iconPath = process.env.DESKTOP_WINDOW_ICON && fs.existsSync(process.env.DESKTOP_WINDOW_ICON)
+        ? process.env.DESKTOP_WINDOW_ICON
+        : undefined
 
     const window = new BrowserWindow({
         ...process.env.DESKTOP_WINDOW_TITLE ? { title: process.env.DESKTOP_WINDOW_TITLE } : {},
@@ -78,6 +151,9 @@ const CreateWindow = () => {
     // Esta task loader cria uma única janela. Ao fechar essa janela, encerra o
     // processo Electron inteiro para não deixar renderer/GPU/network órfãos.
     window.on("closed", () => app.exit(0))
+
+    // Ícone do pacote aplicado em 2º plano (NÃO bloqueia a abertura da janela).
+    ApplyPackageIcon(window, iconPath)
 
     const url  = process.env.DESKTOP_WINDOW_URL
     const file = process.env.DESKTOP_WINDOW_FILE

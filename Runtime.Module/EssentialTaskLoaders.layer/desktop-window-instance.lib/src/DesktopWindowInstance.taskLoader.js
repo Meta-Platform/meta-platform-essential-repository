@@ -1,7 +1,17 @@
+const fs = require("fs")
+const { join } = require("path")
+
 const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
 const OpenElectronWindow = require("./OpenElectronWindow")
+
+// Ícone da janela: convenção de icon.svg na raiz do package (rootPath).
+const ResolveIconPath = (rootPath) => {
+    if(!rootPath) return undefined
+    const candidate = join(rootPath, "icon.svg")
+    return fs.existsSync(candidate) ? candidate : undefined
+}
 
 const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
 
@@ -27,7 +37,7 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
     const Start = () => {
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         try{
-            windowProcess = OpenElectronWindow({ url, file, rootPath, title, width, height })
+            windowProcess = OpenElectronWindow({ url, file, rootPath, title, width, height, iconPath: ResolveIconPath(rootPath) })
 
             windowProcess.on("exit", () => {
                 windowProcess = undefined

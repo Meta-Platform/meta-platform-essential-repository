@@ -60,11 +60,16 @@ const CreateWindowTaskParams = ({
             params: { url },
             metadataHierarchy
         })
+        // rootPath do package raiz (o próprio .desktopapp) para que a janela
+        // possa usar o ícone do pacote (icon.svg na raiz). No modo loadURL o
+        // conteúdo é servido via HTTP, então a raiz é o package da janela.
+        const rootNode = GetMetadataRootNode(metadataHierarchy)
         return {
             objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata),
             staticParameters: {
                 ...commonStaticParameters,
-                url: resolvedUrl
+                url: resolvedUrl,
+                rootPath: rootNode.path
             },
             ...boundParams ? { linkedParameters: RemapAllParams(boundParams) } : {},
             agentLinkRules: _BuildAgentLinkRules(boundParams)

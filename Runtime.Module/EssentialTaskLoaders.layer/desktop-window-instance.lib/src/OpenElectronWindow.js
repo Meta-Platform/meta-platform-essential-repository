@@ -5,7 +5,7 @@ const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-r
 
 const ELECTRON_MAIN_SCRIPT = join(__dirname, "electron-main.js")
 
-const OpenElectronWindow = ({ url, file, rootPath, title, width, height }) => {
+const OpenElectronWindow = ({ url, file, rootPath, title, width, height, iconPath }) => {
     const electronBinaryPath = SmartRequire("electron")
 
     // Modo loadURL (url) x modo loadFile (file relativo à raiz do package de conteúdo).
@@ -20,7 +20,8 @@ const OpenElectronWindow = ({ url, file, rootPath, title, width, height }) => {
             ...contentEnv,
             ...title  !== undefined ? { DESKTOP_WINDOW_TITLE:  String(title) }  : {},
             ...width  !== undefined ? { DESKTOP_WINDOW_WIDTH:  String(width) }  : {},
-            ...height !== undefined ? { DESKTOP_WINDOW_HEIGHT: String(height) } : {}
+            ...height !== undefined ? { DESKTOP_WINDOW_HEIGHT: String(height) } : {},
+            ...iconPath ? { DESKTOP_WINDOW_ICON: String(iconPath) } : {}
         }
     })
 }
