@@ -353,5 +353,3 @@ Estude os loaders essenciais — cada um ilustra um padrão:
 > [API de Referência](./api-referencia.md) ·
 > [Tipos de Object Loader](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md) ·
 > [Environment Runtime Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/environment-runtime-standard.md).
-</content>
-</invoke>

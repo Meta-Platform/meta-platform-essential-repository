@@ -6,16 +6,20 @@ O **Maintenance Toolkit Command-line** é uma ferramenta usada para configuraç�
 
 ## Perfis de Instalação
 
+Os perfis abaixo são os que possuem arquivo em `src/InstallationProfiles/`:
+
 - **localfs-minimal** Configuração mínima, instalada no diretório *home*, usando o sistema de arquivo local como fonte
 - **localfs-standard** Configuração padrão, instalada no diretório *home*, usando o sistema de arquivo local como fonte
+- **localfs-full** Configuração completa, instalada no diretório *home*, usando o sistema de arquivo local como fonte
 - **dev-localfs-minimal** Configuração mínima, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
 - **dev-localfs-standard** Configuração padrão, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
+- **dev-localfs-full** Configuração completa, instalada no local de execução do comando e não do diretório *home*, usando o sistema de arquivo local como fonte
 - **github-release-minimal** Configuração mínima, instala baixando do release hospedada no github
 - **github-release-standard** Configuração padrão, instala baixando do release hospedada no github
-- **github-repo-minimal** Configuração mínima, instala clonando do repositório do github
-- **github-repo-standard** Configuração padrão, instala clonando do repositório do github
 - **google-drive-minimal** Configuração mínima, instala baixando do google drive
 - **google-drive-standard** Configuração padrão, instala baixando do google drive
+
+> **Issue conhecido (código):** o loader de perfis (`src/Helpers/LoadAllInstalationProfiles.js`) referencia os perfis `github-repo-minimal` e `github-repo-standard`, cujos arquivos **não existem** em `src/InstallationProfiles/`. Como o `require` é feito de forma imediata, os comandos `list-profiles`, `install` e `update` atualmente quebram com `MODULE_NOT_FOUND` até que esses arquivos sejam criados ou as referências removidas.
 
 ## Comandos Disponíveis
 ### Exibir Perfis de Instalação Disponíveis
@@ -25,16 +29,25 @@ Exibe as informações sobre os perfis de instalação disponíveis na ferrament
 mytoolkit list-profiles
 ```
 
-### Instalar um Ecossistema na Pasta Padrão do Usuário
-Instala o ecossistema na pasta de usuário padrão, utilizando o perfil de instalação **standard** por padrão.
+### Instalar um Ecossistema
+Instala o ecossistema conforme o perfil de instalação informado. **Não há perfil padrão**: o perfil é obrigatório (executar `mytoolkit install` sem perfil resulta em erro).
 
 ```bash
-mytoolkit install
+mytoolkit install <nome_do_perfil>
 ```
 
 #### Exemplo:
 ```bash
 mytoolkit install github-release-standard
+```
+
+Também é possível informar um arquivo de perfil próprio com a opção `--profile-file "<caminho_do_arquivo>"` (opção declarada em `metadata/command-group.json`; atualmente os handlers de `install`/`update` ainda não a consomem — issue conhecido).
+
+### Atualizar um Ecossistema
+Atualiza um ecossistema já instalado, conforme o perfil informado (também obrigatório).
+
+```bash
+mytoolkit update <nome_do_perfil>
 ```
 
 ### Exibir Detalhes de um Perfil
@@ -44,10 +57,7 @@ Exibe informações detalhadas sobre um perfil específico, como componentes inc
 mytoolkit show profile <nome_do_perfil>
 ```
 
-#### Exemplo:
-```bash
-mytoolkit show profile dev-standard
-```
+> **Issue conhecido (código):** este comando está quebrado no momento — o handler (`src/Commands/ShowProfileInfo.command.js`) referencia perfis inexistentes (`dev-minimal`, `dev-standard`, `minimal`, `standard`) via `require` imediato, o que faz o comando falhar com `MODULE_NOT_FOUND` para qualquer perfil informado.
 
 ### Instalar com Perfis Específicos
 Escolha o perfil de instalação desejado para ajustar a configuração do ecossistema de acordo com suas necessidades.
@@ -78,6 +88,5 @@ mytoolkit install --installation-path "<caminho_para_dados>"
 mytoolkit install --installation-path "~/xpto/EcosystemData"
 ```
 
-Os perfis de instalação permitem que você escolha a configuração mais adequada para o seu ambiente. Abaixo está uma lista dos perfis disponíveis:
-
+Os perfis de instalação permitem que você escolha a configuração mais adequada para o seu ambiente. A lista completa de perfis está na seção [Perfis de Instalação](#perfis-de-instalação) acima.
 

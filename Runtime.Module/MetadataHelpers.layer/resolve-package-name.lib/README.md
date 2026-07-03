@@ -2,8 +2,9 @@
 
 - **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/resolve-package-name.lib`
 
-Resolve o **nome/namespace de um pacote** a partir de suas referências, apoiando a
-montagem da hierarquia de metadados e do plano de execução.
+Resolve o **nome/namespace de um pacote** a partir de suas referências. É usado em
+runtime pelos task loaders `nodejs-package` e `install-nodejs-package-dependencies`
+(não na montagem da hierarquia de metadados / plano de execução).
 
 ## Exports (`src/`)
 

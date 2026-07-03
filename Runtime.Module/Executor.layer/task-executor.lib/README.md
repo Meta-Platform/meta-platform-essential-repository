@@ -10,7 +10,7 @@ O Task Executor é uma biblioteca projetada para facilitar a gestão e execuçã
 
 ## Características Principais
 
-- **Gerenciamento do Ciclo de Vida das Tarefas**: Suporte completo ao ciclo de vida de uma tarefa, incluindo criação, execução, pausa, e finalização.
+- **Gerenciamento do Ciclo de Vida das Tarefas**: Suporte ao ciclo de vida de uma tarefa, incluindo criação, execução, interrupção (`StopTask`) e finalização. Não há estado de *pausa*.
 - **Eventos e Dependências**: Facilidades para lidar com eventos relacionados às tarefas e gerenciar dependências entre elas.
 - **Condições de Ativação**: Capacidade de especificar condições sob as quais as tarefas devem ser ativadas ou suspensas.
 - **Hierarquia de Tarefas**: Suporte para criação de tarefas em uma estrutura hierárquica, permitindo complexidade organizada e dependências entre tarefas.
@@ -21,6 +21,7 @@ Este exemplo mostra como usar o Task Executor para configurar um servidor Expres
 // Importa as dependências necessárias
 const express = require('express')
 const TaskStatusTypes = require("task-executor.lib/src/TaskStatusTypes")
+const CommandChannelEventTypes = require("task-executor.lib/src/CommandChannelEventTypes")
 const TaskExecutor = require("task-executor.lib/src/TaskExecutor")
 
 // Define um loader personalizado para o servidor Express
@@ -80,11 +81,13 @@ setTimeout(() => {
 
 ## API de Referência
 
-- `CreateTask(executionParams[, pTaskId])`: Cria uma nova tarefa.
+- `CreateTask(executionParams[, pTaskId])`: Cria uma nova tarefa (e, recursivamente, seus `children`). Retorna o array de `taskId`s criados.
+- `CreateTasks(executionParamsList[, pTaskId])`: Cria várias tarefas a partir de uma lista. Retorna o array de `taskId`s criados.
 - `GetTask(taskId)`: Retorna informações sobre uma tarefa específica.
 - `ListTasks()`: Lista todas as tarefas criadas.
 - `StopTask(taskId)`: Interrompe a execução de uma tarefa.
-- `AddTaskStatusListener(listenerFunction)`: Adiciona um listener para mudanças de status nas tarefas.
+- `StopTasks(taskIdList)`: Interrompe várias tarefas.
+- `AddTaskStatusListener(listenerFunction)`: Adiciona um listener para mudanças de status nas tarefas. O callback recebe um objeto `{ taskId, status, objectLoaderType }`.
 
 Para acessar a documentação completa da API de Referência do Task Executor, visite o seguinte link: [API de Referência do Task Executor](./docs/api-referencia.md).
 

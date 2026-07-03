@@ -2,13 +2,13 @@
 
 - **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/load-metatada-dir.lib`
 
-Carrega o conteúdo da pasta [`metadata/`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/metadata.md)
+Carrega o conteúdo de um diretório de [metadados](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/metadata.md)
 de um pacote, tornando seus metadados disponíveis para a plataforma.
 
 ## Exports (`src/`)
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `LoadMetadataDir.js` | Lê os arquivos de metadados de um pacote a partir do diretório `metadata/`. |
+| `LoadMetadataDir.js` | `LoadMetadataDir({ metadataDirName, path })`: lê os arquivos de metadados de um pacote. O nome do diretório é **parametrizável** por `metadataDirName` (tipicamente `metadata/`). |
 
 > [README do repositório](../../../README.md)

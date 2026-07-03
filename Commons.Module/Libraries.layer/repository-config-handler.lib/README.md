@@ -2,9 +2,12 @@
 
 - **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/repository-config-handler.lib`
 
-Manipula os arquivos de **configuração de repositórios** do ecossistema —
-`sources.json` (fontes) e `repositories.json` (instalados) — descritos no
+Manipula o arquivo **`repositories.json`** (repositórios instalados, incluindo a
+fonte de cada um) do ecossistema, descrito no
 [Ecosystem Data Directory Hierarchy Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/ecosystem-data-directory-hierarchy-standard.md).
+O `sources.json` inicial é criado pelo `ecosystem-install-utilities.lib`; esta lib
+opera sobre o `repositories.json` (inclusive `ChangeSourceRepository`, que altera a
+fonte registrada nele).
 
 ## Exports (`src/`)
 

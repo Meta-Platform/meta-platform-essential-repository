@@ -17,4 +17,3 @@ código do package durante a execução de um plano pelo *task executor*.
 > Para criar o seu próprio loader, veja o
 > [Guia: como criar e usar um Object Loader](../../Executor.layer/task-executor.lib/docs/guia-criar-object-loader.md).
 > [README do repositório](../../../README.md)
-</content>

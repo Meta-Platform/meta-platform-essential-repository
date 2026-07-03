@@ -9,7 +9,7 @@
 Atualiza a lista de repositórios disponíveis consultando todas as fontes registradas.
 
 ```bash
-# PEDENDENTE
+# PENDENTE
 repo update sources
 ```
 
@@ -20,7 +20,7 @@ repo update sources
 Atualiza todos os repositórios instalados para suas versões mais recentes.
 
 ```bash
-# PEDENDENTE
+# PENDENTE
 repo update all
 ```
 
@@ -29,7 +29,7 @@ repo update all
 Remove um repositório instalado do ecossistema.
 
 ```bash
-# PEDENDENTE
+# PENDENTE
 repo uninstall [repositoryNamespace]
 ```
 

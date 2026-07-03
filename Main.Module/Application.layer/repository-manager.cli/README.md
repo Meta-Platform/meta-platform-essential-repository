@@ -49,9 +49,12 @@ O **Repository Manager** é uma ferramenta de linha de comando para gerenciament
 #### `change installed source [repositoryNamespace] [sourceType]`
 **Descrição:** Trocar uma fonte de repositório instalado
 
+**Parâmetros:**
+- `repositoryNamespace` (positional, string) - nome do repositório
+- `sourceType` (positional, string) - tipo de fonte
+
 #### `remove source [repositoryNamespace] [sourceType]`
 **Descrição:** Remove uma fonte de repositório
-
 
 **Parâmetros:**
 - `repositoryNamespace` (positional, string) - nome do repositório

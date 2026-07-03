@@ -23,5 +23,4 @@ streaming de log e suas tarefas. É a base da CLI `supervisor`
 > derivada da fonte canônica
 > [`proto/package_executor_rpc.proto`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/proto/package_executor_rpc.proto)
 > do Open Standard (sincronização manual, validada por `diff`).
-> Existe um item de planejamento interno para remover o `MountTaskTable` desta
-> lib. [README do repositório](../../../README.md)
+> [README do repositório](../../../README.md)

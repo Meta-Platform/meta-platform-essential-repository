@@ -155,10 +155,10 @@ satisfazem seus requisitos (ver
 ## Regras de Ativação (`activationRules`)
 
 Estabelecem condições que devem ser verdadeiras para a task ativar, sem injetar
-nenhum objeto (diferente de `agentLinkRules`). Usam a mesma sintaxe de expressão
-lógica (`&&` / `||`) sobre propriedades de outras tasks. Exemplo típico: um
-`nodejs-package` que só carrega depois que a instalação de dependências do mesmo
-package terminou (`status = "FINISHED"`).
+nenhum objeto (diferente de `agentLinkRules`). Usam expressão lógica com `&&`
+(conjunção) sobre propriedades de outras tasks — o avaliador de referência **não**
+suporta `||`. Exemplo típico: um `nodejs-package` que só carrega depois que a
+instalação de dependências do mesmo package terminou (`status = "FINISHED"`).
 
 ```json
 "activationRules": {
@@ -188,4 +188,4 @@ O Executor de Tarefas usa os ExecutionParams para criar e gerenciar tarefas. O p
 
 3. **Execução da Tarefa**: A tarefa espera pelas condições certas para começar, baseado nas regras de ativação dos ExecutionParams.
 
-4. **Gerenciamento do Ciclo de Vida da Tarefa**: Os ExecutionParams também ajudam a decidir como e quando pausar, reiniciar ou terminar uma tarefa.
+4. **Gerenciamento do Ciclo de Vida da Tarefa**: Os ExecutionParams também ajudam a decidir como e quando iniciar, interromper ou terminar uma tarefa.

@@ -10,6 +10,6 @@ serviços (injetada como `printDataLogLib`).
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `PrintDataLog.js` | Recebe `{ sourceName, type, message }` e imprime o log formatado. |
+| `PrintDataLog.js` | `PrintDataLog(dataLog, eventOrigin)`: recebe `dataLog` (`{ sourceName, type, message }`) e `eventOrigin` (a `[origem]` do formato) e imprime o log formatado. |
 
 > [README do repositório](../../../README.md)
