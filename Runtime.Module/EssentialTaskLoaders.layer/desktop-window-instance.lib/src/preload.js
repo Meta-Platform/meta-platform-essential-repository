@@ -16,8 +16,21 @@ contextBridge.exposeInMainWorld("buildProgress", {
 // chama os services hospedados no processo principal do Electron por IPC, no
 // lugar de HTTP. window.metaGui só existe nas aplicações Electron GUI-host —
 // o webgui usa isso para detectar o transporte (IPC vs axios/HTTP).
+//
+//  - invoke/getManifest: request/response (equivale a GET/POST/PUT/DELETE).
+//  - stream: canal bidirecional (equivale a WebSocket) para logs/console/
+//    execução ao vivo. O renderer abre um stream por id; o main roteia os
+//    eventos (open/message/close/error) de volta por "metaGui:stream:event".
+//    O webgui embrulha isso num objeto compatível com WebSocket (IPCWebSocket).
 contextBridge.exposeInMainWorld("metaGui", {
     invoke: (serviceName, method, args) =>
         ipcRenderer.invoke("metaGui:invoke", { serviceName, method, args }),
-    getManifest: () => ipcRenderer.invoke("metaGui:manifest")
+    getManifest: () => ipcRenderer.invoke("metaGui:manifest"),
+    stream: {
+        open:  (streamId, serviceName, method, args) =>
+            ipcRenderer.send("metaGui:stream:open", { streamId, serviceName, method, args }),
+        send:  (streamId, data) => ipcRenderer.send("metaGui:stream:send", { streamId, data }),
+        close: (streamId) => ipcRenderer.send("metaGui:stream:close-request", { streamId }),
+        onEvent: (callback) => ipcRenderer.on("metaGui:stream:event", (_event, payload) => callback(payload))
+    }
 })

@@ -392,6 +392,63 @@ const CreateGuiHostWindow = async () => {
     })
     ipcMain.handle("metaGui:manifest", async () => guiServices ? guiServices.GetManifest() : {})
 
+    // Canal de streaming (equivalente a WebSocket). Para cada stream aberto pelo
+    // renderer, cria um objeto ws-like (wsShim) com a MESMA API que os controllers
+    // esperam do `ws` do express-ws (send / on("close") / on("message") / close /
+    // readyState) e o entrega ao guiServices.InvokeStream, que chama o método WS
+    // do controller. Os eventos voltam ao renderer por "metaGui:stream:event".
+    const streams = {}
+    const _StreamSend = (sender, streamId, type, data) => {
+        if(!sender.isDestroyed())
+            sender.send("metaGui:stream:event", { streamId, type, ...(data !== undefined ? { data } : {}) })
+    }
+    ipcMain.on("metaGui:stream:open", (event, { streamId, serviceName, method, args } = {}) => {
+        if(!guiServices || typeof guiServices.InvokeStream !== "function"){
+            _StreamSend(event.sender, streamId, "error")
+            return
+        }
+        const messageCbs = []
+        const closeCbs = []
+        let closed = false
+        const wsShim = {
+            readyState: 1,
+            send: (payload) => _StreamSend(event.sender, streamId, "message", typeof payload === "string" ? payload : JSON.stringify(payload)),
+            close: () => {
+                if(closed) return
+                closed = true
+                wsShim.readyState = 3
+                closeCbs.forEach((cb) => { try { cb() } catch(e){} })
+                _StreamSend(event.sender, streamId, "close")
+                delete streams[streamId]
+            },
+            on: (eventName, cb) => {
+                if(eventName === "close")   closeCbs.push(cb)
+                if(eventName === "message") messageCbs.push(cb)
+            },
+            _messageCbs: messageCbs,
+            _closeCbs: closeCbs
+        }
+        streams[streamId] = wsShim
+        _StreamSend(event.sender, streamId, "open")
+        try {
+            guiServices.InvokeStream(serviceName, method, args, wsShim)
+        } catch(e) {
+            console.error("Falha ao abrir stream", serviceName, method, e)
+            _StreamSend(event.sender, streamId, "error")
+        }
+    })
+    ipcMain.on("metaGui:stream:send", (_event, { streamId, data } = {}) => {
+        const wsShim = streams[streamId]
+        if(wsShim) wsShim._messageCbs.forEach((cb) => { try { cb(data) } catch(e){} })
+    })
+    ipcMain.on("metaGui:stream:close-request", (_event, { streamId } = {}) => {
+        const wsShim = streams[streamId]
+        if(wsShim){
+            wsShim._closeCbs.forEach((cb) => { try { cb() } catch(e){} })
+            delete streams[streamId]
+        }
+    })
+
     // Protocolo de ícones: substitui as URLs http:// de ícone. O <img src> do
     // webgui aponta para metaicon://<kind>?<params>; aqui resolvemos o caminho
     // de arquivo via o service e servimos o arquivo (com cache do Chromium).
