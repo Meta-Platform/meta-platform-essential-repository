@@ -76,6 +76,31 @@ const CreateWindowTaskParams = ({
         }
     }
 
+    // Modo GUI-host: sem "url" e sem "file", mas com bound-params. A janela NÃO
+    // aponta para um servidor HTTP — o processo principal do Electron compila o
+    // webgui e hospeda os services por IPC (sem webservices). Os bound-params
+    // (handles de pacote + services) são resolvidos em linkedParameters e lidos
+    // pelo desktop-window-instance loader para montar a config do Electron. Os
+    // params escalares (installDataDirPath, REPOS_CONF_*, etc.) vêm resolvidos
+    // dos startup-params.
+    if(!file && boundParams){
+        const rootNode = GetMetadataRootNode(metadataHierarchy)
+        const resolvedParams = ResolveMetadataParamsWithStartupParams({
+            params: itemMetadata.params,
+            metadataHierarchy
+        })
+        return {
+            objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata),
+            staticParameters: {
+                ...commonStaticParameters,
+                ...resolvedParams,
+                rootPath: rootNode.path
+            },
+            linkedParameters: RemapAllParams(boundParams),
+            agentLinkRules: _BuildAgentLinkRules(boundParams)
+        }
+    }
+
     // Modo loadFile: a janela carrega um HTML local do package indicado por
     // "dependency" (ou do próprio .desktopapp, se omitido).
     if(!file){

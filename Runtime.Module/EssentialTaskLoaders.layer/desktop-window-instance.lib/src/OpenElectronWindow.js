@@ -5,13 +5,20 @@ const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-r
 
 const ELECTRON_MAIN_SCRIPT = join(__dirname, "electron-main.js")
 
-const OpenElectronWindow = ({ url, file, rootPath, title, width, height, iconPath }) => {
+const OpenElectronWindow = ({ url, file, rootPath, title, width, height, iconPath, guiConfigPath }) => {
     const electronBinaryPath = SmartRequire("electron")
 
-    // Modo loadURL (url) x modo loadFile (file relativo à raiz do package de conteúdo).
-    const contentEnv = url
-        ? { DESKTOP_WINDOW_URL: url }
-        : { DESKTOP_WINDOW_FILE: join(rootPath, file) }
+    // Três modos:
+    //  - GUI-host (guiConfigPath): o processo principal compila o webgui e
+    //    hospeda os services por IPC; toda a config (caminhos + params) vem do
+    //    JSON temporário apontado por DESKTOP_GUI_CONFIG_PATH.
+    //  - loadURL (url): aponta para uma aplicação web local servida por HTTP.
+    //  - loadFile (file): carrega um HTML estático local.
+    const contentEnv = guiConfigPath
+        ? { DESKTOP_GUI_CONFIG_PATH: guiConfigPath }
+        : url
+            ? { DESKTOP_WINDOW_URL: url }
+            : { DESKTOP_WINDOW_FILE: join(rootPath, file) }
 
     return spawn(electronBinaryPath, [ELECTRON_MAIN_SCRIPT], {
         stdio: "inherit",

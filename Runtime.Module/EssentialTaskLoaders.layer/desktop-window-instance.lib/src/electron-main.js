@@ -1,9 +1,10 @@
-const { app, BrowserWindow, Menu, dialog, ipcMain, Notification, nativeImage } = require("electron")
+const { app, BrowserWindow, Menu, dialog, ipcMain, Notification, nativeImage, protocol, net } = require("electron")
 const http  = require("http")
 const https = require("https")
 const crypto = require("crypto")
 const fs = require("fs")
 const { join } = require("path")
+const { pathToFileURL } = require("url")
 
 const DEFAULT_WIDTH  = 1024
 const DEFAULT_HEIGHT = 768
@@ -13,6 +14,17 @@ const ASSET_POLL_INTERVAL_MS = 1200
 
 const LOADING_PAGE = join(__dirname, "loading.html")
 const PRELOAD_SCRIPT = join(__dirname, "preload.js")
+
+// Modo GUI-host: quando o host passa DESKTOP_GUI_CONFIG_PATH, este processo
+// compila o webgui e hospeda os services por IPC (sem HTTP/webservices). O
+// scheme dos ícones precisa ser declarado privilegiado ANTES do app ficar
+// pronto — só registramos no modo GUI-host para não afetar apps legados.
+const IS_GUI_HOST = Boolean(process.env.DESKTOP_GUI_CONFIG_PATH)
+if(IS_GUI_HOST){
+    protocol.registerSchemesAsPrivileged([
+        { scheme: "metaicon", privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true } }
+    ])
+}
 
 const ResolveUrl = (baseUrl, path) => {
     try {
@@ -260,7 +272,187 @@ ipcMain.handle("desktop-notification:show", async (event, { title, body } = {}) 
     }
 })
 
-app.whenReady().then(CreateWindow)
+// ======================================================================
+// Modo GUI-host: hospeda os services + o build do webgui neste processo.
+// ======================================================================
+
+// Handle de pacote no estilo do nodejs-package (SetupServiceObject): requer
+// módulos do pacote com o NODE_PATH apontando para o node_modules dele, para
+// que os require internos resolvam. src já é o diretório "src" do pacote.
+const CreatePackageHandle = (src, nodeModules) => ({
+    require: (subPath) => {
+        const scriptPath = join(src, subPath)
+        const originalNodePath = process.env.NODE_PATH
+        process.env.NODE_PATH = nodeModules || ""
+        require("module").Module._initPaths()
+        const mod = require(scriptPath)
+        process.env.NODE_PATH = originalNodePath || ""
+        require("module").Module._initPaths()
+        return mod
+    },
+    getSourcePath: () => src,
+    getNodeModulesPath: () => nodeModules
+})
+
+// Instancia à mão o grafo de services que a GUI precisa (equivalente ao que o
+// service-instance loader + bound-params fazem no host, mas neste processo).
+// Reusa a LÓGICA real: os controllers do execution-manager.webservice via o
+// desktop-gui.service. onReady/onClose são no-ops (não há executor aqui).
+const BootstrapGuiServices = (config) => {
+    const noop = () => {}
+
+    const repositoryUtilitiesLib      = CreatePackageHandle(config.libs.repositoryUtilities.src, config.libs.repositoryUtilities.nodeModules)
+    const dependencyGraphBuilderLib   = CreatePackageHandle(config.libs.dependencyGraphBuilder.src, config.libs.dependencyGraphBuilder.nodeModules)
+    const jsonFileUtilitiesLib        = CreatePackageHandle(config.libs.jsonFileUtilities.src, config.libs.jsonFileUtilities.nodeModules)
+    const ecosystemInstallUtilitiesLib= CreatePackageHandle(config.libs.ecosystemInstallUtilities.src, config.libs.ecosystemInstallUtilities.nodeModules)
+
+    const ecpHandle    = CreatePackageHandle(config.services.ecosystemControlPanel.src, config.services.ecosystemControlPanel.nodeModules)
+    const repoMgrHandle= CreatePackageHandle(config.services.repositoryManager.src, config.services.repositoryManager.nodeModules)
+    const execWsHandle = CreatePackageHandle(config.services.executionManagerWebservice.src, config.services.executionManagerWebservice.nodeModules)
+    const guiHandle    = CreatePackageHandle(config.services.desktopGui.src, config.services.desktopGui.nodeModules)
+
+    const NotificationHubService      = ecpHandle.require("Services/NotificationHub.service")
+    const EcosystemDataHandlerService = ecpHandle.require("Services/EcosystemDataHandler.service")
+    const RepositoryManagerService    = repoMgrHandle.require("Services/RepositoryManager.service")
+    const DesktopGuiService           = guiHandle.require("Services/DesktopGui.service")
+
+    const notificationHubService = NotificationHubService({ onReady: noop, onClose: noop })
+    const ecosystemdataHandlerService = EcosystemDataHandlerService({
+        installDataDirPath: config.params.installDataDirPath,
+        panelStateFilePath: config.params.panelStateFilePath,
+        onReady: noop, onClose: noop
+    })
+    const repositoryManagerService = RepositoryManagerService({
+        repositoryUtilitiesLib,
+        dependencyGraphBuilderLib,
+        installDataDirPath:             config.params.installDataDirPath,
+        REPOS_CONF_FILENAME_REPOS_DATA: config.params.REPOS_CONF_FILENAME_REPOS_DATA,
+        REPOS_CONF_EXT_MODULE_DIR:      config.params.REPOS_CONF_EXT_MODULE_DIR,
+        REPOS_CONF_EXT_LAYER_DIR:       config.params.REPOS_CONF_EXT_LAYER_DIR,
+        REPOS_CONF_EXT_GROUP_DIR:       config.params.REPOS_CONF_EXT_GROUP_DIR,
+        REPOS_CONF_EXTLIST_PKG_TYPE:    config.params.REPOS_CONF_EXTLIST_PKG_TYPE,
+        PKG_CONF_DIRNAME_METADATA:      config.params.PKG_CONF_DIRNAME_METADATA,
+        onReady: noop, onClose: noop
+    })
+
+    return DesktopGuiService({
+        ecosystemdataHandlerService,
+        notificationHubService,
+        repositoryManagerService,
+        jsonFileUtilitiesLib,
+        ecosystemInstallUtilitiesLib,
+        executionManagerWebservice: execWsHandle,
+        ecosystemDefaultsFileRelativePath: config.params.ecosystemDefaultsFileRelativePath,
+        onReady: noop
+    })
+}
+
+// Diretório de saída do build do webgui (independente do caminho HTTP).
+const MountGuiOutputDir = (webgui) =>
+    join(webgui.environmentPath, webgui.RT_ENV_GENERATED_DIR_NAME, `${webgui.serverAppName}.webInterfaceAssets`)
+
+const CreateGuiHostWindow = async () => {
+
+    Menu.setApplicationMenu(null)
+
+    let config
+    try {
+        config = JSON.parse(fs.readFileSync(process.env.DESKTOP_GUI_CONFIG_PATH, "utf8"))
+    } catch(e) {
+        console.error("Falha ao ler DESKTOP_GUI_CONFIG_PATH:", e)
+        app.exit(1)
+        return
+    }
+
+    const iconPath = config.window.iconPath && fs.existsSync(config.window.iconPath)
+        ? config.window.iconPath
+        : undefined
+
+    const window = new BrowserWindow({
+        ...config.window.title ? { title: config.window.title } : {},
+        width:  config.window.width  ? Number(config.window.width)  : DEFAULT_WIDTH,
+        height: config.window.height ? Number(config.window.height) : DEFAULT_HEIGHT,
+        autoHideMenuBar: true,
+        webPreferences: {
+            preload: PRELOAD_SCRIPT,
+            contextIsolation: true,
+            nodeIntegration: false
+        }
+    })
+    window.on("closed", () => app.exit(0))
+    ApplyPackageIcon(window, iconPath)
+
+    // Durante o build, preserva o título do app (não deixa a página provisória
+    // renomear a janela). Depois que o webgui carrega, ele define o próprio.
+    const title = config.window.title
+    let loaded = false
+    window.on("page-title-updated", (event) => { if(!loaded) event.preventDefault() })
+    if(title) window.setTitle(title)
+
+    window.loadFile(LOADING_PAGE)
+
+    // Services hospedados neste processo, expostos ao renderer por IPC.
+    let guiServices
+    try {
+        guiServices = BootstrapGuiServices(config)
+    } catch(e) {
+        console.error("Falha ao inicializar os services de GUI:", e)
+    }
+
+    ipcMain.handle("metaGui:invoke", async (_event, { serviceName, method, args } = {}) => {
+        if(!guiServices) throw new Error("Serviços de GUI indisponíveis")
+        return guiServices.Invoke(serviceName, method, args)
+    })
+    ipcMain.handle("metaGui:manifest", async () => guiServices ? guiServices.GetManifest() : {})
+
+    // Protocolo de ícones: substitui as URLs http:// de ícone. O <img src> do
+    // webgui aponta para metaicon://<kind>?<params>; aqui resolvemos o caminho
+    // de arquivo via o service e servimos o arquivo (com cache do Chromium).
+    protocol.handle("metaicon", async (request) => {
+        try {
+            const parsed = new URL(request.url)
+            const kind = parsed.hostname
+            const args = Object.fromEntries(parsed.searchParams.entries())
+            const iconFilePath = guiServices && await guiServices.GetIcon({ kind, args })
+            if(!iconFilePath)
+                return new Response("not found", { status: 404 })
+            return net.fetch(pathToFileURL(iconFilePath).toString())
+        } catch(e) {
+            return new Response("error", { status: 500 })
+        }
+    })
+
+    // Compila o webgui empurrando o progresso para a tela de carregamento e,
+    // ao terminar, carrega o bundle local (loadFile — sem servidor HTTP).
+    try {
+        const WebInterfaceBuilder = require("../../endpoint-instance.lib/src/WebInterfaceBuilder")
+        const output = MountGuiOutputDir(config.webgui)
+        const builder = await WebInterfaceBuilder({
+            entrypoint:     config.webgui.entrypoint,
+            htmlTemplate:   config.webgui.htmlTemplate,
+            nodeModulesPath:config.webgui.nodeModules,
+            context:        config.webgui.context,
+            output,
+            url:            "",
+            serverAppName:  config.webgui.serverAppName,
+            onChangeProgress: (percentage) => {
+                if(!window.isDestroyed() && !window.webContents.isDestroyed())
+                    window.webContents.send("build:progress", percentage)
+            }
+        })
+        await builder.Run()
+        if(!window.isDestroyed()){
+            if(!window.webContents.isDestroyed())
+                window.webContents.send("build:progress", 100)
+            loaded = true
+            window.loadFile(join(output, "index.html"))
+        }
+    } catch(e) {
+        console.error("Falha ao compilar o webgui:", e)
+    }
+}
+
+app.whenReady().then(() => IS_GUI_HOST ? CreateGuiHostWindow() : CreateWindow())
 
 app.on("window-all-closed", () => app.exit(0))
 app.on("before-quit", () => BrowserWindow.getAllWindows().forEach((window) => {
