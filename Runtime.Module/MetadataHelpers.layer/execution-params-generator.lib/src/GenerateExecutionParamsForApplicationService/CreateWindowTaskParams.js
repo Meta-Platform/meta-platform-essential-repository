@@ -76,16 +76,18 @@ const CreateWindowTaskParams = ({
         }
     }
 
-    // Modo GUI-host: sem "url" e sem "file", mas com bound-params. A janela NÃO
+    // Modo GUI-host: sem "url"/"file", mas com um spec "gui-host". A janela NÃO
     // aponta para um servidor HTTP — o processo principal do Electron compila o
-    // webgui e hospeda os services por IPC (sem webservices). Os bound-params
-    // (handles de pacote + services) são resolvidos em linkedParameters e lidos
-    // pelo desktop-window-instance loader para montar a config do Electron. Os
-    // params escalares (installDataDirPath, REPOS_CONF_*, etc.) vêm resolvidos
-    // dos startup-params.
-    if(!file && boundParams){
+    // webgui e hospeda os services por IPC (sem webservices). O spec "gui-host"
+    // descreve o grafo de services a instanciar (genérico, por app); os
+    // bound-params (handles de pacote) são resolvidos em linkedParameters e
+    // lidos pelo desktop-window-instance loader para montar a config do Electron.
+    // Os params escalares vêm resolvidos dos startup-params, agrupados em
+    // "guiParams" (não espalhados, para o loader distinguir de handles).
+    const guiHost = itemMetadata["gui-host"]
+    if(!file && guiHost){
         const rootNode = GetMetadataRootNode(metadataHierarchy)
-        const resolvedParams = ResolveMetadataParamsWithStartupParams({
+        const guiParams = ResolveMetadataParamsWithStartupParams({
             params: itemMetadata.params,
             metadataHierarchy
         })
@@ -93,10 +95,11 @@ const CreateWindowTaskParams = ({
             objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata),
             staticParameters: {
                 ...commonStaticParameters,
-                ...resolvedParams,
-                rootPath: rootNode.path
+                rootPath: rootNode.path,
+                guiHost,
+                guiParams
             },
-            linkedParameters: RemapAllParams(boundParams),
+            ...boundParams ? { linkedParameters: RemapAllParams(boundParams) } : {},
             agentLinkRules: _BuildAgentLinkRules(boundParams)
         }
     }

@@ -22,49 +22,53 @@ const _HandlePaths = (handle) => ({
 
 // Modo GUI-host: a janela Electron NÃO carrega uma URL HTTP — o processo
 // principal do Electron compila o webgui e hospeda os services por IPC. Como só
-// strings cruzam o spawn, serializamos os caminhos (lidos dos handles de pacote
-// resolvidos como bound-params) + params escalares num JSON temporário e
-// passamos o caminho dele via env (DESKTOP_GUI_CONFIG_PATH).
-const _BuildGuiConfig = (p) => ({
-    window: {
-        title:    p.title,
-        width:    p.width,
-        height:   p.height,
-        iconPath: ResolveIconPath(p.rootPath)
-    },
-    webgui: {
-        context:                   p.homeScreenWebgui.getSourcePath(),
-        entrypoint:                "index.tsx",
-        htmlTemplate:              "index.html",
-        environmentPath:           p.homeScreenWebgui.getEnvironmentPath(),
-        nodeModules:               p.homeScreenWebgui.getNodeModulesPath(),
-        serverAppName:             p.serverName,
-        RT_ENV_GENERATED_DIR_NAME: p.RT_ENV_GENERATED_DIR_NAME
-    },
-    services: {
-        desktopGui:                 _HandlePaths(p.desktopGuiService),
-        executionManagerWebservice: _HandlePaths(p.executionManagerWebservice),
-        repositoryManager:          _HandlePaths(p.repositoryManagerService),
-        ecosystemControlPanel:      _HandlePaths(p.ecosystemControlPanelService)
-    },
-    libs: {
-        jsonFileUtilities:         _HandlePaths(p.jsonFileUtilitiesLib),
-        ecosystemInstallUtilities: _HandlePaths(p.ecosystemInstallUtilitiesLib),
-        repositoryUtilities:       _HandlePaths(p.repositoryUtilitiesLib),
-        dependencyGraphBuilder:    _HandlePaths(p.dependencyGraphBuilderLib)
-    },
-    params: {
-        installDataDirPath:                p.installDataDirPath,
-        panelStateFilePath:                p.panelStateFilePath,
-        ecosystemDefaultsFileRelativePath: p.ecosystemDefaultsFileRelativePath,
-        REPOS_CONF_FILENAME_REPOS_DATA:    p.REPOS_CONF_FILENAME_REPOS_DATA,
-        REPOS_CONF_EXT_MODULE_DIR:         p.REPOS_CONF_EXT_MODULE_DIR,
-        REPOS_CONF_EXT_LAYER_DIR:          p.REPOS_CONF_EXT_LAYER_DIR,
-        REPOS_CONF_EXT_GROUP_DIR:          p.REPOS_CONF_EXT_GROUP_DIR,
-        REPOS_CONF_EXTLIST_PKG_TYPE:       p.REPOS_CONF_EXTLIST_PKG_TYPE,
-        PKG_CONF_DIRNAME_METADATA:         p.PKG_CONF_DIRNAME_METADATA
+// strings cruzam o spawn, serializamos num JSON temporário (passado via
+// DESKTOP_GUI_CONFIG_PATH):
+//   - webgui: caminhos do pacote do webgui a compilar;
+//   - serviceGraph: descrição GENÉRICA e declarativa (do spec "gui-host" do
+//     boot.json) de como instanciar o grafo de services no Electron — cada
+//     entrada aponta para um handle de pacote (bound-param), sua factory,
+//     boundServices (refs a outras entradas) e boundLibs (handles de pacote);
+//   - params: bag escalar comum passada a todas as factories.
+// Isso NÃO é específico do my-desktop — funciona para qualquer .desktopapp que
+// declare um "gui-host".
+const _BuildGuiConfig = (loaderParams) => {
+    const guiHost = loaderParams.guiHost
+    const params  = loaderParams.guiParams || {}
+    const webguiHandle = loaderParams[guiHost.webgui]
+
+    const serviceGraph = (guiHost.serviceGraph || []).map((entry) => ({
+        ref:            entry.ref,
+        factory:        entry.factory,
+        package:        _HandlePaths(loaderParams[entry.package]),
+        boundServices:  entry.boundServices || {},
+        boundLibs:      Object.keys(entry.boundLibs || {}).reduce((acc, paramName) => {
+            acc[paramName] = _HandlePaths(loaderParams[entry.boundLibs[paramName]])
+            return acc
+        }, {})
+    }))
+
+    return {
+        window: {
+            title:    loaderParams.title,
+            width:    loaderParams.width,
+            height:   loaderParams.height,
+            iconPath: ResolveIconPath(loaderParams.rootPath)
+        },
+        webgui: {
+            context:                   webguiHandle.getSourcePath(),
+            entrypoint:                "index.tsx",
+            htmlTemplate:              "index.html",
+            environmentPath:           webguiHandle.getEnvironmentPath(),
+            nodeModules:               webguiHandle.getNodeModulesPath(),
+            serverAppName:             params.serverName,
+            RT_ENV_GENERATED_DIR_NAME: params.RT_ENV_GENERATED_DIR_NAME
+        },
+        params,
+        guiServiceRef: guiHost.guiService,
+        serviceGraph
     }
-})
+}
 
 const _WriteGuiConfigFile = (config, serverName) => {
     const safeName = String(serverName || "gui").replace(/[^a-zA-Z0-9._-]/g, "_")
@@ -86,13 +90,13 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
         title,
         width,
         height,
-        // Bound-param que marca o modo GUI-host (resolvido para o handle do
-        // pacote desktop-gui.service). Quando presente, a janela hospeda os
-        // services por IPC em vez de carregar uma URL HTTP.
-        desktopGuiService
+        // Spec declarativo que marca o modo GUI-host. Quando presente, a janela
+        // hospeda os services por IPC (no processo Electron) em vez de carregar
+        // uma URL HTTP.
+        guiHost
     } = loaderParams
 
-    const isGuiHost = Boolean(desktopGuiService)
+    const isGuiHost = Boolean(guiHost)
 
     const ScheduleProcessExit = () => {
         if(isProcessExitScheduled) return
@@ -105,7 +109,7 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
         try{
             if(isGuiHost){
                 const config = _BuildGuiConfig(loaderParams)
-                const guiConfigPath = _WriteGuiConfigFile(config, loaderParams.serverName)
+                const guiConfigPath = _WriteGuiConfigFile(config, config.webgui.serverAppName)
                 windowProcess = OpenElectronWindow({ guiConfigPath })
             } else {
                 windowProcess = OpenElectronWindow({ url, file, rootPath, title, width, height, iconPath: ResolveIconPath(rootPath) })

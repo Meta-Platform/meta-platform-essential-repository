@@ -294,57 +294,44 @@ const CreatePackageHandle = (src, nodeModules) => ({
     getNodeModulesPath: () => nodeModules
 })
 
-// Instancia à mão o grafo de services que a GUI precisa (equivalente ao que o
+// Instancia o grafo de services que a GUI precisa (equivalente ao que o
 // service-instance loader + bound-params fazem no host, mas neste processo).
-// Reusa a LÓGICA real: os controllers do execution-manager.webservice via o
-// desktop-gui.service. onReady/onClose são no-ops (não há executor aqui).
+// GENÉRICO: percorre config.serviceGraph (declarado no "gui-host" do boot.json,
+// já ordenado por dependência), instanciando cada factory com:
+//   - config.params  (bag escalar comum; cada factory destrutura o que usa)
+//   - boundServices  (refs a services já instanciados nesta iteração)
+//   - boundLibs      (handles de pacote reconstruídos dos caminhos)
+// Reusa a LÓGICA real de cada service/controller. onReady/onClose são no-ops
+// (não há executor aqui). Retorna o service marcado como guiServiceRef, que
+// expõe Invoke/GetManifest/GetIcon ao renderer.
 const BootstrapGuiServices = (config) => {
     const noop = () => {}
+    const instances = {}
 
-    const repositoryUtilitiesLib      = CreatePackageHandle(config.libs.repositoryUtilities.src, config.libs.repositoryUtilities.nodeModules)
-    const dependencyGraphBuilderLib   = CreatePackageHandle(config.libs.dependencyGraphBuilder.src, config.libs.dependencyGraphBuilder.nodeModules)
-    const jsonFileUtilitiesLib        = CreatePackageHandle(config.libs.jsonFileUtilities.src, config.libs.jsonFileUtilities.nodeModules)
-    const ecosystemInstallUtilitiesLib= CreatePackageHandle(config.libs.ecosystemInstallUtilities.src, config.libs.ecosystemInstallUtilities.nodeModules)
+    for(const entry of config.serviceGraph){
+        const Factory = CreatePackageHandle(entry.package.src, entry.package.nodeModules).require(entry.factory)
 
-    const ecpHandle    = CreatePackageHandle(config.services.ecosystemControlPanel.src, config.services.ecosystemControlPanel.nodeModules)
-    const repoMgrHandle= CreatePackageHandle(config.services.repositoryManager.src, config.services.repositoryManager.nodeModules)
-    const execWsHandle = CreatePackageHandle(config.services.executionManagerWebservice.src, config.services.executionManagerWebservice.nodeModules)
-    const guiHandle    = CreatePackageHandle(config.services.desktopGui.src, config.services.desktopGui.nodeModules)
+        const boundServices = Object.keys(entry.boundServices || {}).reduce((acc, paramName) => {
+            acc[paramName] = instances[entry.boundServices[paramName]]
+            return acc
+        }, {})
 
-    const NotificationHubService      = ecpHandle.require("Services/NotificationHub.service")
-    const EcosystemDataHandlerService = ecpHandle.require("Services/EcosystemDataHandler.service")
-    const RepositoryManagerService    = repoMgrHandle.require("Services/RepositoryManager.service")
-    const DesktopGuiService           = guiHandle.require("Services/DesktopGui.service")
+        const boundLibs = Object.keys(entry.boundLibs || {}).reduce((acc, paramName) => {
+            const lib = entry.boundLibs[paramName]
+            acc[paramName] = CreatePackageHandle(lib.src, lib.nodeModules)
+            return acc
+        }, {})
 
-    const notificationHubService = NotificationHubService({ onReady: noop, onClose: noop })
-    const ecosystemdataHandlerService = EcosystemDataHandlerService({
-        installDataDirPath: config.params.installDataDirPath,
-        panelStateFilePath: config.params.panelStateFilePath,
-        onReady: noop, onClose: noop
-    })
-    const repositoryManagerService = RepositoryManagerService({
-        repositoryUtilitiesLib,
-        dependencyGraphBuilderLib,
-        installDataDirPath:             config.params.installDataDirPath,
-        REPOS_CONF_FILENAME_REPOS_DATA: config.params.REPOS_CONF_FILENAME_REPOS_DATA,
-        REPOS_CONF_EXT_MODULE_DIR:      config.params.REPOS_CONF_EXT_MODULE_DIR,
-        REPOS_CONF_EXT_LAYER_DIR:       config.params.REPOS_CONF_EXT_LAYER_DIR,
-        REPOS_CONF_EXT_GROUP_DIR:       config.params.REPOS_CONF_EXT_GROUP_DIR,
-        REPOS_CONF_EXTLIST_PKG_TYPE:    config.params.REPOS_CONF_EXTLIST_PKG_TYPE,
-        PKG_CONF_DIRNAME_METADATA:      config.params.PKG_CONF_DIRNAME_METADATA,
-        onReady: noop, onClose: noop
-    })
+        instances[entry.ref] = Factory({
+            ...config.params,
+            ...boundServices,
+            ...boundLibs,
+            onReady: noop,
+            onClose: noop
+        })
+    }
 
-    return DesktopGuiService({
-        ecosystemdataHandlerService,
-        notificationHubService,
-        repositoryManagerService,
-        jsonFileUtilitiesLib,
-        ecosystemInstallUtilitiesLib,
-        executionManagerWebservice: execWsHandle,
-        ecosystemDefaultsFileRelativePath: config.params.ecosystemDefaultsFileRelativePath,
-        onReady: noop
-    })
+    return instances[config.guiServiceRef]
 }
 
 // Diretório de saída do build do webgui (independente do caminho HTTP).
