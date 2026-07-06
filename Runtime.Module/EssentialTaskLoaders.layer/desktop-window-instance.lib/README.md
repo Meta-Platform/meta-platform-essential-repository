@@ -109,10 +109,23 @@ instanciados) + `boundLibs` (handles de pacote, reconstruídos dos caminhos). O
    com o spec `gui-host` (acima); `startup-params` perde `port`/`serverManagerUrl`/
    `windowUrl`.
 
-> ⚠️ **WebSocket streaming** (log/console/execução ao vivo) ainda **não** é
-> coberto: `metaGui.invoke` é request/response. Apps com streaming
-> (ecosystem-control-panel, package-developer) precisam de um primitivo de stream
-> na ponte IPC antes de migrar — até lá seguem no modo `loadURL`/HTTP.
+### WebSocket streaming (`metaGui.stream`)
+
+Para logs/console/execução ao vivo (o que `invoke` request/response não cobre), a
+ponte expõe `window.metaGui.stream` (open/send/close/onEvent). O `.service`
+implementa `InvokeStream(serviceName, method, data, wsShim)` — o host cria um
+objeto **ws-like** (mesma API do `ws` do express-ws: `send`/`on("message")`/
+`on("close")`/`close`) e o entrega ao método WS do controller. No renderer,
+`Utils/IPCWebSocket` embrulha o canal num objeto **compatível com a API de
+WebSocket do browser** (`onopen`/`onmessage`/`onclose`/`onerror`/`send`/`close`),
+então os consumidores de socket do webgui **não mudam**; o `GetRequestByServer`
+só passa a devolver um `IPCWebSocket` para os endpoints `WS`. Casos validados:
+`ecosystem-control-panel` (LogStreaming/Notification/RunPackageStreaming) e
+`package-developer` (Console com stdin).
+
+> ⚠️ **`require.main` é `undefined`** no processo principal do Electron (modo
+> GUI-host). Código de service/lib que use `require.main.require(...)` quebra —
+> troque por `require(...)` quando o caminho for absoluto (equivalente).
 
 ## Dependência
 
