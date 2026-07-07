@@ -89,7 +89,9 @@ const GetCompiler = ({
             ]
         },
         plugins:[
-            new HtmlWebpackPlugin({template:path.resolve(context, htmlTemplate),}),
+            // hash: true anexa ?<hash-do-build> ao bundle no HTML gerado — cache-busting
+            // (o navegador rebaixa o bundle novo após cada build, sem trocar o filename).
+            new HtmlWebpackPlugin({template:path.resolve(context, htmlTemplate), hash: true}),
             new webpack.DefinePlugin({
                 "process.env.HTTP_SERVER_MANAGER_ENDPOINT": JSON.stringify(url),
                 "process.env.SERVER_APP_NAME": JSON.stringify(serverAppName),
