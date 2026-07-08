@@ -26,6 +26,35 @@ if(IS_GUI_HOST){
     ])
 }
 
+// Reporta o progresso de LANÇAMENTO ao daemon (executor-manager) que abriu esta
+// janela. O daemon injeta META_LAUNCH_PROGRESS_SOCKET/META_LAUNCH_ID no env; aqui
+// POSTamos o ciclo (window-ready → building → ready) no socket dele, e a área de
+// trabalho (MyDesktop) reflete no ícone. Best-effort: se o daemon não estiver
+// ouvindo, a falha é ignorada e o app segue normalmente.
+// Depois do "ready", o webpack ainda pode disparar onChangeProgress(100) uma
+// última vez; sem esta trava, esse "building 100" chegaria DEPOIS do "ready" e
+// faria a barra reaparecer no ícone. Uma vez pronto, só "closed" (fim do app)
+// volta a ser reportado.
+let _launchProgressDone = false
+const _ReportLaunchProgress = (phase, percentage) => {
+    const socketPath = process.env.META_LAUNCH_PROGRESS_SOCKET
+    const launchId   = process.env.META_LAUNCH_ID
+    if(!socketPath || !launchId) return
+    if(_launchProgressDone && (phase === "building" || phase === "window-ready")) return
+    if(phase === "ready") _launchProgressDone = true
+    try {
+        const body = JSON.stringify({ launchId, phase, ...(percentage !== undefined ? { percentage } : {}) })
+        const req = http.request({
+            socketPath,
+            path: "/ecosystem-manager/report-launch-progress",
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) }
+        })
+        req.on("error", () => {})
+        req.end(body)
+    } catch(e){}
+}
+
 const ResolveUrl = (baseUrl, path) => {
     try {
         return new URL(path, baseUrl).toString()
@@ -167,11 +196,15 @@ const CreateWindow = () => {
     // Ícone do pacote aplicado em 2º plano (NÃO bloqueia a abertura da janela).
     ApplyPackageIcon(window, iconPath)
 
+    // Janela criada → o ícone do MyDesktop deixa o spinner.
+    _ReportLaunchProgress("window-ready")
+
     const url  = process.env.DESKTOP_WINDOW_URL
     const file = process.env.DESKTOP_WINDOW_FILE
 
     // Modo loadFile: conteúdo estático local, sem espera.
     if(!url) {
+        _ReportLaunchProgress("ready", 100)
         window.loadFile(file)
         return
     }
@@ -195,6 +228,7 @@ const CreateWindow = () => {
         if(await IsServerReady(url)) {
             loaded = true
             currentBundleSignature = await GetBundleSignature(url)
+            _ReportLaunchProgress("ready", 100)
             if(!window.isDestroyed()) window.loadURL(url)
             setTimeout(PollForUpdatedBundle, ASSET_POLL_INTERVAL_MS)
         } else {
@@ -369,6 +403,10 @@ const CreateGuiHostWindow = async () => {
     window.on("closed", () => app.exit(0))
     ApplyPackageIcon(window, iconPath)
 
+    // Janela criada (tela de carregamento visível) → o ícone do MyDesktop deixa
+    // o spinner e passa a exibir o progresso do build.
+    _ReportLaunchProgress("window-ready")
+
     // Durante o build, preserva o título do app (não deixa a página provisória
     // renomear a janela). Depois que o webgui carrega, ele define o próprio.
     const title = config.window.title
@@ -471,6 +509,9 @@ const CreateGuiHostWindow = async () => {
     try {
         const WebInterfaceBuilder = require("../../endpoint-instance.lib/src/WebInterfaceBuilder")
         const output = MountGuiOutputDir(config.webgui)
+        // Reporta o progresso do build ao daemon apenas quando o inteiro muda,
+        // para não inundar o socket com frações intermediárias.
+        let lastReportedPct = -1
         const builder = await WebInterfaceBuilder({
             entrypoint:     config.webgui.entrypoint,
             htmlTemplate:   config.webgui.htmlTemplate,
@@ -482,6 +523,11 @@ const CreateGuiHostWindow = async () => {
             onChangeProgress: (percentage) => {
                 if(!window.isDestroyed() && !window.webContents.isDestroyed())
                     window.webContents.send("build:progress", percentage)
+                const rounded = Math.round(percentage)
+                if(rounded !== lastReportedPct){
+                    lastReportedPct = rounded
+                    _ReportLaunchProgress("building", rounded)
+                }
             }
         })
         await builder.Run()
@@ -489,6 +535,7 @@ const CreateGuiHostWindow = async () => {
             if(!window.webContents.isDestroyed())
                 window.webContents.send("build:progress", 100)
             loaded = true
+            _ReportLaunchProgress("ready", 100)
             window.loadFile(join(output, "index.html"))
         }
     } catch(e) {
