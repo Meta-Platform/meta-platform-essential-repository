@@ -11,17 +11,18 @@ EXEC_NAME="${EXEC_NAME}"
 SUPERVISOR_SOCKET_PATH="unix:${supervisorSocketFilePath}"
 REPOSITORY_PATH="${REPOSITORY_PATH}"
 
+# Os argumentos viajam até o pkg-exec como UMA string (--commandLineArgs), então
+# cada um precisa ir aspeado — senão um valor com espaço vira dois argumentos.
+# Escapamos \\ e " e envolvemos em aspas duplas: é exatamente o formato que o
+# TokenizeArgs do command-application.lib desfaz do outro lado.
 QUOTED_ARGS=()
 for arg in "$@"; do
-    # Se o argumento contém espaços, adiciona aspas
-    if [[ "$arg" =~ [[:space:]] ]]; then
-        QUOTED_ARGS+=("\"$arg\"")
-    else
-        QUOTED_ARGS+=("$arg")
-    fi
+    escaped=\${arg//\\\\/\\\\\\\\}
+    escaped=\${escaped//\\"/\\\\\\"}
+    QUOTED_ARGS+=("\\"\$escaped\\"")
 done
 
-ARGS_STRING="\${QUOTED_ARGS[@]}"
+ARGS_STRING="\${QUOTED_ARGS[*]}"
 
 source execute-command-line-application${debugMode ? "-dbg" : ""} "$@"
 `

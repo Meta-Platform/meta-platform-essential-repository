@@ -4,6 +4,8 @@ const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const yargs = SmartRequire('yargs/yargs')
 
+const TokenizeArgs = require("./TokenizeArgs")
+
 const FilteredCommandParams = (loaderParams, parameterNames) => {
 
     const serviceParams = parameterNames
@@ -120,7 +122,11 @@ const ExecuteCommand = async (loaderParams) => {
         nodejsPackageHandler
     } = loaderParams
 
-    const _yargs = yargs(commandLineArgs)
+    // O yargs recebe argv já tokenizado: entregar a string crua faria os
+    // argumentos posicionais chegarem ao comando com as aspas literais.
+    const argv = TokenizeArgs(commandLineArgs)
+
+    const _yargs = yargs(argv)
 
     for (const commandMetadata of commandsMetadata) {
 
@@ -149,7 +155,7 @@ const ExecuteCommand = async (loaderParams) => {
         await CommandFunction()
     }
     
-    await _yargs.parseAsync(commandLineArgs)
+    await _yargs.parseAsync(argv)
 
     return isStopAllTasks
     
