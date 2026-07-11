@@ -6,13 +6,17 @@ const ReplaceStartupParams = (metadataHierarchy, startupParams) => {
     const _replaceItemStartupParams = (list, startupParams) => {
         return list.map(item => {
             if(item?.dependency?.metadata?.["startup-params"]){
+                // Merge por-nó: as vars injetadas (ecossistema) servem de BASE
+                // e os startup-params próprios do nó (port/socket/serverName)
+                // prevalecem por cima. Assim não apagamos os params específicos.
+                const ownStartupParams = item.dependency.metadata["startup-params"]
                 const itemReplaced = {
                     ...item,
                     dependency: {
                         ...item.dependency,
                         metadata: {
                             ...item.dependency.metadata,
-                            ["startup-params"]:startupParams
+                            ["startup-params"]:{ ...startupParams, ...ownStartupParams }
                         }
                     }
                 }
@@ -43,6 +47,8 @@ const BuildMetadataHierarchy = async ({
     const rawMetadataTree = await ConstructDependencyRawMetadataTreeRecursively({
         path,
         packageList,
+        // Fallback intencional (CFGEC-30): quando o ecossistema não fornece a
+        // configuração, mantemos os defaults convencionais "group"/"metadata".
         REPOS_CONF_EXT_GROUP_DIR: REPOS_CONF_EXT_GROUP_DIR || "group",
         PKG_CONF_DIRNAME_METADATA: PKG_CONF_DIRNAME_METADATA || "metadata"
     })
@@ -56,3 +62,4 @@ const BuildMetadataHierarchy = async ({
 }
 
 module.exports = BuildMetadataHierarchy
+module.exports.ReplaceStartupParams = ReplaceStartupParams
