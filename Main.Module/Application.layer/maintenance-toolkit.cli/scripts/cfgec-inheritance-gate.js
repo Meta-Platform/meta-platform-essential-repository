@@ -24,19 +24,21 @@ let failures = 0
 const ok = (c, m) => { console.log((c ? "  [OK]  " : "  [FAIL]") + " " + m); if (!c) failures++ }
 
 const ecosystemDefaults = Get(ECOSYSTEM_DATA, DEFAULTS_REL)
-ok(Object.keys(ecosystemDefaults).length === 19, `Get() -> 19 vars (obtido ${Object.keys(ecosystemDefaults).length})`)
+ok(Object.keys(ecosystemDefaults).length === 20, `Get() -> 20 vars (obtido ${Object.keys(ecosystemDefaults).length})`)
 
-const boot = { grupo: "{{REPOS_CONF_EXT_GROUP_DIR}}", metaDir: "{{PKG_CONF_DIRNAME_METADATA}}", port: "{{port}}" }
+const boot = { grupo: "{{REPOS_CONF_EXT_GROUP_DIR}}", metaDir: "{{PKG_CONF_DIRNAME_METADATA}}", genDir: "{{RT_ENV_GENERATED_DIR_NAME}}", port: "{{port}}" }
 const own = { port: 9999 }
 const mkH = () => ({ dependencyList: [{ dependency: { metadata: { package: { namespace: "@/cfgec-fixture.cli" }, "startup-params": { ...own } } } }], linkedGraph: {} })
 
 const root = ReplaceStartupParams(mkH(), { ...ecosystemDefaults }).dependencyList[0].dependency.metadata["startup-params"]
 ok(root.port === 9999, "merge por-no preserva o port do pacote")
 ok(root.REPOS_CONF_EXT_GROUP_DIR === "group", "no herda REPOS_CONF_EXT_GROUP_DIR do ecossistema")
+ok(root.RT_ENV_GENERATED_DIR_NAME === ".generated_data", "no herda RT_ENV_GENERATED_DIR_NAME do ecossistema")
 
 const resolved = GetPopulatedParameters(boot, root)
 ok(!JSON.stringify(resolved).includes("{{"), "COM injecao: 0 {{ residual  -> " + JSON.stringify(resolved))
 ok(resolved.grupo === "group" && resolved.metaDir === "metadata", "vars do ecossistema resolvidas")
+ok(resolved.genDir === ".generated_data", "RT_ENV_GENERATED_DIR_NAME resolvido via {{}}")
 
 const neg = GetPopulatedParameters(boot, { ...own })
 ok(JSON.stringify(neg).includes("{{"), "NEGATIVO (sem injecao): {{VAR}} permanece literal")
