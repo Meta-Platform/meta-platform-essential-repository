@@ -16,19 +16,27 @@ const MountParams = ({
     boundParams,
     params,
     path,
-    namespaceDependency
+    namespaceDependency,
+    ecosystemDefaults
 }) => {
     const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
 
     const newServiceParameterNames = serviceParameterNames.map(paramName => paramName.charAt(0) === "?" ? paramName.slice(1) : paramName)
 
+    // Injeção do ecossistema em execução: todo service recebe as vars do
+    // ecosystem-defaults (BASE), sem precisar declará-las no seu services.json
+    // nem os hosts repassarem via boot.json. Params próprios do service (do host)
+    // prevalecem por cima quando existirem.
+    const ecosystemDefaultsObj = ecosystemDefaults || {}
+
     return {
         objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata),
         staticParameters:{
             tag: namespace,
+            ...ecosystemDefaultsObj,
             ...params ? params : {},
             path,
-            serviceParameterNames: newServiceParameterNames
+            serviceParameterNames: [ ...new Set([ ...Object.keys(ecosystemDefaultsObj), ...newServiceParameterNames ]) ]
         },
         linkedParameters:  {
             nodejsPackageHandler: namespaceDependency, 
@@ -107,7 +115,8 @@ const CreateServiceTaskParams = ({
             path: metadataDependency.path,
             boundParams: boundParamsResolved,
             params: paramsResolved,
-            namespaceDependency
+            namespaceDependency,
+            ecosystemDefaults: metadataHierarchy && metadataHierarchy.ecosystemDefaults
         })
     }
     return undefined   

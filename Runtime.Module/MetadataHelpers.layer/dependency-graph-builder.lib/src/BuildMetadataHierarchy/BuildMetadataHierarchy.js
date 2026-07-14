@@ -55,8 +55,13 @@ const BuildMetadataHierarchy = async ({
     const metadataHierarchy = ConstructMetadataHierarchy(rawMetadataTree)
 
     if(startupParams){
-        return ReplaceStartupParams(metadataHierarchy, startupParams)
-    } 
+        // Guarda o objeto injetado (ecosystem-defaults) NA hierarquia. Ele é
+        // persistido junto e relido pelos geradores de execution-params, que o
+        // disponibilizam a TODO service-instance — assim os services pegam essas
+        // vars do ecossistema em execução, sem declará-las no services.json nem os
+        // hosts repassarem via boot.json.
+        return { ...ReplaceStartupParams(metadataHierarchy, startupParams), ecosystemDefaults: startupParams }
+    }
 
     return metadataHierarchy
 }
