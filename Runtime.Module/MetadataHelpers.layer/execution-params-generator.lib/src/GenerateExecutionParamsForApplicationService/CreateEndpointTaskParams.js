@@ -1,13 +1,14 @@
 const ConvertTypeTaskParamsToObjectLoaderType = require("./Commons/ConvertTypeTaskParamsToObjectLoaderType")
 const ExtractNamespaceListByBoundParams = require("./Commons/ExtractNamespaceListByBoundParams")
 
-const CreateEndpointTaskParams = ({ 
+const CreateEndpointTaskParams = ({
     typeMetadata,
     url,
     type,
     boundParams,
     params,
-    namespaceDependency
+    namespaceDependency,
+    ecosystemDefaults
 }) => {
     const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
     return {
@@ -15,6 +16,10 @@ const CreateEndpointTaskParams = ({
         staticParameters:{
             url,
             type,
+            // Injeção do ecossistema em execução: o endpoint (webgui) recebe as
+            // vars do ecosystem-defaults como BASE, sem o endpoint-group.json
+            // declará-las. Params próprios (do host) prevalecem por cima.
+            ...(ecosystemDefaults || {}),
             ...params ? params : {}
         },
         linkedParameters:  {

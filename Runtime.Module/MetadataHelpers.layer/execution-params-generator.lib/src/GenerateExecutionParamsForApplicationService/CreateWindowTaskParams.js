@@ -87,10 +87,16 @@ const CreateWindowTaskParams = ({
     const guiHost = itemMetadata["gui-host"]
     if(!file && guiHost){
         const rootNode = GetMetadataRootNode(metadataHierarchy)
-        const guiParams = ResolveMetadataParamsWithStartupParams({
-            params: itemMetadata.params,
-            metadataHierarchy
-        })
+        const guiParams = {
+            // Injeção do ecossistema em execução: o webgui hospedado por IPC
+            // recebe as vars do ecosystem-defaults como BASE, sem o boot.json
+            // repassá-las. Os params próprios da janela prevalecem por cima.
+            ...(metadataHierarchy && metadataHierarchy.ecosystemDefaults ? metadataHierarchy.ecosystemDefaults : {}),
+            ...ResolveMetadataParamsWithStartupParams({
+                params: itemMetadata.params,
+                metadataHierarchy
+            })
+        }
         return {
             objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata),
             staticParameters: {

@@ -43,13 +43,14 @@ const CreateListEndpointTaskParams = ({
 
                 const paramsResolved = GetPopulatedParameters(endpointMetadata.params, endpointGroupParamsResolved)
                     
-                return CreateEndpointTaskParams(({ 
+                return CreateEndpointTaskParams(({
                     typeMetadata,
-                    url: endpointMetadata.url, 
-                    type: endpointMetadata.type, 
+                    url: endpointMetadata.url,
+                    type: endpointMetadata.type,
                     boundParams:RemapAllParams(endpointBoundParamsResolved),
-                    params:RemapAllParams(paramsResolved), 
-                    namespaceDependency
+                    params:RemapAllParams(paramsResolved),
+                    namespaceDependency,
+                    ecosystemDefaults: metadataHierarchy && metadataHierarchy.ecosystemDefaults
                 }))
                 
             })
