@@ -1,11 +1,24 @@
 const fs = require("fs")
 const os = require("os")
-const { join } = require("path")
+const { join, basename } = require("path")
+
+// Classe X11 (WM_CLASS) usada pelo gerenciador de janelas para agrupar botões na
+// barra de tarefas. Cada .desktopapp precisa de uma classe ESTÁVEL e ÚNICA, senão
+// o KDE agrupa todos os apps sob o mesmo botão. Preferimos o nome do app; para
+// janelas url/file caímos no nome do diretório do pacote (rootPath) ou no título.
+const _ResolveWmClass = (raw) => {
+    const value = String(raw || "").trim()
+    if(!value) return undefined
+    // Mantém apenas caracteres seguros para um identificador de classe.
+    const sanitized = value.replace(/[^a-zA-Z0-9._-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "")
+    return sanitized || undefined
+}
 
 const TaskStatusTypes          = require("../../../Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
-const OpenElectronWindow = require("./OpenElectronWindow")
+const OpenElectronWindow    = require("./OpenElectronWindow")
+const EnsureAppDesktopEntry = require("./EnsureAppDesktopEntry")
 
 // Ícone da janela: convenção de icon.svg na raiz do package (rootPath).
 const ResolveIconPath = (rootPath) => {
@@ -110,9 +123,16 @@ const DesktopWindowInstanceTaskLoader = (loaderParams, executorChannel) => {
             if(isGuiHost){
                 const config = _BuildGuiConfig(loaderParams)
                 const guiConfigPath = _WriteGuiConfigFile(config, config.webgui.serverAppName)
-                windowProcess = OpenElectronWindow({ guiConfigPath })
+                const wmClass = _ResolveWmClass(config.webgui.serverAppName)
+                // Registra o app na barra de tarefas (StartupWMClass) para que o
+                // KDE não agrupe todos os desktopapps pelo binário Electron comum.
+                EnsureAppDesktopEntry({ wmClass, name: config.window.title, iconPath: config.window.iconPath })
+                windowProcess = OpenElectronWindow({ guiConfigPath, wmClass })
             } else {
-                windowProcess = OpenElectronWindow({ url, file, rootPath, title, width, height, iconPath: ResolveIconPath(rootPath) })
+                const wmClass  = _ResolveWmClass(rootPath ? basename(rootPath) : title)
+                const iconPath = ResolveIconPath(rootPath)
+                EnsureAppDesktopEntry({ wmClass, name: title, iconPath })
+                windowProcess = OpenElectronWindow({ url, file, rootPath, title, width, height, iconPath, wmClass })
             }
 
             windowProcess.on("exit", () => {

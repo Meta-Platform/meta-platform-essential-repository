@@ -26,6 +26,18 @@ if(IS_GUI_HOST){
     ])
 }
 
+// Identidade de janela para o gerenciador de janelas (X11 WM_CLASS). Sem isto,
+// TODOS os .desktopapp compartilham a mesma classe (o binário Electron) e o KDE
+// (e afins) os agrupa num único botão da barra de tarefas. Damos a cada app uma
+// classe própria (o nome do app) — precisa ser definida ANTES de o app ficar
+// pronto/criar a janela. Usamos os dois caminhos: `--class` (lido pelo Chromium
+// no X11) e `app.setName` (usado pelo Electron como fallback do WM_CLASS).
+const WM_CLASS = process.env.DESKTOP_WINDOW_WM_CLASS
+if(WM_CLASS){
+    app.commandLine.appendSwitch("class", WM_CLASS)
+    app.setName(WM_CLASS)
+}
+
 // Reporta o progresso de LANÇAMENTO ao daemon (executor-manager) que abriu esta
 // janela. O daemon injeta META_LAUNCH_PROGRESS_SOCKET/META_LAUNCH_ID no env; aqui
 // POSTamos o ciclo (window-ready → building → ready) no socket dele, e a área de

@@ -27,9 +27,10 @@ cada entrada da seção `windows` do `boot.json` vira uma task
 | Módulo | Responsabilidade |
 |--------|------------------|
 | `DesktopWindowInstance.taskLoader.js` | Carrega/instancia o `desktop-window-instance`; mantém a task `ACTIVE` enquanto a janela estiver aberta. No modo `gui-host`, monta o config (caminhos dos handles + params) num JSON temporário e o passa ao Electron via `DESKTOP_GUI_CONFIG_PATH`. |
-| `OpenElectronWindow.js` | Faz `spawn` do binário do Electron apontando para `electron-main.js` (env: `DESKTOP_WINDOW_URL`/`_FILE` ou `DESKTOP_GUI_CONFIG_PATH`). |
+| `OpenElectronWindow.js` | Faz `spawn` do binário do Electron apontando para `electron-main.js` (env: `DESKTOP_WINDOW_URL`/`_FILE` ou `DESKTOP_GUI_CONFIG_PATH`). Passa também `DESKTOP_WINDOW_WM_CLASS` (classe X11 por app — ver **WM_CLASS**). |
 | `electron-main.js` | Processo *main* do Electron. Modo `loadURL`: tela de carregamento + *polling* HTTP até o servidor local responder. Modo `loadFile`: HTML local. Modo `gui-host`: reaproveita o bundle já montado quando nada mudou (ver **Cache de build**) ou compila o webgui (progresso na tela de carregamento), instancia o grafo de services e os expõe por IPC + protocolo de ícones, e faz `loadFile` do bundle. |
 | `BuildCache.js` | Cache de build do webgui (modo `gui-host`). Calcula um *fingerprint* de **conteúdo** das entradas do build (árvore de fonte do webgui + `node_modules`) e o grava junto ao bundle (`.meta-build-manifest.json`). Na abertura seguinte, se o *fingerprint* bate e os artefatos existem, o webpack é pulado. |
+| `EnsureAppDesktopEntry.js` | Integração com a barra de tarefas (Linux). Gera um `.desktop` por app em `~/.local/share/applications` com `StartupWMClass` = WM_CLASS da janela, para o KDE não agrupar todos os desktopapps pelo binário Electron comum (ver **WM_CLASS**). Idempotente; atualiza o `ksycoca` best-effort. |
 | `loading.html` | Tela provisória (estilo *retro-brutalist*, auto-contida) exibida enquanto o webgui compila; barra de progresso alimentada por `window.buildProgress` (modo `gui-host`). |
 | `preload.js` | Expõe ao renderer: `electronNotifications`, `buildProgress` (progresso do build) e `metaGui` (ponte IPC — `invoke(serviceName, method, data)` / `getManifest()`). |
 
@@ -127,6 +128,28 @@ só passa a devolver um `IPCWebSocket` para os endpoints `WS`. Casos validados:
 > ⚠️ **`require.main` é `undefined`** no processo principal do Electron (modo
 > GUI-host). Código de service/lib que use `require.main.require(...)` quebra —
 > troque por `require(...)` quando o caminho for absoluto (equivalente).
+
+### WM_CLASS (barra de tarefas)
+
+Todos os `.desktopapp` sobem do **mesmo binário Electron**, então por padrão
+compartilham a mesma classe X11 (`WM_CLASS = "electron"`) e gerenciadores de
+janela como o KDE os **agrupam num único botão** da barra de tarefas. Para que
+cada app apareça como uma entrada separada, o `taskLoader` deriva uma classe
+estável e única por app (nome do app no `gui-host`; nome do diretório do pacote
+ou título nos modos `url`/`file`), passa via `DESKTOP_WINDOW_WM_CLASS`, e o
+`electron-main.js` a aplica **antes** de o app ficar pronto — via `--class`
+(Chromium/X11) e `app.setName` (fallback do Electron). Resultado: `WM_CLASS` por
+app (ex.: `"MyDesktopDesktopInstance"` vs `"APIDesignerDesktopInstance"`).
+Múltiplas instâncias do **mesmo** app compartilham a classe (agrupam juntas, como
+esperado).
+
+> ⚠️ No **KDE Plasma**, WM_CLASS distinto **não basta**: como todos os
+> desktopapps rodam o mesmo binário Electron, o Task Manager cai no executável
+> compartilhado (`/proc/<pid>/exe` → `electron`) e agrupa tudo num só botão. Por
+> isso o `taskLoader` também gera, no launch, um `.desktop` por app com
+> `StartupWMClass` = WM_CLASS (`EnsureAppDesktopEntry.js`): aí o Plasma reconhece
+> cada app como um programa distinto (botão + ícone + nome próprios). Sem o
+> `.desktop`, a separação não acontece.
 
 ### Cache de build (`BuildCache.js`)
 
