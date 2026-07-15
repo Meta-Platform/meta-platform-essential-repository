@@ -28,7 +28,8 @@ cada entrada da seção `windows` do `boot.json` vira uma task
 |--------|------------------|
 | `DesktopWindowInstance.taskLoader.js` | Carrega/instancia o `desktop-window-instance`; mantém a task `ACTIVE` enquanto a janela estiver aberta. No modo `gui-host`, monta o config (caminhos dos handles + params) num JSON temporário e o passa ao Electron via `DESKTOP_GUI_CONFIG_PATH`. |
 | `OpenElectronWindow.js` | Faz `spawn` do binário do Electron apontando para `electron-main.js` (env: `DESKTOP_WINDOW_URL`/`_FILE` ou `DESKTOP_GUI_CONFIG_PATH`). |
-| `electron-main.js` | Processo *main* do Electron. Modo `loadURL`: tela de carregamento + *polling* HTTP até o servidor local responder. Modo `loadFile`: HTML local. Modo `gui-host`: compila o webgui (progresso na tela de carregamento), instancia o grafo de services e os expõe por IPC + protocolo de ícones, e faz `loadFile` do bundle. |
+| `electron-main.js` | Processo *main* do Electron. Modo `loadURL`: tela de carregamento + *polling* HTTP até o servidor local responder. Modo `loadFile`: HTML local. Modo `gui-host`: reaproveita o bundle já montado quando nada mudou (ver **Cache de build**) ou compila o webgui (progresso na tela de carregamento), instancia o grafo de services e os expõe por IPC + protocolo de ícones, e faz `loadFile` do bundle. |
+| `BuildCache.js` | Cache de build do webgui (modo `gui-host`). Calcula um *fingerprint* de **conteúdo** das entradas do build (árvore de fonte do webgui + `node_modules`) e o grava junto ao bundle (`.meta-build-manifest.json`). Na abertura seguinte, se o *fingerprint* bate e os artefatos existem, o webpack é pulado. |
 | `loading.html` | Tela provisória (estilo *retro-brutalist*, auto-contida) exibida enquanto o webgui compila; barra de progresso alimentada por `window.buildProgress` (modo `gui-host`). |
 | `preload.js` | Expõe ao renderer: `electronNotifications`, `buildProgress` (progresso do build) e `metaGui` (ponte IPC — `invoke(serviceName, method, data)` / `getManifest()`). |
 
@@ -126,6 +127,26 @@ só passa a devolver um `IPCWebSocket` para os endpoints `WS`. Casos validados:
 > ⚠️ **`require.main` é `undefined`** no processo principal do Electron (modo
 > GUI-host). Código de service/lib que use `require.main.require(...)` quebra —
 > troque por `require(...)` quando o caminho for absoluto (equivalente).
+
+### Cache de build (`BuildCache.js`)
+
+O webgui era recompilado com webpack a **cada** abertura. Agora, antes de buildar,
+`electron-main.js` calcula um *fingerprint* de **conteúdo** (sha256) das entradas
+do build — a árvore de fonte do webgui (`context`) e o `node_modules` resolvido — e
+o compara com o que ficou gravado no último build (`.meta-build-manifest.json`, no
+diretório de saída):
+
+- **bate** e `index.html`/`bundle.js` existem → pula o webpack e faz `loadFile`
+  direto (sem barra de build);
+- **não bate** (primeira vez, edição da fonte do webgui, ou pacote/repositório
+  atualizado — o reprovisionamento renova o `node_modules`) → builda normalmente e
+  regrava o manifesto.
+
+Só **conteúdo** conta: um `touch` sem alterar bytes não dispara rebuild (o bundle
+seria idêntico). Qualquer falha no cálculo/leitura degrada com segurança para
+*rebuild*. Incremente `CACHE_VERSION` ao mudar a config do webpack ou o algoritmo
+do *fingerprint* para invalidar bundles antigos. Vale para **todos** os
+`.desktopapp` em modo GUI-host (compartilham este `electron-main.js`).
 
 ## Dependência
 

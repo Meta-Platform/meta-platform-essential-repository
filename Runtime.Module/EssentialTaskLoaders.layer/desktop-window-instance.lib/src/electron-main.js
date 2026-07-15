@@ -202,9 +202,12 @@ const CreateWindow = () => {
     const url  = process.env.DESKTOP_WINDOW_URL
     const file = process.env.DESKTOP_WINDOW_FILE
 
-    // Modo loadFile: conteúdo estático local, sem espera.
+    // Modo loadFile: conteúdo estático local, sem espera. "ready" só quando o
+    // conteúdo REAL terminar de renderizar (did-finish-load) — não antes de
+    // sequer disparar o load —, para o ícone do MyDesktop só marcar "aberto"
+    // (badge verde) com a UI de fato pronta.
     if(!url) {
-        _ReportLaunchProgress("ready", 100)
+        window.webContents.once("did-finish-load", () => _ReportLaunchProgress("ready", 100))
         window.loadFile(file)
         return
     }
@@ -212,6 +215,7 @@ const CreateWindow = () => {
     // Modo loadURL: mostra a página provisória e faz polling até o front-end
     // buildado responder; então troca para ele.
     let loaded = false
+    let readyReported = false
     let currentBundleSignature
     let ignoredBundleSignature
     let promptOpen = false
@@ -228,7 +232,9 @@ const CreateWindow = () => {
         if(await IsServerReady(url)) {
             loaded = true
             currentBundleSignature = await GetBundleSignature(url)
-            _ReportLaunchProgress("ready", 100)
+            // "ready" NÃO é reportado aqui: servidor respondendo 200 não é o
+            // mesmo que a UI renderizada. Quem reporta é o did-finish-load do
+            // front-end real (handler abaixo).
             if(!window.isDestroyed()) window.loadURL(url)
             setTimeout(PollForUpdatedBundle, ASSET_POLL_INTERVAL_MS)
         } else {
@@ -279,6 +285,18 @@ const CreateWindow = () => {
         if(!window.isDestroyed())
             setTimeout(PollForUpdatedBundle, ASSET_POLL_INTERVAL_MS)
     }
+
+    // "ready" só quando a UI REAL terminar de carregar. O did-finish-load também
+    // dispara para a página provisória (loading.html) e para recarregamentos de
+    // bundle; a trava loaded/readyReported garante um único "ready", no instante
+    // em que o front-end buildado de fato renderizou (e não quando o servidor
+    // apenas respondeu 200).
+    window.webContents.on("did-finish-load", () => {
+        if(loaded && !readyReported){
+            readyReported = true
+            _ReportLaunchProgress("ready", 100)
+        }
+    })
 
     // Se o front-end buildado falhar ao carregar, volta para a provisória e
     // continua tentando.
@@ -504,39 +522,76 @@ const CreateGuiHostWindow = async () => {
         }
     })
 
-    // Compila o webgui empurrando o progresso para a tela de carregamento e,
-    // ao terminar, carrega o bundle local (loadFile — sem servidor HTTP).
+    // Carrega o webgui no bundle local (loadFile — sem servidor HTTP). Se o
+    // front-end já foi montado e nada mudou desde então, reaproveita o bundle
+    // direto; caso contrário (primeira vez ou pacote/repositório atualizado)
+    // compila com webpack empurrando o progresso para a tela de carregamento.
+    const _LoadBundle = (output) => {
+        if(window.isDestroyed()) return
+        if(!window.webContents.isDestroyed())
+            window.webContents.send("build:progress", 100)
+        loaded = true
+        // "ready" só quando o index.html buildado terminar de renderizar
+        // (did-finish-load), não quando o webpack apenas concluiu o build. A
+        // página provisória já carregou muito antes, durante o build, então
+        // o próximo did-finish-load é o da UI real.
+        window.webContents.once("did-finish-load", () => _ReportLaunchProgress("ready", 100))
+        window.loadFile(join(output, "index.html"))
+    }
+
     try {
         const WebInterfaceBuilder = require("../../endpoint-instance.lib/src/WebInterfaceBuilder")
+        const BuildCache = require("./BuildCache")
         const output = MountGuiOutputDir(config.webgui)
-        // Reporta o progresso do build ao daemon apenas quando o inteiro muda,
-        // para não inundar o socket com frações intermediárias.
-        let lastReportedPct = -1
-        const builder = await WebInterfaceBuilder({
-            entrypoint:     config.webgui.entrypoint,
-            htmlTemplate:   config.webgui.htmlTemplate,
-            nodeModulesPath:config.webgui.nodeModules,
-            context:        config.webgui.context,
-            output,
-            url:            "",
-            serverAppName:  config.webgui.serverAppName,
-            onChangeProgress: (percentage) => {
-                if(!window.isDestroyed() && !window.webContents.isDestroyed())
-                    window.webContents.send("build:progress", percentage)
-                const rounded = Math.round(percentage)
-                if(rounded !== lastReportedPct){
-                    lastReportedPct = rounded
-                    _ReportLaunchProgress("building", rounded)
+
+        // Assinatura de conteúdo das entradas do build (fonte do webgui +
+        // node_modules). Se bate com a do último build e os artefatos existem,
+        // pula o webpack e carrega o bundle já montado — sem barra de build.
+        let fingerprint
+        try {
+            fingerprint = BuildCache.ComputeWebInterfaceFingerprint({
+                context:     config.webgui.context,
+                nodeModules: config.webgui.nodeModules
+            })
+        } catch(e) {
+            fingerprint = null
+        }
+
+        if(BuildCache.IsWebInterfaceFresh({ output, fingerprint })){
+            // Front-end já montado e sem atualização: carrega direto.
+            console.log(`[webgui] bundle atualizado — reaproveitando (sem build): ${output}`)
+            _LoadBundle(output)
+        } else {
+            console.log(`[webgui] montando front-end (build necessário): ${config.webgui.serverAppName}`)
+            // Primeira vez ou entradas alteradas: builda com webpack. Reporta o
+            // progresso ao daemon apenas quando o inteiro muda, para não inundar
+            // o socket com frações intermediárias.
+            let lastReportedPct = -1
+            const builder = await WebInterfaceBuilder({
+                entrypoint:     config.webgui.entrypoint,
+                htmlTemplate:   config.webgui.htmlTemplate,
+                nodeModulesPath:config.webgui.nodeModules,
+                context:        config.webgui.context,
+                output,
+                url:            "",
+                serverAppName:  config.webgui.serverAppName,
+                onChangeProgress: (percentage) => {
+                    if(!window.isDestroyed() && !window.webContents.isDestroyed())
+                        window.webContents.send("build:progress", percentage)
+                    const rounded = Math.round(percentage)
+                    if(rounded !== lastReportedPct){
+                        lastReportedPct = rounded
+                        _ReportLaunchProgress("building", rounded)
+                    }
                 }
-            }
-        })
-        await builder.Run()
-        if(!window.isDestroyed()){
-            if(!window.webContents.isDestroyed())
-                window.webContents.send("build:progress", 100)
-            loaded = true
-            _ReportLaunchProgress("ready", 100)
-            window.loadFile(join(output, "index.html"))
+            })
+            await builder.Run()
+            // Grava o fingerprint recém-buildado p/ permitir o reaproveitamento
+            // futuro. Calculado ANTES do build (o build só escreve no diretório
+            // de saída, que não participa da assinatura), então segue válido.
+            if(fingerprint)
+                BuildCache.WriteBuildManifest(output, { fingerprint, serverAppName: config.webgui.serverAppName })
+            _LoadBundle(output)
         }
     } catch(e) {
         console.error("Falha ao compilar o webgui:", e)
