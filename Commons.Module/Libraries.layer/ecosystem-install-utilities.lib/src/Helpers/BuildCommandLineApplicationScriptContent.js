@@ -14,7 +14,7 @@ REPOSITORY_PATH="${REPOSITORY_PATH}"
 # Os argumentos viajam até o pkg-exec como UMA string (--commandLineArgs), então
 # cada um precisa ir aspeado — senão um valor com espaço vira dois argumentos.
 # Escapamos \\ e " e envolvemos em aspas duplas: é exatamente o formato que o
-# TokenizeArgs do command-application.lib desfaz do outro lado.
+# TokenizeArgs do command-application.taskLoader desfaz do outro lado.
 QUOTED_ARGS=()
 for arg in "$@"; do
     escaped=\${arg//\\\\/\\\\\\\\}
