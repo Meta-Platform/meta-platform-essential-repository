@@ -3,6 +3,7 @@
         {
             "objectLoaderType": "install-nodejs-package-dependencies",
             "package": "@/install-nodejs-package-dependencies.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/install-nodejs-package-dependencies.taskLoader",
             "entry": "src/InstallNodejsPackageDependencies.taskLoader",
             "npmDependencies": {
                 "@npmcli/arborist": "^8.0.1",
@@ -12,12 +13,14 @@
         {
             "objectLoaderType": "nodejs-package",
             "package": "@/nodejs-package.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/nodejs-package.taskLoader",
             "entry": "src/NodeJSPackage.taskLoader",
             "npmDependencies": {}
         },
         {
             "objectLoaderType": "command-application",
             "package": "@/command-application.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/command-application.taskLoader",
             "entry": "src/CommandApplication.taskLoader",
             "npmDependencies": {
                 "yargs": "^17.7.2"
@@ -26,18 +29,21 @@
         {
             "objectLoaderType": "application-instance",
             "package": "@/application-instance.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/application-instance.taskLoader",
             "entry": "src/ApplicationInstance.taskLoader",
             "npmDependencies": {}
         },
         {
             "objectLoaderType": "service-instance",
             "package": "@/service-instance.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/service-instance.taskLoader",
             "entry": "src/ServiceInstance.taskLoader",
             "npmDependencies": {}
         },
         {
             "objectLoaderType": "endpoint-instance",
             "package": "@/endpoint-instance.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/endpoint-instance.taskLoader",
             "entry": "src/EndpointInstance.taskLoader",
             "npmDependencies": {
                 "webpack": "^5.102.1",
@@ -48,6 +54,7 @@
         {
             "objectLoaderType": "desktop-window-instance",
             "package": "@/desktop-window-instance.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/desktop-window-instance.taskLoader",
             "entry": "src/DesktopWindowInstance.taskLoader",
             "npmDependencies": {
                 "electron": "^31.7.7"
