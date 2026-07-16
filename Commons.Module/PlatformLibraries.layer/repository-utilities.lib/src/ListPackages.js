@@ -1,5 +1,6 @@
 const ListLayers = require("./ListLayers")
 const GetPackagesByLayer = require("./Commons/GetPackagesByLayer")
+const DeriveSupportedPackageTypes = require("./Commons/DeriveSupportedPackageTypes")
 
 const ListPackages = async ({
     installDataDirPath,
@@ -9,7 +10,16 @@ const ListPackages = async ({
     REPOS_CONF_EXT_GROUP_DIR,
     REPOS_CONF_EXTLIST_PKG_TYPE
 }) => {
-    
+
+    // A whitelist de tipos de pacote é DERIVADA dos `supportedPackageTypes` dos
+    // repositórios instalados (união + tipos estruturais), não a string fixa recebida.
+    // Assim os tipos reconhecidos dependem de quais repositórios estão instalados
+    // (ver MPTL-16). Sem fallback: repo sem repository.json não contribui tipos.
+    const extListPkgType = DeriveSupportedPackageTypes({
+        installDataDirPath,
+        REPOS_CONF_FILENAME_REPOS_DATA
+    })
+
     const listLayers = await ListLayers({
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
@@ -29,8 +39,8 @@ const ListPackages = async ({
                 REPOS_CONF_FILENAME_REPOS_DATA,
                 REPOS_CONF_EXT_MODULE_DIR,
                 REPOS_CONF_EXT_GROUP_DIR,
-                REPOS_CONF_EXTLIST_PKG_TYPE
-            
+                REPOS_CONF_EXTLIST_PKG_TYPE: extListPkgType
+
             })
             return [...listPackages, ...listPackagesChunk]
         }, Promise.resolve([]))
