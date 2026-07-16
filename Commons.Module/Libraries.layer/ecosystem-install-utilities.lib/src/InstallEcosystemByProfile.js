@@ -6,8 +6,9 @@ const colors = SmartRequire("colors")
 const InstallEcosystem = require("./Install/InstallEcosystem")
 const InstallRepository = require("./InstallRepository")
 
-const SynchronizeNodejsDependencies = require("./Helpers/SynchronizeNodejsDependencies")
-const PrepareContext                = require("./Helpers/PrepareContext")
+const SynchronizeNodejsDependencies    = require("./Helpers/SynchronizeNodejsDependencies")
+const CollectTaskLoaderNpmDependencies = require("./Helpers/CollectTaskLoaderNpmDependencies")
+const PrepareContext                   = require("./Helpers/PrepareContext")
 
 const InstallEcosystemByProfile = async ({
     ecosystemDefaults,
@@ -67,6 +68,21 @@ const InstallEcosystemByProfile = async ({
             })
         }
     }
+
+    // Depois de instalar os repositórios, combina as `npmDependencies` declaradas nos
+    // taskloaders.json instalados com a base e re-sincroniza o diretório de dependências
+    // compartilhado (MPTL-17). Deps específicas de loader (electron, webpack, …) passam
+    // a vir dos taskloaders; a base cobre só as deps de runtime da plataforma. Base vence
+    // em versões compartilhadas.
+    const taskLoaderNpmDependencies = CollectTaskLoaderNpmDependencies({
+        installDataDirPath,
+        REPOS_CONF_FILENAME_REPOS_DATA: ecosystemDefaults.REPOS_CONF_FILENAME_REPOS_DATA
+    })
+    await SynchronizeNodejsDependencies({
+        contextPath: npmDependenciesContextPath,
+        dependencies: { ...taskLoaderNpmDependencies, ...npmDependencies },
+        loggerEmitter
+    })
 
     loggerEmitter && loggerEmitter.emit("log", {
         sourceName: "InstallEcosystemByProfile",
