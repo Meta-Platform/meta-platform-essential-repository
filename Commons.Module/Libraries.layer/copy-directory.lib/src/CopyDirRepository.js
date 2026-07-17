@@ -7,14 +7,18 @@ const CopyDirRepository = (source, destination) => {
         fs.mkdirSync(destination, { recursive: true })
     }
 
-    const entries = fs.readdirSync(source, { withFileTypes: true })
+    const entries = fs.readdirSync(source)
 
-    for (const entry of entries) {
-        if (entry.name === '.git' || entry.name === 'node_modules') continue
-        const srcPath = path.join(source, entry.name)
-        const destPath = path.join(destination, entry.name)
+    for (const entryName of entries) {
+        if (entryName === '.git' || entryName === 'node_modules') continue
+        const srcPath = path.join(source, entryName)
+        const destPath = path.join(destination, entryName)
 
-        if (entry.isDirectory()) {
+        // O tipo vem de statSync, e não do Dirent do readdirSync: o Dirent usa
+        // lstat (symlink para diretório vira "não-diretório") e fica sem tipo em
+        // filesystem que não preenche d_type. Nos dois casos um diretório cairia
+        // no copyFileSync e quebraria com EISDIR.
+        if (fs.statSync(srcPath).isDirectory()) {
             CopyDirRepository(srcPath, destPath)
         } else {
             fs.copyFileSync(srcPath, destPath)
