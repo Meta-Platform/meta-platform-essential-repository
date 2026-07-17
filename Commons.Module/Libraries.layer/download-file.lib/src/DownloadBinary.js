@@ -2,31 +2,34 @@ const fs = require("fs")
 const path = require("path")
 const { pipeline } = require("stream")
 const { promisify } = require("util")
+const { RunWithRetry } = require("./RunWithRetry")
 
 const pipelineAsync = promisify(pipeline)
 
 const DownloadBinary = async ({
-    url, 
+    url,
     destinationPath,
     extName
 })  => {
-    try {
-        const response = await fetch(url)
+    const fileName = path.basename(url) + (extName ? `.${extName}` : "")
+    const filePath = path.resolve(destinationPath, fileName)
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch ${url}: ${response.statusText}`)
+    return await RunWithRetry(async () => {
+        // Recomeço limpo entre tentativas: um arquivo parcial de uma tentativa
+        // que caiu no meio do stream não pode contaminar a próxima.
+        if (fs.existsSync(filePath)) {
+            fs.rmSync(filePath)
         }
-        const fileName = path.basename(url) + (extName ? `.${extName}` : "")
-        const filePath = path.resolve(destinationPath, fileName)
-        const writer = fs.createWriteStream(filePath)
 
+        const response = await fetch(url)
+        if (!response.ok) {
+            throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`)
+        }
+        const writer = fs.createWriteStream(filePath)
         await pipelineAsync(response.body, writer)
 
         return filePath
-    } catch (error) {
-        console.error(`Download failed: ${error.message}`)
-        throw error
-    }
+    }, { label: `download ${fileName}` })
 }
 
 module.exports = DownloadBinary
