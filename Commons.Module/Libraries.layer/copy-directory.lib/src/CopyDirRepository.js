@@ -1,8 +1,15 @@
 const fs = require("fs")
 const path = require("path")
 
-const CopyDirRepository = (source, destination) => {
-    
+const CopyDirRepository = (source, destination, ancestors = new Set()) => {
+
+    // Um symlink que aponte para um diretório ancestral faria a recursão nunca
+    // terminar (ELOOP). A comparação é pelo caminho real: o aparente difere a
+    // cada volta do ciclo.
+    const realSource = fs.realpathSync(source)
+    if (ancestors.has(realSource)) return
+    ancestors.add(realSource)
+
     if (!fs.existsSync(destination)) {
         fs.mkdirSync(destination, { recursive: true })
     }
@@ -19,11 +26,13 @@ const CopyDirRepository = (source, destination) => {
         // filesystem que não preenche d_type. Nos dois casos um diretório cairia
         // no copyFileSync e quebraria com EISDIR.
         if (fs.statSync(srcPath).isDirectory()) {
-            CopyDirRepository(srcPath, destPath)
+            CopyDirRepository(srcPath, destPath, ancestors)
         } else {
             fs.copyFileSync(srcPath, destPath)
         }
     }
+
+    ancestors.delete(realSource)
 }
 
 module.exports = CopyDirRepository
