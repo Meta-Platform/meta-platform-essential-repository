@@ -2,7 +2,8 @@
 const GetTaskInformation = (task) => {       
     const {
         taskId,
-        status, 
+        status,
+        statusReason,
         pTaskId,
         objectLoaderType,
         staticParameters,
@@ -15,7 +16,8 @@ const GetTaskInformation = (task) => {
     return {
         taskId,
         status,
-        ...pTaskId ? { pTaskId } : {}, 
+        ...statusReason ? { statusReason } : {},
+        ...pTaskId ? { pTaskId } : {},
         hasChildTasks: !!children && children.length > 0,
         objectLoaderType,
         ...staticParameters ? { staticParameters } : {},

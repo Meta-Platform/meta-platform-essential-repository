@@ -23,9 +23,9 @@ const ProcessChangeTaskEvents = ({
     const GetCommandChannel = (taskId) =>
         GetTask(taskId).executorChannel
 
-    const EnableStatusChangeListening = (taskId) => 
+    const EnableStatusChangeListening = (taskId) =>
         GetCommandChannel(taskId)
-            .on(CommandChannelEventTypes.CHANGE_TASK_STATUS, (status) => ChangeTaskStatus(taskId, status))
+            .on(CommandChannelEventTypes.CHANGE_TASK_STATUS, (status, statusReason) => ChangeTaskStatus(taskId, status, statusReason))
 
     const EnableExitEventListening = (taskId) => {
         GetCommandChannel(taskId)

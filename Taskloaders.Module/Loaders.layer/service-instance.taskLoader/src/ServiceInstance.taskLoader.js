@@ -29,19 +29,31 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
         }
     }
 
+    // Normaliza um erro para uma linha de motivo (statusReason) exibível no painel.
+    // O erro completo (com stack) continua indo para o console, capturado no log da instância.
+    const _ReasonOf = (e) => (e && (e.message || e.toString())) || String(e)
+
     const _CreateServiceObject = () => {
 
         const Service = _GetService()
-        
+
         try {
-            serviceObject = Service({ 
-                ..._GetServiceParams(), 
+            serviceObject = Service({
+                ..._GetServiceParams(),
                 onReady: () => {
                     executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
                 },
                 onClose: () => {
                     serviceObject=undefined
                     executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.TERMINATED)
+                },
+                // onError: falha ASSÍNCRONA do serviço (ex.: EADDRINUSE no listen), que
+                // escapa do try/catch síncrono abaixo. Sem isso, o erro crashava o processo
+                // sem virar FAILURE nem passar pelo onClose.
+                onError: (e) => {
+                    serviceObject=undefined
+                    executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE, _ReasonOf(e))
+                    console.error(e)
                 }
             }, loaderParams.executionData)
         }catch(e){
@@ -54,7 +66,7 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
         try{
             _CreateServiceObject()
         }catch(e){
-            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
+            executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE, _ReasonOf(e))
             console.error(e)
         }
     }

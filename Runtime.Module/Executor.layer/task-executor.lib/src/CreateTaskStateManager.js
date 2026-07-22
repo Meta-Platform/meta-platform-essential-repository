@@ -10,14 +10,16 @@ const CreateTaskStateManager = () => {
 
     const GetTask = (taskId) => taskList[taskId] || {}
 
-    const AddTaskStatusListener = (f) => 
+    const AddTaskStatusListener = (f) =>
         eventEmitter.on(TASK_STATUS_CHANGE, ({
             taskId,
             status,
+            statusReason,
             objectLoaderType
         }) => f({
             taskId,
             status,
+            statusReason,
             objectLoaderType
         }))
 
@@ -26,9 +28,12 @@ const CreateTaskStateManager = () => {
         task[property] = value
     }
 
-    const ChangeTaskStatus = (taskId, status) => {
+    const ChangeTaskStatus = (taskId, status, statusReason) => {
         UpdateTaskProperty(taskId, "status", status)
-        eventEmitter.emit(TASK_STATUS_CHANGE, { taskId, status, objectLoaderType: GetTask(taskId).objectLoaderType} )
+        // statusReason: motivo textual do término (só relevante em FAILURE); quando
+        // ausente, limpamos o valor anterior para não carregar motivo de um status antigo.
+        UpdateTaskProperty(taskId, "statusReason", statusReason)
+        eventEmitter.emit(TASK_STATUS_CHANGE, { taskId, status, statusReason, objectLoaderType: GetTask(taskId).objectLoaderType} )
     }
 
     return {
