@@ -73,7 +73,11 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
 
     const Stop = () => {
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STOPPING)
-        if(serviceObject.Close) {
+        // Guard `serviceObject &&`: após uma FALHA (onError zera serviceObject) ou se
+        // o serviço nunca subiu, serviceObject é undefined — sem a guarda, o acesso a
+        // .Close lançava TypeError e a task ficava presa em STOPPING, travando a
+        // execução (o ambiente não voltava a "TERMINATED" e não podia ser relançado).
+        if(serviceObject && serviceObject.Close) {
             serviceObject.Close()
         } else {
             serviceObject=undefined
