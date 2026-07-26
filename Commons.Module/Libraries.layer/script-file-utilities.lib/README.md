@@ -1,6 +1,10 @@
 # script-file-utilities.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/script-file-utilities.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/script-file-utilities.lib`
+- **Localização:** `Commons.Module/Libraries.layer/script-file-utilities.lib` (EssentialRepo)
+
+## Propósito
 
 Cria, recria e remove os **scripts executáveis** instalados em
 `EcosystemData/executables/` (os comandos que ficam disponíveis no `PATH`).

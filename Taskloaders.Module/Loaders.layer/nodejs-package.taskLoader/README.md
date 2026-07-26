@@ -1,6 +1,10 @@
-# nodejs-package.lib
+# nodejs-package.taskLoader
 
-- **Tipo:** biblioteca / *task loader* (`.lib`) · **Namespace:** `@/nodejs-package.lib`
+- **Tipo:** *task loader* (`.taskLoader`)
+- **Namespace:** `@/nodejs-package.taskLoader`
+- **Localização:** `Taskloaders.Module/Loaders.layer/nodejs-package.taskLoader` (EssentialRepo)
+
+## Propósito
 
 *Object loader* do tipo **`nodejs-package`**: carrega um package Node.js e expõe
 um *handler* (service object) com `require`, para que outras tasks consumam o
@@ -11,6 +15,14 @@ código do package durante a execução de um plano pelo *task executor*.
 | Módulo | Responsabilidade |
 |--------|------------------|
 | `NodeJSPackage.taskLoader.js` | Carrega o package e monta o handler (`require`, `getSourcePath`, `getEnvironmentPath`, `getNodeModulesPath`). |
+
+## Registro (`metadata/taskloaders.json` do repositório)
+
+| Campo | Valor |
+|---|---|
+| `objectLoaderType` | `nodejs-package` |
+| `entry` | `src/NodeJSPackage.taskLoader` |
+| `npmDependencies` | — |
 
 > Parâmetros e exemplo no `execution-params`: ver
 > [Tipos de Object Loader → `nodejs-package`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md#nodejs-package).

@@ -1,6 +1,11 @@
-[Meta Platform Essential Repository](../../../README.md) / [Main Module](../../README.md)
+# instance-supervisor.cli
 
-# Instance Supervisor CLI (`supervisor`)
+- **Tipo:** aplicação de linha de comando (`.cli`)
+- **Namespace:** `@/instance-supervisor.cli`
+- **Executável:** `supervisor`
+- **Localização:** `Main.Module/Application.layer/instance-supervisor.cli` (EssentialRepo)
+
+## Propósito
 
 O **`instance-supervisor.cli`** (executável `supervisor`) é responsável pela análise e supervisão de aplicações compatíveis com o ecossistema **Meta Platform**, especificamente aquelas executadas pelo *package-executor*. As aplicações gerenciadas por ele podem expor um socket de comunicação, permitindo que o supervisor interaja diretamente com a aplicação em execução. Essa interação é facilitada pelo acesso à instância por meio de um arquivo `.sock`, que é especificado no momento da execução da instância.
 

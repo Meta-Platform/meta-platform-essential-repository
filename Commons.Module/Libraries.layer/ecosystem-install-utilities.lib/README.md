@@ -1,6 +1,10 @@
-# Ecosystem Install Utilities
+# ecosystem-install-utilities.lib
 
-## Visão Geral
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/ecosystem-install-utilities.lib`
+- **Localização:** `Commons.Module/Libraries.layer/ecosystem-install-utilities.lib` (EssentialRepo)
+
+## Propósito
 
 A **Ecosystem Install Utilities** é uma biblioteca central do ecossistema, responsável por concentrar **toda a regra de administração, instalação, atualização e manutenção de ecossistemas**. Ela atua como a base operacional para ferramentas críticas, incluindo:
 
@@ -11,6 +15,20 @@ A **Ecosystem Install Utilities** é uma biblioteca central do ecossistema, resp
 Esta biblioteca abstrai a complexidade de obtenção de repositórios, instalação de aplicações, atualização de versões, reconstrução de estrutura e validação de estado do ecossistema, garantindo consistência entre todas as ferramentas que a utilizam.
 
 ---
+
+## Exports (`src/`)
+
+| Módulo | Responsabilidade |
+|---|---|
+| `InstallEcosystemByProfile.js` | Instala um ecossistema inteiro a partir de um perfil. |
+| `UpdateEcosystemByProfile.js` | Atualiza um ecossistema inteiro a partir de um perfil. |
+| `InstallRepository.js` | Instala um repositório de pacotes. |
+| `UpdateRepository.js` | Atualiza um repositório já instalado. |
+| `ChangeRepositorySource.js` | Troca a fonte de atualização de um repositório. |
+| `UninstallApplication.js` | Remove uma aplicação instalada e seus executáveis. |
+| `Domains/` | Construção e restauração da estrutura de diretórios do ecossistema. |
+| `Install/` · `Update/` | Instalação e reinstalação de aplicações. |
+| `Helpers/` | Obtenção de repositórios, scripts de executável, dependências Node.js e verificações de estado. |
 
 ## Estrutura Interna (`src`)
 

@@ -1,6 +1,10 @@
 # copy-directory.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/copy-directory.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/copy-directory.lib`
+- **Localização:** `Commons.Module/Libraries.layer/copy-directory.lib` (EssentialRepo)
+
+## Propósito
 
 Utilitários de **cópia recursiva de diretórios**, incluindo a cópia da estrutura
 de um repositório de pacotes.

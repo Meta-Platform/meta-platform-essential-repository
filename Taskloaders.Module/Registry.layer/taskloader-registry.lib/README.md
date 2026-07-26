@@ -1,8 +1,20 @@
 # taskloader-registry.lib
 
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/taskloader-registry.lib`
+- **Localização:** `Taskloaders.Module/Registry.layer/taskloader-registry.lib` (EssentialRepo)
+
+## Propósito
+
 Registro **dinâmico** de object loaders. Monta o mapa
 `{ objectLoaderType → função-loader }` lendo o `metadata/taskloaders.json` de cada
 repositório instalado (via `repositories.json`), em vez de um mapa hard-coded.
+
+## Exports (`src/`)
+
+| Módulo | Responsabilidade |
+|---|---|
+| `CreateTaskLoaders.js` | Varre os repositórios instalados e devolve o mapa `objectLoaderType` → função-loader. |
 
 ## API
 

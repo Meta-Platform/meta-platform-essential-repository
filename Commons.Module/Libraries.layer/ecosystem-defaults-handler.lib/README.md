@@ -1,6 +1,10 @@
 # ecosystem-defaults-handler.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/ecosystem-defaults-handler.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/ecosystem-defaults-handler.lib`
+- **Localização:** `Commons.Module/Libraries.layer/ecosystem-defaults-handler.lib` (EssentialRepo)
+
+## Propósito
 
 Acessador **único** do arquivo `ecosystem-defaults.json`. Centraliza a leitura
 das variáveis de configuração do ecossistema (as chaves `REPOS_CONF_*`,

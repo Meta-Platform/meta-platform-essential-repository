@@ -1,6 +1,10 @@
 # repository-config-handler.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/repository-config-handler.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/repository-config-handler.lib`
+- **Localização:** `Commons.Module/Libraries.layer/repository-config-handler.lib` (EssentialRepo)
+
+## Propósito
 
 Manipula o arquivo **`repositories.json`** (repositórios instalados, incluindo a
 fonte de cada um) do ecossistema, descrito no

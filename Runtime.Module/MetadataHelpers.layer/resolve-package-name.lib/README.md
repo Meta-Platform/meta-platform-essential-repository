@@ -1,6 +1,10 @@
 # resolve-package-name.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/resolve-package-name.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/resolve-package-name.lib`
+- **Localização:** `Runtime.Module/MetadataHelpers.layer/resolve-package-name.lib` (EssentialRepo)
+
+## Propósito
 
 Resolve o **nome/namespace de um pacote** a partir de suas referências. É usado em
 runtime pelos task loaders `nodejs-package` e `install-nodejs-package-dependencies`

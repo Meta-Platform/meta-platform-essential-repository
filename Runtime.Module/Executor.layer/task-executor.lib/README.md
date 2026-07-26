@@ -1,5 +1,10 @@
-[Meta Platform Essential Repository](../../../README.md) / [Runtime Module](../../README.md)
-# Task Executor
+# task-executor.lib
+
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/task-executor.lib`
+- **Localização:** `Runtime.Module/Executor.layer/task-executor.lib` (EssentialRepo)
+
+## Propósito
 
 O Task Executor é uma biblioteca projetada para facilitar a gestão e execução de tarefas programáticas de maneira organizada e eficiente. Com foco na flexibilidade e escalabilidade, esta ferramenta oferece um conjunto robusto de funcionalidades para lidar com o ciclo de vida das tarefas, eventos associados, dependências e condições específicas, permitindo aos desenvolvedores construir sistemas complexos de execução de tarefas com facilidade.
 
@@ -7,6 +12,18 @@ O Task Executor é uma biblioteca projetada para facilitar a gestão e execuçã
 > [Guia: como criar e usar um Object Loader (Task Loader)](./docs/guia-criar-object-loader.md) ·
 > [ExecutionParams](./docs/execution-params.md) ·
 > [API de Referência](./docs/api-referencia.md).
+
+## Exports (`src/`)
+
+| Módulo | Responsabilidade |
+|---|---|
+| `TaskExecutor.js` | O executor em si: cria, executa, interrompe e finaliza tarefas. |
+| `CreateTaskStateManager.js` | Gerência do estado das tarefas. |
+| `ProcessChangeTaskEvents.js` | Processa os eventos de mudança de tarefa. |
+| `TaskStatusTypes.js` | Enumeração dos status de tarefa. |
+| `CommandChannelEventTypes.js` | Enumeração dos eventos do canal de comandos. |
+| `TaskHandlers/` | Montagem de corpo e parâmetros de tarefa, busca por query e regra de ativação. |
+| `Utils/DeepMergeObjects.js` | Merge profundo de objetos de parâmetros. |
 
 ## Características Principais
 
@@ -75,7 +92,6 @@ taskExecutor.CreateTask({
 setTimeout(() => {
     taskExecutor.StopTask(0)
 }, 15000)
-
 
 ```
 

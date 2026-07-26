@@ -1,6 +1,10 @@
 # task-table-render.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/task-table-render.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/task-table-render.lib`
+- **Localização:** `Commons.Module/Utilities.layer/task-table-render.lib` (EssentialRepo)
+
+## Propósito
 
 Renderiza **tabelas de tarefas** (tasks) no terminal para as CLIs de execução e
 supervisão — exibindo parâmetros estáticos, parâmetros vinculados, regras de

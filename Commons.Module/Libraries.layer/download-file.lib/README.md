@@ -1,6 +1,10 @@
 # download-file.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/download-file.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/download-file.lib`
+- **Localização:** `Commons.Module/Libraries.layer/download-file.lib` (EssentialRepo)
+
+## Propósito
 
 Utilitários de **download de arquivos e binários** a partir das fontes
 suportadas pela plataforma (URL direta, Google Drive e releases do GitHub).

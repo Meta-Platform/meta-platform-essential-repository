@@ -1,6 +1,11 @@
-[Meta Platform Essential Repository](../../../README.md) / [Main Module](../../README.md)
+# maintenance-toolkit.cli
 
-# Maintenance Toolkit Command-line
+- **Tipo:** aplicação de linha de comando (`.cli`)
+- **Namespace:** `@/maintenance-toolkit.cli`
+- **Executável:** `mytoolkit`
+- **Localização:** `Main.Module/Application.layer/maintenance-toolkit.cli` (EssentialRepo)
+
+## Propósito
 
 O **Maintenance Toolkit Command-line** é uma ferramenta usada para configuração e instalação de ecossistemas **Meta Platform**. Ele facilita a preparação e personalização da instalação, garantindo que todos os componentes essenciais do ecossistema estejam integrados e funcionando de maneira otimizada.
 
@@ -89,4 +94,3 @@ mytoolkit install --installation-path "~/xpto/EcosystemData"
 ```
 
 Os perfis de instalação permitem que você escolha a configuração mais adequada para o seu ambiente. A lista completa de perfis está na seção [Perfis de Instalação](#perfis-de-instalação) acima.
-

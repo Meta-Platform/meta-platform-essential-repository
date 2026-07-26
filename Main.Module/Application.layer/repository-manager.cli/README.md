@@ -1,5 +1,11 @@
-[Meta Platform Essential Repository](../../../README.md) / [Main Module](../../README.md)
-# Repository Manager
+# repository-manager.cli
+
+- **Tipo:** aplicação de linha de comando (`.cli`)
+- **Namespace:** `@/repository-manager.cli`
+- **Executável:** `repo`
+- **Localização:** `Main.Module/Application.layer/repository-manager.cli` (EssentialRepo)
+
+## Propósito
 
 O **Repository Manager** é uma ferramenta de linha de comando para gerenciamento centralizado de repositórios, permitindo configurar, instalar, atualizar e remover repositórios de diversas fontes.
 
@@ -118,3 +124,16 @@ repo update MyRepo
 - **Suporte a Múltiplas Fontes**: Diferentes tipos de fontes com parâmetros específicos
 - **Atualizações Automatizadas**: Manutenção simplificada dos repositórios
 - **Configuração Flexível**: Opções específicas para diferentes tipos de fontes
+
+## Comandos (`metadata/command-group.json`)
+
+| Comando | Descrição |
+|---|---|
+| `sources` | Mostra informações sobre as fontes disponível para instalação agreagada pelo repositório |
+| `list` | — |
+| `install [repositoryNamespace] [sourceType]` | Instala um novo repositório no ecosistema |
+| `update [repositoryNamespace]` | Atualiza um repositório já instalado no ecosistema |
+| `show [repositoryNamespace]` | Mostra informações detalhadas sobre um repositório específico instalado |
+| `register source [repositoryNamespace] [sourceType]` | Adiciona uma nova fonte de repositório para ser instalado. |
+| `remove source [repositoryNamespace] [sourceType]` | Remove uma fonte de repositório |
+| `change installed source [repositoryNamespace] [sourceType]` | Trocar fonte de um repositório instalado |

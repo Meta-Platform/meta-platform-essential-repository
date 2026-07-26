@@ -1,6 +1,10 @@
-# service-instance.lib
+# service-instance.taskLoader
 
-- **Tipo:** biblioteca / *task loader* (`.lib`) · **Namespace:** `@/service-instance.lib`
+- **Tipo:** *task loader* (`.taskLoader`)
+- **Namespace:** `@/service-instance.taskLoader`
+- **Localização:** `Taskloaders.Module/Loaders.layer/service-instance.taskLoader` (EssentialRepo)
+
+## Propósito
 
 *Object loader* do tipo **`service-instance`**: instancia um serviço dentro de
 uma aplicação durante a execução de um plano pelo *task executor*.
@@ -10,6 +14,14 @@ uma aplicação durante a execução de um plano pelo *task executor*.
 | Módulo | Responsabilidade |
 |--------|------------------|
 | `ServiceInstance.taskLoader.js` | Carrega/instancia o `service-instance`. |
+
+## Registro (`metadata/taskloaders.json` do repositório)
+
+| Campo | Valor |
+|---|---|
+| `objectLoaderType` | `service-instance` |
+| `entry` | `src/ServiceInstance.taskLoader` |
+| `npmDependencies` | — |
 
 > Parâmetros e exemplo no `execution-params`: ver
 > [Tipos de Object Loader → `service-instance`](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md#service-instance).

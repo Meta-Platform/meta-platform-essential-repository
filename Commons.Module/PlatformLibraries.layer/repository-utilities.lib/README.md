@@ -1,6 +1,10 @@
 # repository-utilities.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/repository-utilities.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/repository-utilities.lib`
+- **Localização:** `Commons.Module/PlatformLibraries.layer/repository-utilities.lib` (EssentialRepo)
+
+## Propósito
 
 Percorre a **hierarquia de um repositório de pacotes**
 (`Module → Layer → Group → Package`), listando seus itens. É a base de leitura de

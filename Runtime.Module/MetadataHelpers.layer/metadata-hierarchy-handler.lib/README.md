@@ -1,6 +1,10 @@
 # metadata-hierarchy-handler.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/metadata-hierarchy-handler.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/metadata-hierarchy-handler.lib`
+- **Localização:** `Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib` (EssentialRepo)
+
+## Propósito
 
 Manipula a **hierarquia de metadados** de um ambiente — o `metadata-hierarchy.json`
 gerado em cada *environment* (ver

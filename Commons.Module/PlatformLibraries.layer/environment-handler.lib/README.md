@@ -1,6 +1,10 @@
 # environment-handler.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/environment-handler.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/environment-handler.lib`
+- **Localização:** `Commons.Module/PlatformLibraries.layer/environment-handler.lib` (EssentialRepo)
+
+## Propósito
 
 Cria e verifica o **diretório de dados do ecossistema** (`EcosystemData`) e os
 **ambientes de execução** isolados por pacote (`environments/`), conforme o

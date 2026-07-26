@@ -1,6 +1,10 @@
 # supervisor.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/supervisor.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/supervisor.lib`
+- **Localização:** `Commons.Module/Libraries.layer/supervisor.lib` (EssentialRepo)
+
+## Propósito
 
 Biblioteca **cliente da interface de supervisão** (gRPC) dos processos: lista e
 observa os sockets de supervisão, conecta-se a um processo e consome seu

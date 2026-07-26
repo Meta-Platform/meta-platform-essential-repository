@@ -1,6 +1,10 @@
 # print-data-log.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/print-data-log.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/print-data-log.lib`
+- **Localização:** `Commons.Module/Libraries.layer/print-data-log.lib` (EssentialRepo)
+
+## Propósito
 
 Impressão de **logs formatados e coloridos** no terminal, no formato
 `[data] [origem] [tipo] [fonte] mensagem`. É a lib de log padrão das CLIs e

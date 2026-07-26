@@ -1,6 +1,10 @@
 # utilities.lib
 
-- **Tipo:** biblioteca (`.lib`) · **Namespace:** `@/utilities.lib`
+- **Tipo:** biblioteca (`.lib`)
+- **Namespace:** `@/utilities.lib`
+- **Localização:** `Commons.Module/Utilities.layer/utilities.lib` (EssentialRepo)
+
+## Propósito
 
 Utilitários de **formatação de tarefas** (tasks) compartilhados entre o executor,
 a supervisão e os painéis.
