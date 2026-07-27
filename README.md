@@ -89,15 +89,18 @@ Para **criar um novo task loader (object loader)**, siga o
 (constrói a metadata hierarchy),
 [execution-params-generator.lib](./Runtime.Module/MetadataHelpers.layer/execution-params-generator.lib/README.md)
 (traduz para execution params),
-[metadata-hierarchy-handler.lib](./Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/README.md)
+[metadata-hierarchy-handler.lib](./Runtime.Module/MetadataHelpers.layer/metadata-hierarchy-handler.lib/README.md),
+[resolve-package-name.lib](./Runtime.Module/MetadataHelpers.layer/resolve-package-name.lib/README.md)
 e
-[resolve-package-name.lib](./Runtime.Module/MetadataHelpers.layer/resolve-package-name.lib/README.md).
+[resource-params-handler.lib](./Runtime.Module/MetadataHelpers.layer/resource-params-handler.lib/README.md)
+(resolve os recursos declarados em `socket-params.json`/`storage-params.json` e
+os injeta nos startup params).
 
 ### Libs usadas pelo Package Executor
 
 Confirmado em
 [`dependency-references.json`](https://github.com/Meta-Platform/meta-platform-package-executor-command-line/blob/main/src/Configs/dependency-references.json):
-`task-executor.lib`, os 7 task loaders, os 4 metadata helpers,
+`task-executor.lib`, os 7 task loaders, os 5 metadata helpers,
 `json-file-utilities.lib`, `repository-utilities.lib`, `environment-handler.lib` e
 `utilities.lib`.
 
