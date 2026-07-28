@@ -5,8 +5,7 @@ const UpdateRepositoryInstallationPath = async ({
     installDataDirPath,
     repositoryNamespace,
     REPOS_CONF_FILENAME_REPOS_DATA,
-    deployedRepoPath,
-    loggerEmitter
+    deployedRepoPath
 }) => {
 
     const repositories = await GetRepositories({
@@ -29,20 +28,11 @@ const UpdateRepositoryInstallationPath = async ({
             await WriteRepositoriesFileJson({ 
                 content: newRepositories,
                 installDataDirPath,
-                REPOS_CONF_FILENAME_REPOS_DATA,
-                loggerEmitter
+                REPOS_CONF_FILENAME_REPOS_DATA
             })
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "UpdateRepositoryInstallationPath",
-                type: "info",
-                message: `O installDataDirPath foi atualizado para [${deployedRepoPath}]`
-            })
+            Log.info("UpdateRepositoryInstallationPath", `O installDataDirPath foi atualizado para [${deployedRepoPath}]`)
         } else {
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "UpdateRepositoryInstallationPath",
-                type: "error",
-                message: `o parâmetro [deployedRepoPath] é inválido [${deployedRepoPath}]`
-            })
+            Log.error("UpdateRepositoryInstallationPath", `o parâmetro [deployedRepoPath] é inválido [${deployedRepoPath}]`)
         }
         
     } else 

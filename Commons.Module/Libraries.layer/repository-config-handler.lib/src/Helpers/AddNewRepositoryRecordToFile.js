@@ -6,8 +6,7 @@ const AddNewRepositoryRecordToFile = async ({
     sourceData,
     deployedRepoPath, 
     installDataDirPath,
-    REPOS_CONF_FILENAME_REPOS_DATA,
-    loggerEmitter
+    REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
 
     const repositories = await GetRepositories({
@@ -27,14 +26,9 @@ const AddNewRepositoryRecordToFile = async ({
         await WriteRepositoriesFileJson({ 
             content: newRepositories,
             installDataDirPath,
-            REPOS_CONF_FILENAME_REPOS_DATA,
-            loggerEmitter
+            REPOS_CONF_FILENAME_REPOS_DATA
         })
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "AddNewRepositoryRecordToFile",
-            type: "info",
-            message: `arquivo de repositórios atualizado com [${repositoryNamespace}] => [${deployedRepoPath}]`
-        })
+        Log.info("AddNewRepositoryRecordToFile", `arquivo de repositórios atualizado com [${repositoryNamespace}] => [${deployedRepoPath}]`)
     } else 
         throw `ATENÇÃO: a instalação do repositório [${repositoryNamespace}] já está registrada!`
 

@@ -3,16 +3,11 @@ const GetEnvironmentPath = require("./GetEnvironmentPath")
 
 const CreateEnvironmentDir = async ({
     environmentName, 
-    localPath,
-    loggerEmitter
+    localPath
 }) => {
     const environmentPath = GetEnvironmentPath(environmentName, localPath)
     await mkdir(environmentPath, {recursive:true})
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "CreateEnvironmentDir",
-        type: "info",
-        message: `${environmentName} environment criado`
-    })
+    Log.info("CreateEnvironmentDir", `${environmentName} environment criado`)
 }
 
 module.exports = CreateEnvironmentDir

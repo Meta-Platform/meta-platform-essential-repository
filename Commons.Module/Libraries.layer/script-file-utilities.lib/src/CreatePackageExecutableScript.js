@@ -9,8 +9,7 @@ const CreatePackageExecutableScript = async ({
     packageExecutorBinaryName,
     buildContentFunction,
     executableScriptFilename,
-    debugMode=false,
-    loggerEmitter
+    debugMode=false
 }) => {
 
     const {
@@ -37,11 +36,7 @@ const CreatePackageExecutableScript = async ({
     await CreateExecutableScript(fullScriptPath, scriptContent)
 
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "CreatePackageExecutableScript",
-        type: "info",
-        message: `Script executável ${executableScriptFilename} criado com sucesso!`
-    })
+    Log.info("CreatePackageExecutableScript", `Script executável ${executableScriptFilename} criado com sucesso!`)
 
     return fullScriptPath
 }

@@ -1,4 +1,3 @@
-const EventEmitter = require('node:events')
 const path = require("path")
 
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
@@ -25,7 +24,6 @@ const InstallRepositoryCommand = async ({
     const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
     const InstallRepository = ecosystemInstallUtilitiesLib.require("InstallRepository")
-    const PrintDataLog = printDataLogLib.require("PrintDataLog")
     const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
 
     const { 
@@ -34,9 +32,6 @@ const InstallRepositoryCommand = async ({
         executables
     } = args
     
-    const loggerEmitter = new EventEmitter()
-	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "InstallRepositoryCommand"))
-
     const sourcePath = path.resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
     const sourcesDataInformation = await ReadJsonFile(sourcePath)
 
@@ -51,8 +46,7 @@ const InstallRepositoryCommand = async ({
         sourceData,
         executablesToInstall: executables,
         installDataDirPath,
-        ecosystemDefaults: ECOSYSTEM_DEFAULTS,
-        loggerEmitter
+        ecosystemDefaults: ECOSYSTEM_DEFAULTS
     })
     
 }

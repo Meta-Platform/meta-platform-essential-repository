@@ -5,30 +5,17 @@ const { join } = require("path")
 const CreatePackageDependenciesDir = async ({
     environmentPath, 
     packageName,
-    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-    loggerEmitter
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
 }) => {
     const dirpath = join(environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES, packageName)
     try{
         await mkdir(dirpath)
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "CreatePackageDependenciesDir",
-            type: "info",
-            message: `o diretório de dependencia de pacote criado com sucesso em ${dirpath}`
-        })
+        Log.info("CreatePackageDependenciesDir", `o diretório de dependencia de pacote criado com sucesso em ${dirpath}`)
     } catch (e){
         if(e.code === "EEXIST"){
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "CreatePackageDependenciesDir",
-                type: "info",
-                message: `diretório ${dirpath} já existe`
-            })
+            Log.info("CreatePackageDependenciesDir", `diretório ${dirpath} já existe`)
         }else {
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "CreatePackageDependenciesDir",
-                type: "error",
-                message: `erro ao criar diretório de dependencia de pacote ${dirpath}`
-            })
+            Log.error("CreatePackageDependenciesDir", `erro ao criar diretório de dependencia de pacote ${dirpath}`)
             throw e
         }
     }

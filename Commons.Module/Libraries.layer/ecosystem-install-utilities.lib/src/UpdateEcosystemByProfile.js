@@ -15,15 +15,10 @@ const UpdateEcosystemByProfile = async ({
     profile,
     installationDataDir,
     repositoriesInstallData,
-    installationPath,
-    loggerEmitter
+    installationPath
 }) => {
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UpdateEcosystemByProfile",
-        type: "info",
-        message: `Início da atualização usando o perfil ${colors.bold(path.basename(profile))}`
-    })
+    Log.info("UpdateEcosystemByProfile", `Início da atualização usando o perfil ${colors.bold(path.basename(profile))}`)
 
     const context = PrepareContext({
         installationDataDir,
@@ -38,14 +33,12 @@ const UpdateEcosystemByProfile = async ({
 
     await UpdateEcosystem({
         ecosystemDefaults,
-        installDataDirPath,
-        loggerEmitter
+        installDataDirPath
     })
 
     await SynchronizeNodejsDependencies({
         contextPath: npmDependenciesContextPath,
-        dependencies: npmDependencies,
-        loggerEmitter
+        dependencies: npmDependencies
     })
 
     if(repositoriesInstallData){
@@ -71,8 +64,7 @@ const UpdateEcosystemByProfile = async ({
                     sourceData,
                     executablesToInstall,
                     installDataDirPath,
-                    ecosystemDefaults,
-                    loggerEmitter
+                    ecosystemDefaults
                 })
             }
         } else {
@@ -81,11 +73,7 @@ const UpdateEcosystemByProfile = async ({
     }
 
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UpdateEcosystemByProfile",
-        type: "info",
-        message: `Fim da atualização do perfil ${colors.bold(path.basename(profile))}!`
-    })
+    Log.info("UpdateEcosystemByProfile", `Fim da atualização do perfil ${colors.bold(path.basename(profile))}!`)
 }
 
 module.exports = UpdateEcosystemByProfile

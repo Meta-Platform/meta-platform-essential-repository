@@ -4,14 +4,12 @@ const VerifyPackageDependenciesDir = require("./VerifyPackageDependenciesDir")
 const PreparePackageDependenciesDir = async ({
     environmentPath, 
     packageName,
-    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-    loggerEmitter
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
 }) => {
     const configDirExit = await VerifyPackageDependenciesDir({
         environmentPath, 
         packageName,
-        EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-        loggerEmitter
+        EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
     })
     if(configDirExit){
         return
@@ -19,14 +17,12 @@ const PreparePackageDependenciesDir = async ({
         await CreatePackageDependenciesDir({
             environmentPath, 
             packageName,
-            EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-            loggerEmitter
+            EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
         })
         await PreparePackageDependenciesDir({
             environmentPath, 
             packageName,
-            EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-            loggerEmitter
+            EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
         })
     }
 }

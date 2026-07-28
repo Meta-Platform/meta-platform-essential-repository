@@ -5,8 +5,7 @@ const { join } = require("path")
 const VerifyPackageDependenciesDir = async ({
     environmentPath, 
     packageName,
-    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-    loggerEmitter
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
 }) => {
     const dirpath = join(environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES, packageName)
     try{
@@ -19,11 +18,7 @@ const VerifyPackageDependenciesDir = async ({
         }
     } catch (e){
         if(e.code === "ENOENT"){
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "VerifyPackageDependenciesDir",
-                type: "info",
-                message: `${dirpath} não existe`
-            })
+            Log.info("VerifyPackageDependenciesDir", `${dirpath} não existe`)
             return false
         } else {
             throw e

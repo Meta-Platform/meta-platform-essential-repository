@@ -16,33 +16,25 @@ const CreateRepositorySource          = require("./CreateRepositorySource")
 const Install = async ({
     ecosystemDefaults,
     installationDataDir,
-    initialRepositorySource,
-    loggerEmitter
+    initialRepositorySource
 }) => {
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallEcosystem",
-        type: "info",
-        message: `Iniciando a instalação do ecosistema...`
-    })
+    Log.info("InstallEcosystem", `Iniciando a instalação do ecosistema...`)
 
     await ConstructEcosystemStructure({
         installationDataDir,
-        ecosystemDefaults,
-        loggerEmitter
+        ecosystemDefaults
     })
 
     await CreateEcosystemDefaultsJsonFile({
         installationDataDir, 
-        ecosystemDefaults,
-        loggerEmitter
+        ecosystemDefaults
     })
 
     const { REPOS_CONF_FILENAME_SOURCE_DATA } = ecosystemDefaults
 
     await CreateRepositorySource({
         installationDataDir,
-        loggerEmitter,
         sourceData: initialRepositorySource,
         REPOS_CONF_FILENAME_SOURCE_DATA
     })
@@ -53,8 +45,7 @@ const Install = async ({
 
     const packageExecutorBinFilePath = await InstallPackageExecutor({
         installationDataDir,
-        ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
-        loggerEmitter
+        ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
     })
 
     const packageExecutorBinaryName = path.basename(packageExecutorBinFilePath)
@@ -64,8 +55,7 @@ const Install = async ({
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetApplicationExecutionContent,
-        executableScriptFilename:"execute-application",
-        loggerEmitter
+        executableScriptFilename:"execute-application"
     })
 
     await CreatePackageExecutableScript({
@@ -74,8 +64,7 @@ const Install = async ({
         packageExecutorBinaryName,
         buildContentFunction: GetApplicationExecutionContent,
         executableScriptFilename:"execute-application-dbg",
-        debugMode:true,
-        loggerEmitter
+        debugMode:true
     })
 
     await CreatePackageExecutableScript({
@@ -83,8 +72,7 @@ const Install = async ({
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
-        executableScriptFilename:"execute-command-line-application",
-        loggerEmitter
+        executableScriptFilename:"execute-command-line-application"
     })
 
     await CreatePackageExecutableScript({
@@ -93,8 +81,7 @@ const Install = async ({
         packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
         executableScriptFilename:"execute-command-line-application-dbg",
-        debugMode:true,
-        loggerEmitter
+        debugMode:true
     })
 
     await CreatePackageExecutableScript({
@@ -102,8 +89,7 @@ const Install = async ({
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetDesktopApplicationExecutionContent,
-        executableScriptFilename:"execute-desktop-application",
-        loggerEmitter
+        executableScriptFilename:"execute-desktop-application"
     })
 
     await CreatePackageExecutableScript({
@@ -112,16 +98,11 @@ const Install = async ({
         packageExecutorBinaryName,
         buildContentFunction: GetDesktopApplicationExecutionContent,
         executableScriptFilename:"execute-desktop-application-dbg",
-        debugMode:true,
-        loggerEmitter
+        debugMode:true
     })
 
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallEcosystem",
-        type: "info",
-        message: `Ecosistema instalado com sucesso em ${colors.bold(installationDataDir)}`
-    })
+    Log.info("InstallEcosystem", `Ecosistema instalado com sucesso em ${colors.bold(installationDataDir)}`)
     
 
 }

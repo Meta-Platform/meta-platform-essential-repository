@@ -5,8 +5,7 @@ const WriteObjectToFile = require("../../../json-file-utilities.lib/src/WriteObj
 const WriteRepositoriesFileJson = async ({ 
     content,
     installDataDirPath,
-    REPOS_CONF_FILENAME_REPOS_DATA,
-    loggerEmitter
+    REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
     const filePath = GetRepositoriesFilePath({
         installDataDirPath,
@@ -14,17 +13,9 @@ const WriteRepositoriesFileJson = async ({
     })
     try{
         await WriteObjectToFile(filePath, content)
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "WriteRepositoriesFileJson",
-            type: "info",
-            message: `Repositórios atualizado com sucesso!`
-        })
+        Log.info("WriteRepositoriesFileJson", `Repositórios atualizado com sucesso!`)
     } catch(e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "WriteRepositoriesFileJson",
-            type: "error",
-            message: e
-        })
+        Log.error("WriteRepositoriesFileJson", e)
         throw `erro ao escrever arquivo de repositórios ${filePath}!`
     }
 }

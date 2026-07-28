@@ -6,18 +6,13 @@ const WriteObjectToFile = require("../../../../json-file-utilities.lib/src/Write
 
 const CreateRepositorySource = async ({
     installationDataDir,
-    loggerEmitter,
     sourceData,
     REPOS_CONF_FILENAME_SOURCE_DATA
 }) => {
     const filePath = join(installationDataDir, REPOS_CONF_FILENAME_SOURCE_DATA)
     await WriteObjectToFile(filePath, sourceData)
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "CreateRepositorySource",
-        type: "info",
-        message: `${colors.bold(REPOS_CONF_FILENAME_SOURCE_DATA)} criado com sucesso!`
-    })
+    Log.info("CreateRepositorySource", `${colors.bold(REPOS_CONF_FILENAME_SOURCE_DATA)} criado com sucesso!`)
 }
 
 module.exports = CreateRepositorySource

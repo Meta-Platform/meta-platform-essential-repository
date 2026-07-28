@@ -13,8 +13,7 @@ const ReinstallApplication = async ({
     deployedRepoPath,
     installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-    supervisorSocketDirPath,
-    loggerEmitter
+    supervisorSocketDirPath
 }) => {
 
     const {
@@ -24,26 +23,14 @@ const ReinstallApplication = async ({
         supervisorSocketFileName
     } = applicationData
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "ReinstallApplication",
-        type: "info",
-        message: `Início da reinstalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
-    })
+    Log.info("ReinstallApplication", `Início da reinstalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`)
 
     if(!appType) {
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "ReinstallApplication",
-            type: "error",
-            message: `applicationData.appType é obrigatório`
-        })
+        Log.error("ReinstallApplication", `applicationData.appType é obrigatório`)
         throw "applicationData.appType é obrigatório"
     }
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "ReinstallApplication",
-        type: "info",
-        message: `Reinstalando executável ${colors.bold(executable)} do tipo ${appType}`
-    })
+    Log.info("ReinstallApplication", `Reinstalando executável ${colors.bold(executable)} do tipo ${appType}`)
 
     const supervisorSocketFilePath = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
@@ -77,16 +64,12 @@ const ReinstallApplication = async ({
     }
     
     const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
-    await RecreateExecutableScript(fullScriptPath, _CreateScriptContent({ debugMode:false }), loggerEmitter)
+    await RecreateExecutableScript(fullScriptPath, _CreateScriptContent({ debugMode:false }))
 
     const fullScriptDbgPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable+"-dbg")
-    await RecreateExecutableScript(fullScriptDbgPath, _CreateScriptContent({ debugMode:true }), loggerEmitter)
+    await RecreateExecutableScript(fullScriptDbgPath, _CreateScriptContent({ debugMode:true }))
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "ReinstallApplication",
-        type: "info",
-        message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi reinstalado!`
-    })
+    Log.info("ReinstallApplication", `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi reinstalado!`)
 
     return fullScriptPath
 }

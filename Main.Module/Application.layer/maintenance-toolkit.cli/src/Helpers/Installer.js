@@ -1,5 +1,3 @@
-const EventEmitter = require('events')
-
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 const NPM_DEPENDENCIES =  require("../Configs/npm-dependencies.json")
 const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
@@ -16,10 +14,6 @@ const Installer = async ({
 }) => {
 
     const InstallEcosystemByProfile = ecosystemInstallUtilitiesLib.require("InstallEcosystemByProfile")
-    const PrintDataLog = printDataLogLib.require("PrintDataLog")   
-
-    const loggerEmitter = new EventEmitter()
-	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "maintenance-toolkit|Installer"))
 
     const installationProfiles = LoadAllInstalationProfiles()
     const instalationData = installationProfiles[profile]
@@ -35,15 +29,10 @@ const Installer = async ({
             profile,
             installationDataDir,
             repositoriesInstallData,
-            installationPath,
-            loggerEmitter
+            installationPath
         })
     } catch(e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "Installer",
-            type: "error",
-            message: `A instalação cancelada!`
-        })
+        Log.error("Installer", `A instalação cancelada!`)
         console.error(e)
     }
     

@@ -18,8 +18,7 @@ const UpdateRepository = async ({
     repositoryNamespace,
     executablesToInstall,
     installDataDirPath,
-    ecosystemDefaults,
-    loggerEmitter
+    ecosystemDefaults
 }) => {
 
     const { 
@@ -30,17 +29,12 @@ const UpdateRepository = async ({
         REPOS_CONF_DIRNAME_METADATA
     } = ecosystemDefaults
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UpdateRepository",
-        type: "info",
-        message: `Atualizando o repositório ${colors.bold(repositoryNamespace)}...`
-    })
+    Log.info("UpdateRepository", `Atualizando o repositório ${colors.bold(repositoryNamespace)}...`)
 
     await CleanOldRepository({
         namespace: repositoryNamespace,
         installDataDirPath,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-        loggerEmitter
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES
     })
 
     const { sourceData } = (await GetRepositories({
@@ -52,16 +46,14 @@ const UpdateRepository = async ({
         repositoryNamespace,
         sourceData,
         installDataDirPath,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-        loggerEmitter
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES
     })
 
     await UpdateRepositoryInstallationPath({
         installDataDirPath,
         repositoryNamespace,
         REPOS_CONF_FILENAME_REPOS_DATA,
-        deployedRepoPath,
-        loggerEmitter
+        deployedRepoPath
     }) 
   
 
@@ -87,15 +79,10 @@ const UpdateRepository = async ({
                     deployedRepoPath,
                     installDataDirPath,
                     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
-                    supervisorSocketDirPath,
-                    loggerEmitter
+                    supervisorSocketDirPath
                 })
             } catch (err) {
-                loggerEmitter && loggerEmitter.emit("log", {
-                    sourceName: "UpdateRepository",
-                    type: "warning",
-                    message: `A aplicação não foi reinstalada: o executável ${applicationData.executable} não existe em ${executableFullPath}. É preciso estar instalado para reinstalar.`
-                })
+                Log.warn("UpdateRepository", `A aplicação não foi reinstalada: o executável ${applicationData.executable} não existe em ${executableFullPath}. É preciso estar instalado para reinstalar.`)
             }
 
             
@@ -104,11 +91,7 @@ const UpdateRepository = async ({
 
     }
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UpdateRepository",
-        type: "info",
-        message: `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.sourceType)}] foi concluída!`
-    })
+    Log.info("UpdateRepository", `A atualização do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.sourceType)}] foi concluída!`)
 }
 
 module.exports = UpdateRepository

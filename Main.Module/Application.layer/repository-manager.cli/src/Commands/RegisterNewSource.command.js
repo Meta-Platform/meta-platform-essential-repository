@@ -1,6 +1,5 @@
 const path = require("path")
 
-const EventEmitter = require('node:events')
 const { resolve } = require("path")
 const colors = require("colors")
 
@@ -60,10 +59,6 @@ const RegisterNewSourceCommand = async ({
         printDataLogLib
     } = params
 
-    const loggerEmitter = new EventEmitter()
-
-    const PrintDataLog = printDataLogLib.require("PrintDataLog")
-        loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "RegisterNewSourceCommand"))
 	
     try {
         
@@ -90,18 +85,10 @@ const RegisterNewSourceCommand = async ({
                 ]
             }
             await WriteObjectToFile(sourceFilePath, newSourcesDataInformation)
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "RegisterNewSourceCommand",
-                type: "warning",
-                message: `Uma nova fonte foi registrada de namespace ${colors.bold(repositoryNamespace)} de tipo ${colors.bold(sourceType)}.`
-            })
+            Log.warn("RegisterNewSourceCommand", `Uma nova fonte foi registrada de namespace ${colors.bold(repositoryNamespace)} de tipo ${colors.bold(sourceType)}.`)
         }
     }catch(e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RegisterNewSourceCommand",
-            type: "error",
-            message: e
-        })
+        Log.error("RegisterNewSourceCommand", e)
         throw e
     }
 

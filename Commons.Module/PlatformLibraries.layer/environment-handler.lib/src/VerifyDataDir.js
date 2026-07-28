@@ -2,7 +2,7 @@ const { stat } = require('node:fs/promises')
 
 const { join } = require("path")
 
-const VerifyDataDir = async ({ environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES, loggerEmitter}) => {
+const VerifyDataDir = async ({ environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES}) => {
     const dirpath = join(environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES)
     try{
         const stats = await stat(dirpath)
@@ -14,11 +14,7 @@ const VerifyDataDir = async ({ environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPEN
         }
     } catch (e){
         if(e.code === "ENOENT"){
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "VerifyDataDir",
-                type: "info",
-                message: `${dirpath} não existe`
-            })
+            Log.info("VerifyDataDir", `${dirpath} não existe`)
             return false
         } else {
             throw e

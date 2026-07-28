@@ -3,21 +3,18 @@ const CreateEnvironmentDir = require("./CreateEnvironmentDir")
 
 const PrepareEnvironmentDir = async ({
     environmentName, 
-    localPath,
-    loggerEmitter
+    localPath
 }) => {
     const environmentDirExit = await VerifyEnvironmentDir({
         environmentName, 
-        localPath,
-        loggerEmitter
+        localPath
     })
     if(environmentDirExit){
         return
     } else {
         await CreateEnvironmentDir({
             environmentName, 
-            localPath,
-            loggerEmitter
+            localPath
         })
     }
 }

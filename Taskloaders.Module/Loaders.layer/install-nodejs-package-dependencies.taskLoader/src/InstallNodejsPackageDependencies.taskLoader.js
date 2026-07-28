@@ -1,7 +1,3 @@
-const EventEmitter = require('node:events')
-
-const LEVEL_BY_TYPE = { info : "info", success : "message", warning : "warn", error : "error" }
-
 const TaskStatusTypes          = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
@@ -50,18 +46,10 @@ const InstallNodejsPackageDependenciesTaskLoader  = (params, executorChannel) =>
 
             if(CheckIfDependencyIsValid(dependencies)){
 
-                const loggerEmitter = new EventEmitter()
-
-                // Era aqui a SEXTA cópia do formatador de log, montada à mão. O
-                // emissor agora delega ao logger global, que formata e grava.
-                loggerEmitter.on("log", (dataLog) =>
-                    instanceLog[LEVEL_BY_TYPE[dataLog.type] || "info"](dataLog.sourceName, dataLog.message))
-
                 await PreparePackageDependenciesDir({
                     environmentPath, 
                     packageName,
-                    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-                    loggerEmitter
+                    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
                 })
                 await InstallNpmPackage({
                     environmentPath, 

@@ -3,15 +3,14 @@ const MakeFileExecutable         = require("../../../script-file-utilities.lib/s
 
 const UpdatePackageExecutor = async ({
     ECO_DIRPATH_INSTALL_DATA,
-    ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
-    loggerEmitter
+    ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
 }) => {
 
     const packageExecutorBinFilePath = await DownloadPackageExecutorBin({
         ECO_DIRPATH_INSTALL_DATA,
         ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
     })
-    await MakeFileExecutable(packageExecutorBinFilePath, loggerEmitter)
+    await MakeFileExecutable(packageExecutorBinFilePath)
     return packageExecutorBinFilePath
     
 }

@@ -6,39 +6,24 @@ const RegisterRepositoryInstallation = async ({
     sourceData,
     installDataDirPath,
     deployedRepoPath,
-    REPOS_CONF_FILENAME_REPOS_DATA,
-    loggerEmitter
+    REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
     try{
         await PrepareRepositoriesFileJson({
             installDataDirPath,
-            REPOS_CONF_FILENAME_REPOS_DATA,
-            loggerEmitter
+            REPOS_CONF_FILENAME_REPOS_DATA
         })
         await AddNewRepositoryRecordToFile({
             repositoryNamespace,
             sourceData,
             deployedRepoPath,
             installDataDirPath,
-            REPOS_CONF_FILENAME_REPOS_DATA,
-            loggerEmitter
+            REPOS_CONF_FILENAME_REPOS_DATA
         })
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RegisterRepositoryInstallation",
-            type: "info",
-            message: `a instalação do repositório [${repositoryNamespace}] registrada com sucesso!`
-        })
+        Log.info("RegisterRepositoryInstallation", `a instalação do repositório [${repositoryNamespace}] registrada com sucesso!`)
     } catch(e) {
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RegisterRepositoryInstallation",
-            type: "error",
-            message: e
-        })
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RegisterRepositoryInstallation",
-            type: "error",
-            message: `Erro ao registrar repositório`
-        })
+        Log.error("RegisterRepositoryInstallation", e)
+        Log.error("RegisterRepositoryInstallation", `Erro ao registrar repositório`)
     }
 }
 

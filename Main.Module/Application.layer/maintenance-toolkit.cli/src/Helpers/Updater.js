@@ -1,5 +1,3 @@
-const EventEmitter = require('events')
-
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 const NPM_DEPENDENCIES =  require("../Configs/npm-dependencies.json")
 const REPOSITORY_SOURCES = require("../Configs/repository-sources.json")
@@ -16,11 +14,7 @@ const Updater = async ({
 }) => {
 
     const UpdateEcosystemByProfile = ecosystemInstallUtilitiesLib.require("UpdateEcosystemByProfile")
-    const PrintDataLog = printDataLogLib.require("PrintDataLog")  
     
-    const loggerEmitter = new EventEmitter()
-	loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "maintenance-toolkit|Updater"))
-
     const installationProfiles = LoadAllInstalationProfiles()
     const instalationData = installationProfiles[profile]
     const { repositoriesToInstall, installationDataDir } = instalationData
@@ -35,22 +29,13 @@ const Updater = async ({
             profile,
             installationDataDir,
             repositoriesInstallData,
-            installationPath,
-            loggerEmitter
+            installationPath
         })
     } catch(e){
        
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "Updater",
-            type: "error",
-            message: e
-        })
+        Log.error("Updater", e)
 
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "Updater",
-            type: "error",
-            message: `A atualização cancelada!`
-        })
+        Log.error("Updater", `A atualização cancelada!`)
 
         throw e
     }

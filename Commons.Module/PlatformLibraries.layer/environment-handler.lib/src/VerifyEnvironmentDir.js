@@ -4,8 +4,7 @@ const GetEnvironmentPath = require("./GetEnvironmentPath")
 
 const VerifyEnvironmentDir = async ({
     environmentName, 
-    localPath,
-    loggerEmitter
+    localPath
 }) => {
     try{
         const stats = await stat(GetEnvironmentPath(environmentName, localPath))
@@ -16,11 +15,7 @@ const VerifyEnvironmentDir = async ({
             reject(messageError)
         }
     } catch(e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "VerifyEnvironmentDir",
-            type: "info",
-            message: `${environmentName} environment não existe`
-        })
+        Log.info("VerifyEnvironmentDir", `${environmentName} environment não existe`)
         return false
     }
 }

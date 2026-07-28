@@ -16,8 +16,7 @@ const InstallRepository = async ({
     sourceData,
     executablesToInstall,
     installDataDirPath,
-    ecosystemDefaults,
-    loggerEmitter
+    ecosystemDefaults
 }) => {
 
     const { 
@@ -28,18 +27,13 @@ const InstallRepository = async ({
         REPOS_CONF_DIRNAME_METADATA
     } = ecosystemDefaults
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallRepository",
-        type: "info",
-        message: `Instalando o repositório ${colors.bold(repositoryNamespace)}...`
-    })
+    Log.info("InstallRepository", `Instalando o repositório ${colors.bold(repositoryNamespace)}...`)
 
     const deployedRepoPath = await ObtainRepository({
         repositoryNamespace,
         sourceData,
         installDataDirPath,
-        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES,
-        loggerEmitter
+        ECOSYSTEMDATA_CONF_DIRNAME_DOWNLOADED_REPOSITORIES
     })
 
     const metadataContent = await LoadMetadataDir({
@@ -54,8 +48,7 @@ const InstallRepository = async ({
         sourceData,
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA,
-        deployedRepoPath,
-        loggerEmitter
+        deployedRepoPath
     })
 
     if(executablesToInstall && metadataContent){
@@ -77,18 +70,13 @@ const InstallRepository = async ({
                 installDataDirPath,
                 ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
                 REPOS_CONF_FILENAME_REPOS_DATA,
-                supervisorSocketDirPath,
-                loggerEmitter
+                supervisorSocketDirPath
             })
             
         }
     }
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallRepository",
-        type: "info",
-        message: `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.sourceType)}] foi concluída!`
-    })
+    Log.info("InstallRepository", `A Instalação do repositório ${colors.bold("namespace")} pela fonte do tipo [${colors.inverse(sourceData.sourceType)}] foi concluída!`)
 }
 
 module.exports = InstallRepository

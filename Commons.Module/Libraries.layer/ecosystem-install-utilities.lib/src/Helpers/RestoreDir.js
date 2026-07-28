@@ -8,30 +8,17 @@ const VerifyDirExit = require("../Helpers/VerifyDirExit")
 
 const RestoreDir = async ({
     installDataDirPath,
-    dirname,
-    loggerEmitter
+    dirname
 }) => {
 
     const dirPath = resolve(installDataDirPath, dirname)
 
     if(!await VerifyDirExit(dirPath)){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RestoreDir",
-            type: "warning",
-            message: `O diretório ${colors.bold(dirname)} não foi encontrado!`
-        })
+        Log.warn("RestoreDir", `O diretório ${colors.bold(dirname)} não foi encontrado!`)
         await mkdir(dirPath)
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RestoreDir",
-            type: "warning",
-            message: `O subdiretório ${ colors.bold(dirname)} foi recriado!`
-        })
+        Log.warn("RestoreDir", `O subdiretório ${ colors.bold(dirname)} foi recriado!`)
     } else {
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RestoreDir",
-            type: "info",
-            message: `O diretório ${colors.bold(dirname)} já existe!`
-        })
+        Log.info("RestoreDir", `O diretório ${colors.bold(dirname)} já existe!`)
     }
 }
 

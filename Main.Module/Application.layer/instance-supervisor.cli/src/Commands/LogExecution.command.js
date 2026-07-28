@@ -1,4 +1,3 @@
-const EventEmitter = require('events')
 const path = require("path")
 
 const MAX_CONNECT_RETRIES = 1000
@@ -22,14 +21,11 @@ const LogExecutionCommand = async ({
     const FormatterDataLog             = supervisorLib.require("FormatterDataLog")
     const TryConnectLogStreaming       = supervisorLib.require("TryConnectLogStreaming")
 
-    const loggerEmitter = new EventEmitter()
-
     const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)
 
-    const _OpenLogStream = async (socketFilePath, loggerEmitter) => {
+    const _OpenLogStream = async (socketFilePath) => {
         const rpcClient = await CreateCommunicationInterface(socketFilePath)
         await TryConnectLogStreaming({
-            loggerEmitter,
             client: rpcClient,
             ms: RETRY_DELAY_MS,
             remainingConnectionAttempts: MAX_CONNECT_RETRIES,
@@ -37,14 +33,11 @@ const LogExecutionCommand = async ({
         })
     }
 
-    loggerEmitter.on("log", async (dataLog) =>
-        console.log(await FormatterDataLog(dataLog)))
 
     try {
-        await _OpenLogStream(socketFilePath, loggerEmitter)
+        await _OpenLogStream(socketFilePath)
     } catch (e) {
-        loggerEmitter
-            && loggerEmitter.emit("log", { sourceName: "execution-supervisor", type: "warning", message: e })
+        Log.warn("execution-supervisor", e)
     }
 }
 

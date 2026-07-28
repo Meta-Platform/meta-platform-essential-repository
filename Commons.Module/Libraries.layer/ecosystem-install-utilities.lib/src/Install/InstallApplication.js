@@ -15,8 +15,7 @@ const InstallApplication = async ({
     installDataDirPath,
     ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR,
     REPOS_CONF_FILENAME_REPOS_DATA,
-    supervisorSocketDirPath,
-    loggerEmitter
+    supervisorSocketDirPath
 }) => {
 
     const {
@@ -26,18 +25,10 @@ const InstallApplication = async ({
         supervisorSocketFileName
     } = applicationData
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallApplication",
-        type: "info",
-        message: `Início da instalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`
-    })
+    Log.info("InstallApplication", `Início da instalação de uma aplicação do pacote ${colors.bold(path.basename(packageNamespace))}`)
 
     if(!appType) {
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "InstallApplication",
-            type: "error",
-            message: `applicationData.appType é obrigatório`
-        })
+        Log.error("InstallApplication", `applicationData.appType é obrigatório`)
         throw "applicationData.appType é obrigatório"
     }
 
@@ -46,15 +37,10 @@ const InstallApplication = async ({
         installDataDirPath,
         repositoryNamespace:namespace,
         REPOS_CONF_FILENAME_REPOS_DATA,
-        applicationData,
-        loggerEmitter
+        applicationData
     })
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallApplication",
-        type: "info",
-        message: `Instalando do executável ${colors.bold(executable)} do tipo ${appType}`
-    })
+    Log.info("InstallApplication", `Instalando do executável ${colors.bold(executable)} do tipo ${appType}`)
 
     const supervisorSocketFilePath = path.join(supervisorSocketDirPath, supervisorSocketFileName)
 
@@ -88,16 +74,12 @@ const InstallApplication = async ({
     }
 
     const fullScriptPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable)
-    await CreateExecutableScript(fullScriptPath, _CreateScriptContent({ debugMode:false }), loggerEmitter)
+    await CreateExecutableScript(fullScriptPath, _CreateScriptContent({ debugMode:false }))
 
     const fullScriptDbgPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, executable+"-dbg")
-    await CreateExecutableScript(fullScriptDbgPath, _CreateScriptContent({ debugMode:true }), loggerEmitter)
+    await CreateExecutableScript(fullScriptDbgPath, _CreateScriptContent({ debugMode:true }))
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallApplication",
-        type: "info",
-        message: `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi instalado!`
-    })
+    Log.info("InstallApplication", `O executável ${colors.inverse(executable)} do pacote ${colors.inverse(path.basename(packageNamespace))} foi instalado!`)
 
     return fullScriptPath
 }

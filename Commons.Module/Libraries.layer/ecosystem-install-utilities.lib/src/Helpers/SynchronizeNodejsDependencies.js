@@ -5,19 +5,11 @@ const Arborist = SmartRequire("@npmcli/arborist")
 
 const SynchronizeNodejsDependencies = async ({
     contextPath, 
-    dependencies,
-    loggerEmitter
+    dependencies
 }) => {
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "SynchronizeNodejsDependencies",
-        type: "warning",
-        message: `Sincronizando dependências NPM ...`
-    }) && loggerEmitter.emit("log", {
-        sourceName: "SynchronizeNodejsDependencies",
-        type: "warning",
-        message: `Contexto da instalação ${colors.bold(contextPath)}`
-    })
+    Log.warn("SynchronizeNodejsDependencies", `Sincronizando dependências NPM ...`)
+    Log.warn("SynchronizeNodejsDependencies", `Contexto da instalação ${colors.bold(contextPath)}`)
 
     const dependenciesForAdd = Object.keys(dependencies)
         .map((name) => {
@@ -27,11 +19,7 @@ const SynchronizeNodejsDependencies = async ({
     const arborist = new Arborist({ path: contextPath, progress:true})
     await arborist.reify({add:dependenciesForAdd})
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "SynchronizeNodejsDependencies",
-        type: "info",
-        message: `As dependências NPM ${dependenciesForAdd.join(", ")} foram sincronizadas com sucesso!`
-    })
+    Log.info("SynchronizeNodejsDependencies", `As dependências NPM ${dependenciesForAdd.join(", ")} foram sincronizadas com sucesso!`)
 }
 
 module.exports = SynchronizeNodejsDependencies

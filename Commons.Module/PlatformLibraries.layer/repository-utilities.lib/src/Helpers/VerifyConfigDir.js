@@ -3,7 +3,7 @@ const {
 } = require('node:fs/promises')
 
 
-const VerifyConfigDir = async ({ECO_DIRPATH_INSTALL_DATA, loggerEmitter}) => {
+const VerifyConfigDir = async ({ECO_DIRPATH_INSTALL_DATA}) => {
     const [ filename ] = ECO_DIRPATH_INSTALL_DATA.split("/").slice(-1)
     try{
         const stats = await stat(ECO_DIRPATH_INSTALL_DATA)
@@ -14,11 +14,7 @@ const VerifyConfigDir = async ({ECO_DIRPATH_INSTALL_DATA, loggerEmitter}) => {
             reject(messageError)
         }
     } catch (e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "VerifyConfigDir",
-            type: "info",
-            message: `${filename} não existe`
-        })
+        Log.info("VerifyConfigDir", `${filename} não existe`)
         return false
     }
 }

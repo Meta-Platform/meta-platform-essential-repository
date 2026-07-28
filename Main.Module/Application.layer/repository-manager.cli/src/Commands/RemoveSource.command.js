@@ -1,4 +1,3 @@
-const EventEmitter = require('node:events')
 const { resolve } = require("path")
 const colors = require("colors")
 
@@ -24,10 +23,6 @@ const RemoveSourceCommand = async ({
         printDataLogLib
     } = params
 
-    const loggerEmitter = new EventEmitter()
-
-    const PrintDataLog = printDataLogLib.require("PrintDataLog")
-        loggerEmitter.on("log", (dataLog) => PrintDataLog(dataLog, "RemoveSourceCommand"))
     try{
 
         const WriteObjectToFile = jsonFileUtilitiesLib.require("WriteObjectToFile")
@@ -52,21 +47,13 @@ const RemoveSourceCommand = async ({
                 [repositoryNamespace]: filteredSources
             }
             await WriteObjectToFile(sourceFilePath, newSourcesDataInformation)
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "RemoveSourceCommand",
-                type: "warning",
-                message: `A fonte ${colors.bold(sourceType)} foi removida do namespace ${colors.bold(repositoryNamespace)}!`
-            })
+            Log.warn("RemoveSourceCommand", `A fonte ${colors.bold(sourceType)} foi removida do namespace ${colors.bold(repositoryNamespace)}!`)
         } else {
             throw `A fonte ${sourceType} não foi encontrada no repositório ${repositoryNamespace}`
         }
 
     }catch(e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "RemoveSourceCommand",
-            type: "error",
-            message: e
-        })
+        Log.error("RemoveSourceCommand", e)
         throw e
     }
 

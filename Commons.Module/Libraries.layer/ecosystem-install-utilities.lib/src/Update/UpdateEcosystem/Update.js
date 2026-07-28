@@ -10,26 +10,19 @@ const GetCommandLineApplicationExecutionContent = require("../../../../script-fi
 
 const Update = async ({
     ecosystemDefaults,
-    installDataDirPath,
-    loggerEmitter
+    installDataDirPath
 }) => {
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallEcosystem",
-        type: "info",
-        message: `Atualizando o ecosistema...`
-    })
+    Log.info("InstallEcosystem", `Atualizando o ecosistema...`)
 
     await RestoreEcosystemStructure({
         installDataDirPath,
-        ecosystemDefaults,
-        loggerEmitter
+        ecosystemDefaults
     })
 /*
     await CreateEcosystemDefaultsJsonFile({
         ECO_DIRPATH_INSTALL_DATA, 
-        ecosystemDefaults,
-        loggerEmitter
+        ecosystemDefaults
     })
 
     const {
@@ -38,8 +31,7 @@ const Update = async ({
 
     const packageExecutorBinFilePath = await UpdatePackageExecutor({
         ECO_DIRPATH_INSTALL_DATA,
-        ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
-        loggerEmitter
+        ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
     })
 
     const packageExecutorBinaryName = path.basename(packageExecutorBinFilePath)

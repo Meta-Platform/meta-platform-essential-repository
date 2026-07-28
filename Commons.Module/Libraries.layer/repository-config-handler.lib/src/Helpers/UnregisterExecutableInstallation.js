@@ -7,8 +7,7 @@ const UnregisterExecutableInstallation = async ({
     installDataDirPath,
     repositoryNamespace,
     REPOS_CONF_FILENAME_REPOS_DATA,
-    executable,
-    loggerEmitter
+    executable
 }) => {
 
     const repositories = await GetRepositories({
@@ -40,20 +39,11 @@ const UnregisterExecutableInstallation = async ({
             await WriteRepositoriesFileJson({
                 content: newRepositories,
                 installDataDirPath,
-                REPOS_CONF_FILENAME_REPOS_DATA,
-                loggerEmitter
+                REPOS_CONF_FILENAME_REPOS_DATA
             })
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "UnregisterExecutableInstallation",
-                type: "info",
-                message: `O executável ${executable} foi removido do registro de [${repositoryNamespace}]`
-            })
+            Log.info("UnregisterExecutableInstallation", `O executável ${executable} foi removido do registro de [${repositoryNamespace}]`)
         } else {
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "UnregisterExecutableInstallation",
-                type: "warning",
-                message: `o executável [${executable}] não está registrado em [${repositoryNamespace}]`
-            })
+            Log.warn("UnregisterExecutableInstallation", `o executável [${executable}] não está registrado em [${repositoryNamespace}]`)
         }
 
     } else

@@ -3,28 +3,18 @@ const GetEnvironmentPath = require("./GetEnvironmentPath")
 
 const CreateEnvironment = async ({
     environmentName, 
-    localPath,
-    loggerEmitter
+    localPath
 }) => {
     try{
         await PrepareEnvironmentDir({
             environmentName, 
-            localPath,
-            loggerEmitter
+            localPath
         })
         return GetEnvironmentPath(environmentName, localPath)
     }catch(e){
         console.log(e)
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "CreateEnvironment",
-            type: "error",
-            message: e
-        })
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "CreateEnvironment",
-            type: "error",
-            message: `Erro ao criar ${environmentName} environment`
-        })
+        Log.error("CreateEnvironment", e)
+        Log.error("CreateEnvironment", `Erro ao criar ${environmentName} environment`)
         throw e
     }
 }

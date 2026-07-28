@@ -10,8 +10,7 @@ const UninstallApplication = async ({
     repositoryNamespace,
     executable,
     installDataDirPath,
-    ecosystemDefaults,
-    loggerEmitter
+    ecosystemDefaults
 }) => {
 
     const {
@@ -19,30 +18,21 @@ const UninstallApplication = async ({
         REPOS_CONF_FILENAME_REPOS_DATA
     } = ecosystemDefaults
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UninstallApplication",
-        type: "info",
-        message: `Início da desinstalação do executável ${executable} de [${repositoryNamespace}]`
-    })
+    Log.info("UninstallApplication", `Início da desinstalação do executável ${executable} de [${repositoryNamespace}]`)
 
     const executablesDirPath = path.join(installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR)
 
-    await RemoveExecutableScript(path.join(executablesDirPath, executable), loggerEmitter)
-    await RemoveExecutableScript(path.join(executablesDirPath, `${executable}-dbg`), loggerEmitter)
+    await RemoveExecutableScript(path.join(executablesDirPath, executable))
+    await RemoveExecutableScript(path.join(executablesDirPath, `${executable}-dbg`))
 
     await UnregisterExecutableInstallation({
         installDataDirPath,
         repositoryNamespace,
         REPOS_CONF_FILENAME_REPOS_DATA,
-        executable,
-        loggerEmitter
+        executable
     })
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "UninstallApplication",
-        type: "info",
-        message: `O executável ${executable} do repositório ${repositoryNamespace} foi desinstalado!`
-    })
+    Log.info("UninstallApplication", `O executável ${executable} do repositório ${repositoryNamespace} foi desinstalado!`)
 
     return { uninstalled: true, executable }
 }

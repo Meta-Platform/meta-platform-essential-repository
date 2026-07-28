@@ -9,48 +9,27 @@ const BuildObjectFromPrefix = require("../Helpers/BuildObjectFromPrefix")
 
 const ConstructEcosystemStructure = async ({
     installationDataDir,
-    ecosystemDefaults,
-    loggerEmitter
+    ecosystemDefaults
 }) => {
 
     const ecosystemDefaultsConfDirname = BuildObjectFromPrefix(ecosystemDefaults, "ECOSYSTEMDATA_CONF_DIRNAME_")
 
     try{
         await mkdir(installationDataDir, { recursive: true })
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "ConstructEcosystemStructure",
-            type: "info",
-            message: `O diretório de dados do ecosistema criado com sucesso em ${colors.bold(installationDataDir)}`
-        })
+        Log.info("ConstructEcosystemStructure", `O diretório de dados do ecosistema criado com sucesso em ${colors.bold(installationDataDir)}`)
 
         for (const configKey of Object.keys(ecosystemDefaultsConfDirname)) {
 
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "ConstructEcosystemStructure",
-                type: "info",
-                message: `Verificando configuração ${colors.bold(configKey)}`
-            })
+            Log.info("ConstructEcosystemStructure", `Verificando configuração ${colors.bold(configKey)}`)
             
            const dirname = ecosystemDefaultsConfDirname[configKey]
            await mkdir(resolve(installationDataDir, dirname))
-           loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "ConstructEcosystemStructure",
-                type: "info",
-                message: `Configuração ${ colors.bold(configKey)}: o subdiretório ${ colors.bold(dirname)} criado com sucesso!`
-            })
+           Log.info("ConstructEcosystemStructure", `Configuração ${ colors.bold(configKey)}: o subdiretório ${ colors.bold(dirname)} criado com sucesso!`)
         }
 
     } catch (e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "ConstructEcosystemStructure",
-            type: "error",
-            message: `erro ao criar diretório de dados do ecosistema ${colors.bold(installationDataDir)}`
-        })
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "ConstructEcosystemStructure",
-            type: "warning",
-            message: `Verifique se o ecosistema já esta instalado.`
-        })
+        Log.error("ConstructEcosystemStructure", `erro ao criar diretório de dados do ecosistema ${colors.bold(installationDataDir)}`)
+        Log.warn("ConstructEcosystemStructure", `Verifique se o ecosistema já esta instalado.`)
         throw e
     }
 }

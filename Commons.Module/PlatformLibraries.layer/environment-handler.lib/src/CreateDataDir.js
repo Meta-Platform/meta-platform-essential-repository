@@ -4,30 +4,17 @@ const { join } = require("path")
 
 const CreateDataDir = async ({ 
     environmentPath, 
-    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES,
-    loggerEmitter
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
 }) => {
     const dirpath = join(environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES)
     try{
         await mkdir(dirpath)
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "CreateDataDir",
-            type: "info",
-            message: `o diretório de dados criado com sucesso em ${dirpath}`
-        })
+        Log.info("CreateDataDir", `o diretório de dados criado com sucesso em ${dirpath}`)
     } catch (e){
         if(e.code === "EEXIST"){
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "CreateDataDir",
-                type: "info",
-                message: `diretório ${dirpath} já existe`
-            })
+            Log.info("CreateDataDir", `diretório ${dirpath} já existe`)
         }else {
-            loggerEmitter && loggerEmitter.emit("log", {
-                sourceName: "CreateDataDir",
-                type: "error",
-                message: `erro ao criar diretório de dados ${dirpath}`
-            })
+            Log.error("CreateDataDir", `erro ao criar diretório de dados ${dirpath}`)
             throw e
         }
     }

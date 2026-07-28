@@ -6,8 +6,7 @@ const GetRepositoriesFilePath = require("./GetRepositoriesFilePath")
 
 const VerifyRepoFile = async ({
     installDataDirPath,
-    REPOS_CONF_FILENAME_REPOS_DATA, 
-    loggerEmitter
+    REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
     const filePath = GetRepositoriesFilePath({
         installDataDirPath,
@@ -22,11 +21,7 @@ const VerifyRepoFile = async ({
             reject(messageError)
         }
     } catch (e){
-        loggerEmitter && loggerEmitter.emit("log", {
-            sourceName: "VerifyRepoFile",
-            type: "info",
-            message: `${REPOS_CONF_FILENAME_REPOS_DATA} não existe`
-        })
+        Log.info("VerifyRepoFile", `${REPOS_CONF_FILENAME_REPOS_DATA} não existe`)
         return false
     }
 }

@@ -17,15 +17,10 @@ const InstallEcosystemByProfile = async ({
     profile,
     installationDataDir,
     repositoriesInstallData,
-    installationPath,
-    loggerEmitter
+    installationPath
 }) => {
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallEcosystemByProfile",
-        type: "info",
-        message: `Início de instalação usando o perfil ${colors.bold(path.basename(profile))}`
-    })
+    Log.info("InstallEcosystemByProfile", `Início de instalação usando o perfil ${colors.bold(path.basename(profile))}`)
 
     const context = PrepareContext({
         installationDataDir,
@@ -41,14 +36,12 @@ const InstallEcosystemByProfile = async ({
     await InstallEcosystem({
         ecosystemDefaults,
         installationDataDir:installDataDirPath,
-        initialRepositorySource,
-        loggerEmitter
+        initialRepositorySource
     })
 
     await SynchronizeNodejsDependencies({
         contextPath: npmDependenciesContextPath,
-        dependencies: npmDependencies,
-        loggerEmitter
+        dependencies: npmDependencies
     })
 
     if(repositoriesInstallData){
@@ -63,8 +56,7 @@ const InstallEcosystemByProfile = async ({
                 sourceData,
                 executablesToInstall,
                 installDataDirPath,
-                ecosystemDefaults,
-                loggerEmitter
+                ecosystemDefaults
             })
         }
     }
@@ -80,15 +72,10 @@ const InstallEcosystemByProfile = async ({
     })
     await SynchronizeNodejsDependencies({
         contextPath: npmDependenciesContextPath,
-        dependencies: { ...taskLoaderNpmDependencies, ...npmDependencies },
-        loggerEmitter
+        dependencies: { ...taskLoaderNpmDependencies, ...npmDependencies }
     })
 
-    loggerEmitter && loggerEmitter.emit("log", {
-        sourceName: "InstallEcosystemByProfile",
-        type: "info",
-        message: `Fim da instalação do perfil ${colors.bold(path.basename(profile))}!`
-    })
+    Log.info("InstallEcosystemByProfile", `Fim da instalação do perfil ${colors.bold(path.basename(profile))}!`)
 }
 
 module.exports = InstallEcosystemByProfile
