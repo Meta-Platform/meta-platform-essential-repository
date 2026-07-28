@@ -93,11 +93,20 @@ const InstallGlobalLogger = ({
 	force         = false
 } = {}) => {
 
-	if (IsGlobalLoggerInstalled() && !force) {
+	/*
+	 * O `cli-script-loader` instala uma versão MÍNIMA deste logger (ele roda
+	 * antes de existir ecossistema, então não pode carregar esta lib). Quando o
+	 * processo chega aqui, o ecossistema existe — a versão completa, com sink de
+	 * arquivo, rotação e retenção, substitui a mínima.
+	 */
+	const isMinimalInstallation = IsGlobalLoggerInstalled()
+		&& Boolean(globalThis[GLOBAL_MARK].minimal)
+
+	if (IsGlobalLoggerInstalled() && !force && !isMinimalInstallation) {
 		return GetGlobalLogger()
 	}
 
-	if (IsGlobalLoggerInstalled() && force) {
+	if (IsGlobalLoggerInstalled()) {
 		UninstallGlobalLogger()
 	}
 

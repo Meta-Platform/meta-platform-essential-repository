@@ -67,6 +67,41 @@ describe("InstallGlobalLogger", () => {
 		assert.strictEqual(globalThis.Log, segundo)
 	})
 
+	it('deve substituir a instalação MÍNIMA do cli-script-loader', () => {
+
+		/*
+		 * O cli-script-loader instala uma versão mínima deste logger antes de
+		 * existir ecossistema. Quando esta lib entra, ela precisa assumir — do
+		 * contrário o processo seguiria sem sink de arquivo, rotação e retenção.
+		 */
+		const loggerMinimo = { minimal : true, info : () => {} }
+		let pontePreviaDesinstalada = false
+
+		globalThis.Log = loggerMinimo
+
+		Object.defineProperty(globalThis, Symbol.for("meta-platform.logger.globalLogger"), {
+			value : {
+				minimal             : true,
+				UninstallBridge     : () => { pontePreviaDesinstalada = true },
+				UnregisterExitFlush : () => {}
+			},
+			configurable : true,
+			enumerable   : false,
+			writable     : false
+		})
+
+		const completo = InstallGlobalLogger({
+			disableFileSink : true,
+			bridgeConsole   : false,
+			stream          : CreateFakeStream()
+		})
+
+		assert.notStrictEqual(completo, loggerMinimo)
+		assert.strictEqual(globalThis.Log, completo)
+		assert.strictEqual(completo.minimal, undefined)
+		assert.strictEqual(pontePreviaDesinstalada, true, "a ponte da versão mínima precisa sair junto")
+	})
+
 	it('deve remover globalThis.Log ao desinstalar', () => {
 
 		InstallGlobalLogger({ disableFileSink : true, bridgeConsole : false, stream : CreateFakeStream() })
