@@ -162,6 +162,15 @@ const ExecuteCommand = async (loaderParams) => {
 }
 
 const CommandApplicationTaskLoader = (loaderParams, executorChannel) => {
+    // Carimba a execução: tudo que este loader registrar sai identificado pela
+    // instância e pelo ambiente. Ver logging-standard.md.
+    const log = Log
+        .child({
+            instanceId     : process.env.META_LAUNCH_ID || null,
+            environmentPath: loaderParams.environmentPath || null
+        })
+        .source("CommandApplication")
+
 
     const Start = async () => {
 
@@ -175,7 +184,7 @@ const CommandApplicationTaskLoader = (loaderParams, executorChannel) => {
             }
         } catch (e) {
             executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
-            console.error(e)
+            log.error("falha ao executar o comando", e)
         }
 
     }

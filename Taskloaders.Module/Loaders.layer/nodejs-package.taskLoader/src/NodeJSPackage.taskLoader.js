@@ -37,6 +37,15 @@ const SetupServiceObject = (serviceObject, { path, environmentPath, tag, EXECUTI
 }
 
 const NodeJSPackageTaskLoader  = (params, executorChannel) => {
+    // Carimba a execução: tudo que este loader registrar sai identificado pela
+    // instância e pelo ambiente. Ver logging-standard.md.
+    const log = Log
+        .child({
+            instanceId     : process.env.META_LAUNCH_ID || null,
+            environmentPath: params.environmentPath || null
+        })
+        .source("NodeJSPackage")
+
 
     let serviceObject = {}
 
@@ -53,7 +62,7 @@ const NodeJSPackageTaskLoader  = (params, executorChannel) => {
             }
         }catch(e){
             executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
-            console.error(e)
+            log.error("falha ao montar o pacote Node.js", e)
         }
     }
 

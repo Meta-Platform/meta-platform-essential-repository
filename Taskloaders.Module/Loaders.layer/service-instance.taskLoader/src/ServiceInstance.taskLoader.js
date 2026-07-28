@@ -3,6 +3,15 @@ const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.la
 
 const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
 
+    // Carimba a execução: tudo que este loader registrar sai identificado pela
+    // instância e pelo ambiente, sem que nenhuma função abaixo repasse isso.
+    const log = Log
+        .child({
+            instanceId     : process.env.META_LAUNCH_ID || null,
+            environmentPath: loaderParams.environmentPath || null
+        })
+        .source("ServiceInstance")
+
     let serviceObject = {}
 
     const _GetServiceParams = () => {
@@ -53,7 +62,7 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
                 onError: (e) => {
                     serviceObject=undefined
                     executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE, _ReasonOf(e))
-                    console.error(e)
+                    log.error("falha assíncrona do serviço", e)
                 }
             }, loaderParams.executionData)
         }catch(e){
@@ -67,7 +76,7 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
             _CreateServiceObject()
         }catch(e){
             executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE, _ReasonOf(e))
-            console.error(e)
+            log.error("falha ao criar o serviço", e)
         }
     }
 

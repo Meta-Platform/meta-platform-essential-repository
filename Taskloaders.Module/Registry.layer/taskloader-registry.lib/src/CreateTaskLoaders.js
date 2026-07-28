@@ -15,6 +15,11 @@ const ComputeObjectHash        = require("../../../../Commons.Module/Utilities.l
 // desktop-window-instance) que precisam resolver deps do essential por PATH, não por módulo.
 const smartRequirePath = require.resolve("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 
+// Idem para a logger.lib: o processo do Electron é separado e precisa instalar
+// o seu PRÓPRIO globalThis.Log — sem isso, todo log de app desktop nasceria
+// fora do padrão e só existiria como texto no stdout capturado pelo daemon.
+const installGlobalLoggerPath = require.resolve("../../../../Commons.Module/Libraries.layer/logger.lib/src/InstallGlobalLogger")
+
 // WebInterfaceBuilder é capacidade WEB — vive no ecosystem-core (web-interface-builder.lib).
 // Resolvido só se o EcosystemCoreRepo estiver instalado (senão os loaders web nem existem).
 // Devolve { builder, path }: o módulo (fábrica já aplicada) e o caminho absoluto (p/ subprocessos).
@@ -30,7 +35,29 @@ const ResolveWebInterfaceBuilder = (repositoriesData) => {
 // Varre os repositórios instalados (repositories.json), lê o metadata/taskloaders.json
 // de cada um e monta o mapa { objectLoaderType -> função-loader }.
 // Sem fallback: repositório sem taskloaders.json não contribui loaders (ver MPTL-12).
+// Rede de segurança do `globalThis.Log`. Quem instala o logger é o ponto de
+// entrada (package-executor, package-runner, wizard), mas o binário do
+// package-executor pode ser ANTERIOR a essa injeção, enquanto os loaders — que
+// vivem nos repositórios e já usam `Log` — chegam por `repo update`. Sem esta
+// garantia, essa combinação quebraria toda execução com "Log is not defined".
+// Aqui o logger sai só no terminal: quem sabe onde gravar é o ponto de entrada.
+const EnsureGlobalLogger = () => {
+
+    if (globalThis.Log) return
+
+    try {
+        require("../../../../Commons.Module/Libraries.layer/logger.lib/src/InstallGlobalLogger")({
+            origin         : "task-executor",
+            disableFileSink: true
+        })
+    } catch (error) {
+        /* Sem logger: os loaders seguem, e o log daquela execução se perde. */
+    }
+}
+
 const CreateTaskLoaders = ({ repositoriesData }) => {
+
+    EnsureGlobalLogger()
 
     const webInterfaceBuilder = ResolveWebInterfaceBuilder(repositoriesData)
 
@@ -43,7 +70,8 @@ const CreateTaskLoaders = ({ repositoriesData }) => {
         // Caminhos absolutos p/ subprocessos (ex.: electron-main) que resolvem por PATH.
         paths: {
             smartRequire: smartRequirePath,
-            webInterfaceBuilder: webInterfaceBuilder && webInterfaceBuilder.path
+            webInterfaceBuilder: webInterfaceBuilder && webInterfaceBuilder.path,
+            installGlobalLogger: installGlobalLoggerPath
         }
     }
 
