@@ -56,9 +56,37 @@ describe("CreateConsoleSink", () => {
 
 		const stream = CreateFakeStream()
 
-		CreateConsoleSink({ stream }).Write(BuildRecord({ level : "message", source : "A" }))
+		CreateConsoleSink({ stream }).Write(BuildRecord({ level : "warn", source : "A" }))
 
-		assert.ok(stream.written[0].includes("[message] [A                      ]"))
+		assert.ok(stream.written[0].includes("[warn   ] [A                      ]"))
+	})
+
+	it('deve escrever `message` LIMPO, sem carimbo — é a fala com o usuário', () => {
+
+		/*
+		 * Uma tabela renderizada ou a listagem de um `repo sources` não pode sair
+		 * com data/origem/nível na frente: o carimbo destruiria o que o usuário
+		 * foi ver. No arquivo o registro segue completo.
+		 */
+		const stream = CreateFakeStream()
+
+		CreateConsoleSink({ stream }).Write(BuildRecord({
+			level   : "message",
+			source  : "<stdout>",
+			message : "EssentialRepo"
+		}))
+
+		assert.strictEqual(stream.written[0], "EssentialRepo\n")
+	})
+
+	it('deve preservar uma tabela multi-linha intacta', () => {
+
+		const stream = CreateFakeStream()
+		const tabela = "┌─────┐\n│ ID  │\n└─────┘"
+
+		CreateConsoleSink({ stream }).Write(BuildRecord({ level : "message", message : tabela }))
+
+		assert.strictEqual(stream.written[0], `${tabela}\n`)
 	})
 
 	it('deve declarar-se como sink de console', () => {

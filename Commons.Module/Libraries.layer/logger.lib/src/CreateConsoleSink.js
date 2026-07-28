@@ -32,7 +32,20 @@ const PaintLevel = (palette, level) => {
 	return Paint(palette)
 }
 
+/*
+ * `message` é a saída destinada ao HUMANO — a fala do programa com quem o
+ * executou. No terminal ela sai LIMPA, sem carimbo: prefixar a listagem de um
+ * `repo sources` ou uma tabela renderizada com data, origem e nível destruiria
+ * justamente aquilo que o usuário foi ver. No arquivo o registro continua
+ * completo e estruturado, como todos os outros.
+ *
+ * Os demais níveis são log de verdade e levam o carimbo.
+ */
 const FormatRecord = (record) => {
+
+	if (record.level === "message") {
+		return record.message
+	}
 
 	const palette = GetPalette()
 

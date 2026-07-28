@@ -43,10 +43,14 @@ describe("InstallGlobalLogger", () => {
 		assert.strictEqual(IsGlobalLoggerInstalled(), true)
 		assert.strictEqual(typeof globalThis.Log.info, "function")
 
+		/* `message` sai limpo: é a fala do programa com o usuário. */
 		globalThis.Log.message("UpdateRepository", "Atualizando...")
+		assert.strictEqual(stream.written[0], "Atualizando...\n")
 
-		assert.ok(stream.written[0].includes("[repo]"))
-		assert.ok(stream.written[0].includes("Atualizando..."))
+		/* Os demais níveis levam o carimbo, com a origem do processo. */
+		globalThis.Log.warn("UpdateRepository", "diretório já existia")
+		assert.ok(stream.written[1].includes("[repo]"))
+		assert.ok(stream.written[1].includes("diretório já existia"))
 	})
 
 	it('deve ser idempotente: a segunda chamada devolve o logger já instalado', () => {
