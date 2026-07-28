@@ -23,8 +23,8 @@ cheio ou permissão derruba o processo que logou.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `InstallGlobalLogger.js` | `InstallGlobalLogger(config)`: instala `globalThis.Log` (idempotente) com os sinks e o contexto do processo. Também exporta `UninstallGlobalLogger` e `IsGlobalLoggerInstalled`. |
-| `CreateLogger.js` | Monta o logger sobre um conjunto de sinks e um contexto; expõe os sete níveis, `source()`, `child()`, `Flush()`, `FlushSync()` e `Close()`. |
+| `InstallGlobalLogger.js` | `InstallGlobalLogger(config)`: instala `globalThis.Log` (idempotente) com os sinks e o contexto do processo. Expõe também `Log.OpenFileChannel(...)`, `UninstallGlobalLogger` e `IsGlobalLoggerInstalled`. |
+| `CreateLogger.js` | Monta o logger sobre um conjunto de sinks e um contexto; expõe os sete níveis, `source()`, `child()`, `AddSink()`, `Flush()`, `FlushSync()` e `Close()`. |
 | `Levels.js` | Os sete níveis, sua ordem, os apelidos dos tipos antigos (`warning`, `success`) e o filtro dos dois pisos (`ResolveTargets`). |
 | `CreateConsoleSink.js` | Sink de terminal: formato colorido, `process.stdout.write` direto, sem cor quando não há TTY. |
 | `CreateJsonlSink.js` | Sink de arquivo: uma linha JSON por evento, escrita enfileirada e assíncrona, falha de I/O engolida. |
@@ -43,7 +43,7 @@ cheio ou permissão derruba o processo que logou.
 | `trace` | Fluxo fino: entrada/saída de função, payload. |
 | `debug` | Diagnóstico de desenvolvedor. |
 | `info` | Operacional: start/stop, transição de task. |
-| `message` | Saída destinada ao **humano** — sempre visível no terminal. |
+| `message` | Saída destinada ao **humano** — sempre visível no terminal, e **sem carimbo**: é a fala do programa com quem o executou. |
 | `warn` | Degradação recuperável. |
 | `error` | Falha. |
 | `fatal` | Falha que derruba o processo. |
@@ -81,10 +81,19 @@ Idempotente: chamar duas vezes não encadeia a ponte `console.*` sobre ela mesma
 
 ## Formatos
 
-Terminal:
+Terminal — os níveis de log levam carimbo:
 
 ```
 [2026-07-27T10:12:03.412] [repo] [info   ] [UpdateRepository       ] Atualizando...
+```
+
+`message` sai LIMPO, porque é a saída que o usuário foi ver — carimbar a
+listagem de um `repo sources` ou uma tabela renderizada destruiria justamente
+aquilo. No arquivo, o registro é completo como todos os outros:
+
+```
+EssentialRepo
+   LOCAL_FS
 ```
 
 Arquivo (JSONL, uma linha por evento):
@@ -105,6 +114,52 @@ o valor.
 | `LOG_CONF_CONSOLE_LEVEL` | `message` | Piso do que aparece no terminal. |
 | `LOG_CONF_MAX_FILE_SIZE_MB` | `50` | Teto de tamanho antes de partir o arquivo. |
 | `LOG_CONF_RETENTION_DAYS` | `30` | Prazo de descarte dos arquivos antigos. |
+
+## Canal de arquivo
+
+```js
+const canal = Log.OpenFileChannel({
+    dirPath  : "<EcosystemData>/logs/instances",
+    fileName : `${instanceId}.jsonl`,
+    context  : { instanceId }
+})
+
+canal.info("Daemon", "instância lançada")
+```
+
+Um **canal** é um logger que escreve num arquivo próprio, à parte do log do
+processo, e **não** escreve no terminal — o que ele registra pertence àquela
+entidade, não à sessão de quem está olhando. É o que permite ao daemon manter
+um arquivo por instância sem recriar escrita em disco por fora da lib.
+
+## Ouvinte em tempo de execução
+
+```js
+const Remover = Log.AddSink({ Write : (record) => { /* … */ } })
+try { await Operacao() } finally { Remover() }
+```
+
+Para quem precisa **ouvir** o log sem ser um destino permanente — o caso
+concreto é o NotificationHub, que mostra no painel o progresso de uma
+instalação.
+
+Atenção ao escopo: o logger é global, então um ouvinte registrado durante uma
+operação recebe tudo o que o processo logar naquela janela, não apenas o
+daquela operação. Registre pelo menor tempo possível e remova no `finally`.
+
+## O que NÃO usa o `Log`
+
+`Log` é para código que roda **dentro do ecossistema**. Continuam com `console`,
+deliberadamente:
+
+- ferramentas standalone (`scripts/`, `tools/`, `test.js` avulso), que rodam por
+  `node` fora do ecossistema — ali `globalThis.Log` não existe;
+- os `SmartRequire`, carregados **durante** a construção do logger;
+- o servidor MCP, cujo stdout é o canal do protocolo.
+
+Isso não é dívida: é o certo. O lint anti-regressão
+(`maintenance-toolkit.cli/scripts/lint-no-console-log.js`) conhece essas
+exceções e falha em qualquer outra.
 
 ## Três regras invioláveis dos sinks
 
