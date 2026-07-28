@@ -1,7 +1,6 @@
 {
     "bound-params":[
-        "ecosystemInstallUtilitiesLib", 
-        "printDataLogLib"
+        "ecosystemInstallUtilitiesLib" 
     ],
     "commands": [
         {
@@ -36,8 +35,7 @@
                 }
             ],
             "parametersToLoad": [
-                "ecosystemInstallUtilitiesLib",
-                "printDataLogLib"
+                "ecosystemInstallUtilitiesLib"
             ]
         },
         {
@@ -66,8 +64,7 @@
                 }
             ],
             "parametersToLoad": [
-                "ecosystemInstallUtilitiesLib",
-                "printDataLogLib"
+                "ecosystemInstallUtilitiesLib"
             ]
         },
         {

@@ -166,6 +166,36 @@ describe("CreateLogger", () => {
 		assert.doesNotThrow(() => logger.error("Fonte", "mensagem"))
 	})
 
+	it('deve aceitar um ouvinte em tempo de execução e removê-lo depois', () => {
+
+		/* É como o NotificationHub acompanha o progresso de uma instalação. */
+		const { logger, fileSink } = CreateLoggerForTest()
+
+		const ouvinte = CreateCollectorSink()   // sem target: recebe tudo que passar o filtro
+
+		const Remover = logger.AddSink(ouvinte)
+
+		logger.info("Instalador", "baixando...")
+
+		assert.deepStrictEqual(ouvinte.records.map((r) => r.message), ["baixando..."])
+		assert.strictEqual(fileSink.records.length, 1, "os sinks originais seguem recebendo")
+
+		Remover()
+
+		logger.info("Instalador", "depois de remover")
+
+		assert.strictEqual(ouvinte.records.length, 1)
+		assert.strictEqual(fileSink.records.length, 2)
+	})
+
+	it('deve ignorar um ouvinte sem Write', () => {
+
+		const { logger } = CreateLoggerForTest()
+
+		assert.doesNotThrow(() => logger.AddSink({}))
+		assert.doesNotThrow(() => logger.info("Fonte", "mensagem"))
+	})
+
 	it('deve permitir mudar os pisos em tempo de execução', () => {
 
 		const { logger, consoleSink } = CreateLoggerForTest()

@@ -177,6 +177,25 @@ const CreateLogger = ({
 		boundSource
 	})
 
+	/*
+	 * Sink registrado em tempo de execução. Existe para quem precisa OUVIR o log
+	 * sem ser um destino permanente — o caso concreto é o NotificationHub, que
+	 * mostra no painel o progresso de uma instalação (ADR-05 / LOGS-32).
+	 *
+	 * Atenção ao escopo: o logger é global, então um ouvinte registrado durante
+	 * uma operação recebe TUDO o que o processo logar naquela janela, não apenas
+	 * o da operação. Registre pelo menor tempo possível e remova no `finally`.
+	 */
+	logger.AddSink = (sink) => {
+		if (sink && typeof sink.Write === "function") sinks.push(sink)
+		return () => logger.RemoveSink(sink)
+	}
+
+	logger.RemoveSink = (sink) => {
+		const posicao = sinks.indexOf(sink)
+		if (posicao !== -1) sinks.splice(posicao, 1)
+	}
+
 	logger.GetContext = () => ({ ...context })
 
 	logger.GetConfiguration = () => ({ ...configuration })

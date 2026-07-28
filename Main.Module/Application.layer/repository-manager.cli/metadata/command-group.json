@@ -1,8 +1,7 @@
 {
     "bound-params": [
         "ecosystemInstallUtilitiesLib",
-        "jsonFileUtilitiesLib",
-        "printDataLogLib"
+        "jsonFileUtilitiesLib"
     ],
     "commands": [
         {
@@ -65,8 +64,7 @@
             ],
             "parametersToLoad": [
                 "ecosystemInstallUtilitiesLib",
-                "jsonFileUtilitiesLib",
-                "printDataLogLib"
+                "jsonFileUtilitiesLib"
             ]
         },
         {
@@ -83,8 +81,7 @@
                 }
             ],
             "parametersToLoad": [
-                "ecosystemInstallUtilitiesLib",
-                "printDataLogLib"
+                "ecosystemInstallUtilitiesLib"
             ]
         },
         {
@@ -148,8 +145,7 @@
                 }
             ],
             "parametersToLoad": [
-                "jsonFileUtilitiesLib",
-                "printDataLogLib"
+                "jsonFileUtilitiesLib"
             ]
         },
         {
@@ -172,8 +168,7 @@
                 }
             ],
             "parametersToLoad": [
-                "jsonFileUtilitiesLib",
-                "printDataLogLib"
+                "jsonFileUtilitiesLib"
             ]
         },
         {
@@ -197,8 +192,7 @@
             ],
             "parametersToLoad": [
                 "ecosystemInstallUtilitiesLib",
-                "jsonFileUtilitiesLib",
-                "printDataLogLib"
+                "jsonFileUtilitiesLib"
             ]
         }
     ]

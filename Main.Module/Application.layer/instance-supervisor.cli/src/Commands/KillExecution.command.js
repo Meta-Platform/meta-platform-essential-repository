@@ -15,7 +15,6 @@ const KillExecutionCommand = async ({
 	const absolutSupervisorSocketsDirPath = ConvertPathToAbsolutPath(supervisorSocketsDirPath)
 	
 	const CreateCommunicationInterface = supervisorLib.require("CreateCommunicationInterface")
-	const FormatterDataLog             = supervisorLib.require("FormatterDataLog")
 
 	try {
 		const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)

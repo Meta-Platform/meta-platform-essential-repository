@@ -5,8 +5,7 @@ const Updater = require("../Helpers/Updater")
 const UpdateCommand = async ({ args, params }) => {
 
     const {
-        ecosystemInstallUtilitiesLib,
-        printDataLogLib
+        ecosystemInstallUtilitiesLib
     } = params
 
     const { profile, installationPath } = args
@@ -15,8 +14,7 @@ const UpdateCommand = async ({ args, params }) => {
     await Updater({ 
         profile, 
         installationPath: absoluteInstallationPath,
-        ecosystemInstallUtilitiesLib,
-        printDataLogLib
+        ecosystemInstallUtilitiesLib
     })
 }
 

@@ -1,17 +1,22 @@
-const CreatePrintDataLog = require("./CreatePrintDataLog")
+/*
+ * O log que chega por streaming vem de OUTRO processo (o package-executor da
+ * instância supervisionada). Ele é reemitido no logger local com o mesmo nível
+ * de origem: assim o que era só impressão de tela passa a ser também histórico.
+ */
+const LEVEL_BY_TYPE = { info : "info", success : "message", warning : "warn", error : "error", stdout : "message" }
 
 const ConnectLogStreaming =  ({
-    client, 
+    client,
     connectionTries=0
 }) => new Promise(async (resolve, reject) => {
     try{
-        Log.info("ConnectLogStreaming", `Verificando conexão com package-executor. Tentativa ${connectionTries}...`)
-        const PrintDataLog = await CreatePrintDataLog()
+        /* Feedback de um comando interativo: vai para o humano, não é operacional. */
+        Log.message("ConnectLogStreaming", `Verificando conexão com package-executor. Tentativa ${connectionTries}...`)
 
         const logStreaming = client.GetLogStreaming()
         logStreaming.on('data', (logResponse) => {
             resolve(logStreaming)
-            PrintDataLog(logResponse)
+            Log[LEVEL_BY_TYPE[logResponse.type] || "info"](logResponse.sourceName, logResponse.message)
         })
         logStreaming.on('error', (error) => reject(error))
     }catch(e){
@@ -20,11 +25,11 @@ const ConnectLogStreaming =  ({
 })
 
 const TryConnectLogStreaming = ({
-    client, 
-    ms, 
-    remainingConnectionAttempts, 
+    client,
+    ms,
+    remainingConnectionAttempts,
     connectionTries=1
-}) => 
+}) =>
     new Promise(async (resolve, reject) => {
         try{
             resolve(await ConnectLogStreaming({
@@ -36,7 +41,7 @@ const TryConnectLogStreaming = ({
                 if(remainingConnectionAttempts-1 > 0){
                     setTimeout(async () => {
                         resolve(await TryConnectLogStreaming({
-                            client, 
+                            client,
                             ms,
                             remainingConnectionAttempts: remainingConnectionAttempts-1,
                             connectionTries: connectionTries+1
@@ -49,6 +54,5 @@ const TryConnectLogStreaming = ({
             }
         }
     })
-
 
 module.exports = TryConnectLogStreaming

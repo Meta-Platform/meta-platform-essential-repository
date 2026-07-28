@@ -18,7 +18,6 @@ const LogExecutionCommand = async ({
     const absolutSupervisorSocketsDirPath = ConvertPathToAbsolutPath(supervisorSocketsDirPath)
 
     const CreateCommunicationInterface = supervisorLib.require("CreateCommunicationInterface")
-    const FormatterDataLog             = supervisorLib.require("FormatterDataLog")
     const TryConnectLogStreaming       = supervisorLib.require("TryConnectLogStreaming")
 
     const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)

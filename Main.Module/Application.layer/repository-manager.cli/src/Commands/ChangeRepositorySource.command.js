@@ -16,8 +16,7 @@ const ChangeRepositorySourceCommand = async ({
 
     const {
         ecosystemInstallUtilitiesLib,
-        jsonFileUtilitiesLib,
-        printDataLogLib
+        jsonFileUtilitiesLib
     } = params
 
     const { installDataDirPath:installDataDirPathRaw } = startupParams

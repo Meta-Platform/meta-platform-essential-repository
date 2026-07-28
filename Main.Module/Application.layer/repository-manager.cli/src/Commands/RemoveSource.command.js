@@ -19,8 +19,7 @@ const RemoveSourceCommand = async ({
     const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
     const {
-        jsonFileUtilitiesLib,
-        printDataLogLib
+        jsonFileUtilitiesLib
     } = params
 
     try{

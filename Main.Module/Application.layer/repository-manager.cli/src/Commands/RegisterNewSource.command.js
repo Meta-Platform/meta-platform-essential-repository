@@ -55,8 +55,7 @@ const RegisterNewSourceCommand = async ({
     const installDataDirAbsolutPath = ConvertPathToAbsolutPath(installDataDirPath)
 
     const {
-        jsonFileUtilitiesLib,
-        printDataLogLib
+        jsonFileUtilitiesLib
     } = params
 
 	

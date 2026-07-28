@@ -9,8 +9,7 @@ const BuildRepositoriesInstallData = require("./BuildRepositoriesInstallData")
 const Updater = async ({ 
     profile, 
     installationPath,
-    ecosystemInstallUtilitiesLib,
-    printDataLogLib
+    ecosystemInstallUtilitiesLib
 }) => {
 
     const UpdateEcosystemByProfile = ecosystemInstallUtilitiesLib.require("UpdateEcosystemByProfile")
