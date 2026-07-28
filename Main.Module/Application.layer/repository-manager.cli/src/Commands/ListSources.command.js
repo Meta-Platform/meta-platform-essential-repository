@@ -25,7 +25,7 @@ const ListSourcesCommand = async ({
     Object.entries(sourcesDataInformation)
     .forEach(([repositoryNamespace, sources]) => {
         sources.forEach((source) => {
-            console.log(`\t${count++}. ${colors.bold(repositoryNamespace.padEnd(15))} ${colors.bold("->")} ${source["sourceType"]}`) 
+            Log.message("ListSources", `\t${count++}. ${colors.bold(repositoryNamespace.padEnd(15))} ${colors.bold("->")} ${source["sourceType"]}`) 
         })  
     })
 }

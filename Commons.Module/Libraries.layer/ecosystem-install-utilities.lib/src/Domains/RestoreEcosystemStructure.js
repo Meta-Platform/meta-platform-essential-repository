@@ -26,7 +26,7 @@ const RestoreEcosystemStructure = async ({
             }
     
         } catch (e){
-            console.log(e)
+            Log.error("RestoreEcosystemStructure", e)
             Log.error("RestoreEcosystemStructure", `erro ao criar diretório de dados do ecosistema ${installDataDirPath}`)
             throw e
         }

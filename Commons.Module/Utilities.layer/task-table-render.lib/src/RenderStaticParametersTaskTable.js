@@ -16,7 +16,7 @@ const RenderStaticParametersTaskTable = async (staticParameters) => {
         table
         .push([{ vAlign:"center", hAlign: 'right', content: colors.bold.blue(paramName) }, colors.yellow(JSON.stringify(staticParameters[paramName], null, 4))])
     })
-    console.log(table.toString())
+    Log.message("RenderStaticParametersTaskTable", table.toString())
 }
 
 module.exports = RenderStaticParametersTaskTable

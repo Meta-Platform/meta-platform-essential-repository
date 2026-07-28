@@ -26,21 +26,21 @@ const ShowSourceInformationCommand = async ({
     Object.entries(sourcesDataInformation)
         .forEach(([repositoryNamespace, sources]) => {
 
-            console.log(`${colors.underline.bold(repositoryNamespace)}`)
+            Log.message("ShowSourceInformation", `${colors.underline.bold(repositoryNamespace)}`)
 
             sources.forEach((source, index) => {
                 const paramsNameList = Object.keys(source)
                 paramsNameList.forEach((paramName) => {
 
                     if(paramName === "sourceType" )
-                        console.log(`   ${colors.bold(source[paramName])}`)
+                        Log.message("ShowSourceInformation", `   ${colors.bold(source[paramName])}`)
 
                     if(paramName !== "sourceType" )
-                        console.log(`\t${colors.dim(paramName.padEnd(15))} -> ${colors.dim.italic(source[paramName])}`)
+                        Log.message("ShowSourceInformation", `\t${colors.dim(paramName.padEnd(15))} -> ${colors.dim.italic(source[paramName])}`)
 
                 })
             })
-            console.log("")
+            Log.message("ShowSourceInformation", "")
 
         })
 }

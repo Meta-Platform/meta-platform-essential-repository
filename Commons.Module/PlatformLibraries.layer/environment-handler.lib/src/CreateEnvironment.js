@@ -12,7 +12,7 @@ const CreateEnvironment = async ({
         })
         return GetEnvironmentPath(environmentName, localPath)
     }catch(e){
-        console.log(e)
+        Log.error("CreateEnvironment", e)
         Log.error("CreateEnvironment", e)
         Log.error("CreateEnvironment", `Erro ao criar ${environmentName} environment`)
         throw e

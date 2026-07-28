@@ -1,11 +1,18 @@
 const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfiles")
 
+/*
+ * As cores vinham de `console.log("\x1b[35m%s\x1b[0m", texto)`. O `Log` não faz
+ * substituição de `%s`, então o código de cor passa a envolver o texto direto —
+ * mesma saída, sem depender do formatador do console.
+ */
+const Colorir = (codigo, texto) => `\x1b[${codigo}m${texto}\x1b[0m`
+
 const ListProfilesCommand = async () => {
-    console.log("\x1b[35m%s\x1b[0m", "Meta Platform Setup Wizard")
+    Log.message("ListProfiles", Colorir(35, "Meta Platform Setup Wizard"))
     const installationProfiles = LoadAllInstalationProfiles()
     const profileNameList = Object.keys(installationProfiles)
-    console.log("\x1b[32m%s\x1b[0m", "Perfis de instalação disponíveis:")
-    profileNameList.forEach((profile) => console.log("\x1b[34m%s\x1b[0m", profile))
+    Log.message("ListProfiles", Colorir(32, "Perfis de instalação disponíveis:"))
+    profileNameList.forEach((profile) => Log.message("ListProfiles", Colorir(34, profile)))
 }
 
 module.exports = ListProfilesCommand

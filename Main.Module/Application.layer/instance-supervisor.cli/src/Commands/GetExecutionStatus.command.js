@@ -20,10 +20,10 @@ const GetExecutionStatusCommand = async ({
 		const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)
 		const client = await CreateCommunicationInterface(socketFilePath)
 		const executionStatus = await client.GetStatus()
-		console.log(`Status da execução [${executionStatus}]`)
+		Log.message("GetExecutionStatus", `Status da execução [${executionStatus}]`)
 	}catch(e){
-		console.log(e)
-		console.log(`O pacote não esta em execução`)
+		Log.error("GetExecutionStatus", e)
+		Log.message("GetExecutionStatus", `O pacote não esta em execução`)
 	}
 }
 

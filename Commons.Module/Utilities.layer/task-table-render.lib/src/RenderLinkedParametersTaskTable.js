@@ -15,6 +15,6 @@ const RenderLinkedParametersTaskTable = async (linkedParameters) => {
         table
         .push([{ vAlign:"center", hAlign: 'right', content: colors.bold.blue(paramName) }, colors.yellow(JSON.stringify(linkedParameters[paramName], null, 4))])
     })
-    console.log(table.toString())
+    Log.message("RenderLinkedParametersTaskTable", table.toString())
 }
 module.exports = RenderLinkedParametersTaskTable

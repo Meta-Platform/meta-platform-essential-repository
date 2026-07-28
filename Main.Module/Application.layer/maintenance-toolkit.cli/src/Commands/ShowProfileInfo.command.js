@@ -13,26 +13,26 @@ const ShowProfileInfoCommand = async ({ args }) => {
     const profileContent = INSTALL_PROFILES[profile]
 
     if (!profileContent) {
-        console.log(`Perfil "${profile}" não encontrado.`.red)
+        Log.message("ShowProfileInfo", `Perfil "${profile}" não encontrado.`.red)
         return
     }
 
-    console.log(`Perfil: ${profile}`.yellow)
-    console.log(`Diretório de Instalação: ${profileContent.installationDataDir}`.green)
-    console.log("Repositórios para instalação:".green)
+    Log.message("ShowProfileInfo", `Perfil: ${profile}`.yellow)
+    Log.message("ShowProfileInfo", `Diretório de Instalação: ${profileContent.installationDataDir}`.green)
+    Log.message("ShowProfileInfo", "Repositórios para instalação:".green)
 
     profileContent.repositoriesToInstall.forEach((repo, index) => {
-        console.log(`    Namespace: ${repo.repositoryNamespace}`.blue)
-        console.log(`    Tipo de Fonte: ${repo.repositorySourceType}`.blue)
-        console.log(`    Caminho: ${repo.repositoryPath}`.blue)
+        Log.message("ShowProfileInfo", `    Namespace: ${repo.repositoryNamespace}`.blue)
+        Log.message("ShowProfileInfo", `    Tipo de Fonte: ${repo.repositorySourceType}`.blue)
+        Log.message("ShowProfileInfo", `    Caminho: ${repo.repositoryPath}`.blue)
 
         if (repo.appsToInstall && repo.appsToInstall.length > 0) {
-            console.log("    Aplicações para instalar:".magenta)
+            Log.message("ShowProfileInfo", "    Aplicações para instalar:".magenta)
             repo.appsToInstall.forEach((app, appIndex) => {
-                console.log(`      Tipo: ${app.appType}`)
-                console.log(`      Executável: ${app.executable}`)
-                console.log(`      Namespace do Pacote: ${app.packageNamespace}`)
-                console.log(`      Nome do Socket do Supervisor: ${app.supervisorSocketFileName}`)
+                Log.message("ShowProfileInfo", `      Tipo: ${app.appType}`)
+                Log.message("ShowProfileInfo", `      Executável: ${app.executable}`)
+                Log.message("ShowProfileInfo", `      Namespace do Pacote: ${app.packageNamespace}`)
+                Log.message("ShowProfileInfo", `      Nome do Socket do Supervisor: ${app.supervisorSocketFileName}`)
             })
         }
     })

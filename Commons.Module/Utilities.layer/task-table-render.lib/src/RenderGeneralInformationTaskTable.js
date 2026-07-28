@@ -45,7 +45,7 @@ const RenderGeneralInformationTaskTable = async (taskData) => {
             formatter ? formatter(taskData[property]) : colors.yellow(taskData[property])
         ])
     })
-    console.log(table.toString())
+    Log.message("RenderGeneralInformationTaskTable", table.toString())
 }
 
 module.exports = RenderGeneralInformationTaskTable

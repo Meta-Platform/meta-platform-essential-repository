@@ -32,7 +32,7 @@ const Installer = async ({
         })
     } catch(e){
         Log.error("Installer", `A instalação cancelada!`)
-        console.error(e)
+        Log.error("Installer", e)
     }
     
 }

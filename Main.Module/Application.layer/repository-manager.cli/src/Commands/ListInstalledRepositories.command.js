@@ -28,7 +28,7 @@ const ListInstalledRepositoriesCommand = async ({
     let count = 1
     Object.keys(repositoriesInfo)
     .forEach((repositoryNamespace) => {
-        console.log(`\t${count++}. ${colors.bold(repositoryNamespace)}`) 
+        Log.message("ListInstalledRepositories", `\t${count++}. ${colors.bold(repositoryNamespace)}`) 
     })
 }
 

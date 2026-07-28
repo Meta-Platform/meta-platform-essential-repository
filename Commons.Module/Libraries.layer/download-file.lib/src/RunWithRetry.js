@@ -28,10 +28,10 @@ const RunWithRetry = async (operation, {
             lastError = error
             if (attempt < attempts) {
                 const delayMs = Math.min(baseDelayMs * 2 ** (attempt - 1), maxDelayMs)
-                console.error(`[RunWithRetry] ${label}: tentativa ${attempt}/${attempts} falhou (${_DescribeError(error)}). Nova tentativa em ${delayMs}ms...`)
+                Log.error("RunWithRetry", `[RunWithRetry] ${label}: tentativa ${attempt}/${attempts} falhou (${_DescribeError(error)}). Nova tentativa em ${delayMs}ms...`)
                 await Sleep(delayMs)
             } else {
-                console.error(`[RunWithRetry] ${label}: todas as ${attempts} tentativas falharam (${_DescribeError(error)}).`)
+                Log.error("RunWithRetry", `[RunWithRetry] ${label}: todas as ${attempts} tentativas falharam (${_DescribeError(error)}).`)
             }
         }
     }

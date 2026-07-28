@@ -26,7 +26,7 @@ const RenderActivationRulesTaskTable = async (activationRules) => {
             }
         })
     })
-    console.log(table.toString())
+    Log.message("RenderActivationRulesTaskTable", table.toString())
 }
 
 module.exports = RenderActivationRulesTaskTable

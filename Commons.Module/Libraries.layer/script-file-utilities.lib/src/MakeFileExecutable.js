@@ -6,7 +6,7 @@ const MakeFileExecutable = async (filePath) => {
         await fs.chmod(filePath, 0o755)
         Log.info("MakeFileExecutable", `O arquivo ${basename(filePath)} agora é executável.`)
     } catch (err) {
-        console.error(err)
+        Log.error("MakeFileExecutable", err)
         Log.error("MakeFileExecutable", `Erro ao tentar tornar o arquivo ${filePath} executável: ${err}`)
         throw err
     }

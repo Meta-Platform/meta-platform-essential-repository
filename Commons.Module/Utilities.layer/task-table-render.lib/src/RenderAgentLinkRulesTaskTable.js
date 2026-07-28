@@ -48,7 +48,7 @@ const RenderAgentLinkRulesTaskTable = async (agentLinkRules) => {
             })
         })
     })
-   console.log(table.toString())
+   Log.message("RenderAgentLinkRulesTaskTable", table.toString())
 }
 
 module.exports = RenderAgentLinkRulesTaskTable

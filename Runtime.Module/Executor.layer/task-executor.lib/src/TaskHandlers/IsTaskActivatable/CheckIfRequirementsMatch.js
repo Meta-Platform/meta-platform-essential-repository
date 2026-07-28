@@ -14,7 +14,7 @@ const CheckIfRequirementsMatch = (taskStateManager, requirement) => {
             return !!FindTaskByQuery(taskStateManager, taskQuery)
         }
     }catch(e){
-        console.log(e)
+        Log.error("CheckIfRequirementsMatch", e)
     }
     return false
 }

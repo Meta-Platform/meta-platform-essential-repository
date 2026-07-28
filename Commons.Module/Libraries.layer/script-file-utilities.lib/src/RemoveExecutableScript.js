@@ -15,7 +15,7 @@ const RemoveExecutableScript = async (filePath) => {
         
 
     } catch (error) {
-        console.error(error)
+        Log.error("RemoveExecutableScript", error)
         Log.error("RemoveExecutableScript", `Erro ao remover o arquivo: ${filePath}, erro: ${error.message}`)
         throw error
     }
