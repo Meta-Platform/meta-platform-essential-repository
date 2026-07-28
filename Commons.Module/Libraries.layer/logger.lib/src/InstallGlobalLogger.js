@@ -136,6 +136,41 @@ const InstallGlobalLogger = ({
 		? InstallConsoleBridge({ logger })
 		: () => {}
 
+	/*
+	 * Um CANAL é um logger que escreve num arquivo próprio, à parte do log do
+	 * processo. É o que permite ao daemon manter `logs/instances/<id>.jsonl` —
+	 * um arquivo por instância — sem recriar escrita em disco por fora da lib.
+	 *
+	 * O canal não escreve no terminal: o que ele registra pertence à instância,
+	 * não à sessão de quem está olhando o daemon.
+	 */
+	logger.OpenFileChannel = ({ dirPath, fileName, context : channelContext = {}, level : channelLevel } = {}) => {
+
+		const channelSink = CreateJsonlSink({
+			dirPath,
+			fileName,
+			maxFileSizeMb,
+			retentionDays
+		})
+
+		const channel = CreateLogger({
+			context : {
+				origin,
+				package : packageName,
+				instanceId,
+				...context,
+				...channelContext
+			},
+			sinks        : [channelSink],
+			level        : channelLevel || level,
+			consoleLevel : "off"
+		})
+
+		channel.Close = async () => channelSink.Close()
+
+		return channel
+	}
+
 	const UnregisterExitFlush = RegisterExitFlush(logger)
 
 	globalThis[GLOBAL_KEY] = logger

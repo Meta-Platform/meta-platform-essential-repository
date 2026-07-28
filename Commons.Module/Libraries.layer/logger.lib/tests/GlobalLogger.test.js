@@ -106,6 +106,38 @@ describe("InstallGlobalLogger", () => {
 		assert.strictEqual(pontePreviaDesinstalada, true, "a ponte da versão mínima precisa sair junto")
 	})
 
+	it('deve abrir um canal que escreve num arquivo próprio, fora do terminal', async () => {
+
+		/* É como o daemon mantém logs/instances/<instanceId>.jsonl. */
+		const fs   = require("fs")
+		const os   = require("os")
+		const path = require("path")
+
+		const dirPath = fs.mkdtempSync(path.join(os.tmpdir(), "canal-"))
+		const stream  = CreateFakeStream()
+
+		InstallGlobalLogger({ origin : "executor", stream, disableFileSink : true, bridgeConsole : false })
+
+		const canal = globalThis.Log.OpenFileChannel({
+			dirPath,
+			fileName : "abc123.jsonl",
+			context  : { instanceId : "abc123" }
+		})
+
+		canal.info("Daemon", "instância lançada")
+		await canal.Close()
+
+		const registros = fs.readFileSync(path.join(dirPath, "abc123.jsonl"), "utf8")
+			.trim().split("\n").map(JSON.parse)
+
+		assert.strictEqual(registros.length, 1)
+		assert.strictEqual(registros[0].instanceId, "abc123")
+		assert.strictEqual(registros[0].message, "instância lançada")
+		assert.strictEqual(stream.written.length, 0, "o canal não escreve no terminal")
+
+		fs.rmSync(dirPath, { recursive : true, force : true })
+	})
+
 	it('deve remover globalThis.Log ao desinstalar', () => {
 
 		InstallGlobalLogger({ disableFileSink : true, bridgeConsole : false, stream : CreateFakeStream() })
