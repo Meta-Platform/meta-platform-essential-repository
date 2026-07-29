@@ -10,6 +10,15 @@ const InstallApplication = require("./Install/InstallApplication")
 const ObtainRepository = require("./Helpers/ObtainRepository")
 
 const FilterApplicationsMetadataByExecutablesToInstall = require("./Helpers/FilterApplicationsMetadataByExecutablesToInstall")
+/*
+ * Ponto de entrada de instalação/atualização — garante `globalThis.Log` antes de
+ * qualquer uso (VDRP-275). Esta árvore chama `Log.<nível>` direto, mas pode ser
+ * carregada por um binário (mywizard, package-executor) antes de o bootstrap
+ * instalar o global; sem a garantia, o primeiro log lança
+ * `ReferenceError: Log is not defined` e, dentro de um `catch`, apaga a causa
+ * real. O logger garantido é mínimo e o canônico o substitui depois.
+ */
+const EnsureGlobalLogger = require("../../logger.lib/src/EnsureGlobalLogger")
 
 const InstallRepository = async ({
     repositoryNamespace,
@@ -18,6 +27,8 @@ const InstallRepository = async ({
     installDataDirPath,
     ecosystemDefaults
 }) => {
+
+    EnsureGlobalLogger()
 
     const { 
         REPOS_CONF_FILENAME_REPOS_DATA,

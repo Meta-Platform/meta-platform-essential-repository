@@ -10,6 +10,27 @@ const SynchronizeNodejsDependencies    = require("./Helpers/SynchronizeNodejsDep
 const CollectTaskLoaderNpmDependencies = require("./Helpers/CollectTaskLoaderNpmDependencies")
 const PrepareContext                   = require("./Helpers/PrepareContext")
 
+/*
+ * PONTO DE ENTRADA DA INSTALAÇÃO — garante `globalThis.Log` antes de qualquer
+ * uso (VDRP-275).
+ *
+ * Toda esta árvore chama `Log.<nível>` direto, que é o contrato do logger
+ * global. Só que quem instala o global é o bootstrap do processo, e esta função
+ * roda justamente para o ecossistema passar a existir: chamada por um binário
+ * (mywizard, package-executor) que carregou esta lib por LoaderScript, `Log`
+ * pode não estar instalado. Sem esta garantia, o primeiro `Log.info` lança
+ * `ReferenceError: Log is not defined` e — dentro de um `catch` — apaga a causa
+ * real da falha.
+ *
+ * Foi o que travou o provisionamento da plataforma VirtualDesk em 29/07/2026: o
+ * `mywizard install release-standard` morria dentro do build de imagem com "Log
+ * is not defined" e o motivo verdadeiro nunca chegava ao operador.
+ *
+ * O logger garantido aqui é mínimo (só console) e fica marcado como tal — o
+ * InstallGlobalLogger o substitui pelo canônico quando o ecossistema existir.
+ */
+const EnsureGlobalLogger = require("../../logger.lib/src/EnsureGlobalLogger")
+
 const InstallEcosystemByProfile = async ({
     ecosystemDefaults,
     npmDependencies,
@@ -19,6 +40,8 @@ const InstallEcosystemByProfile = async ({
     repositoriesInstallData,
     installationPath
 }) => {
+
+    EnsureGlobalLogger()
 
     Log.info("InstallEcosystemByProfile", `Início de instalação usando o perfil ${colors.bold(path.basename(profile))}`)
 
