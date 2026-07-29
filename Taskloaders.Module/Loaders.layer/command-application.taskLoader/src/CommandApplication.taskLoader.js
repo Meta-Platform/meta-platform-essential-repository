@@ -185,11 +185,21 @@ const CommandApplicationTaskLoader = (loaderParams, executorChannel) => {
         } catch (e) {
             executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE)
             log.error("falha ao executar o comando", e)
+            /* O comando falhou: quem chamou a CLI de um script precisa saber
+             * pelo código de saída, não só pela mensagem no terminal. */
+            process.exitCode = 1
         }
 
     }
-        
-    const Stop = () => process.exit(0)
+
+    /*
+     * `process.exit(0)` fixo descartava o `process.exitCode` que o comando havia
+     * definido: uma operação RECUSADA pelo serviço saía com sucesso para o shell,
+     * e qualquer automação encadeada com `&&` seguia adiante como se tivesse dado
+     * certo. O código de saída passa a ser o que o comando determinou, com 0 como
+     * padrão de quem não determinou nada.
+     */
+    const Stop = () => process.exit(process.exitCode === undefined ? 0 : process.exitCode)
     
     executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
     executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
