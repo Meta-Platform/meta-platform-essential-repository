@@ -1,5 +1,11 @@
 const ExtractNamespaceAndPath = require("./Utils/ExtractNamespaceAndPath")
 
+// `.icomponents` é um pacote front-end estrutural. Ele participa do mesmo grafo
+// de dependências dos demais pacotes, mas recebe um handle especializado, com
+// manifesto/aliases consumidos pelo WebInterfaceBuilder.
+const ResolveObjectLoaderType = (tag) =>
+    String(tag).endsWith(".icomponents") ? "webgui-library" : "nodejs-package"
+
 const GenerateExecutionParamsForNodejsPackageServices = ({
     metadataHierarchy, 
     environmentPath,
@@ -13,7 +19,7 @@ const GenerateExecutionParamsForNodejsPackageServices = ({
     }) => {
 
         return { 
-            objectLoaderType:"nodejs-package", 
+            objectLoaderType: ResolveObjectLoaderType(tag),
             staticParameters:{
                 tag,
                 path,
@@ -39,5 +45,7 @@ const GenerateExecutionParamsForNodejsPackageServices = ({
         .map(_RemapNamespaceToTag)
         .map(_ConvertParamsToLaunchTaskParams)
 }
+
+GenerateExecutionParamsForNodejsPackageServices.ResolveObjectLoaderType = ResolveObjectLoaderType
 
 module.exports = GenerateExecutionParamsForNodejsPackageServices
