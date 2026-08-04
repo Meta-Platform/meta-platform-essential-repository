@@ -148,3 +148,47 @@ Quando ocorre uma falha durante o processo de execução, a tarefa é designada 
 O status `TERMINATED` refere-se a tarefas que foram forçadas a terminar antes de alcançarem um estado de conclusão natural, ou que foram interrompidas por ação do usuário. Isso pode ocorrer tanto para tarefas de execução única quanto para tarefas contínuas, indicando que a tarefa foi deliberadamente finalizada antes do previsto.
 
 Entender esses estados é crucial para gerenciar efetivamente o ciclo de vida das tarefas, permitindo que os desenvolvedores implementem lógicas específicas baseadas no progresso ou conclusão das tarefas.
+
+## Liberação de recursos de tarefas encerradas
+
+Uma tarefa encerrada continua ocupando espaço na lista, mas **não** continua
+segurando o que carregava em execução.
+
+O ponto de partida é uma restrição do próprio desenho: `taskId` é o **índice** do
+array de tarefas. Remover uma tarefa da lista renumeraria todas as seguintes e
+quebraria as referências (`pTaskId`, as regras de vínculo, o que a interface de
+monitoramento exibe). Por isso a tarefa nunca sai da lista — ela é **substituída
+no mesmo índice** por uma lápide (`CreateTaskTombstone`).
+
+A lápide preserva o que ainda é lido depois do fim — `taskId`, `status`,
+`statusReason`, `objectLoaderType`, `staticParameters`, `linkedParameters`,
+`agentLinkRules`, `activationRules` — e solta o resto:
+
+| campo | por quê |
+|---|---|
+| `params` | são os parâmetros **já resolvidos**, onde moram os handles de outras tarefas (`nodejsPackageHandler`, `serverService`, bibliotecas de componentes) |
+| `getServiceObject` | é a closure devolvida pelo *object loader*, que fecha sobre todo o estado interno dele |
+| `executorChannel` | é um `EventEmitter` com listeners registrados pelo loader e pelo executor (`removeAllListeners()` antes de soltar) |
+
+`getServiceObject` não some: vira um substituto que **lança um erro explicativo**.
+Se alguma tarefa viva tentar resolver o serviço de uma tarefa encerrada, o erro
+aponta a causa em vez de estourar um `getServiceObject is not a function` a três
+saltos de distância.
+
+### O que é purgado, e quando
+
+Só `TERMINATED` e `FAILURE`, trinta segundos depois da mudança de status. A
+janela existe porque o encerramento é assíncrono: quando o status muda, ainda
+pode haver callback de loader em voo. O temporizador é `unref`ado — uma instância
+que termina logo em seguida não fica viva só esperando a faxina.
+
+**`FINISHED` fica de fora de propósito.** Uma tarefa `nodejs-package` termina
+nesse estado e o `getServiceObject` dela continua sendo resolvido pelas tarefas
+de endpoint que dependem dela. Purgá-la derrubaria as dependentes.
+
+### Por que isso importa
+
+Num daemon que fica meses no ar, cada instância que sobe e desce deixava esse
+conjunto para trás — e, por transitividade, o compilador webpack de uma interface
+web inteira. Ver `tests/PurgeTask.test.js`, que cobre justamente a preservação da
+identidade das outras tarefas.
