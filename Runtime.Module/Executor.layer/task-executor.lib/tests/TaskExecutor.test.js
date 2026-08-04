@@ -2,6 +2,7 @@ const { describe, before, it } = require('node:test')
 const assert = require('node:assert').strict
 
 const TaskStatusTypes = require("../src/TaskStatusTypes")
+const CommandChannelEventTypes = require("../src/CommandChannelEventTypes")
 
 const MinimumTaskLoader = (params, executorChannel) => {
 

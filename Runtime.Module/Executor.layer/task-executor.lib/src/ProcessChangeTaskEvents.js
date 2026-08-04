@@ -5,11 +5,18 @@ const IsTaskActivatable = require("./TaskHandlers/IsTaskActivatable")
 
 const AssembleTaskParameters = require("./TaskHandlers/AssembleTaskParameters")
 
+// Janela entre o encerramento da task e a liberação dos seus recursos. Existe
+// porque o encerramento é assíncrono: quando o status muda, ainda pode haver
+// callback de loader em voo lendo `params` ou emitindo no `executorChannel`.
+// Trinta segundos é folga larga para isso e curta o bastante para que subir e
+// descer instâncias não acumule nada.
+const PURGE_DELAY_MS = 30000
+
 const ProcessChangeTaskEvents = ({
     StopAllTasks,
-    taskStateManager, 
-    taskLoaders, 
-    taskId, 
+    taskStateManager,
+    taskLoaders,
+    taskId,
     status
 }) => {
 
@@ -18,6 +25,7 @@ const ProcessChangeTaskEvents = ({
         ListTasks,
         ChangeTaskStatus,
         UpdateTaskProperty,
+        PurgeTask
     } = taskStateManager
 
     const GetCommandChannel = (taskId) =>
@@ -70,6 +78,14 @@ const ProcessChangeTaskEvents = ({
         .forEach(({ taskId }) => CheckActivationConditions(taskId)))
     }
 
+    // O timer não segura o processo: uma instância que termina logo depois de a
+    // task encerrar não deve ficar viva só esperando a faxina.
+    const ScheduleTaskPurge = (taskId) => {
+        if(!PurgeTask) return
+        const timer = setTimeout(() => PurgeTask(taskId), PURGE_DELAY_MS)
+        if(typeof timer.unref === "function") timer.unref()
+    }
+
     switch(status){
         case TaskStatusTypes.AWAITING_PRECONDITIONS:
             CheckActivationConditions(taskId)
@@ -83,6 +99,10 @@ const ProcessChangeTaskEvents = ({
         case TaskStatusTypes.ACTIVE:
         case TaskStatusTypes.FINISHED:
             CheckAllTasksActivationConditions()
+        break
+        case TaskStatusTypes.TERMINATED:
+        case TaskStatusTypes.FAILURE:
+            ScheduleTaskPurge(taskId)
         break
     }
 }

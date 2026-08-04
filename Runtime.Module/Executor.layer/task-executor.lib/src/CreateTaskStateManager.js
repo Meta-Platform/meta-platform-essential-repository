@@ -1,7 +1,9 @@
 const EventEmitter = require('node:events')
 
+const CreateTaskTombstone = require("./TaskHandlers/CreateTaskTombstone")
+
 const CreateTaskStateManager = () => {
-    
+
     const eventEmitter = new EventEmitter()
     const TASK_STATUS_CHANGE = Symbol()
     const taskList = []
@@ -9,6 +11,18 @@ const CreateTaskStateManager = () => {
     const CreateEmptyTask = () => taskList.push({}) - 1
 
     const GetTask = (taskId) => taskList[taskId] || {}
+
+    // Libera os recursos de uma task encerrada SEM tirá-la da lista: `taskId` é o
+    // índice do array, então remover renumeraria todas as outras. A task é
+    // substituída no mesmo lugar por uma lápide — mesma identidade, mesmo status,
+    // sem os handles e closures que impediam a coleta (ver CreateTaskTombstone).
+    const PurgeTask = (taskId) => {
+        const task = taskList[taskId]
+        if(!CreateTaskTombstone.IsPurgeable(task)) return false
+
+        taskList[taskId] = CreateTaskTombstone(task)
+        return true
+    }
 
     const AddTaskStatusListener = (f) =>
         eventEmitter.on(TASK_STATUS_CHANGE, ({
@@ -42,7 +56,8 @@ const CreateTaskStateManager = () => {
         CreateEmptyTask,
         ListTasks: () => taskList,
         GetTask,
-        UpdateTaskProperty
+        UpdateTaskProperty,
+        PurgeTask
     }
 }
 
