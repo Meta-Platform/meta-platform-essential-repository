@@ -4,14 +4,10 @@ const ExtractNamespaceAndPath = require("./Utils/ExtractNamespaceAndPath")
 // do mesmo grafo de dependências dos demais pacotes, mas recebe um handle
 // especializado, com manifesto/aliases consumidos pelo WebInterfaceBuilder.
 //
-// `.icomponents` é o nome antigo do mesmo tipo, e `webgui-library` o nome antigo
-// do mesmo loader. Ficam aqui durante a janela de compatibilidade: a mudança
-// atravessa três repositórios git independentes, cada um chegando ao ecossistema
-// por um `repo update` separado — sem a janela, o estado intermediário entre os
-// updates seria quebrado em vez de funcional.
+// O mapa é aberto de propósito: um sufixo novo aqui é um tipo de pacote novo no
+// grafo, sem tocar no resto do gerador.
 const UI_LIBRARY_SUFFIXES = {
-    ".uilib"      : "ui-library",
-    ".icomponents": "webgui-library"
+    ".uilib": "ui-library"
 }
 
 const ResolveObjectLoaderType = (tag) => {
