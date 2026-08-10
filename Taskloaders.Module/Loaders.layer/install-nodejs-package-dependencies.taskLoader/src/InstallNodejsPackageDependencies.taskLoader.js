@@ -8,8 +8,10 @@ const PreparePackageDependenciesDir = require("./PreparePackageDependenciesDir")
 const ResolvePackageName = require("../../../../Runtime.Module/MetadataHelpers.layer/resolve-package-name.lib/src/ResolvePackageName")
 
 const GetDependenciesFromPackageJsonFile = async (packagePath) => {
-    const { dependencies } = await ReadPackageJsonFile(packagePath)
-    return dependencies
+    // `overrides` viaja junto: é a única forma de o pacote resolver um conflito
+    // de peer transitivo, e sem ela a instalação falha em silêncio.
+    const { dependencies, overrides } = await ReadPackageJsonFile(packagePath)
+    return { dependencies, overrides }
 }
 
 const CheckIfDependencyIsValid = (dependencies) =>
@@ -41,7 +43,7 @@ const InstallNodejsPackageDependenciesTaskLoader  = (params, executorChannel) =>
         hasBeenActivated=true
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         try{
-            const dependencies = await GetDependenciesFromPackageJsonFile(path)
+            const { dependencies, overrides } = await GetDependenciesFromPackageJsonFile(path)
             const packageName = ResolvePackageName(namespace)
 
             if(CheckIfDependencyIsValid(dependencies)){
@@ -55,6 +57,7 @@ const InstallNodejsPackageDependenciesTaskLoader  = (params, executorChannel) =>
                     environmentPath, 
                     packageName, 
                     dependencies, 
+                    overrides,
                     EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
                 })
             }
