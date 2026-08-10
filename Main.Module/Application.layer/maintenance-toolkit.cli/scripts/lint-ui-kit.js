@@ -34,7 +34,10 @@ const ROOT = path.resolve(__dirname, "../../../../../..")
  *   - node_modules, dist e build são artefato, não fonte.
  */
 const PERMITIDOS = [
-    /i-components\.icomponents\//,
+    // Regra genérica em vez de enumerar o kit pelo nome: qualquer biblioteca de
+    // UI futura já nasce coberta, sem depender de alguém lembrar de acrescentá-la
+    // aqui. O kit comum saiu deste repositório e mora no ecosystem core.
+    /\.uilib\//,
     /\/node_modules\//,
     /\/dist\//,
     /\/build\//
@@ -51,7 +54,7 @@ const PENDENTES = [
     /instance-executor-control-panel\.webgui\//,
     /meta-project-manager\.webgui\//,
     /package-developer\.webgui\//,
-    /instance-manager\.icomponents\//
+    /container-manager\.webgui\//
 ]
 
 const REGRAS = [
