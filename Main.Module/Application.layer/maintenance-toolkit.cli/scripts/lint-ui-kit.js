@@ -53,8 +53,7 @@ const PENDENTES = [
     /home-screen\.webgui\//,
     /instance-executor-control-panel\.webgui\//,
     /meta-project-manager\.webgui\//,
-    /package-developer\.webgui\//,
-    /container-manager\.webgui\//
+    /package-developer\.webgui\//
 ]
 
 const REGRAS = [
