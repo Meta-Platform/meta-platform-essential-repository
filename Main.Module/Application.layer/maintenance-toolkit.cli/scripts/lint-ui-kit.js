@@ -48,10 +48,6 @@ const PERMITIDOS = [
  * padronização). Remova a entrada ao migrar o aplicativo.
  */
 const PENDENTES = [
-    /launcher\.webgui\//,
-    /datasource-manager\.webgui\//,
-    /home-screen\.webgui\//,
-    /instance-executor-control-panel\.webgui\//,
     /meta-project-manager\.webgui\//,
     /package-developer\.webgui\//
 ]
