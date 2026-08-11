@@ -2,11 +2,12 @@
 /*
  * Lint anti-regressão da UI padronizada.
  *
- * Falha (exit 1) quando um WebGui monta interface fora do padrão:
+ * Falha (exit 1) quando um WebGui — ou a própria biblioteca de UI — monta
+ * interface fora do padrão:
  *
- *   - importa `semantic-ui-react` direto — o Semantic é encapsulado pelo kit
- *     (`@i-components`), e é de lá que o aplicativo importa Button, Icon,
- *     Modal, Input…;
+ *   - importa `semantic-ui-react` — o kit não encapsula mais o Semantic, ele
+ *     o substituiu: Button, Icon, Modal e Input são componentes próprios,
+ *     importados de `@i-components`;
  *   - importa `styled-components` — o visual sai dos tokens --mp-* e das
  *     classes do kit, não de CSS-in-JS por componente;
  *   - redefine no CSS uma classe do design system (`.mp-*`) — variação nova
@@ -14,7 +15,8 @@
  *
  * A lista PENDENTES é a dívida conhecida: são os WebGui que ainda não passaram
  * pela migração. Ela só pode DIMINUIR — ao migrar um aplicativo, remova a linha
- * dele daqui. Quando esvaziar, apague a lista e o lint passa a valer para todos.
+ * dele daqui. Hoje ela está VAZIA: a dívida foi zerada e o lint vale para todos.
+ * A lista continua existindo para quando um repositório novo entrar no escopo.
  *
  * Rodar a partir da raiz do meta-platform-repo:
  *   node repos/essential-repository/Main.Module/Application.layer/\
@@ -28,28 +30,36 @@ const path = require("path")
 const ROOT = path.resolve(__dirname, "../../../../../..")
 
 /*
- * Fora do escopo, e por quê:
- *   - o próprio kit e as bibliotecas de área ENCAPSULAM o Semantic — é o
- *     trabalho delas;
- *   - node_modules, dist e build são artefato, não fonte.
+ * Fora do escopo: node_modules, dist e build são artefato, não fonte.
  */
 const PERMITIDOS = [
-    // Regra genérica em vez de enumerar o kit pelo nome: qualquer biblioteca de
-    // UI futura já nasce coberta, sem depender de alguém lembrar de acrescentá-la
-    // aqui. O kit comum saiu deste repositório e mora no ecosystem core.
-    /\.uilib\//,
     /\/node_modules\//,
     /\/dist\//,
     /\/build\//
 ]
 
 /*
- * DÍVIDA CONHECIDA — WebGui ainda não migrados (ondas 2 e 3 do plano de
- * padronização). Remova a entrada ao migrar o aplicativo.
+ * As bibliotecas de UI (`.uilib`) eram isentas de TUDO enquanto encapsulavam o
+ * Semantic — era o trabalho delas. Desde o APPUI-117 o kit não usa mais
+ * Semantic (nem em componente, nem em folha de estilo, nem em dependência do
+ * package.json), e a isenção geral caiu junto: importar `semantic-ui-react` ou
+ * `styled-components` é infração TAMBÉM no kit.
+ *
+ * Sobra uma isenção, e só uma: a regra de CSS. Uma biblioteca de UI é, por
+ * definição, quem DEFINE as classes `.mp-*`; acusá-la de "redefinir" seria
+ * acusar a fonte.
  */
-const PENDENTES = [
-    /meta-project-manager\.webgui\//
-]
+const EhBibliotecaDeUI = (arquivo) => /\.uilib\//.test(arquivo)
+
+/*
+ * DÍVIDA CONHECIDA — WebGui ainda não migrados.
+ *
+ * A lista está VAZIA: a dívida foi zerada, todo WebGui do escopo passou pela
+ * migração e é cobrado pelas regras abaixo. O mecanismo fica de pé de
+ * propósito — quando um repositório novo entrar no escopo do lint, é aqui que
+ * os aplicativos dele esperam a vez, um por linha, e a lista só pode diminuir.
+ */
+const PENDENTES = []
 
 const REGRAS = [
     {
@@ -77,10 +87,16 @@ const EhComentario = (linha) => /^\s*(\/\/|\*|\/\*)/.test(linha)
 let arquivos
 try {
     arquivos = execSync(
-        // Escopo: o Application Repository, dono do kit e dos desktop apps do
-        // padrão. Outros repositórios (core, virtual-desk, engineering-tools)
-        // têm WebGui próprios e entram quando adotarem o kit.
-        `find repos/applications-repository -path '*.webgui/src/*' \\( -name '*.ts' -o -name '*.tsx' -o -name '*.css' \\) -not -path '*/node_modules/*'`,
+        // Escopo: TODO WebGui e TODA biblioteca de UI dos dois repositórios que
+        // adotaram o kit. Os dois WebGui do core (ecosystem-control-panel e
+        // server-manager) estavam fora até a F8, quando ainda mantinham um fork
+        // da matriz; migrados, entraram — a regra segue o kit, não o endereço.
+        // Outros repositórios (virtual-desk, engineering-tools) têm WebGui
+        // próprios e entram quando adotarem o kit.
+        `find repos/applications-repository repos/ecosystem-core-repository`
+        + ` \\( -path '*.webgui/src/*' -o -path '*.uilib/src/*' \\)`
+        + ` \\( -name '*.ts' -o -name '*.tsx' -o -name '*.css' \\)`
+        + ` -not -path '*/node_modules/*'`,
         { cwd : ROOT, maxBuffer : 32 * 1024 * 1024 }
     ).toString().trim().split("\n").filter(Boolean)
 } catch (e) {
@@ -101,7 +117,9 @@ for (const relativo of arquivos) {
     try { conteudo = fs.readFileSync(path.join(ROOT, relativo), "utf8") } catch (e) { continue }
 
     const ehCss = relativo.endsWith(".css")
-    const regras = ehCss ? [ REGRA_CSS ] : REGRAS
+    const regras = ehCss
+        ? (EhBibliotecaDeUI(relativo) ? [] : [ REGRA_CSS ])
+        : REGRAS
 
     conteudo.split("\n").forEach((linha, indice) => {
 

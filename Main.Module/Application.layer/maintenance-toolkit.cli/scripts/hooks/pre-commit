@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Gatilho do lint de UI da Meta Platform.
+#
+# Instalado por `node scripts/install-lint-hooks.js` nos repositórios que
+# adotaram o kit. Roda no momento em que a regressão é introduzida — que é o
+# único momento em que ela é barata de consertar.
+#
+# Por que um hook local e não CI: os três repositórios (applications, core,
+# essential) NÃO TÊM integração contínua nenhuma. E o lint precisa dos três lado
+# a lado, porque o kit mora no core e é consumido pelo applications — um
+# workflow dentro de um repositório sozinho não enxerga os irmãos. O checkout
+# de distribuição é o único lugar onde a topologia existe inteira.
+#
+# Isto NÃO substitui CI. Um hook local é contornável (`--no-verify`) e não
+# protege quem não o instalou. Enquanto não houver CI, é o que há.
+
+set -u
+
+# Só roda se o commit toca superfície de UI. Um commit de backend não paga o
+# custo do lint.
+TOCA_UI=$(git diff --cached --name-only --diff-filter=ACM \
+    | grep -E '\.(webgui|uilib)/src/.*\.(ts|tsx|css)$' | head -1)
+
+[ -z "$TOCA_UI" ] && exit 0
+
+# O lint varre a partir da raiz do checkout de distribuição, onde os
+# repositórios são irmãos. Subimos até encontrá-la.
+DIR=$(git rev-parse --show-toplevel)
+RAIZ=""
+while [ "$DIR" != "/" ]; do
+    if [ -d "$DIR/repos/essential-repository" ] && [ -d "$DIR/repos/ecosystem-core-repository" ]; then
+        RAIZ="$DIR"
+        break
+    fi
+    DIR=$(dirname "$DIR")
+done
+
+if [ -z "$RAIZ" ]; then
+    echo "lint de UI: pulei — este clone não tem os repositórios irmãos ao lado."
+    echo "            (o lint precisa de applications + core + essential juntos)"
+    exit 0
+fi
+
+LINT="$RAIZ/repos/essential-repository/Main.Module/Application.layer/maintenance-toolkit.cli/scripts/lint-ui-kit.js"
+
+[ -f "$LINT" ] || { echo "lint de UI: script não encontrado em $LINT"; exit 0; }
+
+node "$LINT" || {
+    echo ""
+    echo "O commit foi barrado pelo lint de UI. Conserte as ocorrências acima,"
+    echo "ou use 'git commit --no-verify' se souber por que está passando por cima."
+    exit 1
+}
