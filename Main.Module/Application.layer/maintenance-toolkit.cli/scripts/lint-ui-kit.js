@@ -74,10 +74,27 @@ const REGRAS = [
     }
 ]
 
-/* No CSS: redefinir classe do design system dissolve o padrão. */
+/*
+ * No CSS: redefinir GLOBALMENTE uma classe do design system dissolve o padrão.
+ *
+ * O que conta como redefinição global é o seletor que ATACA a classe do kit
+ * diretamente — `.mp-button { }`. Um seletor DESCENDENTE (`.iep-log__bar
+ * .mp-button { }`) não é a mesma coisa: ele ajusta o componente dentro de um
+ * contexto, sem mudar o componente para os outros doze aplicativos. A
+ * plataforma tem ~30 desses hoje, e cada um é um sinal de lacuna do kit — mas
+ * lacuna se resolve promovendo variante, não quebrando o build de quem já
+ * entregou.
+ *
+ * O padrão antigo ancorava em `^\s*` e só via a redefinição quando ela era a
+ * primeira coisa da linha. Passavam despercebidas a regra indentada dentro de
+ * media query e a que aparece depois de uma vírgula (`.foo, .mp-button {`) —
+ * as duas são globais de verdade. Agora cada parte da lista de seletores é
+ * examinada, e só é infração quando a parte COMEÇA com a classe do kit.
+ */
 const REGRA_CSS = {
-    nome   : "redefinição de classe .mp-* do design system",
-    padrao : /^\s*\.mp-[a-z0-9-]+[^{]*\{/,
+    nome   : "redefinição global de classe .mp-* do design system",
+    // Início de linha OU início de uma parte da lista (depois de vírgula).
+    padrao : /(^|,)\s*\.mp-[a-z0-9-]+(?![\w-])[^,{]*\{/,
     dica   : "a variação nasce no kit como modificador, com história no ui-catalog"
 }
 
