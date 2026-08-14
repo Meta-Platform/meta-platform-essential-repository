@@ -31,6 +31,12 @@ const SetupServiceObject = (serviceObject, { path, environmentPath, tag, EXECUTI
         return Service
     }
 
+    // Raiz do package. `getSourcePath` aponta para `src`, o que basta para carregar
+    // módulos, mas não alcança o que vive fora dele — template HTML, assets estáticos,
+    // manifesto. Sem este acessor, um loader que precise desses arquivos teria de supor
+    // a estrutura interna do package.
+    serviceObject.getPackagePath = () => path
+
     serviceObject.getSourcePath = _GetSourcePath
     serviceObject.getEnvironmentPath = _GetEnvironmentPath
     serviceObject.getNodeModulesPath = _GetNodeModulesPath
