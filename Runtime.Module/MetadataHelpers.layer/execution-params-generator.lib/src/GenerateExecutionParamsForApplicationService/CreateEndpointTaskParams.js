@@ -12,7 +12,7 @@ const CreateEndpointTaskParams = ({
 }) => {
     const namespaceList = boundParams && ExtractNamespaceListByBoundParams(boundParams)
     return {
-        objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata),
+        objectLoaderType: ConvertTypeTaskParamsToObjectLoaderType(typeMetadata, type),
         staticParameters:{
             url,
             type,
