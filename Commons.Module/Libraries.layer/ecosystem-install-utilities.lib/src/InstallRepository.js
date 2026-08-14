@@ -8,6 +8,7 @@ const LoadMetadataDir = require("../../load-metatada-dir.lib/src/LoadMetadataDir
 
 const InstallApplication = require("./Install/InstallApplication")
 const ObtainRepository = require("./Helpers/ObtainRepository")
+const SynchronizeTaskLoaderDependencies = require("./Helpers/SynchronizeTaskLoaderDependencies")
 
 const FilterApplicationsMetadataByExecutablesToInstall = require("./Helpers/FilterApplicationsMetadataByExecutablesToInstall")
 /*
@@ -61,6 +62,9 @@ const InstallRepository = async ({
         REPOS_CONF_FILENAME_REPOS_DATA,
         deployedRepoPath
     })
+
+    // Depois do registro, para que o repositório recém-instalado já entre na coleta.
+    await SynchronizeTaskLoaderDependencies({ installDataDirPath, ecosystemDefaults })
 
     if(executablesToInstall && metadataContent){
 

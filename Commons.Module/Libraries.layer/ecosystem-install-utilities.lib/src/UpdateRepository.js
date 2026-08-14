@@ -11,6 +11,7 @@ const UpdateRepositoryInstallationPath = require("../../repository-config-handle
 
 const ReinstallApplication = require("./Update/ReinstallApplication")
 const ObtainRepository = require("./Helpers/ObtainRepository")
+const SynchronizeTaskLoaderDependencies = require("./Helpers/SynchronizeTaskLoaderDependencies")
 
 const CleanOldRepository = require("./Helpers/CleanOldRepository")
 /*
@@ -74,6 +75,10 @@ const UpdateRepository = async ({
     })
 
     const { applications: applicationsMetadata } = metadataContent || {}
+
+    // O repositório pode ter passado a declarar um task loader novo, ou mudado as
+    // dependências npm de um já existente, entre uma versão e outra.
+    await SynchronizeTaskLoaderDependencies({ installDataDirPath, ecosystemDefaults })
 
     if(metadataContent){
 
