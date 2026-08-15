@@ -6,10 +6,14 @@ const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
 const ExtractSourceData = require("../Helpers/ExtractSourceData")
 
-const InstallRepositoryCommand = async ({ 
+const ChangeRepositorySourceCommand = async ({
     args, 
     startupParams,
     params
+}: {
+    args: any
+    startupParams: any
+    params: any
 }) => {
 
     const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
@@ -22,13 +26,12 @@ const InstallRepositoryCommand = async ({
     const { installDataDirPath:installDataDirPathRaw } = startupParams
     const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
 
-    const InstallRepository = ecosystemInstallUtilitiesLib.require("InstallRepository")
+    const ChangeRepositorySource = ecosystemInstallUtilitiesLib.require("ChangeRepositorySource")
     const ReadJsonFile = jsonFileUtilitiesLib.require("ReadJsonFile")
 
     const { 
         repositoryNamespace,
-        sourceType,
-        executables
+        sourceType
     } = args
     
     const sourcePath = path.resolve(installDataDirPath, REPOS_CONF_FILENAME_SOURCE_DATA)
@@ -40,14 +43,14 @@ const InstallRepositoryCommand = async ({
         sourcesDataInformation
     })
 
-    await InstallRepository({
+    await ChangeRepositorySource({
         repositoryNamespace,
         sourceData,
-        executablesToInstall: executables,
         installDataDirPath,
         ecosystemDefaults: ECOSYSTEM_DEFAULTS
     })
-    
+
+
 }
 
-module.exports = InstallRepositoryCommand
+module.exports = ChangeRepositorySourceCommand

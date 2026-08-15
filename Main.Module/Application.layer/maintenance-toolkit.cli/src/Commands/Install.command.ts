@@ -1,21 +1,21 @@
 const path = require("path")
 
-const Updater = require("../Helpers/Updater")
+const Installer = require("../Helpers/Installer")
 
-const UpdateCommand = async ({ args, params }) => {
+const InstallCommand = async ({ args, params }: { args: any, params: any }) => {
+
+    const { profile, installationPath } = args
 
     const {
         ecosystemInstallUtilitiesLib
     } = params
-
-    const { profile, installationPath } = args
-
+    
     const absoluteInstallationPath = installationPath && path.resolve(process.cwd(), installationPath)
-    await Updater({ 
+    await Installer({ 
         profile, 
         installationPath: absoluteInstallationPath,
         ecosystemInstallUtilitiesLib
     })
 }
 
-module.exports = UpdateCommand
+module.exports = InstallCommand

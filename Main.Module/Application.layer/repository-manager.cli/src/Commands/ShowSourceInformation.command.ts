@@ -7,6 +7,9 @@ const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 const ShowSourceInformationCommand = async ({
     startupParams,
     params
+}: {
+    startupParams: any
+    params: any
 }) => {  
 
     const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
@@ -24,13 +27,13 @@ const ShowSourceInformationCommand = async ({
     const sourcesDataInformation = await ReadJsonFile(sourcePath)
 
     Object.entries(sourcesDataInformation)
-        .forEach(([repositoryNamespace, sources]) => {
+        .forEach(([repositoryNamespace, sources]: [string, any]) => {
 
             Log.message("ShowSourceInformation", `${colors.underline.bold(repositoryNamespace)}`)
 
-            sources.forEach((source, index) => {
+            sources.forEach((source: any, index: any) => {
                 const paramsNameList = Object.keys(source)
-                paramsNameList.forEach((paramName) => {
+                paramsNameList.forEach((paramName: any) => {
 
                     if(paramName === "sourceType" )
                         Log.message("ShowSourceInformation", `   ${colors.bold(source[paramName])}`)

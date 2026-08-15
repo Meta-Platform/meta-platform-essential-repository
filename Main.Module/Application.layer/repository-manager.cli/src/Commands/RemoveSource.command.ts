@@ -7,10 +7,14 @@ const VerifySourceIsRegistered = require("../Helpers/VerifySourceIsRegistered")
 
 const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
-const RemoveSourceCommand = async ({ 
+const RemoveSourceCommand = async ({
     args, 
     startupParams,
     params
+}: {
+    args: any
+    startupParams: any
+    params: any
 }) => {
 
     const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
@@ -39,7 +43,7 @@ const RemoveSourceCommand = async ({
         if(isSourceRegistered){
 
             const filteredSources = sourcesDataInformation[repositoryNamespace]
-             .filter(({sourceType:_sourceType}) => sourceType !== _sourceType)
+             .filter(({sourceType:_sourceType}: { sourceType: string }) => sourceType !== _sourceType)
 
             const newSourcesDataInformation = {
                 ...sourcesDataInformation,
@@ -51,7 +55,7 @@ const RemoveSourceCommand = async ({
             throw `A fonte ${sourceType} não foi encontrada no repositório ${repositoryNamespace}`
         }
 
-    }catch(e){
+    }catch(e: any){
         Log.error("RemoveSourceCommand", e)
         throw e
     }

@@ -4,21 +4,21 @@ const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
 const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
-const ShowRepositoryDetailsCommand = async ({ 
-    args, 
+const ListInstalledRepositoriesCommand = async ({
     startupParams,
-    params
- }) => {
+    params 
+}: {
+    startupParams: any
+    params: any
+}) => {
     
     const {
         ecosystemInstallUtilitiesLib
     } = params
 
     const FetchInstalledRepositoriesInfo = ecosystemInstallUtilitiesLib.require("Helpers/FetchInstalledRepositoriesInfo")
-
+    
     const { REPOS_CONF_FILENAME_REPOS_DATA } = ECOSYSTEM_DEFAULTS
-
-    const { repositoryNamespace } = args
 
     const { installDataDirPath:installDataDirPathRaw } = startupParams
     const installDataDirPath = ConvertPathToAbsolutPath(installDataDirPathRaw)
@@ -28,16 +28,11 @@ const ShowRepositoryDetailsCommand = async ({
         REPOS_CONF_FILENAME_REPOS_DATA
     })
 
-    const infoDetails = repositoriesInfo[repositoryNamespace]
-    const { sourceData } = infoDetails
-    Log.message("ShowRepositoryDetails", `${colors.underline.bold(repositoryNamespace)}`)
-
-    const paramsNameList = Object.keys(sourceData)
-
-    paramsNameList.forEach((paramName) => {
-        const paramValueRender = paramName !== "sourceType" ? colors.dim(sourceData[paramName]) : colors.bold(sourceData[paramName])
-        Log.message("ShowRepositoryDetails", `  ${colors.italic(paramName.padEnd(15))} ${colors.bold("->")} ${paramValueRender}`)
+    let count = 1
+    Object.keys(repositoriesInfo)
+    .forEach((repositoryNamespace: string) => {
+        Log.message("ListInstalledRepositories", `\t${count++}. ${colors.bold(repositoryNamespace)}`) 
     })
 }
 
-module.exports = ShowRepositoryDetailsCommand
+module.exports = ListInstalledRepositoriesCommand

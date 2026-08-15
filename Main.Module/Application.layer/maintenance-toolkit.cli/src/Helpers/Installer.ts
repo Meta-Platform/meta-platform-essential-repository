@@ -6,10 +6,14 @@ const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfile
 
 const BuildRepositoriesInstallData = require("./BuildRepositoriesInstallData")
 
-const Installer = async ({ 
+const Installer = async ({
     profile, 
     installationPath,
     ecosystemInstallUtilitiesLib
+}: {
+    profile: string
+    installationPath: string
+    ecosystemInstallUtilitiesLib: any
 }) => {
 
     const InstallEcosystemByProfile = ecosystemInstallUtilitiesLib.require("InstallEcosystemByProfile")
@@ -30,7 +34,7 @@ const Installer = async ({
             repositoriesInstallData,
             installationPath
         })
-    } catch(e){
+    } catch(e: any){
         Log.error("Installer", `A instalação cancelada!`)
         Log.error("Installer", e)
     }

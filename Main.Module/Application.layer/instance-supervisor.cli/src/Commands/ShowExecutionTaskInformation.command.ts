@@ -6,6 +6,10 @@ const ShowExecutionTaskInformationCommand = async ({
     args, 
     startupParams,
     params
+}: {
+    args: any
+    startupParams: any
+    params: any
 }) => {
 
 	const { taskId, socket } = args

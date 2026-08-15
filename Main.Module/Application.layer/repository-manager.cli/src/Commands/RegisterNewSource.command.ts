@@ -9,7 +9,7 @@ const VerifySourceIsRegistered = require("../Helpers/VerifySourceIsRegistered")
 
 const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
-const GetNewSource = (args) => {
+const GetNewSource = (args: any) => {
     const {
         sourceType,
         localPath,
@@ -42,10 +42,14 @@ const GetNewSource = (args) => {
     }
 }
 
-const RegisterNewSourceCommand = async ({ 
+const RegisterNewSourceCommand = async ({
     args, 
     startupParams,
     params
+}: {
+    args: any
+    startupParams: any
+    params: any
 }) => {
 
     const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
@@ -86,7 +90,7 @@ const RegisterNewSourceCommand = async ({
             await WriteObjectToFile(sourceFilePath, newSourcesDataInformation)
             Log.warn("RegisterNewSourceCommand", `Uma nova fonte foi registrada de namespace ${colors.bold(repositoryNamespace)} de tipo ${colors.bold(sourceType)}.`)
         }
-    }catch(e){
+    }catch(e: any){
         Log.error("RegisterNewSourceCommand", e)
         throw e
     }

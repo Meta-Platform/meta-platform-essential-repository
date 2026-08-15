@@ -2,7 +2,7 @@ const os = require('os')
 
 const path = require("path")
 
-const ConvertPathToAbsolutPath = (_path) => path
+const ConvertPathToAbsolutPath = (_path: any) => path
     .join(_path)
     .replace('~', os.homedir())
 

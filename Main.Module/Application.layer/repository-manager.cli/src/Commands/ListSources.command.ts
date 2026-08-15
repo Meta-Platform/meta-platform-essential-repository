@@ -6,6 +6,9 @@ const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 const ListSourcesCommand = async ({
     startupParams,
     params
+}: {
+    startupParams: any
+    params: any
 }) => {
     const { REPOS_CONF_FILENAME_SOURCE_DATA } = ECOSYSTEM_DEFAULTS
 
@@ -23,8 +26,8 @@ const ListSourcesCommand = async ({
 
     let count = 1
     Object.entries(sourcesDataInformation)
-    .forEach(([repositoryNamespace, sources]) => {
-        sources.forEach((source) => {
+    .forEach(([repositoryNamespace, sources]: [string, any]) => {
+        sources.forEach((source: any) => {
             Log.message("ListSources", `\t${count++}. ${colors.bold(repositoryNamespace.padEnd(15))} ${colors.bold("->")} ${source["sourceType"]}`) 
         })  
     })

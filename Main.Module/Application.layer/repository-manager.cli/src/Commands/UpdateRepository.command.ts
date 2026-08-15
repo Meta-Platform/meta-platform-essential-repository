@@ -2,7 +2,7 @@ const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
 const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
 
-const UpdateRepositoryCommand = async ({ args, startupParams, params }) => {
+const UpdateRepositoryCommand = async ({ args, startupParams, params }: { args: any, startupParams: any, params: any }) => {
 
     const {
         ecosystemInstallUtilitiesLib

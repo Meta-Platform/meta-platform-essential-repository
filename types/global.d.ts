@@ -16,4 +16,38 @@ declare global {
     var Log: Logger
 }
 
+/*
+ * O pacote `colors`, quando carregado, ESTENDE `String.prototype` — é o que
+ * permite escrever `"texto".red` em vez de `colors.red("texto")`. As duas formas
+ * convivem no código do ecossistema; esta declaração é o que torna a segunda
+ * visível ao verificador.
+ */
+declare global {
+    interface String {
+        readonly black: string
+        readonly red: string
+        readonly green: string
+        readonly yellow: string
+        readonly blue: string
+        readonly magenta: string
+        readonly cyan: string
+        readonly white: string
+        readonly gray: string
+        readonly grey: string
+        readonly bold: string
+        readonly dim: string
+        readonly italic: string
+        readonly underline: string
+        readonly inverse: string
+        readonly bgBlack: string
+        readonly bgRed: string
+        readonly bgGreen: string
+        readonly bgYellow: string
+        readonly bgBlue: string
+        readonly bgMagenta: string
+        readonly bgCyan: string
+        readonly bgWhite: string
+    }
+}
+
 export {}

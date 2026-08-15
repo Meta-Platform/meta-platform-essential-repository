@@ -6,6 +6,10 @@ const ListRunningTasksCommand = async ({
     args, 
     startupParams,
     params
+}: {
+    args: any
+    startupParams: any
+    params: any
 }) => {
 
 	const { socket } = args

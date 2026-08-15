@@ -6,10 +6,14 @@ const LoadAllInstalationProfiles = require("../Helpers/LoadAllInstalationProfile
 
 const BuildRepositoriesInstallData = require("./BuildRepositoriesInstallData")
 
-const Updater = async ({ 
+const Updater = async ({
     profile, 
     installationPath,
     ecosystemInstallUtilitiesLib
+}: {
+    profile: string
+    installationPath: string
+    ecosystemInstallUtilitiesLib: any
 }) => {
 
     const UpdateEcosystemByProfile = ecosystemInstallUtilitiesLib.require("UpdateEcosystemByProfile")
@@ -30,7 +34,7 @@ const Updater = async ({
             repositoriesInstallData,
             installationPath
         })
-    } catch(e){
+    } catch(e: any){
        
         Log.error("Updater", e)
 

@@ -6,6 +6,10 @@ const GetExecutionStatusCommand = async ({
 	args, 
 	startupParams,
 	params
+}: {
+    args: any
+    startupParams: any
+    params: any
 }) => {
 	
 	const { socket } = args
@@ -21,7 +25,7 @@ const GetExecutionStatusCommand = async ({
 		const client = await CreateCommunicationInterface(socketFilePath)
 		const executionStatus = await client.GetStatus()
 		Log.message("GetExecutionStatus", `Status da execução [${executionStatus}]`)
-	}catch(e){
+	}catch(e: any){
 		Log.error("GetExecutionStatus", e)
 		Log.message("GetExecutionStatus", `O pacote não esta em execução`)
 	}

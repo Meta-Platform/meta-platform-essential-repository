@@ -1,7 +1,7 @@
 
 const ConvertPathToAbsolutPath = require("../Utils/ConvertPathToAbsolutPath")
 
-const ListSocketsCommand = async ({ startupParams, params }) => {
+const ListSocketsCommand = async ({ startupParams, params }: { startupParams: any, params: any }) => {
 
     const { supervisorSocketsDirPath } = startupParams
     const { supervisorLib } = params
@@ -16,7 +16,7 @@ const ListSocketsCommand = async ({ startupParams, params }) => {
         Log.message("ListSockets", "Nenhum arquivo de socket encontrado.")
     } else {
         Log.message("ListSockets", "Listagem de arquivos de socket:")
-        socketFileNameList.forEach((socketFileName) => {
+        socketFileNameList.forEach((socketFileName: any) => {
             Log.message("ListSockets", `- ${socketFileName}`)
         })
     }

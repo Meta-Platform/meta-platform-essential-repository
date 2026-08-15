@@ -1,13 +1,13 @@
-const BuildRepositoriesInstallData = ({ repositoriesToInstall, sources }) => 
+const BuildRepositoriesInstallData = ({ repositoriesToInstall, sources }: { repositoriesToInstall: any, sources: any }) => 
     repositoriesToInstall
-        .map((repositoryToInstall) => {
+        .map((repositoryToInstall: any) => {
             const { 
                 namespace,
                 sourceType,
                 executablesToInstall 
             } = repositoryToInstall
 
-            const sourceData = sources[namespace].find((sourceData) => sourceData.sourceType === sourceType)
+            const sourceData = sources[namespace].find((sourceData: any) => sourceData.sourceType === sourceType)
 
             return {
                 namespace,

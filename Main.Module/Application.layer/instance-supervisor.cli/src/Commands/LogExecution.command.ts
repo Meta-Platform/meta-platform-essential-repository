@@ -9,6 +9,10 @@ const LogExecutionCommand = async ({
     args, 
     startupParams,
     params
+}: {
+    args: any
+    startupParams: any
+    params: any
 }) => {
 
 	const { socket } = args
@@ -22,7 +26,7 @@ const LogExecutionCommand = async ({
 
     const socketFilePath = path.resolve(absolutSupervisorSocketsDirPath, socket)
 
-    const _OpenLogStream = async (socketFilePath) => {
+    const _OpenLogStream = async (socketFilePath: string) => {
         const rpcClient = await CreateCommunicationInterface(socketFilePath)
         await TryConnectLogStreaming({
             client: rpcClient,
