@@ -18,7 +18,7 @@ const VerifyPackageDependenciesDir = async ({
             return true
         } else {
             // Quinta cópia do `reject` inexistente no repositório — ver
-            // VerifyRepoFile, VerifyDirExit, VerifyDataDir e VerifyConfigDir.
+            // VerifyRepoFile, VerifyDirExit e VerifyDataDir.
             throw `${dirpath} não é um diretório`
         }
     } catch (e: any){
