@@ -1,5 +1,12 @@
-const fs = require("node:fs")
-const path = require("node:path")
+const fs = require("node:fs") as typeof import("node:fs")
+const path = require("node:path") as typeof import("node:path")
+
+/**
+ * Variáveis de configuração do ecossistema, como estão no arquivo: nomes de
+ * diretório, extensões, níveis de log. O conjunto é aberto — cada versão do
+ * ecosystem-defaults pode trazer chaves novas — e por isso não se fecha aqui.
+ */
+export type EcosystemDefaults = Record<string, any>
 
 /**
  * Acessador único do arquivo `ecosystem-defaults.json`.
@@ -10,13 +17,8 @@ const path = require("node:path")
  *
  * Não há fallback embutido nem cópia das variáveis no código: se o arquivo não
  * existir, o ecossistema não está instalado e um erro explícito é lançado.
- *
- * @param {string} ecosystemDataPath - Diretório raiz do EcosystemData.
- * @param {string} ecosystemDefaultsFileRelativePath - Caminho relativo do arquivo de defaults.
- * @returns {object} Objeto com as variáveis de configuração do ecossistema.
- * @throws {Error} Se o arquivo não for encontrado.
  */
-const Get = (ecosystemDataPath, ecosystemDefaultsFileRelativePath) => {
+const Get = (ecosystemDataPath: string, ecosystemDefaultsFileRelativePath: string): EcosystemDefaults => {
     const fullPath = path.resolve(ecosystemDataPath, ecosystemDefaultsFileRelativePath)
 
     if (!fs.existsSync(fullPath))

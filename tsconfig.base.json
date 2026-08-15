@@ -13,6 +13,12 @@
         // O runtime carrega por `require`: o módulo é CommonJS e continua sendo.
         "module": "commonjs",
         "moduleResolution": "node",
+
+        // Sem isto, um arquivo sem `import` seria um script GLOBAL para o
+        // verificador, e o `const fs` de um colidiria com o `const fs` do outro.
+        // A saída óbvia — pôr `export {}` no arquivo — é justamente a proibida:
+        // `export` não é apagado, e o Node passaria a tratar o módulo como ESM.
+        "moduleDetection": "force",
         "target": "es2022",
         "lib": ["es2022"],
         "types": ["node"],

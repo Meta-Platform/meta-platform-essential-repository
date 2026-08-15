@@ -2,24 +2,31 @@
 // intermitente: github.com/codeload.github.com engasgam e devolvem
 // UND_ERR_CONNECT_TIMEOUT. Sem retry, um único soluço condena a instalação.
 // Aqui cada operação é tentada N vezes com backoff exponencial (com teto).
-const Sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+const Sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms))
 
 const DEFAULT_ATTEMPTS = 6
 const DEFAULT_BASE_DELAY_MS = 1500
 const DEFAULT_MAX_DELAY_MS = 15000
 
-const _DescribeError = (error) =>
+export type RetryOptions = {
+    attempts?: number
+    baseDelayMs?: number
+    maxDelayMs?: number
+    label?: string
+}
+
+const _DescribeError = (error: any): string =>
     (error && error.cause && error.cause.code) ||
     (error && error.code) ||
     (error && error.message) ||
     "erro desconhecido"
 
-const RunWithRetry = async (operation, {
+const RunWithRetry = async <T>(operation: (attempt: number) => Promise<T>, {
     attempts = DEFAULT_ATTEMPTS,
     baseDelayMs = DEFAULT_BASE_DELAY_MS,
     maxDelayMs = DEFAULT_MAX_DELAY_MS,
     label = "operação de rede"
-} = {}) => {
+}: RetryOptions = {}): Promise<T> => {
     let lastError
     for (let attempt = 1; attempt <= attempts; attempt++) {
         try {

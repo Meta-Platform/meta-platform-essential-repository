@@ -1,7 +1,7 @@
-const fs = require("fs")
-const path = require("path")
+const fs = require("fs") as typeof import("fs")
+const path = require("path") as typeof import("path")
 
-const CopyDirRepository = (source, destination, ancestors = new Set()) => {
+const CopyDirRepository = (source: string, destination: string, ancestors: Set<string> = new Set()): void => {
 
     // Um symlink que aponte para um diretório ancestral faria a recursão nunca
     // terminar (ELOOP). A comparação é pelo caminho real: o aparente difere a

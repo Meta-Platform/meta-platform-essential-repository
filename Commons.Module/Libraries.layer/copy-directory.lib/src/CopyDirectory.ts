@@ -1,8 +1,8 @@
-const fs = require("fs")
-const path = require("path")
+const fs = require("fs") as typeof import("fs")
+const path = require("path") as typeof import("path")
 
-const CopyDirectory = (source, destination) => {
-    
+const CopyDirectory = (source: string, destination: string): void => {
+
     if (!fs.existsSync(destination)) {
         fs.mkdirSync(destination, { recursive: true })
     }
