@@ -1,6 +1,6 @@
 const path = require("path")
 
-const ConvertPathToAbsolutPath = require("../Utils/ConvertPathToAbsolutPath")
+const ConvertPathToAbsolutPath = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ConvertPathToAbsolutPath")
 
 const KillExecutionCommand = async ({
 	args, 

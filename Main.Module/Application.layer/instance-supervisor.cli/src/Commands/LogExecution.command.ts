@@ -3,7 +3,7 @@ const path = require("path")
 const MAX_CONNECT_RETRIES = 1000
 const RETRY_DELAY_MS = 500
 
-const ConvertPathToAbsolutPath = require("../Utils/ConvertPathToAbsolutPath")
+const ConvertPathToAbsolutPath = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ConvertPathToAbsolutPath")
 
 const LogExecutionCommand = async ({
     args, 

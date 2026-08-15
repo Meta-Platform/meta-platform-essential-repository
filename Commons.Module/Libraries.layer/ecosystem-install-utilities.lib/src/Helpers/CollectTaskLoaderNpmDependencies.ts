@@ -1,8 +1,7 @@
 const path = require("path") as typeof import("path")
-const os = require("os") as typeof import("os")
 const fs = require("fs") as typeof import("fs")
 
-const ToAbsolute = (p: unknown): string => String(p || "").replace("~", os.homedir())
+const ToAbsolute = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ToAbsolutePath") as (value: unknown) => string
 
 // Coleta e combina as `npmDependencies` declaradas nos `taskloaders.json` de todos os
 // repositórios instalados (MPTL-17). O ecossistema passa a instalar, no diretório de

@@ -1,12 +1,11 @@
 import type { EcosystemDefaults } from "../Types"
 
 const path = require("path") as typeof import("path")
-const os = require("os") as typeof import("os")
 
 const CollectTaskLoaderNpmDependencies = require("./CollectTaskLoaderNpmDependencies") as (params: { installDataDirPath: string, REPOS_CONF_FILENAME_REPOS_DATA: string }) => Record<string, string>
 const SynchronizeNodejsDependencies = require("./SynchronizeNodejsDependencies") as (params: { contextPath: string, dependencies: Record<string, string> }) => Promise<void>
 
-const ToAbsolute = (p: unknown): string => String(p || "").replace("~", os.homedir())
+const ToAbsolute = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ToAbsolutePath") as (value: unknown) => string
 
 // Um repositório que contribui um task loader também traz as dependências npm que aquele
 // loader precisa. Sem este passo, instalar o repositório registra o loader mas o deixa

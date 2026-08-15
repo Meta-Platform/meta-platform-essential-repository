@@ -7,7 +7,7 @@ const fs = require("fs") as typeof import("fs")
 // Sempre entram na whitelist.
 const STRUCTURAL_PKG_TYPES = ["lib", "taskLoader"]
 
-const ToAbsolute = (p: unknown): string => String(p || "").replace("~", os.homedir())
+const ToAbsolute = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ToAbsolutePath") as (value: unknown) => string
 
 // Deriva a whitelist de tipos de pacote (REPOS_CONF_EXTLIST_PKG_TYPE) a partir da UNIÃO
 // dos `supportedPackageTypes` declarados nos `repository.json` dos repositórios

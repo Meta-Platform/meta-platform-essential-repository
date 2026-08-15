@@ -2,7 +2,7 @@ const colors = require("colors")
 const { resolve } = require("path")
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
-const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
+const ConvertPathToAbsolutPath = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ConvertPathToAbsolutPath")
 
 const ShowSourceInformationCommand = async ({
     startupParams,

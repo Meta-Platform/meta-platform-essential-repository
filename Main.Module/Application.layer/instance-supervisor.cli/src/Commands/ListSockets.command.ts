@@ -1,5 +1,5 @@
 
-const ConvertPathToAbsolutPath = require("../Utils/ConvertPathToAbsolutPath")
+const ConvertPathToAbsolutPath = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ConvertPathToAbsolutPath")
 
 const ListSocketsCommand = async ({ startupParams, params }: { startupParams: any, params: any }) => {
 

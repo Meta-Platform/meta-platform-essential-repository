@@ -2,7 +2,7 @@ import type { EcosystemDefaults, InstallationContext } from "../Types"
 
 const path = require("path") as typeof import("path")
 
-const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath") as (path: string) => string
+const ConvertPathToAbsolutPath = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ConvertPathToAbsolutPath") as (path: string) => string
 
 const PrepareContext = ({
     installationDataDir,

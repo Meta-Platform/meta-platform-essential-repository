@@ -1,6 +1,6 @@
 const ECOSYSTEM_DEFAULTS = require("../Configs/ecosystem-defaults.json")
 
-const ConvertPathToAbsolutPath = require("../Helpers/ConvertPathToAbsolutPath")
+const ConvertPathToAbsolutPath = require("../../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/ConvertPathToAbsolutPath")
 
 const UpdateRepositoryCommand = async ({ args, startupParams, params }: { args: any, startupParams: any, params: any }) => {
 
