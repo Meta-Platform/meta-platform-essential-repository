@@ -1,24 +1,7 @@
-const fs = require("fs") as typeof import("fs")
-const path = require("path") as typeof import("path")
+const CopyDirectoryTree = require("./CopyDirectoryTree") as (source: string, destination: string, excludedNames?: string[]) => void
 
-const CopyDirectory = (source: string, destination: string): void => {
-
-    if (!fs.existsSync(destination)) {
-        fs.mkdirSync(destination, { recursive: true })
-    }
-
-    const entries = fs.readdirSync(source, { withFileTypes: true })
-
-    for (const entry of entries) {
-        const srcPath = path.join(source, entry.name)
-        const destPath = path.join(destination, entry.name)
-
-        if (entry.isDirectory()) {
-            CopyDirectory(srcPath, destPath)
-        } else {
-            fs.copyFileSync(srcPath, destPath)
-        }
-    }
-}
+/** Copia uma árvore inteira, sem exclusões. */
+const CopyDirectory = (source: string, destination: string): void =>
+    CopyDirectoryTree(source, destination)
 
 module.exports = CopyDirectory

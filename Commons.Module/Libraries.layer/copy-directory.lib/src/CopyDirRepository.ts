@@ -1,38 +1,14 @@
-const fs = require("fs") as typeof import("fs")
-const path = require("path") as typeof import("path")
+const CopyDirectoryTree = require("./CopyDirectoryTree") as (source: string, destination: string, excludedNames?: string[]) => void
 
-const CopyDirRepository = (source: string, destination: string, ancestors: Set<string> = new Set()): void => {
+/*
+ * O que NÃO acompanha um repositório quando ele é implantado: o histórico do
+ * git e as dependências npm. O primeiro é grande e não é do ecossistema; as
+ * segundas são reinstaladas no diretório de dependências da execução.
+ */
+const EXCLUDED_FROM_REPOSITORY = [".git", "node_modules"]
 
-    // Um symlink que aponte para um diretório ancestral faria a recursão nunca
-    // terminar (ELOOP). A comparação é pelo caminho real: o aparente difere a
-    // cada volta do ciclo.
-    const realSource = fs.realpathSync(source)
-    if (ancestors.has(realSource)) return
-    ancestors.add(realSource)
-
-    if (!fs.existsSync(destination)) {
-        fs.mkdirSync(destination, { recursive: true })
-    }
-
-    const entries = fs.readdirSync(source)
-
-    for (const entryName of entries) {
-        if (entryName === '.git' || entryName === 'node_modules') continue
-        const srcPath = path.join(source, entryName)
-        const destPath = path.join(destination, entryName)
-
-        // O tipo vem de statSync, e não do Dirent do readdirSync: o Dirent usa
-        // lstat (symlink para diretório vira "não-diretório") e fica sem tipo em
-        // filesystem que não preenche d_type. Nos dois casos um diretório cairia
-        // no copyFileSync e quebraria com EISDIR.
-        if (fs.statSync(srcPath).isDirectory()) {
-            CopyDirRepository(srcPath, destPath, ancestors)
-        } else {
-            fs.copyFileSync(srcPath, destPath)
-        }
-    }
-
-    ancestors.delete(realSource)
-}
+/** Copia um repositório para o EcosystemData, sem `.git` nem `node_modules`. */
+const CopyDirRepository = (source: string, destination: string): void =>
+    CopyDirectoryTree(source, destination, EXCLUDED_FROM_REPOSITORY)
 
 module.exports = CopyDirRepository
