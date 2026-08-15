@@ -9,9 +9,9 @@
 
 const SmartRequire = require("../../smart-require.lib/src/SmartRequire")
 
-const Identity = (text) => text
+const Identity = (text: string): string => text
 
-const BuildPlainPalette = () => new Proxy({}, {
+const BuildPlainPalette = (): any => new Proxy({}, {
 	get : () => {
 		const plain = Identity
 		return new Proxy(plain, { get : () => plain })
@@ -24,7 +24,7 @@ const BuildPlainPalette = () => new Proxy({}, {
  * npm resolvidas — e ruído emitido pelo próprio logger, antes de existir
  * logger. O `console.error` é calado só durante a tentativa.
  */
-const LoadColors = () => {
+const LoadColors = (): any => {
 
 	const originalConsoleError = console.error
 
@@ -46,7 +46,7 @@ const LoadColors = () => {
 
 const colors = LoadColors()
 
-const IsColorSupported = () =>
+const IsColorSupported = (): boolean =>
 	Boolean(colors) && Boolean(process.stdout && process.stdout.isTTY)
 
 /*
@@ -54,7 +54,7 @@ const IsColorSupported = () =>
  * stdout pode mudar (um pacote lançado pelo daemon escreve num pipe, o mesmo
  * pacote no terminal escreve num TTY).
  */
-const GetPalette = () =>
+const GetPalette = (): any =>
 	IsColorSupported() ? colors : BuildPlainPalette()
 
 module.exports = {

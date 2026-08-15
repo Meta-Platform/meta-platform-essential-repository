@@ -17,7 +17,10 @@ const util = require("util")
 
 const BRIDGE_MARK = Symbol.for("meta-platform.logger.consoleBridge")
 
-const BRIDGED_METHODS = {
+import type { Logger, LogLevel } from "../types/Logger"
+import type { BridgeableConsole } from "./Types"
+
+const BRIDGED_METHODS: Record<string, { level: LogLevel, source: string }> = {
 	log   : { level : "message", source : "<stdout>" },
 	info  : { level : "info",    source : "<stdout>" },
 	debug : { level : "debug",   source : "<stdout>" },
@@ -25,10 +28,10 @@ const BRIDGED_METHODS = {
 	error : { level : "error",   source : "<stderr>" }
 }
 
-const IsBridgeInstalled = (consoleObject = console) =>
+const IsBridgeInstalled = (consoleObject: BridgeableConsole = console) =>
 	Boolean(consoleObject && consoleObject[BRIDGE_MARK])
 
-const FormatArguments = (args) => {
+const FormatArguments = (args: unknown[]): string => {
 	try {
 		return util.format(...args)
 	} catch (error) {
@@ -40,9 +43,9 @@ const FormatArguments = (args) => {
  * Um `console.error(err)` carrega o erro no primeiro argumento — leva-lo para
  * `data` preserva o `stack`, que de outro modo viraria texto solto.
  */
-const ExtractErrorData = (args) => {
+const ExtractErrorData = (args: unknown[]): Error | undefined => {
 
-	const firstError = args.find((argument) => argument instanceof Error)
+	const firstError = args.find((argument) => argument instanceof Error) as Error | undefined
 
 	return firstError === undefined ? undefined : firstError
 }
@@ -50,7 +53,10 @@ const ExtractErrorData = (args) => {
 const InstallConsoleBridge = ({
 	logger,
 	consoleObject = console
-} = {}) => {
+}: {
+	logger?: Logger
+	consoleObject?: BridgeableConsole
+} = {}): (() => void) => {
 
 	if (!logger || !consoleObject) {
 		return () => {}
@@ -60,7 +66,7 @@ const InstallConsoleBridge = ({
 		return consoleObject[BRIDGE_MARK].Uninstall
 	}
 
-	const originalMethods = {}
+	const originalMethods: Record<string, any> = {}
 
 	Object.keys(BRIDGED_METHODS).forEach((methodName) => {
 
@@ -68,7 +74,7 @@ const InstallConsoleBridge = ({
 
 		originalMethods[methodName] = consoleObject[methodName]
 
-		consoleObject[methodName] = (...args) => {
+		consoleObject[methodName] = (...args: unknown[]) => {
 			try {
 				logger[level](source, FormatArguments(args), ExtractErrorData(args))
 			} catch (error) {

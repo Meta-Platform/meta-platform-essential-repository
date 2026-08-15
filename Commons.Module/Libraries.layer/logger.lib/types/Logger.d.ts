@@ -25,8 +25,22 @@ export type LogEmitter = {
     (message: unknown): void
 }
 
+/** A linha, já montada, como chega a um sink e como vai para o arquivo. */
+export type LogRecord = {
+    ts: string
+    level: LogLevel
+    source: string
+    origin: string
+    pid: number
+    package: string | null
+    instanceId: string | null
+    message: string
+    data: unknown
+    [field: string]: unknown
+}
+
 export type LogSink = {
-    Write: (record: unknown) => void
+    Write: (record: LogRecord) => void
     Flush?: () => Promise<void>
     FlushSync?: () => void
     Close?: () => Promise<void>

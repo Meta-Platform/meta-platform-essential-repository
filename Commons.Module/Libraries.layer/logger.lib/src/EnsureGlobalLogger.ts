@@ -30,7 +30,16 @@
  * (ou renomeado) lá tem de existir neste logger também, senão `Log.<nivel>`
  * volta a ser `undefined` — exatamente a classe de erro que este módulo evita.
  */
+import type { Logger, LogLevel } from "../types/Logger"
+
 const { LEVELS } = require("./Levels")
+
+/* O escopo global visto como dicionário — é assim que o logger é instalado e
+ * consultado por quem não o importa. Como uma variável, e não como
+ * `(globalThis as any)` no meio do código: neste repositório não há ponto e
+ * vírgula, e uma linha que começa com parêntese é lida como chamada da linha
+ * anterior. */
+const globalScope = globalThis as any
 
 const GLOBAL_KEY  = "Log"
 const GLOBAL_MARK = Symbol.for("meta-platform.logger.globalLogger")
@@ -42,9 +51,9 @@ const NIVEIS = LEVELS
  * sobreviverem a um stdout redirecionado — e é o stderr que o build do Docker
  * mostra quando um passo falha.
  */
-const Escrever = (nivel, origem, argumentos) => {
+const Escrever = (nivel: LogLevel, origem: unknown, argumentos: any[]) => {
 
-    const partes = argumentos.map((a) =>
+    const partes = argumentos.map((a: any) =>
         (a && a.stack) ? a.stack : (typeof a === "object" ? JSON.stringify(a) : String(a)))
 
     const linha = `[${origem}] ${partes.join(" ")}\n`
@@ -60,20 +69,20 @@ const Escrever = (nivel, origem, argumentos) => {
     }
 }
 
-const CriarLoggerMinimo = () => {
+const CriarLoggerMinimo = (): Logger => {
 
-    const logger = {}
+    const logger: any = {}
 
-    NIVEIS.forEach((nivel) => {
-        logger[nivel] = (origem, ...argumentos) => Escrever(nivel, origem, argumentos)
+    NIVEIS.forEach((nivel: LogLevel) => {
+        logger[nivel] = (origem: unknown, ...argumentos: unknown[]) => Escrever(nivel, origem, argumentos)
     })
 
     /* Superfície mínima que o canônico oferece e que o ecossistema pode chamar. */
     logger.minimal         = true
     logger.FlushSync       = () => {}
     logger.OpenFileChannel = () => {
-        const canal = {}
-        NIVEIS.forEach((nivel) => { canal[nivel] = () => {} })
+        const canal: any = {}
+        NIVEIS.forEach((nivel: LogLevel) => { canal[nivel] = () => {} })
         canal.Close = async () => {}
         return canal
     }
@@ -81,22 +90,22 @@ const CriarLoggerMinimo = () => {
     return logger
 }
 
-const EnsureGlobalLogger = () => {
+const EnsureGlobalLogger = (): Logger => {
 
-    if (globalThis[GLOBAL_KEY]) {
-        return globalThis[GLOBAL_KEY]
+    if (globalScope[GLOBAL_KEY]) {
+        return globalScope[GLOBAL_KEY]
     }
 
     const logger = CriarLoggerMinimo()
 
-    globalThis[GLOBAL_KEY] = logger
+    globalScope[GLOBAL_KEY] = logger
 
     /*
      * A marca precisa dizer `minimal: true` e trazer os dois desmontadores que
      * `UninstallGlobalLogger` chama — senão a troca pelo logger canônico
      * quebraria ao tentar desinstalar este.
      */
-    Object.defineProperty(globalThis, GLOBAL_MARK, {
+    Object.defineProperty(globalScope, GLOBAL_MARK, {
         value        : {
             minimal            : true,
             UninstallBridge    : () => {},

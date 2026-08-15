@@ -6,7 +6,7 @@
  * está em UTC.
  */
 
-const GetLocalISODateTime = (date) => {
+const GetLocalISODateTime = (date?: Date): string => {
 
 	const reference = (date instanceof Date) && !isNaN(date.getTime())
 		? date
@@ -23,7 +23,7 @@ const GetLocalISODateTime = (date) => {
  * `2026-07-27` — o nome do arquivo do dia, no mesmo fuso do carimbo, para que
  * a rotação vire à meia-noite local e não à meia-noite UTC.
  */
-const GetLocalDateStamp = (date) =>
+const GetLocalDateStamp = (date?: Date): string =>
 	GetLocalISODateTime(date).slice(0, 10)
 
 module.exports = {

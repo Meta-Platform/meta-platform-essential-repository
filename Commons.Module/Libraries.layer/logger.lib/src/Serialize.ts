@@ -16,9 +16,9 @@ const MAX_DEPTH  = 8
 const MAX_STRING = 8192
 const MAX_ARRAY  = 200
 
-const SerializeError = (error, depth, seen) => {
+const SerializeError = (error: any, depth: number, seen: WeakSet<object>): Record<string, any> => {
 
-	const serialized = {
+	const serialized: Record<string, any> = {
 		name    : error.name,
 		message : error.message,
 		stack   : error.stack
@@ -41,7 +41,7 @@ const SerializeError = (error, depth, seen) => {
 	return serialized
 }
 
-const SerializeValue = (value, depth, seen) => {
+const SerializeValue = (value: any, depth: number, seen: WeakSet<object>): any => {
 
 	if (value === null || value === undefined) {
 		return null
@@ -123,13 +123,13 @@ const SerializeValue = (value, depth, seen) => {
 	}
 
 	return Object.keys(value)
-		.reduce((serialized, key) => {
+		.reduce((serialized: Record<string, any>, key) => {
 			serialized[key] = SerializeValue(value[key], depth + 1, seen)
 			return serialized
 		}, {})
 }
 
-const Serialize = (value) => {
+const Serialize = (value: unknown): any => {
 	try {
 		return SerializeValue(value, 0, new WeakSet())
 	} catch (error) {
@@ -141,7 +141,7 @@ const Serialize = (value) => {
  * A linha que vai para o arquivo. Devolve `null` quando nem o registro
  * degradado puder ser serializado — o sink simplesmente não escreve.
  */
-const SerializeRecordLine = (record) => {
+const SerializeRecordLine = (record: any): string | null => {
 
 	try {
 		return `${JSON.stringify(record)}\n`

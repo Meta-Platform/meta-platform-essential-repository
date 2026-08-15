@@ -11,7 +11,9 @@
 import type { Logger } from "../Commons.Module/Libraries.layer/logger.lib/types/Logger"
 
 declare global {
-    const Log: Logger
+    // `var`, e não `const`: é o que também descreve `globalThis.Log`, usado por
+    // quem INSTALA o logger — e o instalador é justamente a logger.lib.
+    var Log: Logger
 }
 
 export {}

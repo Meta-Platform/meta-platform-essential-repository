@@ -8,7 +8,9 @@
  * de diagnóstico (`debug`, `trace`) fica só no arquivo.
  */
 
-const LEVELS = [
+import type { LogLevel } from "../types/Logger"
+
+const LEVELS: LogLevel[] = [
 	"trace",
 	"debug",
 	"info",
@@ -19,7 +21,7 @@ const LEVELS = [
 ]
 
 const LEVEL_SEVERITY = LEVELS
-	.reduce((severityByLevel, level, index) => {
+	.reduce((severityByLevel: Record<string, number>, level, index) => {
 		severityByLevel[level] = index
 		return severityByLevel
 	}, {})
@@ -28,21 +30,23 @@ const LEVEL_SEVERITY = LEVELS
  * Os tipos que os mecanismos antigos usavam. Ficam aceitos como entrada para
  * que um `dataLog` legado atravesse o logger sem virar nível inválido.
  */
-const LEVEL_ALIASES = {
+const LEVEL_ALIASES: Record<string, LogLevel> = {
 	"warning" : "warn",
 	"success" : "message",
 	"log"     : "message"
 }
 
-const DEFAULT_LEVEL         = "info"
-const DEFAULT_CONSOLE_LEVEL = "message"
+const DEFAULT_LEVEL: LogLevel         = "info"
+const DEFAULT_CONSOLE_LEVEL: LogLevel = "message"
 
-const IsValidLevel = (level) =>
+const IsValidLevel = (level: string): boolean =>
 	Object.prototype.hasOwnProperty.call(LEVEL_SEVERITY, level)
 
-const NormalizeLevel = (level, fallbackLevel) => {
+const NormalizeLevel = (level: unknown, fallbackLevel?: unknown): LogLevel => {
 
-	const fallback = IsValidLevel(fallbackLevel) ? fallbackLevel : DEFAULT_LEVEL
+	const fallback = (typeof fallbackLevel === "string" && IsValidLevel(fallbackLevel))
+		? fallbackLevel as LogLevel
+		: DEFAULT_LEVEL
 
 	if (typeof level !== "string") {
 		return fallback
@@ -51,7 +55,7 @@ const NormalizeLevel = (level, fallbackLevel) => {
 	const normalized = level.trim().toLowerCase()
 
 	if (IsValidLevel(normalized)) {
-		return normalized
+		return normalized as LogLevel
 	}
 
 	if (Object.prototype.hasOwnProperty.call(LEVEL_ALIASES, normalized)) {
@@ -61,14 +65,14 @@ const NormalizeLevel = (level, fallbackLevel) => {
 	return fallback
 }
 
-const GetSeverity = (level) =>
+const GetSeverity = (level: unknown): number =>
 	LEVEL_SEVERITY[NormalizeLevel(level, DEFAULT_LEVEL)]
 
 /*
  * O filtro. Um evento passa por um piso quando sua severidade alcança a do
  * piso. O piso especial `off` (ou `none`) desliga o destino por inteiro.
  */
-const Accepts = (level, floorLevel) => {
+const Accepts = (level: unknown, floorLevel: unknown): boolean => {
 
 	if (typeof floorLevel === "string") {
 		const normalizedFloor = floorLevel.trim().toLowerCase()
@@ -85,7 +89,7 @@ const Accepts = (level, floorLevel) => {
  * independentes: um evento pode ir para o terminal, para o arquivo, para os
  * dois ou para nenhum.
  */
-const ResolveTargets = (level, { consoleLevel, fileLevel } = {}) => ({
+const ResolveTargets = (level: unknown, { consoleLevel, fileLevel }: { consoleLevel?: unknown, fileLevel?: unknown } = {}) => ({
 	console : Accepts(level, NormalizeLevel(consoleLevel, DEFAULT_CONSOLE_LEVEL)),
 	file    : Accepts(level, NormalizeLevel(fileLevel, DEFAULT_LEVEL))
 })

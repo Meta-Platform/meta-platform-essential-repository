@@ -18,6 +18,8 @@
 const fs   = require("fs")
 const path = require("path")
 
+import type { JsonlSink, LogRecord } from "./Types"
+
 const { SerializeRecordLine } = require("./Serialize")
 const { GetLocalDateStamp }   = require("./Timestamp")
 
@@ -31,13 +33,18 @@ const CreateJsonlSink = ({
 	fileName,
 	maxFileSizeMb,
 	retentionDays
-} = {}) => {
+}: {
+	dirPath?: string
+	fileName?: string
+	maxFileSizeMb?: unknown
+	retentionDays?: unknown
+} = {}): JsonlSink => {
 
-	const pendingLines = []
+	const pendingLines: string[] = []
 
 	let isDraining          = false
-	let currentDrain        = null
-	let lastRetentionStamp  = null
+	let currentDrain: Promise<void> | null = null
+	let lastRetentionStamp: string | null = null
 	let discardedLineCount  = 0
 
 	const EnsureDirectory = () => {
@@ -74,7 +81,7 @@ const CreateJsonlSink = ({
 	const TakePendingBatch = () =>
 		pendingLines.splice(0, pendingLines.length).join("")
 
-	const AppendBatch = (batch) => new Promise((resolve) => {
+	const AppendBatch = (batch: string) => new Promise<void>((resolve) => {
 
 		if (!EnsureDirectory()) {
 			discardedLineCount = discardedLineCount + 1
@@ -130,7 +137,7 @@ const CreateJsonlSink = ({
 		})
 	}
 
-	const Write = (record) => {
+	const Write = (record: LogRecord) => {
 
 		try {
 

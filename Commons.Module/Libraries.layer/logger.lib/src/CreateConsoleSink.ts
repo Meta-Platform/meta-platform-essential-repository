@@ -12,23 +12,26 @@
  *   2. Sem cor quando não há TTY.
  */
 
+import type { LogLevel } from "../types/Logger"
+import type { LogRecord, TargetedSink } from "./Types"
+
 const { GetPalette } = require("./Colors")
 
 const LEVEL_LABEL_WIDTH  = 7
 const SOURCE_LABEL_WIDTH = 23
 
-const PaintByLevel = {
-	trace   : (palette) => palette.gray,
-	debug   : (palette) => palette.bgGray,
-	info    : (palette) => palette.bgBlue,
-	message : (palette) => palette.bgGreen.black,
-	warn    : (palette) => palette.bgYellow.black,
-	error   : (palette) => palette.bgRed.white,
-	fatal   : (palette) => palette.bgRed.white.bold
+const PaintByLevel: Record<LogLevel, (palette: any) => any> = {
+	trace   : (palette: any) => palette.gray,
+	debug   : (palette: any) => palette.bgGray,
+	info    : (palette: any) => palette.bgBlue,
+	message : (palette: any) => palette.bgGreen.black,
+	warn    : (palette: any) => palette.bgYellow.black,
+	error   : (palette: any) => palette.bgRed.white,
+	fatal   : (palette: any) => palette.bgRed.white.bold
 }
 
-const PaintLevel = (palette, level) => {
-	const Paint = PaintByLevel[level] || ((currentPalette) => currentPalette.bgGray)
+const PaintLevel = (palette: any, level: LogLevel) => {
+	const Paint = PaintByLevel[level] || ((currentPalette: any) => currentPalette.bgGray)
 	return Paint(palette)
 }
 
@@ -41,7 +44,7 @@ const PaintLevel = (palette, level) => {
  *
  * Os demais níveis são log de verdade e levam o carimbo.
  */
-const FormatRecord = (record) => {
+const FormatRecord = (record: LogRecord): string => {
 
 	if (record.level === "message") {
 		return record.message
@@ -78,7 +81,7 @@ const FormatRecord = (record) => {
  * terminal seria uma regressão em relação ao `console.error` que este logger
  * substitui.
  */
-const FormatData = (record) => {
+const FormatData = (record: LogRecord): string | null => {
 
 	const { level, data } = record
 
@@ -97,12 +100,12 @@ const FormatData = (record) => {
 	}
 }
 
-const CreateConsoleSink = ({ stream } = {}) => {
+const CreateConsoleSink = ({ stream }: { stream?: NodeJS.WritableStream } = {}): TargetedSink => {
 
 	const ResolveStream = () =>
 		stream || process.stdout
 
-	const Write = (record) => {
+	const Write = (record: LogRecord) => {
 
 		try {
 

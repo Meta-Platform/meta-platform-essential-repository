@@ -8,13 +8,16 @@
  * execução (`instanceId`, `environmentPath`) com `child`.
  */
 
+import type { LogLevel, Logger } from "../types/Logger"
+import type { CreateLoggerFn, CreateLoggerParams, LogRecord, LogTargets, ResolvedCall, TargetedSink } from "./Types"
+
 const { LEVELS, NormalizeLevel, ResolveTargets, DEFAULT_LEVEL, DEFAULT_CONSOLE_LEVEL } = require("./Levels")
 const { GetLocalISODateTime } = require("./Timestamp")
 const Serialize = require("./Serialize")
 
 const UNKNOWN_SOURCE = "-"
 
-const NormalizeMessage = (message) => {
+const NormalizeMessage = (message: unknown): string => {
 
 	if (typeof message === "string") {
 		return message
@@ -42,7 +45,7 @@ const NormalizeMessage = (message) => {
  * (`log.info("Atualizando...")`) é o uso natural de um logger já amarrado a um
  * source por `Log.source(...)` — nesse caso o argumento é a mensagem.
  */
-const ResolveCall = (boundSource, firstArgument, secondArgument, thirdArgument) => {
+const ResolveCall = (boundSource: string | null, firstArgument?: unknown, secondArgument?: unknown, thirdArgument?: unknown): ResolvedCall => {
 
 	if (secondArgument === undefined && thirdArgument === undefined) {
 		return {
@@ -69,13 +72,13 @@ const ResolveCall = (boundSource, firstArgument, secondArgument, thirdArgument) 
 	}
 }
 
-const CreateLogger = ({
+const CreateLogger: CreateLoggerFn = ({
 	context     = {},
 	sinks       = [],
 	level,
 	consoleLevel,
 	boundSource = null
-} = {}) => {
+}: CreateLoggerParams = {}) => {
 
 	const configuration = {
 		fileLevel    : NormalizeLevel(level, DEFAULT_LEVEL),
@@ -89,7 +92,7 @@ const CreateLogger = ({
 		...extraContext
 	} = context
 
-	const BuildRecord = (levelName, { source, message, data }) => ({
+	const BuildRecord = (levelName: LogLevel, { source, message, data }: ResolvedCall): LogRecord => ({
 		ts         : GetLocalISODateTime(),
 		level      : levelName,
 		source,
@@ -102,7 +105,7 @@ const CreateLogger = ({
 		data       : data === undefined ? null : Serialize(data)
 	})
 
-	const Dispatch = (levelName, record, targets) => {
+	const Dispatch = (levelName: LogLevel, record: LogRecord, targets: LogTargets) => {
 		sinks.forEach((sink) => {
 
 			try {
@@ -127,7 +130,7 @@ const CreateLogger = ({
 		})
 	}
 
-	const Emit = (levelName, firstArgument, secondArgument, thirdArgument) => {
+	const Emit = (levelName: LogLevel, firstArgument?: unknown, secondArgument?: unknown, thirdArgument?: unknown) => {
 
 		try {
 
@@ -148,9 +151,9 @@ const CreateLogger = ({
 		}
 	}
 
-	const logger = LEVELS.reduce((builtLogger, levelName) => {
+	const logger: any = LEVELS.reduce((builtLogger: any, levelName: LogLevel) => {
 
-		builtLogger[levelName] = (firstArgument, secondArgument, thirdArgument) =>
+		builtLogger[levelName] = (firstArgument?: unknown, secondArgument?: unknown, thirdArgument?: unknown) =>
 			Emit(levelName, firstArgument, secondArgument, thirdArgument)
 
 		return builtLogger
@@ -161,7 +164,7 @@ const CreateLogger = ({
 	 * `Log.source("UpdateRepository")` — mesmo logger, mesmos sinks, com o
 	 * source amarrado. `Log.child({ instanceId })` — contexto acrescentado.
 	 */
-	logger.source = (sourceName) => CreateLogger({
+	logger.source = (sourceName: string) => CreateLogger({
 		context      : context,
 		sinks,
 		level        : configuration.fileLevel,
@@ -169,7 +172,7 @@ const CreateLogger = ({
 		boundSource  : sourceName
 	})
 
-	logger.child = (childContext = {}) => CreateLogger({
+	logger.child = (childContext: Record<string, unknown> = {}) => CreateLogger({
 		context      : { ...context, ...childContext },
 		sinks,
 		level        : configuration.fileLevel,
@@ -186,12 +189,12 @@ const CreateLogger = ({
 	 * uma operação recebe TUDO o que o processo logar naquela janela, não apenas
 	 * o da operação. Registre pelo menor tempo possível e remova no `finally`.
 	 */
-	logger.AddSink = (sink) => {
+	logger.AddSink = (sink: TargetedSink) => {
 		if (sink && typeof sink.Write === "function") sinks.push(sink)
 		return () => logger.RemoveSink(sink)
 	}
 
-	logger.RemoveSink = (sink) => {
+	logger.RemoveSink = (sink: TargetedSink) => {
 		const posicao = sinks.indexOf(sink)
 		if (posicao !== -1) sinks.splice(posicao, 1)
 	}
@@ -200,12 +203,12 @@ const CreateLogger = ({
 
 	logger.GetConfiguration = () => ({ ...configuration })
 
-	logger.SetLevel = (newLevel) => {
+	logger.SetLevel = (newLevel: unknown) => {
 		configuration.fileLevel = NormalizeLevel(newLevel, configuration.fileLevel)
 		return configuration.fileLevel
 	}
 
-	logger.SetConsoleLevel = (newLevel) => {
+	logger.SetConsoleLevel = (newLevel: unknown) => {
 		configuration.consoleLevel = NormalizeLevel(newLevel, configuration.consoleLevel)
 		return configuration.consoleLevel
 	}

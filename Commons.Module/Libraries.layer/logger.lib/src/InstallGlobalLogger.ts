@@ -17,16 +17,22 @@ const CreateConsoleSink     = require("./CreateConsoleSink")
 const CreateJsonlSink       = require("./CreateJsonlSink")
 const InstallConsoleBridge  = require("./InstallConsoleBridge")
 
+import type { Logger, LogLevel } from "../types/Logger"
+import type { InstallGlobalLoggerParams, LogContext, TargetedSink } from "./Types"
+
 const { DEFAULT_LEVEL, DEFAULT_CONSOLE_LEVEL } = require("./Levels")
+
+/* O escopo global visto como dicionário — ver EnsureGlobalLogger.ts. */
+const globalScope = globalThis as any
 
 const GLOBAL_KEY  = "Log"
 const GLOBAL_MARK = Symbol.for("meta-platform.logger.globalLogger")
 
 const IsGlobalLoggerInstalled = () =>
-	Boolean(globalThis[GLOBAL_MARK])
+	Boolean(globalScope[GLOBAL_MARK])
 
 const GetGlobalLogger = () =>
-	globalThis[GLOBAL_KEY]
+	globalScope[GLOBAL_KEY]
 
 const BuildSinks = ({
 	logsDirPath,
@@ -36,9 +42,17 @@ const BuildSinks = ({
 	stream,
 	disableConsoleSink,
 	disableFileSink
-}) => {
+}: {
+	logsDirPath?: string | null
+	fileName?: string | null
+	maxFileSizeMb?: unknown
+	retentionDays?: unknown
+	stream?: NodeJS.WritableStream
+	disableConsoleSink?: boolean
+	disableFileSink?: boolean
+}): TargetedSink[] => {
 
-	const sinks = []
+	const sinks: TargetedSink[] = []
 
 	if (!disableConsoleSink) {
 		sinks.push(CreateConsoleSink({ stream }))
@@ -60,7 +74,7 @@ const BuildSinks = ({
  * O processo pode terminar com linhas ainda na fila do sink de arquivo. No
  * `exit` não há mais event loop, então a drenagem final é síncrona.
  */
-const RegisterExitFlush = (logger) => {
+const RegisterExitFlush = (logger: Logger): (() => void) => {
 
 	const Flush = () => {
 		try {
@@ -91,7 +105,7 @@ const InstallGlobalLogger = ({
 	disableConsoleSink = false,
 	disableFileSink    = false,
 	force         = false
-} = {}) => {
+}: InstallGlobalLoggerParams = {}): Logger => {
 
 	/*
 	 * O `cli-script-loader` instala uma versão MÍNIMA deste logger (ele roda
@@ -100,7 +114,7 @@ const InstallGlobalLogger = ({
 	 * arquivo, rotação e retenção, substitui a mínima.
 	 */
 	const isMinimalInstallation = IsGlobalLoggerInstalled()
-		&& Boolean(globalThis[GLOBAL_MARK].minimal)
+		&& Boolean(globalScope[GLOBAL_MARK].minimal)
 
 	if (IsGlobalLoggerInstalled() && !force && !isMinimalInstallation) {
 		return GetGlobalLogger()
@@ -144,7 +158,12 @@ const InstallGlobalLogger = ({
 	 * O canal não escreve no terminal: o que ele registra pertence à instância,
 	 * não à sessão de quem está olhando o daemon.
 	 */
-	logger.OpenFileChannel = ({ dirPath, fileName, context : channelContext = {}, level : channelLevel } = {}) => {
+	logger.OpenFileChannel = ({ dirPath, fileName, context : channelContext = {}, level : channelLevel }: {
+		dirPath?: string
+		fileName?: string
+		context?: Record<string, unknown>
+		level?: LogLevel
+	} = {}) => {
 
 		const channelSink = CreateJsonlSink({
 			dirPath,
@@ -173,9 +192,9 @@ const InstallGlobalLogger = ({
 
 	const UnregisterExitFlush = RegisterExitFlush(logger)
 
-	globalThis[GLOBAL_KEY] = logger
+	globalScope[GLOBAL_KEY] = logger
 
-	Object.defineProperty(globalThis, GLOBAL_MARK, {
+	Object.defineProperty(globalScope, GLOBAL_MARK, {
 		value        : { UninstallBridge, UnregisterExitFlush },
 		configurable : true,
 		enumerable   : false,
@@ -191,7 +210,7 @@ const InstallGlobalLogger = ({
  */
 const UninstallGlobalLogger = () => {
 
-	const installation = globalThis[GLOBAL_MARK]
+	const installation = globalScope[GLOBAL_MARK]
 
 	if (!installation) {
 		return
@@ -209,8 +228,8 @@ const UninstallGlobalLogger = () => {
 		/* segue */
 	}
 
-	delete globalThis[GLOBAL_KEY]
-	delete globalThis[GLOBAL_MARK]
+	delete globalScope[GLOBAL_KEY]
+	delete globalScope[GLOBAL_MARK]
 }
 
 module.exports = InstallGlobalLogger

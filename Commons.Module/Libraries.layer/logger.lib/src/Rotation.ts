@@ -10,8 +10,8 @@
  * limpeza.
  */
 
-const fs   = require("fs")
-const path = require("path")
+const fs   = require("fs") as typeof import("fs")
+const path = require("path") as typeof import("path")
 
 const { GetLocalDateStamp } = require("./Timestamp")
 
@@ -21,14 +21,14 @@ const DATE_STAMP_PATTERN = /^(\d{4}-\d{2}-\d{2})(?:\.(\d+))?\.jsonl$/
 const DEFAULT_MAX_FILE_SIZE_MB = 50
 const DEFAULT_RETENTION_DAYS   = 30
 
-const ToPositiveNumber = (value, fallback) => {
+const ToPositiveNumber = (value: unknown, fallback: number): number => {
 
-	const parsed = typeof value === "number" ? value : parseFloat(value)
+	const parsed = typeof value === "number" ? value : parseFloat(String(value))
 
 	return (Number.isFinite(parsed) && parsed > 0) ? parsed : fallback
 }
 
-const GetFileSize = (filePath) => {
+const GetFileSize = (filePath: string): number => {
 	try {
 		return fs.statSync(filePath).size
 	} catch (error) {
@@ -36,7 +36,7 @@ const GetFileSize = (filePath) => {
 	}
 }
 
-const Exists = (filePath) => {
+const Exists = (filePath: string): boolean => {
 	try {
 		return fs.existsSync(filePath)
 	} catch (error) {
@@ -44,7 +44,7 @@ const Exists = (filePath) => {
 	}
 }
 
-const BuildFileName = (dateStamp, part) =>
+const BuildFileName = (dateStamp: string, part: number): string =>
 	part > 0
 		? `${dateStamp}.${part}${LOG_FILE_EXTENSION}`
 		: `${dateStamp}${LOG_FILE_EXTENSION}`
@@ -57,7 +57,11 @@ const ResolveLogFilePath = ({
 	dirPath,
 	date,
 	maxFileSizeMb
-}) => {
+}: {
+	dirPath: string
+	date?: Date
+	maxFileSizeMb?: unknown
+}): string => {
 
 	const dateStamp       = GetLocalDateStamp(date)
 	const maxFileSizeInMb = ToPositiveNumber(maxFileSizeMb, DEFAULT_MAX_FILE_SIZE_MB)
@@ -81,7 +85,7 @@ const ResolveLogFilePath = ({
 	}
 }
 
-const ParseDateStamp = (fileName) => {
+const ParseDateStamp = (fileName: string): string | null => {
 
 	const matched = DATE_STAMP_PATTERN.exec(fileName)
 
@@ -97,7 +101,11 @@ const ApplyRetention = ({
 	dirPath,
 	retentionDays,
 	now
-}) => {
+}: {
+	dirPath: string
+	retentionDays?: unknown
+	now?: Date
+}): string[] => {
 
 	const retentionInDays = ToPositiveNumber(retentionDays, DEFAULT_RETENTION_DAYS)
 
@@ -106,7 +114,7 @@ const ApplyRetention = ({
 	const limitDate = new Date(reference.getTime() - (retentionInDays * 24 * 60 * 60 * 1000))
 	const limitStamp = GetLocalDateStamp(limitDate)
 
-	const removed = []
+	const removed: string[] = []
 
 	try {
 
