@@ -5,6 +5,10 @@ const PreparePackageDependenciesDir = async ({
     environmentPath, 
     packageName,
     EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
+}: {
+    environmentPath: string
+    packageName: any
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES: any
 }) => {
     const configDirExit = await VerifyPackageDependenciesDir({
         environmentPath, 

@@ -1,7 +1,7 @@
 const TaskStatusTypes          = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
-const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
+const ServiceInstanceObjectLoader = (loaderParams: any, executorChannel: any) => {
 
     // Carimba a execução: tudo que este loader registrar sai identificado pela
     // instância e pelo ambiente, sem que nenhuma função abaixo repasse isso.
@@ -12,12 +12,12 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
         })
         .source("ServiceInstance")
 
-    let serviceObject = {}
+    let serviceObject: any = {}
 
     const _GetServiceParams = () => {
         const { serviceParameterNames } = loaderParams
         const serviceParams = serviceParameterNames
-        .reduce((serviceParamsAcc, parameterName) => ({ 
+        .reduce((serviceParamsAcc: any, parameterName: any) => ({ 
             ...serviceParamsAcc, 
             [parameterName]: loaderParams[parameterName] 
         }), {})
@@ -40,7 +40,7 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
 
     // Normaliza um erro para uma linha de motivo (statusReason) exibível no painel.
     // O erro completo (com stack) continua indo para o console, capturado no log da instância.
-    const _ReasonOf = (e) => (e && (e.message || e.toString())) || String(e)
+    const _ReasonOf = (e: any) => (e && (e.message || e.toString())) || String(e)
 
     const _CreateServiceObject = () => {
 
@@ -59,7 +59,7 @@ const ServiceInstanceObjectLoader = (loaderParams, executorChannel) => {
                 // onError: falha ASSÍNCRONA do serviço (ex.: EADDRINUSE no listen), que
                 // escapa do try/catch síncrono abaixo. Sem isso, o erro crashava o processo
                 // sem virar FAILURE nem passar pelo onClose.
-                onError: (e) => {
+                onError: (e: any) => {
                     serviceObject=undefined
                     executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.FAILURE, _ReasonOf(e))
                     log.error("falha assíncrona do serviço", e)

@@ -6,10 +6,10 @@ const yargs = SmartRequire('yargs/yargs')
 
 const TokenizeArgs = require("./TokenizeArgs")
 
-const FilteredCommandParams = (loaderParams, parameterNames) => {
+const FilteredCommandParams = (loaderParams: any, parameterNames: any) => {
 
     const serviceParams = parameterNames
-    .reduce((serviceParamsAcc, parameterName) => ({ 
+    .reduce((serviceParamsAcc: any, parameterName: any) => ({ 
         ...serviceParamsAcc, 
         [parameterName]: loaderParams[parameterName] 
     }), {})
@@ -18,7 +18,7 @@ const FilteredCommandParams = (loaderParams, parameterNames) => {
 
 }
 
-const BuiderParameter = (_yargs, param) => {
+const BuiderParameter = (_yargs: any, param: any) => {
 
     const {
         key,
@@ -30,13 +30,13 @@ const BuiderParameter = (_yargs, param) => {
 
 }
 
-const GetCommandBuilder = ({parameters, children, loaderParams}) => {
+const GetCommandBuilder = ({parameters, children, loaderParams}: { parameters: any, children: any, loaderParams: any }) => {
 
-    return async (_yargs) => {
-        parameters?.forEach(param => BuiderParameter(_yargs, param))
+    return async (_yargs: any) => {
+        parameters?.forEach((param: any) => BuiderParameter(_yargs, param))
 
         if(children){
-            for(childCommandData of children){
+            for(const childCommandData of children){
                 const childCommandModule = await ConfigCommand({ 
                     commandMetadata: childCommandData, 
                     loaderParams
@@ -53,6 +53,10 @@ const GetCommandHandler = ({
     path, 
     parametersToLoad=[],
     loaderParams
+}: {
+    path: string
+    parametersToLoad: any
+    loaderParams: any
 }) => {
 
     if (path) {
@@ -67,18 +71,21 @@ const GetCommandHandler = ({
         const params = FilteredCommandParams(allParams, parametersToLoad)
 
         return CommandFunction 
-            ? async (args) => await CommandFunction({ args, startupParams, params })
-            : (args) => {}
+            ? async (args: any) => await CommandFunction({ args, startupParams, params })
+            : (args: any) => {}
 
     } else {
-        return (args) => {}
+        return (args: any) => {}
     }
 
 }
 
-const ConfigCommand = async ({ 
+const ConfigCommand = async ({
     commandMetadata, 
     loaderParams
+}: {
+    commandMetadata: any
+    loaderParams: any
 }) => {
 
     const {
@@ -112,7 +119,7 @@ const ConfigCommand = async ({
     return commandModule
 }
 
-const ExecuteCommand = async (loaderParams) => {
+const ExecuteCommand = async (loaderParams: any) => {
 
     let isStopAllTasks = true
 
@@ -146,7 +153,7 @@ const ExecuteCommand = async (loaderParams) => {
         _yargs.command(commandModule)
     }
 
-    const mainCommandData = commandsMetadata.find(({ isMainCommand }) => isMainCommand)
+    const mainCommandData = commandsMetadata.find(({ isMainCommand }: { isMainCommand: any }) => isMainCommand)
     if (mainCommandData) {
         const {
             path
@@ -161,7 +168,7 @@ const ExecuteCommand = async (loaderParams) => {
     
 }
 
-const CommandApplicationTaskLoader = (loaderParams, executorChannel) => {
+const CommandApplicationTaskLoader = (loaderParams: any, executorChannel: any) => {
     // Carimba a execução: tudo que este loader registrar sai identificado pela
     // instância e pelo ambiente. Ver logging-standard.md.
     const log = Log

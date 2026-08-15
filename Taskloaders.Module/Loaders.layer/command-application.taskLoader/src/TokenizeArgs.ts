@@ -15,15 +15,15 @@
 //   - "..." preserva espaços; \" e \\ são escapes;
 //   - fora de aspas, "\" escapa o próximo caractere;
 //   - aspas vazias produzem um token vazio ("" -> "").
-const TokenizeArgs = (commandLineArgs) => {
+const TokenizeArgs = (commandLineArgs: any) => {
 
     if(Array.isArray(commandLineArgs))
-        return commandLineArgs.map((arg) => typeof arg === "string" ? arg : String(arg))
+        return commandLineArgs.map((arg: any) => typeof arg === "string" ? arg : String(arg))
 
     if(typeof commandLineArgs !== "string")
         return []
 
-    const tokens = []
+    const tokens: string[] = []
 
     let current   = ""
     let hasToken  = false // distingue um token vazio ("") de "nenhum token"

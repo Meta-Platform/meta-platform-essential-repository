@@ -13,7 +13,7 @@ const { writeFile } = require("fs/promises")
 // ancorava a resolução. Ao mover o react para a biblioteca de UI, o npm passou a
 // escalar pelo react-native e a instalação falhava com ERESOLVE — produzindo
 // ZERO módulos, em silêncio.
-const WriteResolutionManifest = async ({ contextPath, packageName, overrides }) => {
+const WriteResolutionManifest = async ({ contextPath, packageName, overrides }: { contextPath: any, packageName: any, overrides: any }) => {
     if(!overrides || Object.keys(overrides).length === 0) return
     const manifest = {
         name: `${packageName}-dependencies`,
@@ -30,9 +30,15 @@ const InstallNpmPackage = async ({
     dependencies,
     overrides,
     EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
+}: {
+    environmentPath: string
+    packageName: any
+    dependencies: any
+    overrides: any
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES: any
 }) => {
     const dependenciesForAdd = Object.keys(dependencies)
-        .map((name) => {
+        .map((name: any) => {
             const version = dependencies[name]
             return `${name}@${version}`
         })

@@ -7,17 +7,17 @@ const PreparePackageDependenciesDir = require("./PreparePackageDependenciesDir")
 
 const ResolvePackageName = require("../../../../Runtime.Module/MetadataHelpers.layer/resolve-package-name.lib/src/ResolvePackageName")
 
-const GetDependenciesFromPackageJsonFile = async (packagePath) => {
+const GetDependenciesFromPackageJsonFile = async (packagePath: string) => {
     // `overrides` viaja junto: é a única forma de o pacote resolver um conflito
     // de peer transitivo, e sem ela a instalação falha em silêncio.
     const { dependencies, overrides } = await ReadPackageJsonFile(packagePath)
     return { dependencies, overrides }
 }
 
-const CheckIfDependencyIsValid = (dependencies) =>
+const CheckIfDependencyIsValid = (dependencies: any) =>
     dependencies && Object.keys(dependencies).length > 0
 
-const InstallNodejsPackageDependenciesTaskLoader  = (params, executorChannel) => {
+const InstallNodejsPackageDependenciesTaskLoader  = (params: any, executorChannel: any) => {
 
     // Carimba a execução: tudo que este loader registrar sai identificado pela
     // instância e pelo ambiente. Ver logging-standard.md.
@@ -83,7 +83,7 @@ const InstallNodejsPackageDependenciesTaskLoader  = (params, executorChannel) =>
         
     }
 
-    const handleChangeStatus = (status) => {
+    const handleChangeStatus = (status: any) => {
         if(status === TaskStatusTypes.STOPPING) wasStopped=true
         if(status === TaskStatusTypes.STARTING) hasBeenActivated=true
         if(status === TaskStatusTypes.FINISHED) hasBeenFinished=true

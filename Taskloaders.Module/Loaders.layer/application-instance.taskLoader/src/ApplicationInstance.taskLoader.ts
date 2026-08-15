@@ -1,7 +1,7 @@
 const TaskStatusTypes          = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
-const ApplicationInstanceTaskLoader  = (loaderParams, executorChannel) => {
+const ApplicationInstanceTaskLoader  = (loaderParams: any, executorChannel: any) => {
     // Carimba a execução: tudo que este loader registrar sai identificado pela
     // instância e pelo ambiente. Ver logging-standard.md.
     const log = Log

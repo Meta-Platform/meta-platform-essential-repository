@@ -8,23 +8,30 @@ const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.la
 
 const PACKAGEJSON_FILENAME = "package.json"
 
-const GetPackageJsonContent = (path) => ReadJsonFile(join(path, PACKAGEJSON_FILENAME))
+const GetPackageJsonContent = (path: string) => ReadJsonFile(join(path, PACKAGEJSON_FILENAME))
 
 const SOURCE_DIR_NAME = "src"
 
-const SetupServiceObject = (serviceObject, { path, environmentPath, tag, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES }) => {
+const SetupServiceObject = (serviceObject: any, { path, environmentPath, tag, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES }: {
+    path: string
+    environmentPath: string
+    tag: string
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES: string
+}) => {
     const _GetSourcePath = () => join(path, SOURCE_DIR_NAME)
     const _GetEnvironmentPath = () => environmentPath
     const _GetNodeModulesPath = () => 
         join(environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES, ResolvePackageName(tag), "node_modules")
 
-    serviceObject.require = (srcPath) => {
+    serviceObject.require = (srcPath: string) => {
         const scriptPath = join(path, SOURCE_DIR_NAME, srcPath)
         
         const originalNodePath = process.env.NODE_PATH
         process.env.NODE_PATH = _GetNodeModulesPath()
         require('module').Module._initPaths()
-        const Service = require.main.require(scriptPath)
+        // `require.main` é o módulo de entrada do processo — sempre existe aqui,
+        // porque este loader só roda dentro de uma execução do executor.
+        const Service = require.main!.require(scriptPath)
         process.env.NODE_PATH = originalNodePath
         require('module').Module._initPaths()
         
@@ -42,7 +49,7 @@ const SetupServiceObject = (serviceObject, { path, environmentPath, tag, EXECUTI
     serviceObject.getNodeModulesPath = _GetNodeModulesPath
 }
 
-const NodeJSPackageTaskLoader  = (params, executorChannel) => {
+const NodeJSPackageTaskLoader  = (params: any, executorChannel: any) => {
     // Carimba a execução: tudo que este loader registrar sai identificado pela
     // instância e pelo ambiente. Ver logging-standard.md.
     const log = Log
@@ -53,7 +60,7 @@ const NodeJSPackageTaskLoader  = (params, executorChannel) => {
         .source("NodeJSPackage")
 
 
-    let serviceObject = {}
+    let serviceObject: any = {}
 
     const Start = async () => {
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)

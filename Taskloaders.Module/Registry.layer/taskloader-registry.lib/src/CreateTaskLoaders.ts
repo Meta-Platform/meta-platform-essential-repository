@@ -5,7 +5,7 @@ const fs = require("fs")
 // OUTRO repositório (ex.: endpoint-instance no ecosystem-core), ele não pode mais
 // usar `require` relativo até o essential. O registry (que vive no essential)
 // resolve essas deps aqui e as INJETA nos loaders marcados com `injectsDeps` no
-// taskloaders.json — contrato de fábrica `(runtimeDeps) => (params, executorChannel) => ...`.
+// taskloaders.json — contrato de fábrica `(runtimeDeps: any) => (params: any, executorChannel: any) => ...`.
 const TaskStatusTypes          = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 const SmartRequire             = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
@@ -29,7 +29,7 @@ const installTypeScriptResolutionPath = require.resolve("../../../../Commons.Mod
 // WebInterfaceBuilder é capacidade WEB — vive no ecosystem-core (web-interface-builder.lib).
 // Resolvido só se o EcosystemCoreRepo estiver instalado (senão os loaders web nem existem).
 // Devolve { builder, path }: o módulo (fábrica já aplicada) e o caminho absoluto (p/ subprocessos).
-const ResolveWebInterfaceBuilder = (repositoriesData) => {
+const ResolveWebInterfaceBuilder = (repositoriesData: any) => {
     const core = repositoriesData.EcosystemCoreRepo
     if (!core) return undefined
     const wibPath = join(core.installationPath, "Main.Module/Libraries.layer/web-interface-builder.lib/src/WebInterfaceBuilder")
@@ -64,7 +64,7 @@ const EnsureGlobalLogger = () => {
     }
 }
 
-const CreateTaskLoaders = ({ repositoriesData }) => {
+const CreateTaskLoaders = ({ repositoriesData }: { repositoriesData: any }) => {
 
     EnsureGlobalLogger()
 
@@ -85,7 +85,9 @@ const CreateTaskLoaders = ({ repositoriesData }) => {
         }
     }
 
-    const taskLoaders = {}
+    // Mapa aberto: objectLoaderType → loader, montado a partir do que cada
+    // repositório instalado declara no seu taskloaders.json.
+    const taskLoaders: Record<string, any> = {}
 
     for (const repositoryNamespace of Object.keys(repositoriesData)) {
 
