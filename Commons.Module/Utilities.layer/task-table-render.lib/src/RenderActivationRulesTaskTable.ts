@@ -1,19 +1,22 @@
+import type { Rule, RuleSet } from "../../../../Runtime.Module/Executor.layer/task-executor.lib/types/Task"
+import type { CreateAttributeTableFn, TableCell } from "./Types"
+
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 
 const colors = SmartRequire("colors")
-const CreateAttributeTable = require("./CreateAttributeTable")
+const CreateAttributeTable = require("./CreateAttributeTable") as CreateAttributeTableFn
 
-const RenderActivationRulesTaskTable = async (activationRules) => {
-    
+const RenderActivationRulesTaskTable = async (activationRules: RuleSet): Promise<void> => {
+
     const table = CreateAttributeTable({
         colWidths: [50]
     })
     table.push([{ hAlign: 'center', content: colors.bold('Activation Rules') }])
     const boolOperators = Object.keys(activationRules)
-    const _RenderRuleRow = (rule) => {
+    const _RenderRuleRow = (rule: Rule) => {
         const operator = Object.keys(rule).filter((ruleField) => ruleField !== "property")[0]
         const content = `${ colors.cyan(rule.property)} ${ colors.bold.magenta(operator)} ${ colors.gray(rule[operator])}`
-        const ruleColumn = { hAlign: 'center', content }
+        const ruleColumn: TableCell = { hAlign: 'center', content }
         table.push([ruleColumn])
     }
     boolOperators

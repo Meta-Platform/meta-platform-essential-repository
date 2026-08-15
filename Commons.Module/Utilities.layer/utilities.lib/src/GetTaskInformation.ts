@@ -1,5 +1,6 @@
+import type { Task, TaskInformation } from "../../../../Runtime.Module/Executor.layer/task-executor.lib/types/Task"
 
-const GetTaskInformation = (task) => {       
+const GetTaskInformation = (task: Task): TaskInformation => {
     const {
         taskId,
         status,

@@ -1,5 +1,6 @@
+import type { GetColorLogByStatusFn } from "./Types"
 
-const GetColorLogByStatus = (status) => {
+const GetColorLogByStatus: GetColorLogByStatusFn = (status) => {
     switch(status){
         case "AWAITING_PRECONDITIONS":
             return "gray"

@@ -1,10 +1,13 @@
+import type { LinkedParameters } from "../../../../Runtime.Module/Executor.layer/task-executor.lib/types/Task"
+import type { CreateAttributeTableFn } from "./Types"
+
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 
 const colors = SmartRequire("colors")
-const CreateAttributeTable = require("./CreateAttributeTable")
+const CreateAttributeTable = require("./CreateAttributeTable") as CreateAttributeTableFn
 
-const RenderLinkedParametersTaskTable = async (linkedParameters) => {
-    
+const RenderLinkedParametersTaskTable = async (linkedParameters: LinkedParameters): Promise<void> => {
+
     const table = CreateAttributeTable({
         colWidths: [45, 80]
     })

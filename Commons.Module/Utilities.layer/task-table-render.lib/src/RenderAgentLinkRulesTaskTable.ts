@@ -1,10 +1,20 @@
+import type { AgentLinkRule, Rule } from "../../../../Runtime.Module/Executor.layer/task-executor.lib/types/Task"
+import type { CreateAttributeTableFn, TableCell } from "./Types"
+
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 
 const colors = SmartRequire("colors")
-const CreateAttributeTable = require("./CreateAttributeTable")
+const CreateAttributeTable = require("./CreateAttributeTable") as CreateAttributeTableFn
 
-const RenderAgentLinkRulesTaskTable = async (agentLinkRules) => {
-    
+type RuleRow = {
+    totalRules: number
+    referenceName: string
+    ruleIndex: number
+    rule: Rule
+}
+
+const RenderAgentLinkRulesTaskTable = async (agentLinkRules: AgentLinkRule[]): Promise<void> => {
+
     const table = CreateAttributeTable({
         colWidths: [50, 50]
     })
@@ -15,17 +25,17 @@ const RenderAgentLinkRulesTaskTable = async (agentLinkRules) => {
     ])
     agentLinkRules.forEach(({referenceName, requirement}) => {
         const boolOperators = Object.keys(requirement)
-        const _RenderRuleRow = ({ 
+        const _RenderRuleRow = ({
             totalRules,
             referenceName,
-            ruleIndex, 
+            ruleIndex,
             rule,
-        }) => {
+        }: RuleRow) => {
             const operator = Object.keys(rule).filter((ruleField) => ruleField !== "property")[0]
             const content = `${ colors.cyan(rule.property)} ${ colors.bold.magenta(operator)} ${ colors.gray(rule[operator])}`
-            const referenceNameColumn = { rowSpan: totalRules+(totalRules>1?1:0), vAlign:'center', hAlign: 'center', content: colors.bold.blue(referenceName) }
-            const ruleColumn = { hAlign: 'center', content }
-    
+            const referenceNameColumn: TableCell = { rowSpan: totalRules+(totalRules>1?1:0), vAlign:'center', hAlign: 'center', content: colors.bold.blue(referenceName) }
+            const ruleColumn: TableCell = { hAlign: 'center', content }
+
             if(ruleIndex === 0){
                 table.push([referenceNameColumn, ruleColumn])
             }else {
@@ -36,10 +46,10 @@ const RenderAgentLinkRulesTaskTable = async (agentLinkRules) => {
         .forEach((operator) => {
             const rules = requirement[operator]
             rules.forEach((rule, ruleIndex) => {
-                _RenderRuleRow({ 
+                _RenderRuleRow({
                     totalRules:rules.length,
-                    referenceName, 
-                    ruleIndex, 
+                    referenceName,
+                    ruleIndex,
                     rule
                 })
                 if(ruleIndex < rules.length - 1){
