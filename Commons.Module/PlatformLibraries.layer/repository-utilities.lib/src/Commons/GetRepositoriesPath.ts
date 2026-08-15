@@ -4,6 +4,10 @@ const GetRepositoriesPath = async ({
     namespace,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
+}: {
+    namespace: string
+    installDataDirPath: string
+    REPOS_CONF_FILENAME_REPOS_DATA: string
 }) => {
     const registeredRepositories = await GetRepositories({
         installDataDirPath,

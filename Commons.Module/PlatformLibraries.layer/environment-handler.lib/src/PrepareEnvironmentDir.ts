@@ -1,12 +1,14 @@
-const VerifyEnvironmentDir = require("./VerifyEnvironmentDir")
-const CreateEnvironmentDir = require("./CreateEnvironmentDir")
-const EnsureEnvironmentLogsDir = require("./EnsureEnvironmentLogsDir")
+type EnvironmentRef = { environmentName: string, localPath: string, LOG_CONF_DIRNAME_LOGS?: string }
+
+const VerifyEnvironmentDir = require("./VerifyEnvironmentDir") as (ref: EnvironmentRef) => Promise<boolean>
+const CreateEnvironmentDir = require("./CreateEnvironmentDir") as (ref: EnvironmentRef) => Promise<void>
+const EnsureEnvironmentLogsDir = require("./EnsureEnvironmentLogsDir") as (ref: EnvironmentRef) => Promise<void>
 
 const PrepareEnvironmentDir = async ({
     environmentName,
     localPath,
     LOG_CONF_DIRNAME_LOGS
-}) => {
+}: EnvironmentRef): Promise<void> => {
     const environmentDirExit = await VerifyEnvironmentDir({
         environmentName,
         localPath

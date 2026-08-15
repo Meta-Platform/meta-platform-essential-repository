@@ -1,4 +1,9 @@
-const { resolve } = require("path")
+import type { DirNameAndExt } from "./ListValidDir"
+
+/** Pacote encontrado na varredura, com o grupo a que pertence, quando há um. */
+type PackageEntry = DirNameAndExt & { parentGroup?: string }
+
+const { resolve } = require("path") as typeof import("path")
 const ListValidDir = require("./ListValidDir")
 const GetLayerPath = require("./GetLayerPath")
 
@@ -8,7 +13,13 @@ const GetPackages = async ({
     parentGroup,
     REPOS_CONF_EXT_GROUP_DIR,
     REPOS_CONF_EXTLIST_PKG_TYPE
-}={}) => {
+}: {
+    path: string
+    disableExtGroupScan?: boolean
+    parentGroup?: string
+    REPOS_CONF_EXT_GROUP_DIR: string
+    REPOS_CONF_EXTLIST_PKG_TYPE: string
+}) => {
     
     const listExtPackages = REPOS_CONF_EXTLIST_PKG_TYPE.split("|")
 
@@ -22,7 +33,7 @@ const GetPackages = async ({
         ]
     })
 
-    const listPackageNameAndExt = await listDirs.reduce(async (listPackageNameAndExtPromiseAcc, {name, ext}) => {
+    const listPackageNameAndExt: PackageEntry[] = await listDirs.reduce(async (listPackageNameAndExtPromiseAcc: Promise<PackageEntry[]>, {name, ext}: DirNameAndExt) => {
         const listPackageNameAndExtAcc = await listPackageNameAndExtPromiseAcc;
         if(ext !== REPOS_CONF_EXT_GROUP_DIR){
             return [
@@ -51,7 +62,7 @@ const GetPackages = async ({
     return listPackageNameAndExt
 }
 
-const GetPackagesByLayer = async ({ 
+const GetPackagesByLayer = async ({
     layerName,
     namespaceRepo, 
     moduleName,
@@ -62,6 +73,16 @@ const GetPackagesByLayer = async ({
     REPOS_CONF_EXT_GROUP_DIR,
     REPOS_CONF_EXTLIST_PKG_TYPE
 
+}: {
+    layerName: string
+    namespaceRepo: string
+    moduleName: string
+    REPOS_CONF_EXT_LAYER_DIR: string
+    installDataDirPath: string
+    REPOS_CONF_FILENAME_REPOS_DATA: string
+    REPOS_CONF_EXT_MODULE_DIR: string
+    REPOS_CONF_EXT_GROUP_DIR: string
+    REPOS_CONF_EXTLIST_PKG_TYPE: string
 }) => {
     const layerPath = await GetLayerPath({ 
         layerName,
@@ -79,7 +100,7 @@ const GetPackagesByLayer = async ({
         REPOS_CONF_EXTLIST_PKG_TYPE
     })
 
-    return listPackageNameAndExt.map(({ name, ext, parentGroup }) => {
+    return listPackageNameAndExt.map(({ name, ext, parentGroup }: PackageEntry) => {
         return { 
             packageName:name, 
             ext, 

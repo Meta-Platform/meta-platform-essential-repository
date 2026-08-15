@@ -1,6 +1,6 @@
-const { mkdir } = require('node:fs/promises')
-const { join } = require('node:path')
-const GetEnvironmentPath = require("./GetEnvironmentPath")
+const { mkdir } = require('node:fs/promises') as typeof import('node:fs/promises')
+const { join } = require('node:path') as typeof import('node:path')
+const GetEnvironmentPath = require("./GetEnvironmentPath") as (environmentName: string, localPath: string) => string
 
 /*
  * Cada ambiente de execução tem o seu próprio `logs/`, ao lado dos metadados e
@@ -14,7 +14,11 @@ const CreateEnvironmentDir = async ({
     environmentName,
     localPath,
     LOG_CONF_DIRNAME_LOGS
-}) => {
+}: {
+    environmentName: string
+    localPath: string
+    LOG_CONF_DIRNAME_LOGS?: string
+}): Promise<void> => {
     const environmentPath = GetEnvironmentPath(environmentName, localPath)
     await mkdir(environmentPath, {recursive:true})
     await mkdir(join(environmentPath, LOG_CONF_DIRNAME_LOGS || LOGS_DIRNAME), {recursive:true})

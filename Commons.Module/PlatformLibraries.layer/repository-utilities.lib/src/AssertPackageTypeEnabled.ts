@@ -9,6 +9,10 @@ const AssertPackageTypeEnabled = ({
     packagePath,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
+}: {
+    packagePath: string
+    installDataDirPath: string
+    REPOS_CONF_FILENAME_REPOS_DATA: string
 }) => {
     const packageType = basename(packagePath).split(".").pop()
 

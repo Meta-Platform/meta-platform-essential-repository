@@ -3,6 +3,9 @@ const GetRepositories = require("../../../Libraries.layer/repository-config-hand
 const ListRepositories = async ({
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA,
+}: {
+    installDataDirPath: string
+    REPOS_CONF_FILENAME_REPOS_DATA: string
 }) => {
     const registeredRepositories = await GetRepositories({
         installDataDirPath,

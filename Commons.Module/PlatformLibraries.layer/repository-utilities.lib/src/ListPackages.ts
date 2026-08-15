@@ -1,5 +1,7 @@
-const ListLayers = require("./ListLayers")
-const GetPackagesByLayer = require("./Commons/GetPackagesByLayer")
+import type { LayerEntry, PackageEntry } from "./Types"
+
+const ListLayers = require("./ListLayers") as (params: any) => Promise<LayerEntry[]>
+const GetPackagesByLayer = require("./Commons/GetPackagesByLayer") as (params: any) => Promise<PackageEntry[]>
 const DeriveSupportedPackageTypes = require("./Commons/DeriveSupportedPackageTypes")
 
 const ListPackages = async ({
@@ -9,6 +11,13 @@ const ListPackages = async ({
     REPOS_CONF_EXT_LAYER_DIR,
     REPOS_CONF_EXT_GROUP_DIR,
     REPOS_CONF_EXTLIST_PKG_TYPE
+}: {
+    installDataDirPath: string
+    REPOS_CONF_FILENAME_REPOS_DATA: string
+    REPOS_CONF_EXT_MODULE_DIR: string
+    REPOS_CONF_EXT_LAYER_DIR: string
+    REPOS_CONF_EXT_GROUP_DIR: string
+    REPOS_CONF_EXTLIST_PKG_TYPE: string
 }) => {
 
     // A whitelist de tipos de pacote é DERIVADA dos `supportedPackageTypes` dos
@@ -28,7 +37,7 @@ const ListPackages = async ({
     })  
 
     const listPackages = listLayers
-        .reduce(async (listPackagesPromise, { layerName, moduleName, namespaceRepo }) => {
+        .reduce(async (listPackagesPromise: Promise<PackageEntry[]>, { layerName, moduleName, namespaceRepo }) => {
             const listPackages = await listPackagesPromise;
             const listPackagesChunk = await GetPackagesByLayer({ 
                 layerName,

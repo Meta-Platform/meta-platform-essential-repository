@@ -7,6 +7,11 @@ const GetModuleNamesByRepo = async ({
     REPOS_CONF_EXT_MODULE_DIR,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
+}: {
+    namespace: string
+    REPOS_CONF_EXT_MODULE_DIR: string
+    installDataDirPath: string
+    REPOS_CONF_FILENAME_REPOS_DATA: string
 }) => {
     const repoPath = await GetRepositoriesPath({
         namespace,

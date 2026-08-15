@@ -1,10 +1,13 @@
-const PrepareEnvironmentDir = require("./PrepareEnvironmentDir")
-const GetEnvironmentPath = require("./GetEnvironmentPath")
+const PrepareEnvironmentDir = require("./PrepareEnvironmentDir") as (params: { environmentName: string, localPath: string, LOG_CONF_DIRNAME_LOGS?: string }) => Promise<void>
+const GetEnvironmentPath = require("./GetEnvironmentPath") as (environmentName: string, localPath: string) => string
 
 const CreateEnvironment = async ({
     environmentName, 
     localPath
-}) => {
+}: {
+    environmentName: string
+    localPath: string
+}): Promise<string> => {
     try{
         await PrepareEnvironmentDir({
             environmentName, 

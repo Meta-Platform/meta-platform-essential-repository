@@ -1,6 +1,6 @@
-const { mkdir } = require('node:fs/promises')
-const { join } = require('node:path')
-const GetEnvironmentPath = require("./GetEnvironmentPath")
+const { mkdir } = require('node:fs/promises') as typeof import('node:fs/promises')
+const { join } = require('node:path') as typeof import('node:path')
+const GetEnvironmentPath = require("./GetEnvironmentPath") as (environmentName: string, localPath: string) => string
 
 /*
  * Garante o `logs/` de um ambiente que JÁ EXISTE.
@@ -19,7 +19,11 @@ const EnsureEnvironmentLogsDir = async ({
     environmentName,
     localPath,
     LOG_CONF_DIRNAME_LOGS
-}) => {
+}: {
+    environmentName: string
+    localPath: string
+    LOG_CONF_DIRNAME_LOGS?: string
+}): Promise<void> => {
     try {
         const environmentPath = GetEnvironmentPath(environmentName, localPath)
         await mkdir(join(environmentPath, LOG_CONF_DIRNAME_LOGS || LOGS_DIRNAME), { recursive : true })
