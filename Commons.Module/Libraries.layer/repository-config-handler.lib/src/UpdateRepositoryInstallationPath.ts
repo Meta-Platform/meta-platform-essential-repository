@@ -1,12 +1,17 @@
-const GetRepositories = require("./GetRepositories")
-const WriteRepositoriesFileJson = require("./Helpers/WriteRepositoriesFileJson")
+import type { GetRepositoriesFn, RepositoriesFileRef, WriteRepositoriesFileJsonFn } from "./Types"
+
+const GetRepositories = require("./GetRepositories") as GetRepositoriesFn
+const WriteRepositoriesFileJson = require("./Helpers/WriteRepositoriesFileJson") as WriteRepositoriesFileJsonFn
 
 const UpdateRepositoryInstallationPath = async ({
     installDataDirPath,
     repositoryNamespace,
     REPOS_CONF_FILENAME_REPOS_DATA,
     deployedRepoPath
-}) => {
+}: RepositoriesFileRef & {
+    repositoryNamespace: string
+    deployedRepoPath: string
+}): Promise<void> => {
 
     const repositories = await GetRepositories({
         installDataDirPath,
@@ -20,12 +25,12 @@ const UpdateRepositoryInstallationPath = async ({
         if(deployedRepoPath){
             const newRepositories = {
                 ...repositories,
-                [repositoryNamespace]: { 
+                [repositoryNamespace]: {
                     ...thisRepo,
                     installationPath: deployedRepoPath
                 }
             }
-            await WriteRepositoriesFileJson({ 
+            await WriteRepositoriesFileJson({
                 content: newRepositories,
                 installDataDirPath,
                 REPOS_CONF_FILENAME_REPOS_DATA
@@ -34,8 +39,8 @@ const UpdateRepositoryInstallationPath = async ({
         } else {
             Log.error("UpdateRepositoryInstallationPath", `o parâmetro [deployedRepoPath] é inválido [${deployedRepoPath}]`)
         }
-        
-    } else 
+
+    } else
         throw `O repositório [${repositoryNamespace}] não esta instalado!`
 }
 

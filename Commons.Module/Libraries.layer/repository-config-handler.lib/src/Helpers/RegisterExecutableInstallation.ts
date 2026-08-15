@@ -1,12 +1,17 @@
-const GetRepositories = require("../GetRepositories")
-const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson")
+import type { GetRepositoriesFn, InstalledApplication, RepositoriesFileRef, WriteRepositoriesFileJsonFn } from "../Types"
+
+const GetRepositories = require("../GetRepositories") as GetRepositoriesFn
+const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson") as WriteRepositoriesFileJsonFn
 
 const RegisterExecutableInstallation = async ({
     installDataDirPath,
     repositoryNamespace,
     REPOS_CONF_FILENAME_REPOS_DATA,
     applicationData
-}) => {
+}: RepositoriesFileRef & {
+    repositoryNamespace: string
+    applicationData: InstalledApplication
+}): Promise<void> => {
 
     const repositories = await GetRepositories({
         installDataDirPath,
@@ -17,18 +22,18 @@ const RegisterExecutableInstallation = async ({
 
     if(thisRepo){
 
-        const alreadyRegistered = 
+        const alreadyRegistered =
             !!thisRepo
             .installedApplications
             .find(
-                (installedApplicationData) => 
+                (installedApplicationData) =>
                     installedApplicationData.executable === applicationData.executable
             )
 
         if(!alreadyRegistered){
             const newRepositories = {
                 ...repositories,
-                [repositoryNamespace]: { 
+                [repositoryNamespace]: {
                     ...thisRepo,
                     installedApplications: [
                         ...thisRepo.installedApplications,
@@ -36,7 +41,7 @@ const RegisterExecutableInstallation = async ({
                     ]
                 }
             }
-            await WriteRepositoriesFileJson({ 
+            await WriteRepositoriesFileJson({
                 content: newRepositories,
                 installDataDirPath,
                 REPOS_CONF_FILENAME_REPOS_DATA
@@ -45,8 +50,8 @@ const RegisterExecutableInstallation = async ({
         } else {
             Log.warn("RegisterExecutableInstallation", `o executável [${applicationData.executable}] já esta registrado em [${repositoryNamespace}]`)
         }
-        
-    } else 
+
+    } else
         throw `O repositório [${repositoryNamespace}] não esta instalado!`
 }
 

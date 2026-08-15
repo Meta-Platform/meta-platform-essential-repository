@@ -1,6 +1,8 @@
-const { resolve } = require("path")
+import type { GetRepositoriesFilePathFn } from "../Types"
 
-const GetRepositoriesFilePath = ({
+const { resolve } = require("path") as typeof import("path")
+
+const GetRepositoriesFilePath: GetRepositoriesFilePathFn = ({
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
 }) => {

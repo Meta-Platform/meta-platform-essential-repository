@@ -1,5 +1,7 @@
-const GetRepositories = require("../GetRepositories")
-const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson")
+import type { GetRepositoriesFn, RepositoriesFileRef, WriteRepositoriesFileJsonFn } from "../Types"
+
+const GetRepositories = require("../GetRepositories") as GetRepositoriesFn
+const WriteRepositoriesFileJson = require("./WriteRepositoriesFileJson") as WriteRepositoriesFileJsonFn
 
 // Inverso de RegisterExecutableInstallation: remove a entrada de um executável
 // da lista installedApplications do repositório no repositories.json.
@@ -8,7 +10,10 @@ const UnregisterExecutableInstallation = async ({
     repositoryNamespace,
     REPOS_CONF_FILENAME_REPOS_DATA,
     executable
-}) => {
+}: RepositoriesFileRef & {
+    repositoryNamespace: string
+    executable: string
+}): Promise<void> => {
 
     const repositories = await GetRepositories({
         installDataDirPath,

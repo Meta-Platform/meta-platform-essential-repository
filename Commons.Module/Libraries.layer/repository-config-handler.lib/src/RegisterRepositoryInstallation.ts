@@ -1,5 +1,9 @@
-const PrepareRepositoriesFileJson = require("./PrepareRepositoriesFileJson")
-const AddNewRepositoryRecordToFile = require("./Helpers/AddNewRepositoryRecordToFile")
+import type { PrepareRepositoriesFileJsonFn, RepositoriesFileRef, SourceData } from "./Types"
+
+const PrepareRepositoriesFileJson = require("./PrepareRepositoriesFileJson") as PrepareRepositoriesFileJsonFn
+const AddNewRepositoryRecordToFile = require("./Helpers/AddNewRepositoryRecordToFile") as (
+    params: RepositoriesFileRef & { repositoryNamespace: string, sourceData: SourceData, deployedRepoPath: string }
+) => Promise<void>
 
 const RegisterRepositoryInstallation = async ({
     repositoryNamespace,
@@ -7,7 +11,11 @@ const RegisterRepositoryInstallation = async ({
     installDataDirPath,
     deployedRepoPath,
     REPOS_CONF_FILENAME_REPOS_DATA
-}) => {
+}: RepositoriesFileRef & {
+    repositoryNamespace: string
+    sourceData: SourceData
+    deployedRepoPath: string
+}): Promise<void> => {
     try{
         await PrepareRepositoriesFileJson({
             installDataDirPath,

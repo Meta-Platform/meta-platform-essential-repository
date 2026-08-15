@@ -1,12 +1,13 @@
+import type { PrepareRepositoriesFileJsonFn, VerifyRepoFileFn } from "./Types"
 
-const VerifyRepoFile = require("./Helpers/VerifyRepoFile")
-const CreateInitialRepositoriesFileJson = require("./Helpers/CreateInitialRepositoriesFileJson")
+const VerifyRepoFile = require("./Helpers/VerifyRepoFile") as VerifyRepoFileFn
+const CreateInitialRepositoriesFileJson = require("./Helpers/CreateInitialRepositoriesFileJson") as PrepareRepositoriesFileJsonFn
 
-const PrepareRepositoriesFileJson = async ({
+const PrepareRepositoriesFileJson: PrepareRepositoriesFileJsonFn = async ({
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
 }) => {
-    
+
     const repofileExit = await VerifyRepoFile({
         installDataDirPath,
         REPOS_CONF_FILENAME_REPOS_DATA

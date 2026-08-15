@@ -1,12 +1,17 @@
-const GetRepositories = require("./GetRepositories")
-const WriteRepositoriesFileJson = require("./Helpers/WriteRepositoriesFileJson")
+import type { GetRepositoriesFn, RepositoriesFileRef, SourceData, WriteRepositoriesFileJsonFn } from "./Types"
+
+const GetRepositories = require("./GetRepositories") as GetRepositoriesFn
+const WriteRepositoriesFileJson = require("./Helpers/WriteRepositoriesFileJson") as WriteRepositoriesFileJsonFn
 
 const ChangeSourceRepository = async ({
     repositoryNamespace,
     sourceData,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
-}) => {
+}: RepositoriesFileRef & {
+    repositoryNamespace: string
+    sourceData: SourceData
+}): Promise<void> => {
 
     const repositories = await GetRepositories({
         installDataDirPath,
@@ -19,18 +24,18 @@ const ChangeSourceRepository = async ({
 
         const newRepositories = {
             ...repositories,
-            [repositoryNamespace]: { 
+            [repositoryNamespace]: {
                 ...repositories[repositoryNamespace],
                 sourceData
             }
         }
-        await WriteRepositoriesFileJson({ 
+        await WriteRepositoriesFileJson({
             content: newRepositories,
             installDataDirPath,
             REPOS_CONF_FILENAME_REPOS_DATA
         })
         Log.info("ChangeSourceRepository", `a fonte do repositório [${repositoryNamespace}] foi alterada de [${sourceTypeOld}] para [${sourceData.sourceType}]`)
-    } else 
+    } else
         throw `ATENÇÃO: o repositório [${repositoryNamespace}] não esta instalado!`
 
 }

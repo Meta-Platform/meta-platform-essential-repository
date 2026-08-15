@@ -1,8 +1,10 @@
-const GetRepositoriesFilePath = require("./GetRepositoriesFilePath")
+import type { GetRepositoriesFilePathFn, WriteRepositoriesFileJsonFn } from "../Types"
 
-const WriteObjectToFile = require("../../../json-file-utilities.lib/src/WriteObjectToFile")
+const GetRepositoriesFilePath = require("./GetRepositoriesFilePath") as GetRepositoriesFilePathFn
 
-const WriteRepositoriesFileJson = async ({ 
+const WriteObjectToFile = require("../../../json-file-utilities.lib/src/WriteObjectToFile") as (filepath: string, objectContent: unknown) => Promise<void>
+
+const WriteRepositoriesFileJson: WriteRepositoriesFileJsonFn = async ({
     content,
     installDataDirPath,
     REPOS_CONF_FILENAME_REPOS_DATA
