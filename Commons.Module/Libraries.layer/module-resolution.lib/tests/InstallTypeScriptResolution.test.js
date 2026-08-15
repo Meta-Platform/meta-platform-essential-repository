@@ -42,3 +42,25 @@ describe("InstallTypeScriptResolution", () => {
     })
 
 })
+
+describe("InstallTypeScriptResolution — require.resolve", () => {
+
+    // Os hooks de módulo não alcançam `require.resolve`. Quem entrega um caminho
+    // absoluto a um subprocesso passa por essa porta — e ela precisa enxergar
+    // `.ts` também, senão o caminho chega vazio do outro lado.
+    it("resolve o caminho de um .ts sem extensão", () => {
+        InstallTypeScriptResolution()
+        assert.equal(require.resolve("./fixtures/Sample"), join(FIXTURES_PATH, "Sample.ts"))
+    })
+
+    it("preserva a precedência do JavaScript", () => {
+        InstallTypeScriptResolution()
+        assert.equal(require.resolve("./fixtures/Preferred"), join(FIXTURES_PATH, "Preferred.js"))
+    })
+
+    it("não engole o erro de módulo inexistente", () => {
+        InstallTypeScriptResolution()
+        assert.throws(() => require.resolve("./fixtures/NaoExiste"), { code: "MODULE_NOT_FOUND" })
+    })
+
+})
