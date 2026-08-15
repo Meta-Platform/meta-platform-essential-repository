@@ -60,3 +60,21 @@ export type TaskInformation = {
     agentLinkRules?: AgentLinkRule[]
     activationRules?: RuleSet
 }
+
+/**
+ * A tarefa como o executor a mantém em memória, com o que NÃO atravessa
+ * fronteira: o canal de comando, o objeto de serviço vivo, os parâmetros já
+ * resolvidos. Nada disso é serializável — por isso a `Task` acima, que é o que
+ * sai para o supervisor, para o painel e para o log, não os inclui.
+ */
+export type RuntimeTask = Task & {
+    /** Parâmetros resolvidos na ativação, com os handles que o loader precisa. */
+    params?: Record<string, any>
+    /** Canal por onde o executor comanda a tarefa e ouve a mudança de status. */
+    executorChannel?: any
+    /** O objeto que o loader publicou — o serviço em si. */
+    getServiceObject?: () => any
+    hasChildTasks?: boolean
+    /** Marca da lápide: quando a tarefa foi esvaziada, preservando a identidade. */
+    purgedAt?: string
+}

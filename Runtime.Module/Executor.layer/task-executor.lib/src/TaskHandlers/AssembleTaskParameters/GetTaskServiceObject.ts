@@ -5,8 +5,12 @@ const GetTaskServiceObject = ({
     taskStateManager,
     agentLinkRules,
     refValue
+}: {
+    taskStateManager: any
+    agentLinkRules: any
+    refValue: any
 }) => {
-    const ruleFound = agentLinkRules.find(({referenceName}) => referenceName === refValue)
+    const ruleFound = agentLinkRules.find(({referenceName}: { referenceName: any }) => referenceName === refValue)
     const { requirement } = ruleFound
     const conditionType = Object.keys(requirement)[0]
     if(conditionType === "&&"){

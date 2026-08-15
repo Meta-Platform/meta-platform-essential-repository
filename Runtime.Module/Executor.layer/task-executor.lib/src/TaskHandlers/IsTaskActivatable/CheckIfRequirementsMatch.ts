@@ -1,11 +1,11 @@
 const FindTaskByQuery = require("../FindTaskByQuery")
 
-const ConvertRequirementExpressionToTaskQuery = (requirementExpression) => 
-    requirementExpression.reduce((queryAcc, { property, "=": equals }) => equals 
+const ConvertRequirementExpressionToTaskQuery = (requirementExpression: any) => 
+    requirementExpression.reduce((queryAcc: any, { property, "=": equals }: any) => equals 
         ? { ...queryAcc, [property]: {value: equals, type: "=" } }
     : queryAcc, {})
 
-const CheckIfRequirementsMatch = (taskStateManager, requirement) => {
+const CheckIfRequirementsMatch = (taskStateManager: any, requirement: any) => {
     try{
         const conditionType = Object.keys(requirement)[0]
         if(conditionType === "&&"){

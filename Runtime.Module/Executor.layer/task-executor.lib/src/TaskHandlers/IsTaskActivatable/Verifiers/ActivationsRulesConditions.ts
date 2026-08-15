@@ -1,7 +1,7 @@
 
 const CheckIfRequirementsMatch = require("../CheckIfRequirementsMatch")
 
-const VerifyActivationsRulesConditions = (taskStateManager, taskId) => {
+const VerifyActivationsRulesConditions = (taskStateManager: any, taskId: number) => {
     const {
         activationRules
     } = taskStateManager.GetTask(taskId)

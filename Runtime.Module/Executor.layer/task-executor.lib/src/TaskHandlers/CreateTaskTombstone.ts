@@ -1,3 +1,5 @@
+import type { RuntimeTask as Task, TaskStatus } from "../../types/Task"
+
 const TaskStatusTypes = require("../TaskStatusTypes")
 
 // Lápide de uma task encerrada.
@@ -33,10 +35,10 @@ const PURGEABLE_STATUS = [
     TaskStatusTypes.FAILURE
 ]
 
-const IsPurgeable = (task) =>
+const IsPurgeable = (task: Task) =>
     !!task && !task.purgedAt && PURGEABLE_STATUS.includes(task.status)
 
-const CreateTaskTombstone = (task) => {
+const CreateTaskTombstone = (task: Task) => {
 
     const {
         taskId,

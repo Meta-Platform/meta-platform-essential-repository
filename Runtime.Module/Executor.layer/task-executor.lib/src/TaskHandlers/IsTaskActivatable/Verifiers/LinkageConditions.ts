@@ -1,6 +1,6 @@
 const CheckIfRequirementsMatch = require("../CheckIfRequirementsMatch")
 
-const VerifyLinkageConditions = (taskStateManager, taskId) => {
+const VerifyLinkageConditions = (taskStateManager: any, taskId: number) => {
 
     const {
         linkedParameters,
@@ -9,7 +9,7 @@ const VerifyLinkageConditions = (taskStateManager, taskId) => {
 
     if(linkedParameters && agentLinkRules){
         return agentLinkRules
-        .reduce((isValidAcc, { requirement }) => {
+        .reduce((isValidAcc: boolean, { requirement }: any) => {
             if(isValidAcc){
                 return CheckIfRequirementsMatch(taskStateManager, requirement)
             }

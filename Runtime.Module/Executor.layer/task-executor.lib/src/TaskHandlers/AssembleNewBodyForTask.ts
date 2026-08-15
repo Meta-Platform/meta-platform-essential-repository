@@ -1,6 +1,6 @@
 const EventEmitter = require('node:events')
 
-const AssembleNewBodyForTask = ({ taskId, pTaskId, executionParams }) => {
+const AssembleNewBodyForTask = ({ taskId, pTaskId, executionParams }: { taskId: number, pTaskId: number, executionParams: any }) => {
     const {
         objectLoaderType, 
         staticParameters,

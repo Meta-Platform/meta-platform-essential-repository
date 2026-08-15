@@ -1,6 +1,6 @@
-const ConvertRequirementExpressionToTaskQuery = (requirementExpression) => 
+const ConvertRequirementExpressionToTaskQuery = (requirementExpression: any) => 
         requirementExpression
-            .reduce((queryAcc, { property, "=":equals }) => equals 
+            .reduce((queryAcc: any, { property, "=":equals }: any) => equals 
                 ? { ...queryAcc, [property]: {value: equals, type: "=" } }
                 : queryAcc, {}) 
 

@@ -2,7 +2,7 @@ const VerifyActivationsRulesConditions = require("./Verifiers/ActivationsRulesCo
 const VerifyLinkageConditions = require("./Verifiers/LinkageConditions")
 const VerifyAllChildTasksActive = require("./Verifiers/AllChildTasksActive")
 
-const IsTaskActivatable = (taskStateManager, taskId) => {
+const IsTaskActivatable = (taskStateManager: any, taskId: number) => {
 
     const {
         linkedParameters,

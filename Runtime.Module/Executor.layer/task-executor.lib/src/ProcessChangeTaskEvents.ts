@@ -1,3 +1,5 @@
+import type { RuntimeTask as Task, TaskStatus } from "../types/Task"
+
 const TaskStatusTypes = require("./TaskStatusTypes")
 const CommandChannelEventTypes = require("./CommandChannelEventTypes")
 
@@ -18,6 +20,12 @@ const ProcessChangeTaskEvents = ({
     taskLoaders,
     taskId,
     status
+}: {
+    StopAllTasks: any
+    taskStateManager: any
+    taskLoaders: any
+    taskId: number
+    status: TaskStatus
 }) => {
 
     const {
@@ -28,29 +36,29 @@ const ProcessChangeTaskEvents = ({
         PurgeTask
     } = taskStateManager
 
-    const GetCommandChannel = (taskId) =>
+    const GetCommandChannel = (taskId: number) =>
         GetTask(taskId).executorChannel
 
-    const EnableStatusChangeListening = (taskId) =>
+    const EnableStatusChangeListening = (taskId: number) =>
         GetCommandChannel(taskId)
-            .on(CommandChannelEventTypes.CHANGE_TASK_STATUS, (status, statusReason) => ChangeTaskStatus(taskId, status, statusReason))
+            .on(CommandChannelEventTypes.CHANGE_TASK_STATUS, (status: TaskStatus, statusReason: string) => ChangeTaskStatus(taskId, status, statusReason))
 
-    const EnableExitEventListening = (taskId) => {
+    const EnableExitEventListening = (taskId: number) => {
         GetCommandChannel(taskId)
         .on(CommandChannelEventTypes.STOP_ALL_TASKS, () => StopAllTasks())
     }
 
-    const MountServiceObject = (task) => {
+    const MountServiceObject = (task: Task) => {
         const ObjectLoader = taskLoaders[task.objectLoaderType]
         return ObjectLoader(task.params, task.executorChannel)
     }
 
-    const CheckActivationConditions = (taskId) => {
+    const CheckActivationConditions = (taskId: number) => {
         if(IsTaskActivatable(taskStateManager, taskId))
             ChangeTaskStatus(taskId, TaskStatusTypes.PRECONDITIONS_COMPLETED)
     }
 
-    const PrepareTaskForActivation = (taskId) => {
+    const PrepareTaskForActivation = (taskId: number) => {
 
         const task = GetTask(taskId)
 
@@ -64,23 +72,23 @@ const ProcessChangeTaskEvents = ({
         
     }
 
-    const StartTask = (taskId) => {
+    const StartTask = (taskId: number) => {
         const { executorChannel } = GetTask(taskId)
         executorChannel.emit(CommandChannelEventTypes.START_TASK)
     }
 
     const GetTasksAwaitingConditions = () => 
         ListTasks()
-            .filter(({status}) => status === TaskStatusTypes.AWAITING_PRECONDITIONS)
+            .filter(({status}: { status: TaskStatus }) => status === TaskStatusTypes.AWAITING_PRECONDITIONS)
 
     const CheckAllTasksActivationConditions = () => {
         setTimeout(() => GetTasksAwaitingConditions()
-        .forEach(({ taskId }) => CheckActivationConditions(taskId)))
+        .forEach(({ taskId }: { taskId: number }) => CheckActivationConditions(taskId)))
     }
 
     // O timer não segura o processo: uma instância que termina logo depois de a
     // task encerrar não deve ficar viva só esperando a faxina.
-    const ScheduleTaskPurge = (taskId) => {
+    const ScheduleTaskPurge = (taskId: number) => {
         if(!PurgeTask) return
         const timer = setTimeout(() => PurgeTask(taskId), PURGE_DELAY_MS)
         if(typeof timer.unref === "function") timer.unref()

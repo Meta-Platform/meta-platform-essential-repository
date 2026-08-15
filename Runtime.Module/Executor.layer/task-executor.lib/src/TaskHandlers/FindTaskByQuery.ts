@@ -1,4 +1,6 @@
-const VerifyPropertyContent = (chunck, propertyStack, queryValue) => {
+import type { Task, TaskStatus } from "../../types/Task"
+
+const VerifyPropertyContent = (chunck: any, propertyStack: any, queryValue: any) => {
     const property = propertyStack.pop()
     const chunkValue = chunck[property]
     if(chunkValue){
@@ -19,12 +21,12 @@ const VerifyPropertyContent = (chunck, propertyStack, queryValue) => {
     return false
 }
 
-const ConvertPropertyQueryToStack = (propertyQuery) => 
+const ConvertPropertyQueryToStack = (propertyQuery: any) => 
         propertyQuery.split(".").reverse()
 
-const IsTaskMatching = ({ task, taskQuery }) => {
+const IsTaskMatching = ({ task, taskQuery }: { task: Task, taskQuery: any }) => {
     const isMatch = Object.keys(taskQuery)
-    .reduce((isMarchAcc, propertyQuery) => {
+    .reduce((isMarchAcc: any, propertyQuery: any) => {
         if(isMarchAcc){
             const propertyStack = ConvertPropertyQueryToStack(propertyQuery)
             const queryValue = taskQuery[propertyQuery]
@@ -35,10 +37,10 @@ const IsTaskMatching = ({ task, taskQuery }) => {
     return isMatch
 }
 
-const FindTaskByQuery = (taskStateManager, taskQuery) => {
+const FindTaskByQuery = (taskStateManager: any, taskQuery: any) => {
     const taskFound = taskStateManager
         .ListTasks()
-        .find((task) => IsTaskMatching(({task, taskQuery})))
+        .find((task: Task) => IsTaskMatching(({task, taskQuery})))
 
     return taskFound
 }

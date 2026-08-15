@@ -1,12 +1,12 @@
 const GetTaskServiceObject = require("./GetTaskServiceObject")
 
-const IsString = (value) => typeof value === "string"
+const IsString = (value: any) => typeof value === "string"
 
-const AssembleLinkedTaskParameters = ({ taskStateManager, agentLinkRules, linkedParameters }) => {
+const AssembleLinkedTaskParameters = ({ taskStateManager, agentLinkRules, linkedParameters }: { taskStateManager: any, agentLinkRules: any, linkedParameters: any }) => {
 
-    const AssembleParams = (linkedParameters) =>  Object
+    const AssembleParams: any = (linkedParameters: any) =>  Object
         .keys(linkedParameters)
-        .reduce((paramsInAssembly, paramName)=>{
+        .reduce((paramsInAssembly: any, paramName: any) =>{
             const valueForBind = linkedParameters[paramName]
             if(IsString(valueForBind)){
                 return {

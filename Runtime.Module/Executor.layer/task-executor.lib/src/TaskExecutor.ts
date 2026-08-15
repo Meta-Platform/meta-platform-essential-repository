@@ -1,3 +1,5 @@
+import type { Task, TaskStatus } from "../types/Task"
+
 
 
 const TaskStatusTypes          = require("./TaskStatusTypes")
@@ -7,7 +9,7 @@ const CreateTaskStateManager = require("./CreateTaskStateManager")
 const ProcessChangeTaskEvents = require("./ProcessChangeTaskEvents")
 const AssembleNewBodyForTask = require("./TaskHandlers/AssembleNewBodyForTask")
 
-const TaskExecutor = (params) => {  
+const TaskExecutor = (params: any) => {  
 
     const taskLoaders  = params?.taskLoaders || []
 
@@ -21,31 +23,31 @@ const TaskExecutor = (params) => {
         CreateEmptyTask
     } = taskStateManager
 
-    const SetupTask = ({ taskId, pTaskId, executionParams }) => {
+    const SetupTask = ({ taskId, pTaskId, executionParams }: { taskId: number, pTaskId: number, executionParams: any }) => {
         const taskList = ListTasks()
         taskList[taskId] = AssembleNewBodyForTask({ taskId, pTaskId, executionParams })
         ChangeTaskStatus(taskId, TaskStatusTypes.AWAITING_PRECONDITIONS)
     }
 
-    const StopTask = (taskId) => {
+    const StopTask = (taskId: number) => {
         const task = GetTask(taskId)
         if (task.status === TaskStatusTypes.AWAITING_PRECONDITIONS)
             ChangeTaskStatus(taskId, TaskStatusTypes.TERMINATED)
         else task.executorChannel.emit(CommandChannelEventTypes.STOP_TASK)
     }
 
-    const StopTasks = (taskIdList) => 
-        taskIdList.forEach((taskId) => StopTask(taskId))
+    const StopTasks = (taskIdList: any) => 
+        taskIdList.forEach((taskId: number) => StopTask(taskId))
 
     const StopAllTasks = () => {
-        const taskIdList = ListTasks().map(({taskId}) => taskId)
+        const taskIdList = ListTasks().map(({taskId}: { taskId: number }) => taskId)
         StopTasks(taskIdList)
     }
 
-    const CreateTasks = (executionParamsList, pTaskId) => 
-        executionParamsList.flatMap((executionParams) => CreateTask(executionParams, pTaskId))
+    const CreateTasks = (executionParamsList: any, pTaskId: number) => 
+        executionParamsList.flatMap((executionParams: any) => CreateTask(executionParams, pTaskId))
 
-    const CreateTask = (executionParams, pTaskId) => {
+    const CreateTask = (executionParams: any, pTaskId: number) => {
 
         if(Object.values(executionParams).length < 1)
             throw new Error("The Execution Params cannot be empty")
@@ -68,7 +70,7 @@ const TaskExecutor = (params) => {
     }
 
      //TODO talvez carregar loader na hora do setup
-     AddTaskStatusListener(({ taskId, status }) => 
+     AddTaskStatusListener(({ taskId, status }: { taskId: number, status: TaskStatus }) => 
         setImmediate(() => ProcessChangeTaskEvents({
             StopAllTasks,
             taskStateManager, 

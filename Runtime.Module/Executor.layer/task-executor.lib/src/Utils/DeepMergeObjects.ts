@@ -1,4 +1,4 @@
-const DeepMergeObjects = (obj1, obj2) => {
+const DeepMergeObjects = (obj1: any, obj2: any) => {
     const result = { ...obj1 }
 
     if (obj2) {
