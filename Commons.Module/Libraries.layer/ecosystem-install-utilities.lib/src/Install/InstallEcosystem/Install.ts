@@ -11,8 +11,8 @@ const GetCommandLineApplicationExecutionContent = require("../../../../script-fi
 const GetDesktopApplicationExecutionContent     = require("../../../../script-file-utilities.lib/src/GetDesktopApplicationExecutionContent")
 
 const ConstructEcosystemStructure     = require("../../Domains/ConstructEcosystemStructure")
-const InstallPackageExecutor          = require("./InstallPackageExecutor")
-const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
+const SetupPackageExecutor            = require("../../Helpers/PackageExecutor/SetupPackageExecutor")
+const CreateEcosystemDefaultsJsonFile = require("../../Helpers/CreateEcosystemDefaultsJsonFile")
 const CreateRepositorySource          = require("./CreateRepositorySource")
 
 const Install = async ({
@@ -49,7 +49,7 @@ const Install = async ({
         ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
     } = ecosystemDefaults
 
-    const packageExecutorBinFilePath = await InstallPackageExecutor({
+    const packageExecutorBinFilePath = await SetupPackageExecutor({
         installationDataDir,
         ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
     })

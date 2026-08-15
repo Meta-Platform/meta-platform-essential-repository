@@ -3,8 +3,19 @@ import type { EcosystemDefaults } from "../../Types"
 const path = require("path")
 
 const RestoreEcosystemStructure = require("../../Domains/RestoreEcosystemStructure")
-/*const UpdatePackageExecutor = require("./UpdatePackageExecutor")
-const CreateEcosystemDefaultsJsonFile = require("./CreateEcosystemDefaultsJsonFile")
+/*
+ * O corpo da atualização do ecossistema está DESATIVADO: hoje `Update` apenas
+ * restaura a estrutura de diretórios. O binário do Package Executor, o
+ * ecosystem-defaults.json e os scripts executáveis não são atualizados por
+ * aqui — quem os atualiza é a instalação.
+ *
+ * O bloco abaixo é a intenção registrada de reativar isso. Foi mantido, mas
+ * corrigido: apontava para módulos que já não existem (eram cópias do fluxo de
+ * instalação, agora unificadas em Helpers/) e usava um `ECO_DIRPATH_INSTALL_DATA`
+ * que não existe neste escopo — descomentá-lo como estava não compilaria.
+ */
+/*const SetupPackageExecutor = require("../../Helpers/PackageExecutor/SetupPackageExecutor")
+const CreateEcosystemDefaultsJsonFile = require("../../Helpers/CreateEcosystemDefaultsJsonFile")
 
 const CreatePackageExecutableScript             = require("../../../../script-file-utilities.lib/src/CreatePackageExecutableScript")
 const GetApplicationExecutionContent            = require("../../../../script-file-utilities.lib/src/GetApplicationExecutionContent")
@@ -26,7 +37,7 @@ const Update = async ({
     })
 /*
     await CreateEcosystemDefaultsJsonFile({
-        ECO_DIRPATH_INSTALL_DATA, 
+        installationDataDir: installDataDirPath,
         ecosystemDefaults
     })
 
@@ -34,15 +45,15 @@ const Update = async ({
         ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR,
     } = ecosystemDefaults
 
-    const packageExecutorBinFilePath = await UpdatePackageExecutor({
-        ECO_DIRPATH_INSTALL_DATA,
+    const packageExecutorBinFilePath = await SetupPackageExecutor({
+        installationDataDir: installDataDirPath,
         ECOSYSTEMDATA_CONF_DIRNAME_ESSENTIAL_BINARY_DIR
     })
 
     const packageExecutorBinaryName = path.basename(packageExecutorBinFilePath)
 
     await CreatePackageExecutableScript({
-        ECO_DIRPATH_INSTALL_DATA,
+        installationDataDir: installDataDirPath,
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetApplicationExecutionContent,
@@ -50,7 +61,7 @@ const Update = async ({
     })
 
     await CreatePackageExecutableScript({
-        ECO_DIRPATH_INSTALL_DATA,
+        installationDataDir: installDataDirPath,
         ecosystemDefaults,
         packageExecutorBinaryName,
         buildContentFunction: GetCommandLineApplicationExecutionContent,
