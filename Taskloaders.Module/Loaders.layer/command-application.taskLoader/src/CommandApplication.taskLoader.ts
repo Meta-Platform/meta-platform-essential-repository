@@ -1,174 +1,17 @@
+import type { CommandLoaderParams } from "./Types"
+
 const TaskStatusTypes          = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 
-const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
-const yargs = SmartRequire('yargs/yargs')
+const ExecuteCommand = require("./ExecuteCommand") as (loaderParams: CommandLoaderParams) => Promise<boolean>
 
-const TokenizeArgs = require("./TokenizeArgs")
-
-const FilteredCommandParams = (loaderParams: any, parameterNames: any) => {
-
-    const serviceParams = parameterNames
-    .reduce((serviceParamsAcc: any, parameterName: any) => ({ 
-        ...serviceParamsAcc, 
-        [parameterName]: loaderParams[parameterName] 
-    }), {})
-    
-    return serviceParams
-
-}
-
-const BuiderParameter = (_yargs: any, param: any) => {
-
-    const {
-        key,
-        paramType,
-        valueType,
-        describe
-    } = param
-    _yargs[paramType](key, {describe, type:valueType})
-
-}
-
-const GetCommandBuilder = ({parameters, children, loaderParams}: { parameters: any, children: any, loaderParams: any }) => {
-
-    return async (_yargs: any) => {
-        parameters?.forEach((param: any) => BuiderParameter(_yargs, param))
-
-        if(children){
-            for(const childCommandData of children){
-                const childCommandModule = await ConfigCommand({ 
-                    commandMetadata: childCommandData, 
-                    loaderParams
-                })
-                _yargs.command(childCommandModule)
-            }
-        }
-
-    }
-
-}
-
-const GetCommandHandler = ({
-    path, 
-    parametersToLoad=[],
-    loaderParams
-}: {
-    path: string
-    parametersToLoad: any
-    loaderParams: any
-}) => {
-
-    if (path) {
-        const { 
-            startupParams, 
-            nodejsPackageHandler, 
-            commandParameterNames
-         } = loaderParams
-
-        const CommandFunction = path && nodejsPackageHandler.require(path)
-        const allParams = FilteredCommandParams(loaderParams, commandParameterNames)
-        const params = FilteredCommandParams(allParams, parametersToLoad)
-
-        return CommandFunction 
-            ? async (args: any) => await CommandFunction({ args, startupParams, params })
-            : (args: any) => {}
-
-    } else {
-        return (args: any) => {}
-    }
-
-}
-
-const ConfigCommand = async ({
-    commandMetadata, 
-    loaderParams
-}: {
-    commandMetadata: any
-    loaderParams: any
-}) => {
-
-    const {
-        path,
-        command,
-        parameters,
-        children,
-        description = '',
-        parametersToLoad
-    } = commandMetadata
-
-    if (!command) {
-        throw new Error('O campo "command" é obrigatório.')
-    }
-
-    const handler = await GetCommandHandler({
-        path,
-        parametersToLoad,
-        loaderParams
-    })
-    
-    const builder = GetCommandBuilder({parameters, children, loaderParams})
-
-    const commandModule = {
-        command,
-        describe: description,
-        builder,
-        handler
-    }
-
-    return commandModule
-}
-
-const ExecuteCommand = async (loaderParams: any) => {
-
-    let isStopAllTasks = true
-
-    const {
-        commands: commandsMetadata, 
-        commandLineArgs,  
-        nodejsPackageHandler
-    } = loaderParams
-
-    // O yargs recebe argv já tokenizado: entregar a string crua faria os
-    // argumentos posicionais chegarem ao comando com as aspas literais.
-    const argv = TokenizeArgs(commandLineArgs)
-
-    const _yargs = yargs(argv)
-
-    for (const commandMetadata of commandsMetadata) {
-
-        const commandModule = await ConfigCommand({ 
-            commandMetadata, 
-            loaderParams
-        })
-
-        const originalHandler = commandModule.handler
-        commandModule.handler = async function(args) {
-            if(commandMetadata.isNotStopAllTasks){
-                isStopAllTasks = false
-            }
-            return originalHandler(args)
-        }
-
-        _yargs.command(commandModule)
-    }
-
-    const mainCommandData = commandsMetadata.find(({ isMainCommand }: { isMainCommand: any }) => isMainCommand)
-    if (mainCommandData) {
-        const {
-            path
-        } = mainCommandData
-        const CommandFunction = path && nodejsPackageHandler.require(path)
-        await CommandFunction()
-    }
-    
-    await _yargs.parseAsync(argv)
-
-    return isStopAllTasks
-    
-}
-
-const CommandApplicationTaskLoader = (loaderParams: any, executorChannel: any) => {
+/**
+ * Object loader de aplicação de linha de comando: dá ciclo de vida a um `.cli`.
+ *
+ * Só isso — montar os comandos é do ConfigCommand, executá-los é do
+ * ExecuteCommand. Aqui ficam o estado da task e o código de saída do processo.
+ */
+const CommandApplicationTaskLoader = (loaderParams: CommandLoaderParams, executorChannel: any) => {
     // Carimba a execução: tudo que este loader registrar sai identificado pela
     // instância e pelo ambiente. Ver logging-standard.md.
     const log = Log
@@ -207,7 +50,7 @@ const CommandApplicationTaskLoader = (loaderParams: any, executorChannel: any) =
      * padrão de quem não determinou nada.
      */
     const Stop = () => process.exit(process.exitCode === undefined ? 0 : process.exitCode)
-    
+
     executorChannel.on(CommandChannelEventTypes.START_TASK, Start)
     executorChannel.on(CommandChannelEventTypes.STOP_TASK, Stop)
 
