@@ -10,6 +10,7 @@ const TaskStatusTypes          = require("../../../../Runtime.Module/Executor.la
 const CommandChannelEventTypes = require("../../../../Runtime.Module/Executor.layer/task-executor.lib/src/CommandChannelEventTypes")
 const SmartRequire             = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 const ComputeObjectHash        = require("../../../../Commons.Module/Utilities.layer/compute-object-hash.lib/src/ComputeObjectHash")
+const ResolveModulePath        = require("../../../../Commons.Module/Libraries.layer/module-resolution.lib/src/ResolveModulePath")
 
 // Caminho absoluto do SmartRequire — passado a subprocessos (ex.: electron-main do
 // desktop-window-instance) que precisam resolver deps do essential por PATH, não por módulo.
@@ -20,6 +21,11 @@ const smartRequirePath = require.resolve("../../../../Commons.Module/Libraries.l
 // fora do padrão e só existiria como texto no stdout capturado pelo daemon.
 const installGlobalLoggerPath = require.resolve("../../../../Commons.Module/Libraries.layer/logger.lib/src/InstallGlobalLogger")
 
+// Idem para a resolução de TypeScript: o subprocesso do Electron precisa
+// instalar a SUA, senão nenhum package `.ts` carrega lá dentro.
+// Ver: meta-platform-open-standard/specifications/source-language-standard.md
+const installTypeScriptResolutionPath = require.resolve("../../../../Commons.Module/Libraries.layer/module-resolution.lib/src/InstallTypeScriptResolution")
+
 // WebInterfaceBuilder é capacidade WEB — vive no ecosystem-core (web-interface-builder.lib).
 // Resolvido só se o EcosystemCoreRepo estiver instalado (senão os loaders web nem existem).
 // Devolve { builder, path }: o módulo (fábrica já aplicada) e o caminho absoluto (p/ subprocessos).
@@ -27,7 +33,10 @@ const ResolveWebInterfaceBuilder = (repositoriesData) => {
     const core = repositoriesData.EcosystemCoreRepo
     if (!core) return undefined
     const wibPath = join(core.installationPath, "Main.Module/Libraries.layer/web-interface-builder.lib/src/WebInterfaceBuilder")
-    if (!fs.existsSync(`${wibPath}.js`)) return undefined
+    // Presença do módulo, e não do arquivo `.js`: escrito como `${wibPath}.js`,
+    // este teste passaria a mentir no dia em que a lib fosse convertida para
+    // TypeScript — os loaders web sumiriam sem erro nenhum.
+    if (!ResolveModulePath(wibPath)) return undefined
     return { builder: require(wibPath)(SmartRequire), path: wibPath } // fábrica: recebe SmartRequire
 }
 
@@ -71,7 +80,8 @@ const CreateTaskLoaders = ({ repositoriesData }) => {
         paths: {
             smartRequire: smartRequirePath,
             webInterfaceBuilder: webInterfaceBuilder && webInterfaceBuilder.path,
-            installGlobalLogger: installGlobalLoggerPath
+            installGlobalLogger: installGlobalLoggerPath,
+            installTypeScriptResolution: installTypeScriptResolutionPath
         }
     }
 

@@ -5,5 +5,9 @@
   "author": "Kaio Cezar <kadisk.shark@gmail.com>",
   "dependencies": {
     "@npmcli/arborist": "^9.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3"
   }
 }

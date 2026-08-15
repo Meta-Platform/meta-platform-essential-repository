@@ -1,6 +1,11 @@
-const { readdir } = require('node:fs/promises')
+const { readdir } = require('node:fs/promises') as typeof import('node:fs/promises')
 
-const ListJsonFile = async (directoryPath) => {
+export type JsonFileEntry = {
+    path: string
+    name: string
+}
+
+const ListJsonFile = async (directoryPath: string): Promise<JsonFileEntry[]> => {
     const listItems = await readdir(directoryPath, { withFileTypes: true })
     const listFiles = listItems.filter((file) => file.isFile())
     const listJsonFiles = listFiles.filter((file) => {

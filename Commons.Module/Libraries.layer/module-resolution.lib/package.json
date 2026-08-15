@@ -1,0 +1,10 @@
+{
+  "name": "module-resolution.lib",
+  "version": "0.0.1",
+  "description": "Resolução de módulos TypeScript para o runtime da plataforma",
+  "scripts": {
+    "test": "node --test"
+  },
+  "author": "Kaio Cezar <kadisk.shark@gmail.com>",
+  "license": "BSD-3-Clause"
+}
