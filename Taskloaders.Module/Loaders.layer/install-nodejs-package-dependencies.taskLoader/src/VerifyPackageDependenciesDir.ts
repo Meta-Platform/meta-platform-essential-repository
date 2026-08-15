@@ -1,6 +1,6 @@
-const { stat } = require('node:fs/promises')
+const { join } = require("path") as typeof import("path")
 
-const { join } = require("path")
+const DirectoryExists = require("../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/DirectoryExists") as (dirPath: string) => Promise<boolean>
 
 const VerifyPackageDependenciesDir = async ({
     environmentPath, 
@@ -8,27 +8,17 @@ const VerifyPackageDependenciesDir = async ({
     EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES
 }: {
     environmentPath: string
-    packageName: any
-    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES: any
-}) => {
+    packageName: string
+    EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES: string
+}): Promise<boolean> => {
     const dirpath = join(environmentPath, EXECUTIONDATA_CONF_DIRNAME_DEPENDENCIES, packageName)
-    try{
-        const stats = await stat(dirpath)
-        if(stats.isDirectory()){
-            return true
-        } else {
-            // Quinta cópia do `reject` inexistente no repositório — ver
-            // VerifyRepoFile, VerifyDirExit e VerifyDataDir.
-            throw `${dirpath} não é um diretório`
-        }
-    } catch (e: any){
-        if(e.code === "ENOENT"){
-            Log.info("VerifyPackageDependenciesDir", `${dirpath} não existe`)
-            return false
-        } else {
-            throw e
-        }
-    }
+
+    const exists = await DirectoryExists(dirpath)
+
+    if(!exists)
+        Log.info("VerifyPackageDependenciesDir", `${dirpath} não existe`)
+
+    return exists
 }
 
 module.exports = VerifyPackageDependenciesDir

@@ -1,6 +1,5 @@
-const { stat } = require('node:fs/promises') as typeof import('node:fs/promises')
-
 const GetEnvironmentPath = require("./GetEnvironmentPath") as (environmentName: string, localPath: string) => string
+const DirectoryExists = require("../../../../Commons.Module/Utilities.layer/path-utilities.lib/src/DirectoryExists") as (dirPath: string) => Promise<boolean>
 
 const VerifyEnvironmentDir = async ({
     environmentName, 
@@ -9,20 +8,12 @@ const VerifyEnvironmentDir = async ({
     environmentName: string
     localPath: string
 }): Promise<boolean> => {
-    try{
-        const stats = await stat(GetEnvironmentPath(environmentName, localPath))
-        if(stats.isDirectory()){
-            return true
-        } else {
-            // Este ramo chamava `reject`, que não existe aqui — ver a mesma
-            // cópia em VerifyRepoFile e VerifyDirExit. O `throw` preserva o
-            // efeito que sempre valeu, sem fingir ser uma Promise.
-            throw `${environmentName} não é um diretório`
-        }
-    } catch(e){
+    const exists = await DirectoryExists(GetEnvironmentPath(environmentName, localPath))
+
+    if(!exists)
         Log.info("VerifyEnvironmentDir", `${environmentName} environment não existe`)
-        return false
-    }
+
+    return exists
 }
 
 module.exports = VerifyEnvironmentDir
