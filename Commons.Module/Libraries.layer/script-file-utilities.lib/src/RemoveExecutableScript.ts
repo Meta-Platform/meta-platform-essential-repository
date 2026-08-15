@@ -1,6 +1,8 @@
-const fs = require('fs').promises
+import type { RemoveExecutableScriptFn } from "./Types"
 
-const RemoveExecutableScript = async (filePath) => {
+const fs = (require('fs') as typeof import('fs')).promises
+
+const RemoveExecutableScript: RemoveExecutableScriptFn = async (filePath) => {
 
     try {
         await fs.access(filePath)
@@ -12,9 +14,9 @@ const RemoveExecutableScript = async (filePath) => {
     try {
         await fs.unlink(filePath)
         Log.warn("RemoveExecutableScript", `Executável removido com sucesso: ${filePath}`)
-        
 
-    } catch (error) {
+
+    } catch (error: any) {
         Log.error("RemoveExecutableScript", error)
         Log.error("RemoveExecutableScript", `Erro ao remover o arquivo: ${filePath}, erro: ${error.message}`)
         throw error

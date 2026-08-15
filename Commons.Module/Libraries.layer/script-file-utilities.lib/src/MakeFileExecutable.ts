@@ -1,7 +1,9 @@
-const fs = require('fs').promises
-const { basename } = require("path")
+import type { MakeFileExecutableFn } from "./Types"
 
-const MakeFileExecutable = async (filePath) => {
+const fs = (require('fs') as typeof import('fs')).promises
+const { basename } = require("path") as typeof import("path")
+
+const MakeFileExecutable: MakeFileExecutableFn = async (filePath) => {
     try {
         await fs.chmod(filePath, 0o755)
         Log.info("MakeFileExecutable", `O arquivo ${basename(filePath)} agora é executável.`)

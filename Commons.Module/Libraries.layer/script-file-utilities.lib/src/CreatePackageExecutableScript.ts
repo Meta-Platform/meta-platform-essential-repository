@@ -1,7 +1,9 @@
-const { join } = require("path")
+import type { CreateExecutableScriptFn, CreatePackageExecutableScriptParams } from "./Types"
+
+const { join } = require("path") as typeof import("path")
 
 
-const CreateExecutableScript = require("./CreateExecutableScript")
+const CreateExecutableScript = require("./CreateExecutableScript") as CreateExecutableScriptFn
 
 const CreatePackageExecutableScript = async ({
     installationDataDir,
@@ -10,7 +12,7 @@ const CreatePackageExecutableScript = async ({
     buildContentFunction,
     executableScriptFilename,
     debugMode=false
-}) => {
+}: CreatePackageExecutableScriptParams): Promise<string> => {
 
     const {
         PKG_CONF_DIRNAME_METADATA,

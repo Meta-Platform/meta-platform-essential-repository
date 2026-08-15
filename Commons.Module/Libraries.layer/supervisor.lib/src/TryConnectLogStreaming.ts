@@ -1,14 +1,20 @@
+import type { CommunicationInterface, EventStream } from "./Types"
+import type { LogLevel } from "../../logger.lib/types/Logger"
+
 /*
  * O log que chega por streaming vem de OUTRO processo (o package-executor da
  * instância supervisionada). Ele é reemitido no logger local com o mesmo nível
  * de origem: assim o que era só impressão de tela passa a ser também histórico.
  */
-const LEVEL_BY_TYPE = { info : "info", success : "message", warning : "warn", error : "error", stdout : "message" }
+const LEVEL_BY_TYPE: Record<string, LogLevel> = { info : "info", success : "message", warning : "warn", error : "error", stdout : "message" }
 
 const ConnectLogStreaming =  ({
     client,
     connectionTries=0
-}) => new Promise(async (resolve, reject) => {
+}: {
+    client: CommunicationInterface
+    connectionTries?: number
+}): Promise<EventStream> => new Promise(async (resolve, reject) => {
     try{
         /* Feedback de um comando interativo: vai para o humano, não é operacional. */
         Log.message("ConnectLogStreaming", `Verificando conexão com package-executor. Tentativa ${connectionTries}...`)
@@ -29,13 +35,18 @@ const TryConnectLogStreaming = ({
     ms,
     remainingConnectionAttempts,
     connectionTries=1
-}) =>
+}: {
+    client: CommunicationInterface
+    ms: number
+    remainingConnectionAttempts: number
+    connectionTries?: number
+}): Promise<EventStream> =>
     new Promise(async (resolve, reject) => {
         try{
             resolve(await ConnectLogStreaming({
                 client, connectionTries
             }))
-        }catch(e){
+        }catch(e: any){
             if(e.code === 14){
 
                 if(remainingConnectionAttempts-1 > 0){

@@ -1,13 +1,16 @@
-const path = require("path")
+import type { Task } from "../../../../Runtime.Module/Executor.layer/task-executor.lib/types/Task"
+import type { CommunicationInterface, ConvertTaskResponseToTaskFn, TaskResponse } from "./Types"
+
+const path = require("path") as typeof import("path")
 
 const SmartRequire = require("../../../../Commons.Module/Libraries.layer/smart-require.lib/src/SmartRequire")
 
 const grpc = SmartRequire('@grpc/grpc-js')
 const protoLoader = SmartRequire('@grpc/proto-loader')
 
-const ConvertTaskResponseToTask = require("./ConvertTaskResponseToTask")
+const ConvertTaskResponseToTask = require("./ConvertTaskResponseToTask") as ConvertTaskResponseToTaskFn
 
-const ConvertTaskListResponsetoTaskList = (response) => {
+const ConvertTaskListResponsetoTaskList = (response: { tasksList: TaskResponse[] }): Task[] => {
     const {
         tasksList
     } = response
@@ -30,10 +33,10 @@ const PackageExecutorGrpcObject = grpc
 
 const PackageExecutorRPCService = PackageExecutorGrpcObject.PackageExecutorRPCSpec.PackageExecutorRPCService
 
-const CreateClient = (socketFilePath) => 
+const CreateClient = (socketFilePath: string) =>
     new PackageExecutorRPCService(`unix:${socketFilePath}`, grpc.credentials.createInsecure())
 
-const WaitForConnectionReady = async (client, timeout = 5000) => {
+const WaitForConnectionReady = async (client: any, timeout = 5000): Promise<void> => {
     return new Promise((resolve, reject) => {
         const channel = client.getChannel()
         const checkState = () => {
@@ -50,53 +53,53 @@ const WaitForConnectionReady = async (client, timeout = 5000) => {
     })
 }
 
-const CreateCommunicationInterface = async (socketFilePath) => {
+const CreateCommunicationInterface = async (socketFilePath: string): Promise<CommunicationInterface> => {
     const daemonClient = CreateClient(socketFilePath)
 
     try {
         await WaitForConnectionReady(daemonClient)
-    } catch (err) {
+    } catch (err: any) {
         throw new Error("Failed to connect to daemon: " + err.message)
     }
 
-    const KillInstance = () => new Promise((resolve, reject) => {
-        daemonClient.KillInstance({}, (err, response) => {
+    const KillInstance = () => new Promise<string>((resolve, reject) => {
+        daemonClient.KillInstance({}, (err: any, response: any) => {
             if (err) reject(err)
             else resolve(response.status)
         })
     })
 
-    const GetStatus = () => new Promise((resolve, reject) => {
-        daemonClient.GetStatus({}, (err, response) => {
+    const GetStatus = () => new Promise<string>((resolve, reject) => {
+        daemonClient.GetStatus({}, (err: any, response: any) => {
             if (err) reject(err)
             else resolve(response.status)
         })
     })
 
-    const GetStartupArguments = () => new Promise((resolve, reject) => {
-        daemonClient.GetStartupArguments({}, (err, response) => {
+    const GetStartupArguments = () => new Promise<any>((resolve, reject) => {
+        daemonClient.GetStartupArguments({}, (err: any, response: any) => {
             if (err) reject(err)
             else resolve(response)
         })
     })
 
-    const GetProcessInformation = () => new Promise((resolve, reject) => {
-        daemonClient.GetProcessInformation({}, (err, response) => {
+    const GetProcessInformation = () => new Promise<any>((resolve, reject) => {
+        daemonClient.GetProcessInformation({}, (err: any, response: any) => {
             if (err) reject(err)
             else resolve(response)
         })
     })
 
-    const ListTasks = () => new Promise((resolve, reject) => {      
-        daemonClient.ListTasks({}, (err, response) => {
+    const ListTasks = () => new Promise<Task[]>((resolve, reject) => {
+        daemonClient.ListTasks({}, (err: any, response: any) => {
             if (err) reject(err)
             else {
                 resolve(ConvertTaskListResponsetoTaskList(response))    }
         })
     })
 
-    const GetTask = (taskId) => new Promise((resolve, reject) => {
-        daemonClient.GetTask({ taskId }, (err, response) => {
+    const GetTask = (taskId: number) => new Promise<Task>((resolve, reject) => {
+        daemonClient.GetTask({ taskId }, (err: any, response: any) => {
             if (err) reject(err)
             else {
                 const taskInformation = ConvertTaskResponseToTask(response)
@@ -118,7 +121,7 @@ const CreateCommunicationInterface = async (socketFilePath) => {
         GetStartupArguments,
         GetProcessInformation
     }
-    
+
 }
 
 module.exports = CreateCommunicationInterface

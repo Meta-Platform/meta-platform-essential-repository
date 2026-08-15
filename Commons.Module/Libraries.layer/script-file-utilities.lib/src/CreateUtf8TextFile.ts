@@ -1,6 +1,8 @@
-const fs = require('fs').promises
+import type { CreateUtf8TextFileFn } from "./Types"
 
-const CreateUtf8TextFile = async (filePath, content) => {
+const fs = (require('fs') as typeof import('fs')).promises
+
+const CreateUtf8TextFile: CreateUtf8TextFileFn = async (filePath, content) => {
     try {
         await fs.writeFile(filePath, content, 'utf8')
         Log.info("CreateUtf8TextFile", `Arquivo criado com sucesso em: ${filePath}`)

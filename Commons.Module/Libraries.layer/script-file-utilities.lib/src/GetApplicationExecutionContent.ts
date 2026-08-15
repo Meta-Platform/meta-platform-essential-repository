@@ -1,11 +1,13 @@
-const GetDesktopApplicationExecutionContent = ({
+import type { BuildContentFunction } from "./Types"
+
+const GetApplicationExecutionContent: BuildContentFunction = ({
     RENDER_BINARY_DIR_PATH,
     RENDER_ECOSYSTEM_DATA_PATH,
     RENDER_PKG_CONF_DIRNAME_METADATA,
     RENDER_DIRNAME_MINIMAL_NODEJS_DEPENDENCIES,
     RENDER_DIRNAME_CONFIGURATIONS_DIR,
     debugMode=false
-}) =>
+}) => 
 `#!/bin/bash
 
 ECOSYSTEM_DATA_PATH="${RENDER_ECOSYSTEM_DATA_PATH}"
@@ -32,4 +34,4 @@ ${debugMode ? "pkg-exec-dbg" : `"${RENDER_BINARY_DIR_PATH}"`} --package "$PACKAG
 --supervisorSocket "$SUPERVISOR_SOCKET_PATH"
 `
 
-module.exports = GetDesktopApplicationExecutionContent
+module.exports = GetApplicationExecutionContent

@@ -1,4 +1,6 @@
-const GetApplicationExecutionContent = ({
+import type { BuildContentFunction } from "./Types"
+
+const GetCommandLineApplicationExecutionContent: BuildContentFunction = ({
     RENDER_BINARY_DIR_PATH,
     RENDER_ECOSYSTEM_DATA_PATH,
     RENDER_PKG_CONF_DIRNAME_METADATA,
@@ -28,8 +30,9 @@ ${debugMode ? "pkg-exec-dbg" : `"${RENDER_BINARY_DIR_PATH}"`} --package "$PACKAG
 --ecosystemDefault "$ECOSYSTEM_DEFAULT" \
 --ecosystemData "$ECOSYSTEM_DATA_PATH" \
 --nodejsProjectDependencies "$NODEJS_DEPS_PATH" \
---verbose \
---supervisorSocket "$SUPERVISOR_SOCKET_PATH"
+--executableName "$EXEC_NAME" \
+--supervisorSocket "$SUPERVISOR_SOCKET_PATH" \
+--commandLineArgs "$ARGS_STRING"
 `
 
-module.exports = GetApplicationExecutionContent
+module.exports = GetCommandLineApplicationExecutionContent
