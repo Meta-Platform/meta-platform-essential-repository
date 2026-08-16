@@ -1,5 +1,5 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert').strict
+const { describe, it } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
 
 const Serialize = require("../src/Serialize")
 const { SerializeRecordLine } = require("../src/Serialize")
@@ -8,7 +8,7 @@ describe("Serialize", () => {
 
 	it('deve sobreviver a referência circular', () => {
 
-		const objeto = { nome : "raiz" }
+		const objeto: any = { nome : "raiz" }
 		objeto.self = objeto
 
 		const serializado = Serialize(objeto)
@@ -20,7 +20,7 @@ describe("Serialize", () => {
 
 	it('deve preservar message e stack de um Error (que não são enumeráveis)', () => {
 
-		const erro = new Error("falhou ao abrir")
+		const erro: any = new Error("falhou ao abrir")
 		erro.code = "ENOENT"
 
 		const serializado = Serialize(erro)
@@ -55,8 +55,8 @@ describe("Serialize", () => {
 
 	it('deve cortar profundidade excessiva sem estourar a pilha', () => {
 
-		let raiz = {}
-		let atual = raiz
+		let raiz: any = {}
+		let atual: any = raiz
 
 		for (let indice = 0; indice < 50; indice++) {
 			atual.filho = {}

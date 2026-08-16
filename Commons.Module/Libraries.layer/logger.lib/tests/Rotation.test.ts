@@ -1,9 +1,9 @@
-const { describe, it, beforeEach, afterEach } = require('node:test')
-const assert = require('node:assert').strict
+const { describe, it, beforeEach, afterEach } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
 
-const fs   = require("fs")
-const os   = require("os")
-const path = require("path")
+const fs   = require("fs")   as typeof import("fs")
+const os   = require("os")   as typeof import("os")
+const path = require("path") as typeof import("path")
 
 const {
 	BuildFileName,
@@ -14,9 +14,9 @@ const {
 
 const { GetLocalDateStamp } = require("../src/Timestamp")
 
-let dirPath = null
+let dirPath: any = null
 
-const CreateFile = (fileName, sizeInBytes = 0) => {
+const CreateFile = (fileName: string, sizeInBytes = 0) => {
 	const filePath = path.join(dirPath, fileName)
 	fs.writeFileSync(filePath, sizeInBytes > 0 ? "x".repeat(sizeInBytes) : "")
 	return filePath

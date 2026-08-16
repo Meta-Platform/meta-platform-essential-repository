@@ -1,5 +1,5 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert').strict
+const { describe, it } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
 
 const {
 	LEVELS,
@@ -24,7 +24,7 @@ describe("Levels", () => {
 	})
 
 	it('deve reconhecer os níveis válidos e recusar os inventados', () => {
-		LEVELS.forEach((level) => assert.strictEqual(IsValidLevel(level), true))
+		LEVELS.forEach((level: string) => assert.strictEqual(IsValidLevel(level), true))
 		assert.strictEqual(IsValidLevel("verbose"), false)
 	})
 

@@ -1,10 +1,10 @@
-const { describe, before, it } = require('node:test')
-const assert = require('node:assert').strict
+const { describe, before, it } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
 
 const TaskStatusTypes = require("../src/TaskStatusTypes")
 const CommandChannelEventTypes = require("../src/CommandChannelEventTypes")
 
-const MinimumTaskLoader = (params, executorChannel) => {
+const MinimumTaskLoader = (params: any, executorChannel: any) => {
 
     const Start = () => 
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.ACTIVE)
@@ -20,7 +20,7 @@ const MinimumTaskLoader = (params, executorChannel) => {
 
 
 const TaskExecutor = require("../src/TaskExecutor")
-let taskExecutor
+let taskExecutor: any
 
 describe("Task Executor test", () => {
 
@@ -64,13 +64,13 @@ describe("Task Executor test", () => {
             'ACTIVE'
         ]
 
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             let eventIndex = 0
             taskExecutor
                 .AddTaskStatusListener(({
                     taskId,
                     status
-                }) => {
+                }: { taskId: number, status: string }) => {
                     try {
                         assert.strictEqual(status, sequencExpectedEvents[eventIndex], `Expected status ${sequencExpectedEvents[eventIndex]} but got ${status}`)
                         assert.strictEqual(taskId, 0, `Expected parameter 0 but got ${taskId}`)

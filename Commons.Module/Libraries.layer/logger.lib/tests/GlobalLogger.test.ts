@@ -1,5 +1,5 @@
-const { describe, it, afterEach } = require('node:test')
-const assert = require('node:assert').strict
+const { describe, it, afterEach } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
 
 const InstallGlobalLogger = require("../src/InstallGlobalLogger")
 
@@ -12,8 +12,8 @@ const InstallConsoleBridge = require("../src/InstallConsoleBridge")
 const { IsBridgeInstalled } = require("../src/InstallConsoleBridge")
 
 const CreateFakeStream = () => {
-	const written = []
-	return { written, isTTY : false, write : (text) => written.push(text) }
+	const written: string[] = []
+	return { written, isTTY : false, write : (text: string) => written.push(text) }
 }
 
 const CreateFakeConsole = () => ({
@@ -109,9 +109,9 @@ describe("InstallGlobalLogger", () => {
 	it('deve abrir um canal que escreve num arquivo próprio, fora do terminal', async () => {
 
 		/* É como o daemon mantém logs/instances/<instanceId>.jsonl. */
-		const fs   = require("fs")
-		const os   = require("os")
-		const path = require("path")
+		const fs   = require("fs")   as typeof import("fs")
+		const os   = require("os")   as typeof import("os")
+		const path = require("path") as typeof import("path")
 
 		const dirPath = fs.mkdtempSync(path.join(os.tmpdir(), "canal-"))
 		const stream  = CreateFakeStream()
@@ -152,15 +152,15 @@ describe("InstallConsoleBridge", () => {
 
 	it('deve mapear cada método de console ao seu nível e source', () => {
 
-		const registros    = []
-		const fakeConsole  = CreateFakeConsole()
+		const registros: any[] = []
+		const fakeConsole      = CreateFakeConsole()
 
 		const logger = {
-			message : (source, message) => registros.push({ level : "message", source, message }),
-			info    : (source, message) => registros.push({ level : "info",    source, message }),
-			debug   : (source, message) => registros.push({ level : "debug",   source, message }),
-			warn    : (source, message) => registros.push({ level : "warn",    source, message }),
-			error   : (source, message) => registros.push({ level : "error",   source, message })
+			message : (source: string, message: string) => registros.push({ level : "message", source, message }),
+			info    : (source: string, message: string) => registros.push({ level : "info",    source, message }),
+			debug   : (source: string, message: string) => registros.push({ level : "debug",   source, message }),
+			warn    : (source: string, message: string) => registros.push({ level : "warn",    source, message }),
+			error   : (source: string, message: string) => registros.push({ level : "error",   source, message })
 		}
 
 		const Uninstall = InstallConsoleBridge({ logger, consoleObject : fakeConsole })
@@ -184,11 +184,11 @@ describe("InstallConsoleBridge", () => {
 
 	it('deve formatar múltiplos argumentos como o console faz', () => {
 
-		const registros   = []
-		const fakeConsole = CreateFakeConsole()
+		const registros: string[] = []
+		const fakeConsole         = CreateFakeConsole()
 
 		const Uninstall = InstallConsoleBridge({
-			logger        : { message : (source, message) => registros.push(message) },
+			logger        : { message : (source: string, message: string) => registros.push(message) },
 			consoleObject : fakeConsole
 		})
 
@@ -203,11 +203,11 @@ describe("InstallConsoleBridge", () => {
 
 	it('deve levar o Error para data, preservando o stack', () => {
 
-		const registros   = []
-		const fakeConsole = CreateFakeConsole()
+		const registros: any[] = []
+		const fakeConsole      = CreateFakeConsole()
 
 		const Uninstall = InstallConsoleBridge({
-			logger        : { error : (source, message, data) => registros.push({ message, data }) },
+			logger        : { error : (source: string, message: string, data: any) => registros.push({ message, data }) },
 			consoleObject : fakeConsole
 		})
 
@@ -221,10 +221,10 @@ describe("InstallConsoleBridge", () => {
 
 	it('não deve encadear ponte sobre ponte', () => {
 
-		const registros   = []
-		const fakeConsole = CreateFakeConsole()
+		const registros: string[] = []
+		const fakeConsole         = CreateFakeConsole()
 
-		const logger = { message : (source, message) => registros.push(message) }
+		const logger = { message : (source: string, message: string) => registros.push(message) }
 
 		const Uninstall  = InstallConsoleBridge({ logger, consoleObject : fakeConsole })
 		const UninstallDeNovo = InstallConsoleBridge({ logger, consoleObject : fakeConsole })

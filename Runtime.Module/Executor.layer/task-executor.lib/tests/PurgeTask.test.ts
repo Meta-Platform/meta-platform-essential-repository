@@ -1,6 +1,6 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert').strict
-const EventEmitter = require('node:events')
+const { describe, it } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
+const EventEmitter = require('node:events') as typeof import('node:events')
 
 const TaskStatusTypes      = require("../src/TaskStatusTypes")
 const CreateTaskStateManager = require("../src/CreateTaskStateManager")
@@ -9,7 +9,7 @@ const FindTaskByQuery      = require("../src/TaskHandlers/FindTaskByQuery")
 
 // Monta uma task com a mesma forma que AssembleNewBodyForTask produz, mais os
 // campos que só existem depois da ativação (`params`, `getServiceObject`).
-const _MakeTask = (taskStateManager, { tag, status, objectLoaderType = "fake-loader" }) => {
+const _MakeTask = (taskStateManager: any, { tag, status, objectLoaderType = "fake-loader" }: { tag: string, status: any, objectLoaderType?: string }) => {
     const taskId = taskStateManager.CreateEmptyTask()
     const task = taskStateManager.GetTask(taskId)
 

@@ -1,20 +1,20 @@
-const { describe, it } = require('node:test')
-const assert = require('node:assert').strict
+const { describe, it } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
 
 const CreateLogger = require("../src/CreateLogger")
 
-const CreateCollectorSink = (target) => {
+const CreateCollectorSink = (target?: string) => {
 
-	const records = []
+	const records: any[] = []
 
 	return {
 		target,
 		records,
-		Write : (record) => records.push(record)
+		Write : (record: any) => records.push(record)
 	}
 }
 
-const CreateLoggerForTest = (options = {}) => {
+const CreateLoggerForTest = (options: any = {}) => {
 
 	const consoleSink = CreateCollectorSink("console")
 	const fileSink    = CreateCollectorSink("file")
@@ -35,7 +35,7 @@ describe("CreateLogger", () => {
 		const { logger } = CreateLoggerForTest()
 
 		;["trace", "debug", "info", "message", "warn", "error", "fatal"]
-			.forEach((level) => assert.strictEqual(typeof logger[level], "function"))
+			.forEach((level: string) => assert.strictEqual(typeof logger[level], "function"))
 	})
 
 	it('deve montar o registro com os campos do contrato', () => {
@@ -137,7 +137,7 @@ describe("CreateLogger", () => {
 
 		const { logger, fileSink } = CreateLoggerForTest()
 
-		const circular = { nome : "raiz" }
+		const circular: any = { nome : "raiz" }
 		circular.self = circular
 
 		logger.error("Fonte", "falhou", circular)

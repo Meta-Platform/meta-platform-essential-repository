@@ -1,9 +1,9 @@
-const { describe, it, beforeEach, afterEach } = require('node:test')
-const assert = require('node:assert').strict
+const { describe, it, beforeEach, afterEach } = require('node:test') as typeof import('node:test')
+const assert = (require('node:assert') as typeof import('node:assert')).strict
 
-const fs   = require("fs")
-const os   = require("os")
-const path = require("path")
+const fs   = require("fs")   as typeof import("fs")
+const os   = require("os")   as typeof import("os")
+const path = require("path") as typeof import("path")
 
 const CreateConsoleSink = require("../src/CreateConsoleSink")
 const CreateJsonlSink   = require("../src/CreateJsonlSink")
@@ -12,19 +12,19 @@ const { GetLocalDateStamp } = require("../src/Timestamp")
 
 const CreateFakeStream = () => {
 
-	const written = []
+	const written: string[] = []
 
 	return {
 		written,
 		isTTY : false,
-		write : (text) => {
+		write : (text: string) => {
 			written.push(text)
 			return true
 		}
 	}
 }
 
-const BuildRecord = (overrides = {}) => ({
+const BuildRecord = (overrides: any = {}) => ({
 	ts         : "2026-07-27T10:12:03.412",
 	level      : "info",
 	source     : "UpdateRepository",
@@ -120,7 +120,7 @@ describe("CreateConsoleSink", () => {
 
 describe("CreateJsonlSink", () => {
 
-	let dirPath = null
+	let dirPath: any = null
 
 	beforeEach(() => {
 		dirPath = fs.mkdtempSync(path.join(os.tmpdir(), "logger-lib-jsonl-"))
@@ -198,7 +198,7 @@ describe("CreateJsonlSink", () => {
 
 	it('deve sobreviver a um registro com referência circular', async () => {
 
-		const circular = { nome : "raiz" }
+		const circular: any = { nome : "raiz" }
 		circular.self = circular
 
 		const sink = CreateJsonlSink({ dirPath })

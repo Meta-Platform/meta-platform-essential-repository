@@ -1,7 +1,7 @@
-const { describe, before, it } = require("node:test")
-const assert = require("node:assert").strict
-const { join, resolve } = require("node:path")
-const EventEmitter = require("node:events")
+const { describe, before, it } = require("node:test") as typeof import("node:test")
+const assert = (require("node:assert") as typeof import("node:assert")).strict
+const { join, resolve } = require("node:path") as typeof import("node:path")
+const EventEmitter = require("node:events") as typeof import("node:events")
 
 require("../../../../Commons.Module/Libraries.layer/logger.lib/src/InstallGlobalLogger")({
     origin: "wasm-module-task-loader-test",
@@ -21,11 +21,11 @@ const BROKEN_FIXTURES   = join(__dirname, "fixtures", "broken")
 // Sobe o loader como o task executor faria: instancia, emite START_TASK e espera
 // o status parar de mudar. O executor real é assíncrono; aqui basta escutar o
 // primeiro status terminal (ACTIVE ou FAILURE).
-const StartLoader = (packagePath) => new Promise((resolveStart) => {
+const StartLoader = (packagePath: string) => new Promise<any>((resolveStart) => {
     const executorChannel = new EventEmitter()
-    const statuses = []
+    const statuses: any[] = []
 
-    executorChannel.on(CommandChannelEventTypes.CHANGE_TASK_STATUS, (status, reason) => {
+    executorChannel.on(CommandChannelEventTypes.CHANGE_TASK_STATUS, (status: any, reason: any) => {
         statuses.push({ status, reason })
         if (status === TaskStatusTypes.ACTIVE || status === TaskStatusTypes.FAILURE)
             resolveStart({ getServiceObject, statuses, executorChannel })
@@ -37,8 +37,8 @@ const StartLoader = (packagePath) => new Promise((resolveStart) => {
 
 describe("wasm-module task loader — ABI core", () => {
 
-    let handle
-    let statuses
+    let handle: any
+    let statuses: any[]
 
     before(async () => {
         const started = await StartLoader(REFERENCE_PACKAGE)
