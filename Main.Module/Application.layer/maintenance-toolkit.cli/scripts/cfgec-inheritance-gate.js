@@ -15,10 +15,16 @@ const ECOSYSTEM_DATA = process.argv[2] || path.join(os.homedir(), "EcosystemData
 const ESSENTIAL = path.join(ECOSYSTEM_DATA, "repos/EssentialRepo")
 const DEFAULTS_REL = "./config-files/ecosystem-defaults.json"
 
-const Get = require(path.join(ESSENTIAL, "Commons.Module/Libraries.layer/ecosystem-defaults-handler.lib/src/Get.js"))
-const BuildMetadataHierarchy = require(path.join(ESSENTIAL, "Runtime.Module/MetadataHelpers.layer/dependency-graph-builder.lib/src/BuildMetadataHierarchy/BuildMetadataHierarchy.js"))
+// Este script carrega o código INSTALADO diretamente, sem passar pelo Package
+// Executor — então é ele que precisa instalar a resolução de TypeScript, ou os
+// `require` abaixo não encontram nada. E os caminhos vão SEM extensão: o
+// dialeto de cada arquivo é assunto da resolução, não deste gate.
+require(path.join(ESSENTIAL, "Commons.Module/Libraries.layer/module-resolution.lib/src/register.js"))
+
+const Get = require(path.join(ESSENTIAL, "Commons.Module/Libraries.layer/ecosystem-defaults-handler.lib/src/Get"))
+const BuildMetadataHierarchy = require(path.join(ESSENTIAL, "Runtime.Module/MetadataHelpers.layer/dependency-graph-builder.lib/src/BuildMetadataHierarchy/BuildMetadataHierarchy"))
 const { ReplaceStartupParams } = BuildMetadataHierarchy
-const GetPopulatedParameters = require(path.join(ESSENTIAL, "Runtime.Module/MetadataHelpers.layer/execution-params-generator.lib/src/Utils/GetPopulatedParameters.js"))
+const GetPopulatedParameters = require(path.join(ESSENTIAL, "Runtime.Module/MetadataHelpers.layer/execution-params-generator.lib/src/Utils/GetPopulatedParameters"))
 
 let failures = 0
 const ok = (c, m) => { console.log((c ? "  [OK]  " : "  [FAIL]") + " " + m); if (!c) failures++ }
