@@ -46,13 +46,29 @@ const path = require('node:path');
 // Subimos 6 níveis para chegar em <repo>.
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..', '..', '..', '..');
 
+// Este script roda por `node scripts/...`, fora do Package Executor — quem
+// instala o hook que faz o `require` enxergar `.ts` é o executor, e aqui ele
+// não passou. Sem isto, o sampler (que é TypeScript) carrega, mas o primeiro
+// vizinho que ele pedir sem extensão vira MODULE_NOT_FOUND.
+require(path.join(
+  REPO_ROOT,
+  'repos/essential-repository/Commons.Module/Libraries.layer/module-resolution.lib/src/register.js'
+));
+
 // O sampler vive no ecosystem-core. Num checkout do monorepo o caminho é
 // direto; num ecossistema INSTALADO os repositórios têm outros nomes de
 // diretório (EcosystemCoreRepo), então tentamos os dois.
-const SAMPLER_CANDIDATES = [
-  path.join(REPO_ROOT, 'repos/ecosystem-core-repository/Main.Module/Libraries.layer/process-metrics.lib/src/CreateProcessSampler.js'),
-  path.join(REPO_ROOT, 'repos/EcosystemCoreRepo/Main.Module/Libraries.layer/process-metrics.lib/src/CreateProcessSampler.js')
+//
+// Sem extensão no caminho base: a linguagem do arquivo é assunto do repositório
+// que o mantém, e o sampler JÁ virou TypeScript. Escrito como `...Sampler.js`,
+// este script morria com "não encontrei o CreateProcessSampler" — a medição
+// inteira ficava indisponível por causa de uma letra.
+const SAMPLER_BASES = [
+  path.join(REPO_ROOT, 'repos/ecosystem-core-repository/Main.Module/Libraries.layer/process-metrics.lib/src/CreateProcessSampler'),
+  path.join(REPO_ROOT, 'repos/EcosystemCoreRepo/Main.Module/Libraries.layer/process-metrics.lib/src/CreateProcessSampler')
 ];
+
+const SAMPLER_CANDIDATES = SAMPLER_BASES.flatMap((base) => [`${base}.js`, `${base}.ts`]);
 
 const _LoadSampler = () => {
   const found = SAMPLER_CANDIDATES.find((candidate) => fs.existsSync(candidate));
