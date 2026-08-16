@@ -90,11 +90,23 @@ const _FindDialectCollisions = (packagePath) => {
   return fs.existsSync(sourcePath) ? _Walk(sourcePath) : [];
 };
 
+/**
+ * Os packages do RUNTIME não instalam `@types` — eles executam por apagamento
+ * de tipos, e verificar tipo é tarefa de manutenção — então emprestam os do
+ * toolkit. Já um `.webgui` ou `.uilib` traz os seus próprios (react, d3, …), e
+ * apontar o typeRoots para o toolkit os apagaria do mapa: o `tsc` acusaria
+ * "Cannot find type definition file for 'react'" em código perfeitamente são.
+ */
+const _TypeRootsArgumentsFor = (packagePath) =>
+  fs.existsSync(path.join(packagePath, 'node_modules', '@types'))
+    ? []
+    : ['--typeRoots', TYPE_ROOTS];
+
 const _RunTypeCheck = (packagePath) => {
 
   const result = spawnSync(
     TSC_BIN,
-    ['--noEmit', '-p', path.join(packagePath, 'tsconfig.json'), '--typeRoots', TYPE_ROOTS],
+    ['--noEmit', '-p', path.join(packagePath, 'tsconfig.json'), ..._TypeRootsArgumentsFor(packagePath)],
     { encoding: 'utf8' }
   );
 
