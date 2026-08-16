@@ -2,6 +2,9 @@
   "name": "execution-params-generator.lib",
   "version": "0.0.1",
   "author": "Kaio Cezar <kadisk.shark@gmail.com>",
+  "scripts": {
+    "test": "EXTERNAL_NODE_MODULES_PATH=${EXTERNAL_NODE_MODULES_PATH:-$HOME/EcosystemData/npm-dependencies/node_modules} node --require ../../../Commons.Module/Libraries.layer/module-resolution.lib/src/register.js --test"
+  },
   "license": "BSD-3-Clause",
   "dependencies": {
     "handlebars": "^4.7.8"
