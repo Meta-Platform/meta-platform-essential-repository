@@ -115,14 +115,40 @@ const _RunTypeCheck = (packagePath) => {
   return { ok: result.status === 0, output };
 };
 
+/**
+ * "Não deu para verificar" não é "está errado".
+ *
+ * Um package cujas dependências não foram instaladas neste workspace declara
+ * tipos que o `tsc` não tem como achar (`TS2688: Cannot find type definition
+ * file for 'react'`). Chamar isso de FALHA faz o gate gritar por algo que não é
+ * defeito de código; chamar de `ok` seria a mentira que o gate existe para
+ * evitar. Então é um terceiro estado — e ele só vale quando o package REALMENTE
+ * não tem `node_modules` e o `tsc` não reclamou de mais nada.
+ */
+const _IsUncheckable = (packagePath, output) => {
+
+  if(fs.existsSync(path.join(packagePath, 'node_modules'))) return false;
+
+  // O TS2688 sai SEM prefixo de arquivo — ele não é de um arquivo, é do
+  // programa — então a varredura é pelo código, não pela forma da linha.
+  const errorCodes = [...output.matchAll(/error TS(\d+)/g)].map((match) => match[1]);
+
+  return errorCodes.length > 0 && errorCodes.every((code) => code === '2688');
+};
+
 const _VerifyPackage = (packagePath) => {
 
   const collisions = _FindDialectCollisions(packagePath);
   const typeCheck  = _RunTypeCheck(packagePath);
 
+  const uncheckable = !typeCheck.ok
+    && collisions.length === 0
+    && _IsUncheckable(packagePath, typeCheck.output);
+
   return {
     package: packagePath,
     ok     : typeCheck.ok && collisions.length === 0,
+    uncheckable,
     collisions,
     output : typeCheck.output
   };
@@ -138,6 +164,11 @@ const _Report = (results) => {
       return;
     }
 
+    if(result.uncheckable){
+      console.log(`  --    ${name} — não verificado: dependências não instaladas neste workspace`);
+      return;
+    }
+
     console.log(`  FALHA ${name}`);
 
     result.collisions.forEach((module) =>
@@ -146,10 +177,12 @@ const _Report = (results) => {
     if(result.output) console.log(result.output.split('\n').map((line) => `        ${line}`).join('\n'));
   });
 
-  const failed = results.filter((result) => !result.ok);
+  const failed      = results.filter((result) => !result.ok && !result.uncheckable);
+  const uncheckable = results.filter((result) => result.uncheckable);
 
   console.log('');
-  console.log(`  ${results.length} package(s) verificado(s), ${failed.length} com falha`);
+  console.log(`  ${results.length - uncheckable.length} package(s) verificado(s), ${failed.length} com falha`
+    + (uncheckable.length > 0 ? `, ${uncheckable.length} não verificável(is)` : ''));
 
   return failed.length;
 };
@@ -169,7 +202,7 @@ const Main = () => {
 
   if(args.json){
     console.log(JSON.stringify(results, null, 2));
-    process.exit(results.some((result) => !result.ok) ? 1 : 0);
+    process.exit(results.some((result) => !result.ok && !result.uncheckable) ? 1 : 0);
   }
 
   process.exit(_Report(results) > 0 ? 1 : 0);
