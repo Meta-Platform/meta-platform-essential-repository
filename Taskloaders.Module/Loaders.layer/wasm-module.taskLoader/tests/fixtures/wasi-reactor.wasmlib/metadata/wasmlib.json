@@ -1,0 +1,8 @@
+{
+    "alias": "@wasi-reactor",
+    "abi": "wasi",
+    "binary": "dist/wasi-reactor.wasm",
+    "wasi": {
+        "mode": "reactor"
+    }
+}

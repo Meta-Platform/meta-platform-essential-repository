@@ -39,6 +39,13 @@
             "path": "Taskloaders.Module/Loaders.layer/service-instance.taskLoader",
             "entry": "src/ServiceInstance.taskLoader",
             "npmDependencies": {}
+        },
+        {
+            "objectLoaderType": "wasm-module",
+            "package": "@/wasm-module.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/wasm-module.taskLoader",
+            "entry": "src/WasmModule.taskLoader",
+            "npmDependencies": {}
         }
     ]
 }

@@ -1,0 +1,5 @@
+{
+    "alias": "@quebrado",
+    "abi": "core",
+    "binary": "/tmp/fora-do-pacote.wasm"
+}

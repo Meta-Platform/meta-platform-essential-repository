@@ -1,0 +1,5 @@
+{
+    "alias": "@quebrado",
+    "abi": "python",
+    "binary": "dist/x.wasm"
+}

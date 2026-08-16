@@ -1,0 +1,5 @@
+{
+    "alias": "@quebrado",
+    "abi": "core",
+    "binary": "dist/nao-existe.wasm"
+}

@@ -1,0 +1,2 @@
+Fixtures de manifesto invalido, usadas pelos testes do wasm-module.taskLoader.
+O diretorio sem-manifesto existe de proposito sem metadata/wasmlib.json.

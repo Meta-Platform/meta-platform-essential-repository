@@ -15,6 +15,7 @@ Bibliotecas utilitárias e de plataforma compartilhadas por todo o ecossistema.
     - [**script-file-utilities** *library*](./Libraries.layer/script-file-utilities.lib/README.md)
     - [**smart-require** *library*](./Libraries.layer/smart-require.lib/README.md)
     - [**supervisor** *library*](./Libraries.layer/supervisor.lib/README.md)
+    - [**wasm-reference** *módulo WebAssembly*](./Libraries.layer/wasm-reference.wasmlib/README.md)
 - **PlatformLibraries** *Layer*
     - [**environment-handler** *library*](./PlatformLibraries.layer/environment-handler.lib/README.md)
     - [**repository-utilities** *library*](./PlatformLibraries.layer/repository-utilities.lib/README.md)

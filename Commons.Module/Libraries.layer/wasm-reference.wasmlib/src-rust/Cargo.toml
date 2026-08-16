@@ -1,0 +1,20 @@
+[package]
+name = "wasm-reference"
+version = "0.0.1"
+edition = "2021"
+license = "BSD-3-Clause"
+description = "Módulo WebAssembly de referência do Meta Platform"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+
+# O binário é versionado no pacote, então o que importa aqui é o TAMANHO e a
+# previsibilidade, não o tempo de compilação.
+[profile.release]
+opt-level = "z"      # otimiza para tamanho: um .wasm menor é menos bytes a compilar em cada carga
+lto = true           # link-time optimization: remove o que nenhuma export alcança
+codegen-units = 1    # uma unidade só — otimização melhor, build mais lento (pago uma vez)
+panic = "abort"      # sem desenrolar a pilha: WebAssembly não tem exceções e o código de unwind só engorda o módulo
+strip = true         # sem símbolos de depuração no artefato distribuído

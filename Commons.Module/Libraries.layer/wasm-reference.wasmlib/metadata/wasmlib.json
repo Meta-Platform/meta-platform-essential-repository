@@ -1,0 +1,8 @@
+{
+    "alias": "@wasm-reference",
+    "abi": "core",
+    "binary": "dist/wasm-reference.wasm",
+    "web": {
+        "expose": true
+    }
+}
