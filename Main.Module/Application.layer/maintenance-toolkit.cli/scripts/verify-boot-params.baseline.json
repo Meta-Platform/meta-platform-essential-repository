@@ -1,0 +1,19 @@
+{
+  "_leia": "Faltas de param que já existiam quando o gate nasceu. Para ENCOLHER, não crescer: conserte uma e rode --update-baseline.",
+  "conhecidos": [
+    "repos/applications-repository/Apps.Module/Admin.layer/MyDesktop.group/execution-manager.webservice/metadata/boot.json | services | @/ecosystem-control-panel.service/services/EcosystemDataHandlerService | bound-param | ecosystemDefaultsHandlerLib",
+    "repos/applications-repository/Apps.Module/Admin.layer/MyDesktop.group/execution-manager.webservice/metadata/boot.json | services | @/ecosystem-control-panel.service/services/EcosystemDataHandlerService | param | ecosystemDefaultsFileRelativePath",
+    "repos/applications-repository/Apps.Module/Productivity.layer/MetaProjectManager.group/meta-project-manager.webapp/metadata/boot.json | endpoints | @/meta-project-manager.webservice/endpoint-group | bound-param | gitStatusLib",
+    "repos/applications-repository/Apps.Module/Productivity.layer/MetaProjectManager.group/meta-project-manager.webapp/metadata/boot.json | endpoints | @/meta-project-manager.webservice/endpoint-group | bound-param | instanceManagerClientLib",
+    "repos/applications-repository/Apps.Module/Productivity.layer/MetaProjectManager.group/meta-project-manager.webapp/metadata/boot.json | endpoints | @/meta-project-manager.webservice/endpoint-group | param | MPM_DESKTOP_NOTIFY_URL",
+    "repos/applications-repository/Apps.Module/Productivity.layer/MyBlueprint.group/my-blueprint.webservice/metadata/boot.json | endpoints | @//endpoint-group | bound-param | serverService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webapp/metadata/boot.json | endpoints | @/ecosystem-control-panel.webservice/endpoint-group | bound-param | logReaderService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webservice/metadata/boot.json | endpoints | @//endpoint-group | bound-param | ecosystemdataHandlerService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webservice/metadata/boot.json | endpoints | @//endpoint-group | bound-param | notificationHubService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webservice/metadata/boot.json | endpoints | @//endpoint-group | bound-param | repositoryManagerService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webservice/metadata/boot.json | services | @/ecosystem-control-panel.service/services/EnvironmentHandlerService | bound-param | ecosystemdataHandlerService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webservice/metadata/boot.json | services | @/ecosystem-control-panel.service/services/LogReaderService | bound-param | ecosystemdataHandlerService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webservice/metadata/boot.json | services | @/instance-supervisor.service/services/InstanceMonitoringManager | bound-param | ecosystemdataHandlerService",
+    "repos/ecosystem-core-repository/Main.Module/Application.layer/EcosystemControlPanel.group/ecosystem-control-panel.webservice/metadata/boot.json | services | @/instance-supervisor.service/services/InstanceMonitoringManager | bound-param | notificationHubService"
+  ]
+}

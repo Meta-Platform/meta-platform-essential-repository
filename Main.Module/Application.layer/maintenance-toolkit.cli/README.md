@@ -94,3 +94,55 @@ mytoolkit install --installation-path "~/xpto/EcosystemData"
 ```
 
 Os perfis de instalação permitem que você escolha a configuração mais adequada para o seu ambiente. A lista completa de perfis está na seção [Perfis de Instalação](#perfis-de-instalação) acima.
+
+## Verificadores de manutenção
+
+Ficam em `scripts/` e rodam por `node`, fora do CLI: são ferramentas de quem
+mantém a plataforma, não comandos de quem a usa. Os dois abaixo nasceram do
+mesmo incidente, em 2026-08-16, quando o `_3dviewer-desktop` parou de abrir a
+janela.
+
+### `verify-boot-params.js` — o consumidor está devendo um param?
+
+Compara o que cada dependência de `boot.json` EXIGE (`params` e `bound-params`
+do `endpoint-group.json` / `services.json` do alvo) com o que o consumidor
+FORNECE. A lista do alvo é whitelist: ela autoriza o nome, mas quem entrega o
+valor é cada `boot.json` — e eles são independentes. Todo param obrigatório novo
+nasce faltando em N−1 lugares.
+
+```bash
+node scripts/verify-boot-params.js                      # todos os repositórios
+node scripts/verify-boot-params.js --repo <caminho>     # só os boot.json daquele repo
+node scripts/verify-boot-params.js --strict             # ignora o baseline
+node scripts/verify-boot-params.js --update-baseline    # depois de pagar uma dívida
+```
+
+O índice de packages é sempre global — o consumidor que fica devendo costuma
+estar em OUTRO repositório. As faltas que já existiam quando o gate nasceu estão
+em `verify-boot-params.baseline.json`: aparecem no rodapé como dívida, mas não
+barram commit. O arquivo é para encolher.
+
+Roda sozinho no `pre-commit` quando o commit toca qualquer `metadata/*.json`
+(instale com `node scripts/install-lint-hooks.js`).
+
+### `check-declared-resources.js` — quem está segurando o quê
+
+Cruza os recursos declarados (`storage-params.json`, `socket-params.json`, a
+porta do `startup-params.json`) com o que os processos vivos têm aberto agora,
+e responde com PID e nome do package. Lê só o `/proc`: sem `ss`, sem `fuser`,
+sem root.
+
+```bash
+node scripts/check-declared-resources.js                        # panorama
+node scripts/check-declared-resources.js --package <nome>       # posso subir isto agora?
+node scripts/check-declared-resources.js --collisions           # mapa de recursos compartilhados
+```
+
+Com `--package`, sai com 1 se algum recurso daquele package já estiver ocupado —
+é a pré-checagem antes de lançar. Vigia também a ÁREA de storage do namespace,
+e não só os arquivos declarados: o lock que derrubou a reindexação do viewer era
+de um `.duckdb` criado em tempo de execução, que não aparece em metadado nenhum.
+
+Isto é diagnóstico, não gate. Variantes do mesmo app (`desktopapp`, `webapp`,
+`webservice`, `cli`) declaram o mesmo recurso de propósito — acusar isso como
+defeito seria acusar o que funciona.

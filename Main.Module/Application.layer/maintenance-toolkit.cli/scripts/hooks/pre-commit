@@ -2,29 +2,39 @@
 #
 # Gatilho do lint de UI da Meta Platform.
 #
-# Instalado por `node scripts/install-lint-hooks.js` nos repositórios que
-# adotaram o kit. Roda no momento em que a regressão é introduzida — que é o
-# único momento em que ela é barata de consertar.
+# Instalado por `node scripts/install-lint-hooks.js` nos repositórios cobertos.
+# Roda no momento em que a regressão é introduzida — que é o único momento em
+# que ela é barata de consertar.
 #
-# Por que um hook local e não CI: os três repositórios (applications, core,
-# essential) NÃO TÊM integração contínua nenhuma. E o lint precisa dos três lado
-# a lado, porque o kit mora no core e é consumido pelo applications — um
-# workflow dentro de um repositório sozinho não enxerga os irmãos. O checkout
-# de distribuição é o único lugar onde a topologia existe inteira.
+# Hoje dispara duas verificações, cada uma com seu próprio gatilho:
+#
+#   - lint de UI          quando o commit toca `*.webgui/src` ou `*.uilib/src`
+#   - params de boot.json quando o commit toca qualquer `metadata/*.json`
+#
+# Por que um hook local e não CI: os repositórios NÃO TÊM integração contínua
+# nenhuma. E as duas verificações precisam dos repositórios lado a lado — o kit
+# de UI mora no core e é consumido pelo applications; um boot.json do
+# EngineeringTools depende de metadado do core. Um workflow dentro de um
+# repositório sozinho não enxerga os irmãos. O checkout de distribuição é o
+# único lugar onde a topologia existe inteira.
 #
 # Isto NÃO substitui CI. Um hook local é contornável (`--no-verify`) e não
 # protege quem não o instalou. Enquanto não houver CI, é o que há.
 
 set -u
 
-# Só roda se o commit toca superfície de UI. Um commit de backend não paga o
-# custo do lint.
-TOCA_UI=$(git diff --cached --name-only --diff-filter=ACM \
-    | grep -E '\.(webgui|uilib)/src/.*\.(ts|tsx|css)$' | head -1)
+ALTERADOS=$(git diff --cached --name-only --diff-filter=ACM)
 
-[ -z "$TOCA_UI" ] && exit 0
+TOCA_UI=$(echo "$ALTERADOS" | grep -E '\.(webgui|uilib)/src/.*\.(ts|tsx|css)$' | head -1)
 
-# O lint varre a partir da raiz do checkout de distribuição, onde os
+# `boot.json` fornece; `endpoint-group.json` e `services.json` exigem. Mudar
+# qualquer um dos lados pode deixar o outro devendo um param — por isso o
+# gatilho é a pasta `metadata` inteira, e não só o boot.json.
+TOCA_METADATA=$(echo "$ALTERADOS" | grep -E '/metadata/[^/]+\.json$' | head -1)
+
+[ -z "$TOCA_UI" ] && [ -z "$TOCA_METADATA" ] && exit 0
+
+# Os verificadores varrem a partir da raiz do checkout de distribuição, onde os
 # repositórios são irmãos. Subimos até encontrá-la.
 DIR=$(git rev-parse --show-toplevel)
 RAIZ=""
@@ -37,18 +47,40 @@ while [ "$DIR" != "/" ]; do
 done
 
 if [ -z "$RAIZ" ]; then
-    echo "lint de UI: pulei — este clone não tem os repositórios irmãos ao lado."
-    echo "            (o lint precisa de applications + core + essential juntos)"
+    echo "verificações da Meta Platform: pulei — este clone não tem os repositórios irmãos ao lado."
     exit 0
 fi
 
-LINT="$RAIZ/repos/essential-repository/Main.Module/Application.layer/maintenance-toolkit.cli/scripts/lint-ui-kit.js"
+SCRIPTS="$RAIZ/repos/essential-repository/Main.Module/Application.layer/maintenance-toolkit.cli/scripts"
+FALHOU=0
 
-[ -f "$LINT" ] || { echo "lint de UI: script não encontrado em $LINT"; exit 0; }
+if [ -n "$TOCA_UI" ]; then
+    LINT="$SCRIPTS/lint-ui-kit.js"
+    if [ -f "$LINT" ]; then
+        node "$LINT" || FALHOU=1
+    else
+        echo "lint de UI: script não encontrado em $LINT"
+    fi
+fi
 
-node "$LINT" || {
+if [ -n "$TOCA_METADATA" ]; then
+    # Sem `--repo`: o consumidor que fica devendo pode estar em OUTRO
+    # repositório que não o do commit — foi assim que o `.desktopapp` do
+    # 3d-viewer ficou para trás do `.webservice`.
+    GATE="$SCRIPTS/verify-boot-params.js"
+    if [ -f "$GATE" ]; then
+        node "$GATE" || FALHOU=1
+    else
+        echo "params de boot.json: script não encontrado em $GATE"
+    fi
+fi
+
+if [ "$FALHOU" -ne 0 ]; then
     echo ""
-    echo "O commit foi barrado pelo lint de UI. Conserte as ocorrências acima,"
-    echo "ou use 'git commit --no-verify' se souber por que está passando por cima."
+    echo "O commit foi barrado por uma verificação da Meta Platform. Conserte as"
+    echo "ocorrências acima, ou use 'git commit --no-verify' se souber por que"
+    echo "está passando por cima."
     exit 1
-}
+fi
+
+exit 0

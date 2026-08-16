@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /*
- * Instala o gatilho do lint de UI nos repositórios que adotaram o kit.
+ * Instala o gatilho de verificações da Meta Platform nos repositórios do
+ * checkout. Hoje o hook dispara o lint de UI e o gate de params de boot.json —
+ * cada um só quando o commit toca a superfície dele.
  *
  * O problema que isto resolve: `lint-ui-kit.js` existe desde a Fase 0 e passou
  * SEMANAS em vermelho sem ninguém perceber — um WebGui nasceu depois do plano,
@@ -21,13 +23,23 @@ const path = require("path")
 const ROOT = path.resolve(__dirname, "../../../../../..")
 const ORIGEM = path.join(__dirname, "hooks", "pre-commit")
 
-// Os repositórios cobertos pelo lint. Um repositório que adotar o kit depois
-// entra aqui junto com a mudança de escopo em lint-ui-kit.js — as duas listas
-// descrevem a mesma coisa e devem andar juntas.
-const REPOSITORIOS = [
-    "repos/applications-repository",
-    "repos/ecosystem-core-repository"
-]
+// Onde os repositórios ficam lado a lado no checkout de distribuição.
+const CONTEINERES = ["repos", "thrid-party-repos"]
+
+/*
+ * Descoberta, e não lista fixa. Uma lista fixa foi justamente o que deixou o
+ * lint em vermelho por semanas: repositório novo não entra em lista nenhuma.
+ * Qualquer diretório versionado que esteja sob os contêineres é candidato — o
+ * hook em si decide, a cada commit, se tem o que verificar.
+ */
+const DescobrirRepositorios = () =>
+    CONTEINERES
+    .map((conteiner) => path.join(ROOT, conteiner))
+    .filter((conteiner) => fs.existsSync(conteiner))
+    .flatMap((conteiner) => fs.readdirSync(conteiner, { withFileTypes: true })
+        .filter((entrada) => entrada.isDirectory())
+        .map((entrada) => path.join(path.basename(conteiner), entrada.name)))
+    .filter((relativo) => fs.existsSync(path.join(ROOT, relativo, ".git")))
 
 const MARCA = "Gatilho do lint de UI da Meta Platform"
 
@@ -80,12 +92,13 @@ if(!fs.existsSync(ORIGEM)){
     process.exit(2)
 }
 
-console.log("Instalando o gatilho do lint de UI:")
-const resultados = REPOSITORIOS.map(Instalar)
+console.log("Instalando o gatilho de verificações da Meta Platform:")
+const resultados = DescobrirRepositorios().map(Instalar)
 
 const conflitos = resultados.filter((r) => r === "conflito").length
 console.log("")
-console.log("O hook roda apenas quando o commit toca `*.webgui/src` ou `*.uilib/src`.")
+console.log("O hook roda o lint de UI quando o commit toca `*.webgui/src` ou `*.uilib/src`,")
+console.log("e o gate de params quando toca qualquer `metadata/*.json`.")
 console.log("Ele NÃO substitui integração contínua — é contornável com --no-verify e")
 console.log("não protege quem não o instalou. Os repositórios não têm CI hoje.")
 
