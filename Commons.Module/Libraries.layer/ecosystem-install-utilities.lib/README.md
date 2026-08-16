@@ -60,6 +60,9 @@ src/
 │   │   ├── DownloadPackageExecutorBin.ts
 │   │   └── SetupPackageExecutor.ts
 │   ├── SynchronizeNodejsDependencies.ts
+│   ├── SynchronizeTaskLoaderDependencies.ts
+│   ├── CollectTaskLoaderNpmDependencies.ts
+│   ├── EnsureElectronBinary.ts
 │   ├── BuildApplicationScriptContent.ts
 │   ├── BuildCommandLineApplicationScriptContent.ts
 │   ├── BuildDesktopAppScriptContent.ts
@@ -125,6 +128,9 @@ Os helpers fornecem funcionalidades reutilizáveis como:
 * Download de repositórios (GitHub Releases, Google Drive, FS local)
 * Filtragem de aplicações instaláveis
 * Reconstrução de objetos a partir de prefixos
+* Garantia do binário do Electron em disco quando o pacote `electron` entra na
+  sincronização (`EnsureElectronBinary`) — o Electron 42 removeu o download do
+  `postinstall`, e sem este passo ele aconteceria no primeiro lançamento de janela
 
 ---
 
