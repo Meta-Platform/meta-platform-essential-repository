@@ -13,10 +13,10 @@ suportadas pela plataforma (URL direta, Google Drive e releases do GitHub).
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `DownloadBinary.js` | Baixa um binário/arquivo de uma URL. |
-| `DownloadFileFromGoogleDrive.js` | Baixa um arquivo do Google Drive por `fileId`. |
-| `DownloadFirstAssetOfLatestReleaseFromGithub.js` | Baixa o primeiro asset da release mais recente de um repositório GitHub. |
-| `GetReleaseLatestData.js` | Consulta os dados da *latest release* na API do GitHub. |
+| `DownloadBinary.ts` | Baixa um binário/arquivo de uma URL. |
+| `DownloadFileFromGoogleDrive.ts` | Baixa um arquivo do Google Drive por `fileId`. |
+| `DownloadFirstAssetOfLatestReleaseFromGithub.ts` | Baixa o primeiro asset da release mais recente de um repositório GitHub. |
+| `GetReleaseLatestData.ts` | Consulta os dados da *latest release* na API do GitHub. |
 
 > Relaciona-se aos `sourceType` `GITHUB_RELEASE`/`GOOGLE_DRIVE` (ver
 > [Meta Repository Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/meta-repository-standard.md)).

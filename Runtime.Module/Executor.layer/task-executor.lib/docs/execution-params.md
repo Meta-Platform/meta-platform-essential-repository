@@ -25,7 +25,7 @@ Os ExecutionParams, ou parâmetros de execução, são um conjunto de informaç�
 Define qual carregador usar. Isso é fundamental porque o carregador determina as funcionalidades da tarefa. O Executor de Tarefas assegura que a tarefa só será ativada quando estiver pronta, conforme definido pelos ExecutionParams.
 
 Exemplo em código:
-```javascript
+```ts
 const taskExecutor = TaskExecutor({
     taskLoaders: {
         "some-task-loader": SomeTaskLoader
@@ -40,8 +40,8 @@ Os Parâmetros Estáticos são informações estruturadas, tipicamente formatada
 
 Para exemplificar como os Parâmetros Estáticos são implementados e utilizados na prática, considere o uso do `PrintParamsTaskLoader`. Este carregador foi desenvolvido especificamente para demonstrar a passagem desses parâmetros pelo Executor de Tarefas, ilustrando seu papel crítico na configuração da tarefa.
 
-```javascript
-const PrintParamsTaskLoader = (params, executorChannel) => {
+```ts
+const PrintParamsTaskLoader = (params: any, executorChannel: any) => {
     const Start = () => {
         executorChannel.emit(CommandChannelEventTypes.CHANGE_TASK_STATUS, TaskStatusTypes.STARTING)
         console.log("Parameters passed to the loader:")
@@ -57,7 +57,7 @@ const PrintParamsTaskLoader = (params, executorChannel) => {
 ### Demonstrando uso do `staticParameters`
 Nessa desmonstração, ao criar uma tarefa com o PrintParamsTaskLoader, especificamos um conjunto de Parâmetros Estáticos. A função `Start` do carregador imprime esses parâmetros, evidenciando a transmissão e utilização das informações fornecidas pelo Executor de Tarefas.
 
-```javascript
+```ts
 const taskExecutor = TaskExecutor({
     taskLoaders: {
         "print-params-task-loader": PrintParamsTaskLoader
@@ -106,7 +106,7 @@ Cada chave do mapa aponta para uma referência (ex.: `"@@/server-service"`). O
 executor resolve essa referência em runtime: encontra a task que a satisfaz,
 chama o `getServiceObject()` dela e injeta o objeto resultante no `loaderParams`
 (ver
-[`AssembleLinkedTaskParameters`](../src/TaskHandlers/AssembleTaskParameters/AssembleLinkedTaskParameters.js)).
+[`AssembleLinkedTaskParameters`](../src/TaskHandlers/AssembleTaskParameters/AssembleLinkedTaskParameters.ts)).
 O valor de cada chave pode ser uma string (referência direta) ou um objeto
 aninhado de referências.
 
@@ -150,7 +150,7 @@ precisa satisfazer (tipicamente `status = "ACTIVE"` e um `params.tag` específic
 Além de resolver a injeção do service object, os `agentLinkRules` **gatilham a
 ativação**: a task só sai de `AWAITING_PRECONDITIONS` quando as tasks referenciadas
 satisfazem seus requisitos (ver
-[`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.js)).
+[`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.ts)).
 
 ## Regras de Ativação (`activationRules`)
 
@@ -173,9 +173,9 @@ instalação de dependências do mesmo package terminou (`status = "FINISHED"`).
 
 Array de `ExecutionParams` aninhados. As tasks filhas são criadas
 recursivamente com o `taskId` da task atual como `pTaskId` (ver
-[`CreateTask`](../src/TaskExecutor.js)). Uma task com filhas (típico de
+[`CreateTask`](../src/TaskExecutor.ts)). Uma task com filhas (típico de
 `application-instance`) só ativa quando **todas as filhas estão ativas** (ver
-[`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.js)),
+[`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.ts)),
 formando a hierarquia aplicação → serviços → endpoints.
 
 ## Como o Executor de Tarefas usa os ExecutionParams

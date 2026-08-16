@@ -14,10 +14,10 @@ repositórios usada pelos serviços e CLIs de gerenciamento.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `ListRepositories.js` | Lista os repositórios instalados. |
-| `ListModules.js` | Lista os `*.Module` de um repositório. |
-| `ListLayers.js` | Lista as `*.layer` de um módulo. |
-| `ListPackages.js` | Lista os pacotes de uma layer/group. |
+| `ListRepositories.ts` | Lista os repositórios instalados. |
+| `ListModules.ts` | Lista os `*.Module` de um repositório. |
+| `ListLayers.ts` | Lista as `*.layer` de um módulo. |
+| `ListPackages.ts` | Lista os pacotes de uma layer/group. |
 | `Commons/`, `Configs/`, `Helpers/` | Apoio à navegação da hierarquia. |
 
 > Hierarquia formal: [Meta Repository Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/meta-repository-standard.md).

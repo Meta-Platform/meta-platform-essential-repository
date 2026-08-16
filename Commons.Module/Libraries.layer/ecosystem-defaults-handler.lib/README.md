@@ -16,11 +16,11 @@ passem a delegar a esta lib.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `Get.js` | Resolve o caminho do `ecosystem-defaults.json`, lê o JSON e retorna o objeto com as variáveis. Lança erro explícito se o arquivo não existir (ecossistema não instalado). |
+| `Get.ts` | Resolve o caminho do `ecosystem-defaults.json`, lê o JSON e retorna o objeto com as variáveis. Lança erro explícito se o arquivo não existir (ecossistema não instalado). |
 
 ## Uso
 
-```js
+```ts
 const Get = ecosystemDefaultsHandlerLib.require("Get")
 
 const ecosystemDefaults = Get(ecosystemDataPath, ecosystemDefaultsFileRelativePath)

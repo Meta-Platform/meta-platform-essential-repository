@@ -14,7 +14,7 @@ runtime pelos task loaders `nodejs-package` e `install-nodejs-package-dependenci
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `ResolvePackageName.js` | Resolve o nome do pacote a partir de uma referência. |
+| `ResolvePackageName.ts` | Resolve o nome do pacote a partir de uma referência. |
 
 > Convenções de namespace: ver [Package](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/package.md).
 > [README do repositório](../../../README.md)

@@ -105,7 +105,7 @@ modo que declara uma `.uilib`:
 
 E o recebe já compilado e instanciado:
 
-```javascript
+```ts
 const { add, alloc, dealloc, sum_f32 } = geometry.getExports()
 ```
 

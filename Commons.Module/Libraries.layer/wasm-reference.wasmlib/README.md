@@ -54,7 +54,7 @@ uma transformação de geometria: aplicar uma matriz, normalizar, pintar vértic
 
 ## Uso
 
-```javascript
+```ts
 const { alloc, dealloc, sum_f32, scale_f32 } = wasmReference.getExports()
 const memory = wasmReference.getMemory()
 

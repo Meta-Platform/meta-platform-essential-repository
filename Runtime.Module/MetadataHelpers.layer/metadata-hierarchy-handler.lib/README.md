@@ -14,6 +14,6 @@ gerado em cada *environment* (ver
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `GetMetadataRootNode.js` | Obtém o nó raiz da hierarquia de metadados. |
+| `GetMetadataRootNode.ts` | Obtém o nó raiz da hierarquia de metadados. |
 
 > [README do repositório](../../../README.md)

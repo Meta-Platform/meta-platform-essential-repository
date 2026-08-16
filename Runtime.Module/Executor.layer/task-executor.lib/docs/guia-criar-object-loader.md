@@ -30,7 +30,7 @@ para o formato do plano de execução, veja
   - [4. Crie uma task usando o loader](#4-crie-uma-task-usando-o-loader)
 - [Recebendo dados: parâmetros estáticos e vinculados](#recebendo-dados-parâmetros-estáticos-e-vinculados)
   - [Compartilhando o service object entre tasks](#compartilhando-o-service-object-entre-tasks)
-- [Empacotando como uma `.lib` da plataforma](#empacotando-como-uma-lib-da-plataforma)
+- [Empacotando como uma `.taskLoader` da plataforma](#empacotando-como-uma-taskloader-da-plataforma)
 - [Checklist e armadilhas comuns](#checklist-e-armadilhas-comuns)
 - [Object loaders de referência](#object-loaders-de-referência)
 
@@ -56,8 +56,8 @@ passado ao `TaskExecutor`. No `execution-params.json`, cada unidade declara qual
 
 ## O contrato da função
 
-```javascript
-const MeuObjectLoader = (loaderParams, executorChannel) => {
+```ts
+const MeuObjectLoader = (loaderParams: any, executorChannel: any) => {
 
     const Start = () => { /* ... */ }
     const Stop  = () => { /* ... */ }
@@ -71,6 +71,11 @@ const MeuObjectLoader = (loaderParams, executorChannel) => {
 module.exports = MeuObjectLoader
 ```
 
+> O módulo continua **CommonJS** (`require` + `module.exports`); o que mudou é o
+> dialeto do arquivo, que agora é TypeScript. Não há passo de compilação: o Node
+> apaga os tipos ao carregar o `.ts`. Ver
+> [Source Language Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/source-language-standard.md).
+
 A função é chamada **uma vez por task**, no momento em que a task é preparada para
 ativação (estado `PRECONDITIONS_COMPLETED`). Nesse momento ela apenas **registra
 os listeners** e devolve `getServiceObject`. O trabalho de verdade só acontece
@@ -80,7 +85,7 @@ quando o executor emite `START_TASK`.
 
 É o objeto de parâmetros **já montado** pelo executor. Ele é o resultado do
 *merge profundo* de `staticParameters` com os `linkedParameters` já resolvidos
-(ver [`AssembleTaskParameters`](../src/TaskHandlers/AssembleTaskParameters/index.js)).
+(ver [`AssembleTaskParameters`](../src/TaskHandlers/AssembleTaskParameters/index.ts)).
 Ou seja: dentro do loader, parâmetros estáticos e vinculados chegam **achatados no
 mesmo objeto** — você não precisa olhar para `staticParameters`/`linkedParameters`
 separadamente.
@@ -89,7 +94,7 @@ separadamente.
 
 É um `EventEmitter` ([`node:events`](https://nodejs.org/api/events.html)) exclusivo
 da task. Os tipos de evento estão em
-[`CommandChannelEventTypes`](../src/CommandChannelEventTypes.js):
+[`CommandChannelEventTypes`](../src/CommandChannelEventTypes.ts):
 
 | Evento | Direção | Significado |
 |--------|---------|-------------|
@@ -114,8 +119,8 @@ task — aquilo que outras tasks podem consumir via [`linkedParameters`](#compar
 ## O ciclo de vida de uma task
 
 O executor conduz cada task pelos estados de
-[`TaskStatusTypes`](../src/TaskStatusTypes.js). O fluxo controlado pelo executor
-(ver [`ProcessChangeTaskEvents`](../src/ProcessChangeTaskEvents.js)) é:
+[`TaskStatusTypes`](../src/TaskStatusTypes.ts). O fluxo controlado pelo executor
+(ver [`ProcessChangeTaskEvents`](../src/ProcessChangeTaskEvents.ts)) é:
 
 ```
 CreateTask
@@ -169,15 +174,17 @@ Nosso `delayed-printer` é de **execução única**.
 
 ### 2. Escreva a função do loader
 
-```javascript
+```ts
 const TaskStatusTypes          = require("task-executor.lib/src/TaskStatusTypes")
 const CommandChannelEventTypes = require("task-executor.lib/src/CommandChannelEventTypes")
 
-const DelayedPrinterTaskLoader = (loaderParams, executorChannel) => {
+type DelayedPrinterParams = { message: string, delayMs?: number }
+
+const DelayedPrinterTaskLoader = (loaderParams: DelayedPrinterParams, executorChannel: any) => {
 
     const { message, delayMs = 1000 } = loaderParams
 
-    let timer
+    let timer: NodeJS.Timeout | undefined
     let wasStopped = false
 
     const Start = () => {
@@ -213,12 +220,17 @@ Pontos a observar:
   task que nunca reporta um desfecho trava as dependentes e a parada do plano.
 - **Envolva o trabalho em `try/catch`** e emita `FAILURE` no erro (veja os loaders
   de referência).
+- **Só sintaxe apagável.** Nada de `enum`, `namespace`, decorator ou
+  parâmetro-propriedade: o tipo tem de sumir sem sobrar código. Para trazer uma
+  dependência nativa com tipo, anote o `require`
+  (`const fs = require("fs") as typeof import("fs")`); para trazer só um tipo, use
+  `import type`.
 
 ### 3. Registre o loader no Task Executor
 
 O executor recebe um mapa `objectLoaderType → função`:
 
-```javascript
+```ts
 const TaskExecutor = require("task-executor.lib/src/TaskExecutor")
 
 const taskExecutor = TaskExecutor({
@@ -232,9 +244,9 @@ Na plataforma, esse mapa é montado em dois pontos (ambos no
 [ecosystem-core-repository](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository)),
 carregando cada loader como uma `.lib`:
 
-- [`StandardTaskExecutorMachine.service`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Main.Module/Services.layer/task-executor-machine.service/src/Services/StandardTaskExecutorMachine.service.js)
+- [`StandardTaskExecutorMachine.service`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Main.Module/Services.layer/task-executor-machine.service/src/Services/StandardTaskExecutorMachine.service.ts)
   (a máquina de execução usada pelo supervisor);
-- [`RunPackage.command`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Main.Module/PackageApplication.layer/package-runner.cli/src/Commands/RunPackage.command.js)
+- [`RunPackage.command`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Main.Module/PackageApplication.layer/package-runner.cli/src/Commands/RunPackage.command.ts)
   (a CLI `package-runner`).
 
 Para que um **novo** loader essencial seja reconhecido pela plataforma, você o
@@ -243,7 +255,7 @@ de uso pontual, basta passá-lo no mapa do seu próprio `TaskExecutor`, como aci
 
 ### 4. Crie uma task usando o loader
 
-```javascript
+```ts
 taskExecutor.CreateTask({
     objectLoaderType: "delayed-printer",
     staticParameters: {
@@ -254,7 +266,7 @@ taskExecutor.CreateTask({
 ```
 
 Se o `objectLoaderType` não estiver no mapa, o executor lança
-`"Task Loader was not found"` (ver [`TaskExecutor.CreateTask`](../src/TaskExecutor.js)).
+`"Task Loader was not found"` (ver [`TaskExecutor.CreateTask`](../src/TaskExecutor.ts)).
 
 ## Recebendo dados: parâmetros estáticos e vinculados
 
@@ -270,8 +282,8 @@ Os parâmetros que chegam em `loaderParams` vêm de dois lugares do `executionPa
 
 É aqui que o retorno `getServiceObject` ganha sentido. Uma task expõe um objeto;
 outra task o recebe como parâmetro. O mecanismo (ver
-[`AssembleLinkedTaskParameters`](../src/TaskHandlers/AssembleTaskParameters/AssembleLinkedTaskParameters.js)
-e [`GetTaskServiceObject`](../src/TaskHandlers/AssembleTaskParameters/GetTaskServiceObject.js)):
+[`AssembleLinkedTaskParameters`](../src/TaskHandlers/AssembleTaskParameters/AssembleLinkedTaskParameters.ts)
+e [`GetTaskServiceObject`](../src/TaskHandlers/AssembleTaskParameters/GetTaskServiceObject.ts)):
 
 1. Em `linkedParameters`, o valor é uma **referência** (ex.: `"@@/server-service"`).
 2. Em `agentLinkRules`, há uma regra com `referenceName` igual a essa referência e
@@ -282,32 +294,35 @@ e [`GetTaskServiceObject`](../src/TaskHandlers/AssembleTaskParameters/GetTaskSer
 Exemplo real: o `endpoint-instance` recebe o objeto do servidor HTTP
 (`serverService`) já no ar e chama `serverService.AddStaticEndpoint(...)`. Para
 expor um objeto assim, basta o seu loader **retornar** `() => serviceObject` —
-como faz o [`service-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/service-instance.lib/src/ServiceInstance.taskLoader.js).
+como faz o [`service-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Taskloaders.Module/Loaders.layer/service-instance.taskLoader/src/ServiceInstance.taskLoader.ts).
 
 > Os `agentLinkRules` também **bloqueiam a ativação**: a task com
 > `linkedParameters`/`agentLinkRules` só sai de `AWAITING_PRECONDITIONS` quando as
 > tasks referenciadas satisfazem seus requisitos (ver
-> [`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.js)). Use
+> [`IsTaskActivatable`](../src/TaskHandlers/IsTaskActivatable/index.ts)). Use
 > `activationRules` para condições que não dependem de injetar um objeto.
 
-## Empacotando como uma `.lib` da plataforma
+## Empacotando como uma `.taskLoader` da plataforma
 
 Os object loaders essenciais vivem em
-`Runtime.Module/EssentialTaskLoaders.layer/<nome>.lib` no
+`Taskloaders.Module/Loaders.layer/<nome>.taskLoader` no
 [essential-repository](https://github.com/Meta-Platform/meta-platform-essential-repository).
 Para criar o seu seguindo a mesma convenção:
 
 ```
-meu-loader.lib/
+meu-loader.taskLoader/
 ├── metadata/
-│   └── package.json        # metadados do pacote (apenas namespace, ex.: @/meu-loader.lib)
+│   └── package.json        # metadados do pacote (apenas namespace, ex.: @/meu-loader.taskLoader)
 ├── package.json
+├── tsconfig.json           # estende o tsconfig.base.json do repositório
 ├── README.md
 └── src/
-    └── MeuLoader.taskLoader.js
+    └── MeuLoader.taskLoader.ts
 ```
 
-- O arquivo de código segue o sufixo **`.taskLoader.js`** e exporta a função.
+- O arquivo de código segue o sufixo **`.taskLoader.ts`** e exporta a função.
+- O `tsconfig.json` é o que põe o pacote sob o `verify-typescript`; sem ele a
+  checagem passa a mentir por omissão.
 - Registre-o no mapa de `taskLoaders` com um `objectLoaderType` estável (é o
   contrato público — ele aparece no `execution-params.json`).
 - Documente os parâmetros do loader (ver
@@ -339,13 +354,13 @@ Estude os loaders essenciais — cada um ilustra um padrão:
 
 | Loader | Padrão | O que aprender |
 |--------|--------|----------------|
-| [`application-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/application-instance.lib/src/ApplicationInstance.taskLoader.js) | Marcador imediato | O loader mínimo: `ACTIVE` no start, `TERMINATED` no stop. |
-| [`install-nodejs-package-dependencies`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/install-nodejs-package-dependencies.lib/src/InstallNodejsPackageDependencies.taskLoader.js) | Execução única assíncrona | `try/catch`, flags de estado, `FINISHED` vs `TERMINATED`. |
-| [`nodejs-package`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/nodejs-package.lib/src/NodeJSPackage.taskLoader.js) | Expõe service object | Retornar um objeto com `.require` para outras tasks. |
-| [`service-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/service-instance.lib/src/ServiceInstance.taskLoader.js) | Serviço de longa duração | `onReady`/`onClose` → `ACTIVE`/`TERMINATED`; expor o objeto do serviço. |
-| [`endpoint-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/endpoint-instance.lib/src/EndpointInstance.taskLoader.js) | Consome service object | Receber `serverService` via `linkedParameters` e usá-lo. |
-| [`command-application`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/command-application.lib/src/CommandApplication.taskLoader.js) | CLI | `FINISHED` + `STOP_ALL_TASKS` para encerrar o plano inteiro. |
-| [`desktop-window-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Runtime.Module/EssentialTaskLoaders.layer/desktop-window-instance.lib/src/DesktopWindowInstance.taskLoader.js) | Serviço de longa duração | `spawn` do Electron; abre a janela via `loadURL` (app web local que sobe junto) ou `loadFile` (HTML estático); `ACTIVE` enquanto a janela está aberta; emite `TERMINATED` (da própria task) quando a janela é fechada. |
+| [`application-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Taskloaders.Module/Loaders.layer/application-instance.taskLoader/src/ApplicationInstance.taskLoader.ts) | Marcador imediato | O loader mínimo: `ACTIVE` no start, `TERMINATED` no stop. |
+| [`install-nodejs-package-dependencies`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Taskloaders.Module/Loaders.layer/install-nodejs-package-dependencies.taskLoader/src/InstallNodejsPackageDependencies.taskLoader.ts) | Execução única assíncrona | `try/catch`, flags de estado, `FINISHED` vs `TERMINATED`. |
+| [`nodejs-package`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Taskloaders.Module/Loaders.layer/nodejs-package.taskLoader/src/NodeJSPackage.taskLoader.ts) | Expõe service object | Retornar um objeto com `.require` para outras tasks. |
+| [`service-instance`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Taskloaders.Module/Loaders.layer/service-instance.taskLoader/src/ServiceInstance.taskLoader.ts) | Serviço de longa duração | `onReady`/`onClose` → `ACTIVE`/`TERMINATED`; expor o objeto do serviço. |
+| [`endpoint-instance`](https://github.com/Meta-Platform/meta-platform-ecosystem-core-repository/blob/main/Taskloaders.Module/Loaders.layer/endpoint-instance.taskLoader/src/EndpointInstance.taskLoader.ts) | Consome service object | Receber `serverService` via `linkedParameters` e usá-lo. |
+| [`command-application`](https://github.com/Meta-Platform/meta-platform-essential-repository/blob/main/Taskloaders.Module/Loaders.layer/command-application.taskLoader/src/CommandApplication.taskLoader.ts) | CLI | `FINISHED` + `STOP_ALL_TASKS` para encerrar o plano inteiro. |
+| [`desktop-window-instance`](https://github.com/Meta-Platform/meta-platform-applications-repository/blob/main/Taskloaders.Module/Loaders.layer/desktop-window-instance.taskLoader/src/DesktopWindowInstance.taskLoader.ts) | Serviço de longa duração | `spawn` do Electron; abre a janela via `loadURL` (app web local que sobe junto) ou `loadFile` (HTML estático); `ACTIVE` enquanto a janela está aberta; emite `TERMINATED` (da própria task) quando a janela é fechada. |
 
 ---
 

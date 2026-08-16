@@ -13,7 +13,7 @@ instalar repositórios distribuídos como tarball).
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `ExtractTarGz.js` | Extrai um `.tar.gz` para um diretório. |
-| `ListTarGzContents.js` | Lista o conteúdo de um `.tar.gz` sem extrair. |
+| `ExtractTarGz.ts` | Extrai um `.tar.gz` para um diretório. |
+| `ListTarGzContents.ts` | Lista o conteúdo de um `.tar.gz` sem extrair. |
 
 > [README do repositório](../../../README.md) · [Arquitetura](https://github.com/Meta-Platform/.github/blob/main/docs/ARQUITETURA.md)

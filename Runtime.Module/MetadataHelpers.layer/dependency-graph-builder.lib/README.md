@@ -13,8 +13,8 @@ Esse pacote é responsável por construir uma **hierarquia de metadados** de um 
 | Módulo | Responsabilidade |
 |---|---|
 | `BuildMetadataHierarchy/` | Monta o grafo de metadados do pacote raiz e de todas as dependências resolvidas por namespace. |
-| `ResolveDependencyPath.js` | Resolve o caminho em disco de uma dependência declarada por namespace. |
-| `Utils/ReadAllPackageMetadata.js` | Lê todos os JSONs de `metadata/` de um pacote. |
+| `ResolveDependencyPath.ts` | Resolve o caminho em disco de uma dependência declarada por namespace. |
+| `Utils/ReadAllPackageMetadata.ts` | Lê todos os JSONs de `metadata/` de um pacote. |
 
 ## Construção de uma Hierarquia de Metadados
 

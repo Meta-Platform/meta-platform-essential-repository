@@ -13,6 +13,6 @@ exemplo, para nomear ambientes de execução (nome do pacote + hash do caminho).
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `ComputeObjectHash.js` | Gera o hash de um objeto. |
+| `ComputeObjectHash.ts` | Gera o hash de um objeto. |
 
 > [README do repositório](../../../README.md)

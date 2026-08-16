@@ -38,10 +38,10 @@ daemon.
 
 | Módulo | Responsabilidade |
 |---|---|
-| `NormalizeResourceParam.js` | Uniformiza as duas formas de declaração (string curta e objeto). |
-| `ResolvePackageResourceParams.js` | Traduz as declarações de um package em caminhos reais. Puro: não toca no disco. |
-| `EnsureResources.js` | Cria as pastas dos recursos de que o package é dono. |
-| `ApplyResourceParamsToHierarchy.js` | Sobrepõe os caminhos resolvidos no `startup-params` de cada nó e devolve o inventário. |
+| `NormalizeResourceParam.ts` | Uniformiza as duas formas de declaração (string curta e objeto). |
+| `ResolvePackageResourceParams.ts` | Traduz as declarações de um package em caminhos reais. Puro: não toca no disco. |
+| `EnsureResources.ts` | Cria as pastas dos recursos de que o package é dono. |
+| `ApplyResourceParamsToHierarchy.ts` | Sobrepõe os caminhos resolvidos no `startup-params` de cada nó e devolve o inventário. |
 
 ## Formato dos metadados
 
@@ -127,7 +127,7 @@ O valor resolvido chega aos packages referenciados pelo caminho de sempre: o
 
 ## API
 
-```js
+```ts
 const ApplyResourceParamsToHierarchy = resourceParamsHandlerLib.require("ApplyResourceParamsToHierarchy")
 const EnsureResources                = resourceParamsHandlerLib.require("EnsureResources")
 

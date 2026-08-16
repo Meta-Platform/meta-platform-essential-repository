@@ -24,7 +24,7 @@ Os perfis abaixo são os que possuem arquivo em `src/InstallationProfiles/`:
 - **google-drive-minimal** Configuração mínima, instala baixando do google drive
 - **google-drive-standard** Configuração padrão, instala baixando do google drive
 
-> **Issue conhecido (código):** o loader de perfis (`src/Helpers/LoadAllInstalationProfiles.js`) referencia os perfis `github-repo-minimal` e `github-repo-standard`, cujos arquivos **não existem** em `src/InstallationProfiles/`. Como o `require` é feito de forma imediata, os comandos `list-profiles`, `install` e `update` atualmente quebram com `MODULE_NOT_FOUND` até que esses arquivos sejam criados ou as referências removidas.
+> **Issue conhecido (código):** o loader de perfis (`src/Helpers/LoadAllInstalationProfiles.ts`) referencia os perfis `github-repo-minimal` e `github-repo-standard`, cujos arquivos **não existem** em `src/InstallationProfiles/`. Como o `require` é feito de forma imediata, os comandos `list-profiles`, `install` e `update` atualmente quebram com `MODULE_NOT_FOUND` até que esses arquivos sejam criados ou as referências removidas.
 
 ## Comandos Disponíveis
 ### Exibir Perfis de Instalação Disponíveis
@@ -62,7 +62,7 @@ Exibe informações detalhadas sobre um perfil específico, como componentes inc
 mytoolkit show profile <nome_do_perfil>
 ```
 
-> **Issue conhecido (código):** este comando está quebrado no momento — o handler (`src/Commands/ShowProfileInfo.command.js`) referencia perfis inexistentes (`dev-minimal`, `dev-standard`, `minimal`, `standard`) via `require` imediato, o que faz o comando falhar com `MODULE_NOT_FOUND` para qualquer perfil informado.
+> **Issue conhecido (código):** este comando está quebrado no momento — o handler (`src/Commands/ShowProfileInfo.command.ts`) referencia perfis inexistentes (`dev-minimal`, `dev-standard`, `minimal`, `standard`) via `require` imediato, o que faz o comando falhar com `MODULE_NOT_FOUND` para qualquer perfil informado.
 
 ### Instalar com Perfis Específicos
 Escolha o perfil de instalação desejado para ajustar a configuração do ecossistema de acordo com suas necessidades.

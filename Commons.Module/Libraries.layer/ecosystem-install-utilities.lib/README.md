@@ -20,12 +20,12 @@ Esta biblioteca abstrai a complexidade de obtenção de repositórios, instalaç
 
 | Módulo | Responsabilidade |
 |---|---|
-| `InstallEcosystemByProfile.js` | Instala um ecossistema inteiro a partir de um perfil. |
-| `UpdateEcosystemByProfile.js` | Atualiza um ecossistema inteiro a partir de um perfil. |
-| `InstallRepository.js` | Instala um repositório de pacotes. |
-| `UpdateRepository.js` | Atualiza um repositório já instalado. |
-| `ChangeRepositorySource.js` | Troca a fonte de atualização de um repositório. |
-| `UninstallApplication.js` | Remove uma aplicação instalada e seus executáveis. |
+| `InstallEcosystemByProfile.ts` | Instala um ecossistema inteiro a partir de um perfil. |
+| `UpdateEcosystemByProfile.ts` | Atualiza um ecossistema inteiro a partir de um perfil. |
+| `InstallRepository.ts` | Instala um repositório de pacotes. |
+| `UpdateRepository.ts` | Atualiza um repositório já instalado. |
+| `ChangeRepositorySource.ts` | Troca a fonte de atualização de um repositório. |
+| `UninstallApplication.ts` | Remove uma aplicação instalada e seus executáveis. |
 | `Domains/` | Construção e restauração da estrutura de diretórios do ecossistema. |
 | `Install/` · `Update/` | Instalação e reinstalação de aplicações. |
 | `Helpers/` | Obtenção de repositórios, scripts de executável, dependências Node.js e verificações de estado. |
@@ -34,57 +34,54 @@ Esta biblioteca abstrai a complexidade de obtenção de repositórios, instalaç
 
 ```
 src/
-├── InstallEcosystemByProfile.js
-├── InstallRepository.js
-├── UpdateRepository.js
-├── UpdateEcosystemByProfile.js
-├── ChangeRepositorySource.js
+├── InstallEcosystemByProfile.ts
+├── InstallRepository.ts
+├── UpdateRepository.ts
+├── UpdateEcosystemByProfile.ts
+├── ChangeRepositorySource.ts
 │
 ├── Install/
-│   ├── InstallApplication.js
+│   ├── InstallApplication.ts
 │   └── InstallEcosystem/
-│       ├── index.js
-│       ├── Install.js
-│       ├── InstallPackageExecutor.js
-│       ├── DownloadPackageExecutorBin.js
-│       ├── CreateEcosystemDefaultsJsonFile.js
-│       └── CreateRepositorySource.js
+│       ├── index.ts
+│       ├── Install.ts
+│       └── CreateRepositorySource.ts
 │
 ├── Update/
-│   ├── ReinstallApplication.js
+│   ├── ReinstallApplication.ts
 │   └── UpdateEcosystem/
-│       ├── index.js
-│       ├── Update.js
-│       ├── UpdatePackageExecutor.js
-│       ├── CreateEcosystemDefaultsJsonFile.js
-│       └── DownloadPackageExecutorBin.js
+│       ├── index.ts
+│       └── Update.ts
 │
 ├── Helpers/
-│   ├── PrepareContext.js
-│   ├── ConvertPathToAbsolutPath.js
-│   ├── SynchronizeNodejsDependencies.js
-│   ├── BuildApplicationScriptContent.js
-│   ├── BuildCommandLineApplicationScriptContent.js
-│   ├── BuildDesktopAppScriptContent.js
-│   ├── BuildObjectFromPrefix.js
-│   ├── RestoreDir.js
-│   ├── VerifyDirExit.js
-│   ├── CleanOldRepository.js
-│   ├── FetchInstalledRepositoriesInfo.js
-│   ├── VerifyIfAllRepositoriesAreRegistered.js
-│   ├── FilterApplicationsMetadataByExecutablesToInstall.js
+│   ├── PrepareContext.ts
+│   ├── CreateEcosystemDefaultsJsonFile.ts
+│   ├── PackageExecutor/
+│   │   ├── DownloadPackageExecutorBin.ts
+│   │   └── SetupPackageExecutor.ts
+│   ├── SynchronizeNodejsDependencies.ts
+│   ├── BuildApplicationScriptContent.ts
+│   ├── BuildCommandLineApplicationScriptContent.ts
+│   ├── BuildDesktopAppScriptContent.ts
+│   ├── BuildObjectFromPrefix.ts
+│   ├── RestoreDir.ts
+│   ├── VerifyDirExit.ts
+│   ├── CleanOldRepository.ts
+│   ├── FetchInstalledRepositoriesInfo.ts
+│   ├── VerifyIfAllRepositoriesAreRegistered.ts
+│   ├── FilterApplicationsMetadataByExecutablesToInstall.ts
 │   └── ObtainRepository/
-│       ├── index.js
-│       ├── ObtainFromLocalFS.js
-│       ├── DownloadFromGoogleDrive.js
-│       └── DownloadFromGithubRelease.js
+│       ├── index.ts
+│       ├── ObtainFromLocalFS.ts
+│       ├── DownloadFromGoogleDrive.ts
+│       └── DownloadFromGithubRelease.ts
 │
 └── Domains/
-    ├── ConstructEcosystemStructure.js
-    └── RestoreEcosystemStructure.js
+    ├── ConstructEcosystemStructure.ts
+    └── RestoreEcosystemStructure.ts
 ```
 
-> As funções de construção de script incluem `BuildDesktopAppScriptContent.js`,
+> As funções de construção de script incluem `BuildDesktopAppScriptContent.ts`,
 > usada para instalar/reinstalar packages `.desktopapp` (`appType` `DESKTOP`),
 > além das variantes de CLI (`command-line`) e aplicação (`app`).
 
@@ -97,13 +94,13 @@ argumentos posicionais). O `loggerEmitter` (um `EventEmitter`) é opcional em to
 
 | Função | Módulo | Parâmetros (chaves do objeto) | Retorno | Descrição |
 | ------ | ------ | ----------------------------- | ------- | --------- |
-| InstallEcosystemByProfile | InstallEcosystemByProfile.js | `{ ecosystemDefaults, npmDependencies, initialRepositorySource, profile, installationDataDir, repositoriesInstallData, installationPath, loggerEmitter }` | `Promise<void>` | Instala um ecossistema completo a partir de um perfil declarativo, orquestrando repositórios e aplicações. |
-| UpdateEcosystemByProfile | UpdateEcosystemByProfile.js | objeto único de configuração (análogo a `InstallEcosystemByProfile`) | `Promise<void>` | Atualiza um ecossistema existente preservando estado e compatibilidade. |
-| InstallRepository | InstallRepository.js | `{ repositoryNamespace, sourceData, executablesToInstall, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Obtém, valida e registra um repositório e instala seus executáveis. |
-| UpdateRepository | UpdateRepository.js | `{ repositoryNamespace, executablesToInstall, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Atualiza um repositório já instalado aplicando limpeza e reinstalação. |
-| ChangeRepositorySource | ChangeRepositorySource.js | `{ repositoryNamespace, sourceData, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Altera a origem (`sourceData`) de um repositório mantendo seu registro interno. |
-| InstallApplication | Install/InstallApplication.js | `{ namespace, deployedRepoPath, applicationData, installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, REPOS_CONF_FILENAME_REPOS_DATA, supervisorSocketDirPath, loggerEmitter }` | `Promise<string>` (caminho do script do executável gerado) | Instala uma aplicação individual (`CLI`/`APP`/`DESKTOP`) dentro de um repositório. |
-| ReinstallApplication | Update/ReinstallApplication.js | `{ namespace, applicationData, deployedRepoPath, installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, supervisorSocketDirPath, loggerEmitter }` | `Promise<string>` (caminho do script do executável gerado) | Reinstala uma aplicação recriando o script do executável. |
+| InstallEcosystemByProfile | InstallEcosystemByProfile.ts | `{ ecosystemDefaults, npmDependencies, initialRepositorySource, profile, installationDataDir, repositoriesInstallData, installationPath, loggerEmitter }` | `Promise<void>` | Instala um ecossistema completo a partir de um perfil declarativo, orquestrando repositórios e aplicações. |
+| UpdateEcosystemByProfile | UpdateEcosystemByProfile.ts | objeto único de configuração (análogo a `InstallEcosystemByProfile`) | `Promise<void>` | Atualiza um ecossistema existente preservando estado e compatibilidade. |
+| InstallRepository | InstallRepository.ts | `{ repositoryNamespace, sourceData, executablesToInstall, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Obtém, valida e registra um repositório e instala seus executáveis. |
+| UpdateRepository | UpdateRepository.ts | `{ repositoryNamespace, executablesToInstall, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Atualiza um repositório já instalado aplicando limpeza e reinstalação. |
+| ChangeRepositorySource | ChangeRepositorySource.ts | `{ repositoryNamespace, sourceData, installDataDirPath, ecosystemDefaults, loggerEmitter }` | `Promise<void>` | Altera a origem (`sourceData`) de um repositório mantendo seu registro interno. |
+| InstallApplication | Install/InstallApplication.ts | `{ namespace, deployedRepoPath, applicationData, installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, REPOS_CONF_FILENAME_REPOS_DATA, supervisorSocketDirPath, loggerEmitter }` | `Promise<string>` (caminho do script do executável gerado) | Instala uma aplicação individual (`CLI`/`APP`/`DESKTOP`) dentro de um repositório. |
+| ReinstallApplication | Update/ReinstallApplication.ts | `{ namespace, applicationData, deployedRepoPath, installDataDirPath, ECOSYSTEMDATA_CONF_DIRNAME_GLOBAL_EXECUTABLES_DIR, supervisorSocketDirPath, loggerEmitter }` | `Promise<string>` (caminho do script do executável gerado) | Reinstala uma aplicação recriando o script do executável. |
 
 ---
 

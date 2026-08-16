@@ -14,8 +14,8 @@ CLIs e serviços).
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `ReadJsonFile.js` | Lê e faz o parse de um arquivo JSON. |
-| `WriteObjectToFile.js` | Serializa um objeto e o grava em arquivo. |
-| `ListJsonFile.js` | Lista/lê arquivos JSON de um diretório. |
+| `ReadJsonFile.ts` | Lê e faz o parse de um arquivo JSON. |
+| `WriteObjectToFile.ts` | Serializa um objeto e o grava em arquivo. |
+| `ListJsonFile.ts` | Lista/lê arquivos JSON de um diretório. |
 
 > [README do repositório](../../../README.md)

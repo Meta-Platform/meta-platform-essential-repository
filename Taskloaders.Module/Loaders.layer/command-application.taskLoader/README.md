@@ -13,7 +13,7 @@ linha de comando (CLI) dentro de um plano de execução do *task executor*.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `CommandApplication.taskLoader.js` | Carrega/instancia a `command-application`. |
+| `CommandApplication.taskLoader.ts` | Carrega/instancia a `command-application`. |
 
 ## Registro (`metadata/taskloaders.json` do repositório)
 

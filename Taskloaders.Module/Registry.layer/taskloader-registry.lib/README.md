@@ -14,11 +14,11 @@ repositório instalado (via `repositories.json`), em vez de um mapa hard-coded.
 
 | Módulo | Responsabilidade |
 |---|---|
-| `CreateTaskLoaders.js` | Varre os repositórios instalados e devolve o mapa `objectLoaderType` → função-loader. |
+| `CreateTaskLoaders.ts` | Varre os repositórios instalados e devolve o mapa `objectLoaderType` → função-loader. |
 
 ## API
 
-```js
+```ts
 const CreateTaskLoaders = require("taskloader-registry.lib/src/CreateTaskLoaders")
 const taskLoaders = CreateTaskLoaders({ repositoriesData })
 // -> { "desktop-window-instance": fn, "endpoint-instance": fn, ... }

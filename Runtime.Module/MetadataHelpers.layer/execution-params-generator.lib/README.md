@@ -21,10 +21,10 @@ A função de entrada é `TranslateMetadataHierarchyForExecutionParams`.
 
 | Módulo | Responsabilidade |
 |---|---|
-| `TranslateMetadataHierarchyForExecutionParams.js` | Entrada: percorre a hierarquia de metadados e devolve os parâmetros de execução. |
+| `TranslateMetadataHierarchyForExecutionParams.ts` | Entrada: percorre a hierarquia de metadados e devolve os parâmetros de execução. |
 | `GenerateExecutionParamsForApplicationService/` | Gera os parâmetros de uma aplicação: serviços, endpoints, executáveis, comandos e janelas. |
-| `GenerateExecutionParamsForNodejsPackageServices.js` | Gera os parâmetros dos serviços de um pacote Node.js. |
-| `GenerateExecutionParamsForPrepareEnvironment.js` | Gera os parâmetros da etapa de preparação do ambiente. |
+| `GenerateExecutionParamsForNodejsPackageServices.ts` | Gera os parâmetros dos serviços de um pacote Node.js. |
+| `GenerateExecutionParamsForPrepareEnvironment.ts` | Gera os parâmetros da etapa de preparação do ambiente. |
 | `Utils/` | Substituição de parâmetros por string (`{{VAR}}`), extração de namespace/caminho e povoamento de parâmetros. |
 
 > Veja o [Execution Params Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/packages/execution-params-standard.md) e o [README do repositório](../../../README.md).

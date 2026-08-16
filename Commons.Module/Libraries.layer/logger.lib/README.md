@@ -23,16 +23,16 @@ cheio ou permissão derruba o processo que logou.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `InstallGlobalLogger.js` | `InstallGlobalLogger(config)`: instala `globalThis.Log` (idempotente) com os sinks e o contexto do processo. Expõe também `Log.OpenFileChannel(...)`, `UninstallGlobalLogger` e `IsGlobalLoggerInstalled`. |
-| `CreateLogger.js` | Monta o logger sobre um conjunto de sinks e um contexto; expõe os sete níveis, `source()`, `child()`, `AddSink()`, `Flush()`, `FlushSync()` e `Close()`. |
-| `Levels.js` | Os sete níveis, sua ordem, os apelidos dos tipos antigos (`warning`, `success`) e o filtro dos dois pisos (`ResolveTargets`). |
-| `CreateConsoleSink.js` | Sink de terminal: formato colorido, `process.stdout.write` direto, sem cor quando não há TTY. |
-| `CreateJsonlSink.js` | Sink de arquivo: uma linha JSON por evento, escrita enfileirada e assíncrona, falha de I/O engolida. |
-| `Rotation.js` | Nome do arquivo do dia, corte por `LOG_CONF_MAX_FILE_SIZE_MB` e descarte por `LOG_CONF_RETENTION_DAYS`. |
-| `InstallConsoleBridge.js` | A ponte `console.* → Log`, com marca de idempotência e desinstalação. |
-| `Serialize.js` | Serialização defensiva de `data`: sobrevive a referência circular e preserva `message`/`stack` de um `Error`. |
-| `Timestamp.js` | Carimbo local `2026-07-27T10:12:03.412` e o `dateStamp` que nomeia o arquivo do dia. |
-| `Colors.js` | Acesso ao `colors` com degradação silenciosa: sem o módulo ou sem TTY, o sink escreve sem cor. |
+| `InstallGlobalLogger.ts` | `InstallGlobalLogger(config)`: instala `globalThis.Log` (idempotente) com os sinks e o contexto do processo. Expõe também `Log.OpenFileChannel(...)`, `UninstallGlobalLogger` e `IsGlobalLoggerInstalled`. |
+| `CreateLogger.ts` | Monta o logger sobre um conjunto de sinks e um contexto; expõe os sete níveis, `source()`, `child()`, `AddSink()`, `Flush()`, `FlushSync()` e `Close()`. |
+| `Levels.ts` | Os sete níveis, sua ordem, os apelidos dos tipos antigos (`warning`, `success`) e o filtro dos dois pisos (`ResolveTargets`). |
+| `CreateConsoleSink.ts` | Sink de terminal: formato colorido, `process.stdout.write` direto, sem cor quando não há TTY. |
+| `CreateJsonlSink.ts` | Sink de arquivo: uma linha JSON por evento, escrita enfileirada e assíncrona, falha de I/O engolida. |
+| `Rotation.ts` | Nome do arquivo do dia, corte por `LOG_CONF_MAX_FILE_SIZE_MB` e descarte por `LOG_CONF_RETENTION_DAYS`. |
+| `InstallConsoleBridge.ts` | A ponte `console.* → Log`, com marca de idempotência e desinstalação. |
+| `Serialize.ts` | Serialização defensiva de `data`: sobrevive a referência circular e preserva `message`/`stack` de um `Error`. |
+| `Timestamp.ts` | Carimbo local `2026-07-27T10:12:03.412` e o `dateStamp` que nomeia o arquivo do dia. |
+| `Colors.ts` | Acesso ao `colors` com degradação silenciosa: sem o módulo ou sem TTY, o sink escreve sem cor. |
 
 ## Os sete níveis
 
@@ -50,7 +50,7 @@ cheio ou permissão derruba o processo que logou.
 
 ## Uso
 
-```js
+```ts
 Log.info("UpdateRepository", "Atualizando...")
 Log.error("CreateEnvironmentDir", "Falhou ao criar o diretório", { error })
 
@@ -65,7 +65,7 @@ todo log daquela execução sair identificado, sem passar nada como parâmetro.
 
 ## Instalação no bootstrap
 
-```js
+```ts
 const InstallGlobalLogger = loggerLib.require("InstallGlobalLogger")
 
 InstallGlobalLogger({
@@ -117,7 +117,7 @@ o valor.
 
 ## Canal de arquivo
 
-```js
+```ts
 const canal = Log.OpenFileChannel({
     dirPath  : "<EcosystemData>/logs/instances",
     fileName : `${instanceId}.jsonl`,
@@ -134,7 +134,7 @@ um arquivo por instância sem recriar escrita em disco por fora da lib.
 
 ## Ouvinte em tempo de execução
 
-```js
+```ts
 const Remover = Log.AddSink({ Write : (record) => { /* … */ } })
 try { await Operacao() } finally { Remover() }
 ```

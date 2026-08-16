@@ -13,6 +13,6 @@ de um pacote, tornando seus metadados disponíveis para a plataforma.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `LoadMetadataDir.js` | `LoadMetadataDir({ metadataDirName, path })`: lê os arquivos de metadados de um pacote. O nome do diretório é **parametrizável** por `metadataDirName` (tipicamente `metadata/`). |
+| `LoadMetadataDir.ts` | `LoadMetadataDir({ metadataDirName, path })`: lê os arquivos de metadados de um pacote. O nome do diretório é **parametrizável** por `metadataDirName` (tipicamente `metadata/`). |
 
 > [README do repositório](../../../README.md)

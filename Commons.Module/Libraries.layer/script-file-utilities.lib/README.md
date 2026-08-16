@@ -13,14 +13,14 @@ Cria, recria e remove os **scripts executáveis** instalados em
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `CreateExecutableScript.js` | Cria um script executável genérico. |
-| `CreatePackageExecutableScript.js` | Cria o script executável de um pacote. |
-| `RecreateExecutableScript.js` | Recria um script executável existente. |
-| `RemoveExecutableScript.js` | Remove um script executável. |
-| `MakeFileExecutable.js` | Torna um arquivo executável (permissões). |
-| `CreateUtf8TextFile.js` | Cria um arquivo de texto UTF-8. |
-| `GetApplicationExecutionContent.js` | Gera o conteúdo de execução de uma aplicação (`.app`). |
-| `GetCommandLineApplicationExecutionContent.js` | Gera o conteúdo de execução de uma CLI (`.cli`). |
-| `GetDesktopApplicationExecutionContent.js` | Gera o conteúdo de execução de uma aplicação desktop (`.desktopapp`). |
+| `CreateExecutableScript.ts` | Cria um script executável genérico. |
+| `CreatePackageExecutableScript.ts` | Cria o script executável de um pacote. |
+| `RecreateExecutableScript.ts` | Recria um script executável existente. |
+| `RemoveExecutableScript.ts` | Remove um script executável. |
+| `MakeFileExecutable.ts` | Torna um arquivo executável (permissões). |
+| `CreateUtf8TextFile.ts` | Cria um arquivo de texto UTF-8. |
+| `GetApplicationExecutionContent.ts` | Gera o conteúdo de execução de uma aplicação (`.app`). |
+| `GetCommandLineApplicationExecutionContent.ts` | Gera o conteúdo de execução de uma CLI (`.cli`). |
+| `GetDesktopApplicationExecutionContent.ts` | Gera o conteúdo de execução de uma aplicação desktop (`.desktopapp`). |
 
 > [README do repositório](../../../README.md)

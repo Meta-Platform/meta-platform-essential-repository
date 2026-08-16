@@ -13,7 +13,7 @@ uma aplicação durante a execução de um plano pelo *task executor*.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `ServiceInstance.taskLoader.js` | Carrega/instancia o `service-instance`. |
+| `ServiceInstance.taskLoader.ts` | Carrega/instancia o `service-instance`. |
 
 ## Registro (`metadata/taskloaders.json` do repositório)
 

@@ -15,11 +15,11 @@ streaming de log e suas tarefas. É a base da CLI `supervisor`
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `CreateCommunicationInterface.js` | Cria o cliente gRPC para um socket de supervisão. |
-| `ListSocketFilesName.js` | Lista os sockets de supervisão disponíveis. |
-| `WatchSocketDirectory.js` | Observa o diretório de sockets de supervisão. |
-| `TryConnectLogStreaming.js` | Conecta-se ao streaming de log de um processo. |
-| `ConvertTaskResponseToTask.js` | Converte a resposta gRPC de tarefa no modelo interno. |
+| `CreateCommunicationInterface.ts` | Cria o cliente gRPC para um socket de supervisão. |
+| `ListSocketFilesName.ts` | Lista os sockets de supervisão disponíveis. |
+| `WatchSocketDirectory.ts` | Observa o diretório de sockets de supervisão. |
+| `TryConnectLogStreaming.ts` | Conecta-se ao streaming de log de um processo. |
+| `ConvertTaskResponseToTask.ts` | Converte a resposta gRPC de tarefa no modelo interno. |
 | `CreatePrintDataLog.js` / `FormatterDataLog.js` | Formatação/impressão dos logs recebidos. |
 
 > Contrato gRPC: [Package Executor RPC Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/package-executor-rpc-standard.md).

@@ -14,9 +14,9 @@ Cria e verifica o **diretório de dados do ecossistema** (`EcosystemData`) e os
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `CreateDataDir.js` / `PrepareDataDir.js` / `VerifyDataDir.js` | Cria, prepara e valida o diretório de dados. |
-| `CreateEnvironment.js` / `CreateEnvironmentDir.js` | Cria um ambiente de execução isolado. |
-| `PrepareEnvironmentDir.js` / `VerifyEnvironmentDir.js` | Prepara e valida o diretório de um ambiente. |
-| `GetEnvironmentPath.js` | Resolve o caminho de um ambiente: `join(localPath, environmentName)`. |
+| `CreateDataDir.ts` / `PrepareDataDir.ts` / `VerifyDataDir.ts` | Cria, prepara e valida o diretório de dados. |
+| `CreateEnvironment.ts` / `CreateEnvironmentDir.ts` | Cria um ambiente de execução isolado. |
+| `PrepareEnvironmentDir.ts` / `VerifyEnvironmentDir.ts` | Prepara e valida o diretório de um ambiente. |
+| `GetEnvironmentPath.ts` | Resolve o caminho de um ambiente: `join(localPath, environmentName)`. |
 
 > [README do repositório](../../../README.md)

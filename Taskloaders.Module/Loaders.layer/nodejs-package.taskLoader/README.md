@@ -14,7 +14,7 @@ código do package durante a execução de um plano pelo *task executor*.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `NodeJSPackage.taskLoader.js` | Carrega o package e monta o handler (`require`, `getSourcePath`, `getEnvironmentPath`, `getNodeModulesPath`). |
+| `NodeJSPackage.taskLoader.ts` | Carrega o package e monta o handler (`require`, `getSourcePath`, `getEnvironmentPath`, `getNodeModulesPath`). |
 
 ## Registro (`metadata/taskloaders.json` do repositório)
 

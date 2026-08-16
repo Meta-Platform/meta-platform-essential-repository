@@ -14,14 +14,14 @@ ativação e de *agent link*. Injetada como `taskTableRenderLib`.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `MountTaskTable.js` | Monta a tabela completa de uma task. |
-| `CreateAttributeTable.js` | Cria uma tabela de atributos. |
-| `RenderGeneralInformationTaskTable.js` | Renderiza informações gerais. |
-| `RenderStaticParametersTaskTable.js` | Renderiza `staticParameters`. |
-| `RenderLinkedParametersTaskTable.js` | Renderiza `linkedParameters`. |
-| `RenderActivationRulesTaskTable.js` | Renderiza `activationRules`. |
-| `RenderAgentLinkRulesTaskTable.js` | Renderiza `agentLinkRules`. |
-| `GetColorLogByStatus.js` | Define a cor conforme o status da task. |
+| `MountTaskTable.ts` | Monta a tabela completa de uma task. |
+| `CreateAttributeTable.ts` | Cria uma tabela de atributos. |
+| `RenderGeneralInformationTaskTable.ts` | Renderiza informações gerais. |
+| `RenderStaticParametersTaskTable.ts` | Renderiza `staticParameters`. |
+| `RenderLinkedParametersTaskTable.ts` | Renderiza `linkedParameters`. |
+| `RenderActivationRulesTaskTable.ts` | Renderiza `activationRules`. |
+| `RenderAgentLinkRulesTaskTable.ts` | Renderiza `agentLinkRules`. |
+| `GetColorLogByStatus.ts` | Define a cor conforme o status da task. |
 
 > Campos de task: ver [Execution Params Standard](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/specifications/packages/execution-params-standard.md).
 > [README do repositório](../../../README.md)

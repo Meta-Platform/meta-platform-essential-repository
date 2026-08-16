@@ -13,8 +13,8 @@ a supervisão e os painéis.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `FormatTaskForOutput.js` | Formata uma task para exibição/transporte. |
-| `GetTaskInformation.js` | Extrai as informações detalhadas de uma task. |
+| `FormatTaskForOutput.ts` | Formata uma task para exibição/transporte. |
+| `GetTaskInformation.ts` | Extrai as informações detalhadas de uma task. |
 
 > Consumida, entre outros, pelo [Package Executor](https://github.com/Meta-Platform/meta-platform-package-executor-command-line/blob/main/README.md).
 > [README do repositório](../../../README.md)

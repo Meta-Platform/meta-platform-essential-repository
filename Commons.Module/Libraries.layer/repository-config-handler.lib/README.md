@@ -17,11 +17,11 @@ fonte registrada nele).
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `GetRepositories.js` | Lê os repositórios registrados/instalados. |
-| `RegisterRepositoryInstallation.js` | Registra a instalação de um repositório. |
-| `ChangeSourceRepository.js` | Altera a fonte de um repositório. |
-| `UpdateRepositoryInstallationPath.js` | Atualiza o caminho de instalação de um repositório. |
-| `PrepareRepositoriesFileJson.js` | Prepara/normaliza o arquivo de repositórios. |
+| `GetRepositories.ts` | Lê os repositórios registrados/instalados. |
+| `RegisterRepositoryInstallation.ts` | Registra a instalação de um repositório. |
+| `ChangeSourceRepository.ts` | Altera a fonte de um repositório. |
+| `UpdateRepositoryInstallationPath.ts` | Atualiza o caminho de instalação de um repositório. |
+| `PrepareRepositoriesFileJson.ts` | Prepara/normaliza o arquivo de repositórios. |
 | `Helpers/` | Funções auxiliares. |
 
 > Consumido pela CLI `repo` e pelos serviços de gerenciamento de repositórios.

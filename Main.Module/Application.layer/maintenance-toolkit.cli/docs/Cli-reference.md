@@ -17,7 +17,7 @@ Perfis com arquivo em `src/InstallationProfiles/`:
 | `google-drive-minimal`         | Configuração mínima, instala baixando do Google Drive                                                |
 | `google-drive-standard`        | Configuração padrão, instala baixando do Google Drive                                                |
 
-> **Issue conhecido (código):** o loader de perfis (`src/Helpers/LoadAllInstalationProfiles.js`) ainda referencia `github-repo-minimal` e `github-repo-standard`, que não possuem arquivo em `src/InstallationProfiles/`. Isso faz `list-profiles`, `install` e `update` falharem com `MODULE_NOT_FOUND` no estado atual do código.
+> **Issue conhecido (código):** o loader de perfis (`src/Helpers/LoadAllInstalationProfiles.ts`) ainda referencia `github-repo-minimal` e `github-repo-standard`, que não possuem arquivo em `src/InstallationProfiles/`. Isso faz `list-profiles`, `install` e `update` falharem com `MODULE_NOT_FOUND` no estado atual do código.
 
 ---
 
@@ -54,4 +54,4 @@ Comando: `mytoolkit show profile [profile]`
 
 O perfil é um argumento **posicional** (ex.: `mytoolkit show profile localfs-standard`).
 
-> **Issue conhecido (código):** o handler (`src/Commands/ShowProfileInfo.command.js`) referencia perfis inexistentes (`dev-minimal`, `dev-standard`, `minimal`, `standard`) via `require` imediato; o comando atualmente falha com `MODULE_NOT_FOUND` para qualquer perfil.
+> **Issue conhecido (código):** o handler (`src/Commands/ShowProfileInfo.command.ts`) referencia perfis inexistentes (`dev-minimal`, `dev-standard`, `minimal`, `standard`) via `require` imediato; o comando atualmente falha com `MODULE_NOT_FOUND` para qualquer perfil.

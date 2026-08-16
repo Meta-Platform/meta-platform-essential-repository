@@ -17,13 +17,13 @@ O Task Executor é uma biblioteca projetada para facilitar a gestão e execuçã
 
 | Módulo | Responsabilidade |
 |---|---|
-| `TaskExecutor.js` | O executor em si: cria, executa, interrompe e finaliza tarefas. |
-| `CreateTaskStateManager.js` | Gerência do estado das tarefas. |
-| `ProcessChangeTaskEvents.js` | Processa os eventos de mudança de tarefa. |
-| `TaskStatusTypes.js` | Enumeração dos status de tarefa. |
-| `CommandChannelEventTypes.js` | Enumeração dos eventos do canal de comandos. |
+| `TaskExecutor.ts` | O executor em si: cria, executa, interrompe e finaliza tarefas. |
+| `CreateTaskStateManager.ts` | Gerência do estado das tarefas. |
+| `ProcessChangeTaskEvents.ts` | Processa os eventos de mudança de tarefa. |
+| `TaskStatusTypes.ts` | Enumeração dos status de tarefa. |
+| `CommandChannelEventTypes.ts` | Enumeração dos eventos do canal de comandos. |
 | `TaskHandlers/` | Montagem de corpo e parâmetros de tarefa, busca por query e regra de ativação. |
-| `Utils/DeepMergeObjects.js` | Merge profundo de objetos de parâmetros. |
+| `Utils/DeepMergeObjects.ts` | Merge profundo de objetos de parâmetros. |
 
 ## Características Principais
 
@@ -34,7 +34,7 @@ O Task Executor é uma biblioteca projetada para facilitar a gestão e execuçã
 
 ## Primeiros Passos com Task Executor: Configurando um Servidor Express Simples
 Este exemplo mostra como usar o Task Executor para configurar um servidor Express. Ele oferece um olhar inicial sobre como a ferramenta facilita a organização e execução de tarefas, servindo como um ponto de partida para entender suas funcionalidades básicas.
-```javascript
+```ts
 // Importa as dependências necessárias
 const express = require('express')
 const TaskStatusTypes = require("task-executor.lib/src/TaskStatusTypes")
@@ -42,9 +42,9 @@ const CommandChannelEventTypes = require("task-executor.lib/src/CommandChannelEv
 const TaskExecutor = require("task-executor.lib/src/TaskExecutor")
 
 // Define um loader personalizado para o servidor Express
-const ExpressServerTaskLoader = (params, executorChannel) => {
+const ExpressServerTaskLoader = (params: { port: number }, executorChannel: any) => {
     const app = express()
-    let server
+    let server: any
 
     // Inicia o servidor Express
     const Start = () => {

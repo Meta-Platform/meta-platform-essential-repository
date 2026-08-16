@@ -14,7 +14,7 @@ pelo *task executor*.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `ApplicationInstance.taskLoader.js` | Carrega/instancia a `application-instance`. |
+| `ApplicationInstance.taskLoader.ts` | Carrega/instancia a `application-instance`. |
 
 ## Registro (`metadata/taskloaders.json` do repositório)
 

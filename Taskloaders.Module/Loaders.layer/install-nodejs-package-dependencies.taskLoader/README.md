@@ -14,12 +14,12 @@ execução. É uma task de **execução única** (termina em `FINISHED`).
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `InstallNodejsPackageDependencies.taskLoader.js` | Lê o `package.json`, prepara o diretório e instala as dependências. |
-| `InstallNpmPackage.js` | Executa a instalação via npm. |
-| `ReadPackageJsonFile.js` | Lê o `package.json` do package. |
-| `PreparePackageDependenciesDir.js` | Prepara o diretório de dependências no ambiente. |
-| `CreatePackageDependenciesDir.js` | Cria o diretório de dependências. |
-| `VerifyPackageDependenciesDir.js` | Verifica o diretório de dependências. |
+| `InstallNodejsPackageDependencies.taskLoader.ts` | Lê o `package.json`, prepara o diretório e instala as dependências. |
+| `InstallNpmPackage.ts` | Executa a instalação via npm. |
+| `ReadPackageJsonFile.ts` | Lê o `package.json` do package. |
+| `PreparePackageDependenciesDir.ts` | Prepara o diretório de dependências no ambiente. |
+| `CreatePackageDependenciesDir.ts` | Cria o diretório de dependências. |
+| `VerifyPackageDependenciesDir.ts` | Verifica o diretório de dependências. |
 
 ## Registro (`metadata/taskloaders.json` do repositório)
 

@@ -13,7 +13,7 @@ de um repositório de pacotes.
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `CopyDirectory.js` | Cópia recursiva genérica de um diretório. |
-| `CopyDirRepository.js` | Cópia da estrutura de um repositório. |
+| `CopyDirectory.ts` | Cópia recursiva genérica de um diretório. |
+| `CopyDirRepository.ts` | Cópia da estrutura de um repositório. |
 
 > [README do repositório](../../../README.md) · [Arquitetura](https://github.com/Meta-Platform/.github/blob/main/docs/ARQUITETURA.md)
