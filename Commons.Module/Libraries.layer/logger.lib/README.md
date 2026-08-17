@@ -152,7 +152,7 @@ daquela operação. Registre pelo menor tempo possível e remova no `finally`.
 `Log` é para código que roda **dentro do ecossistema**. Continuam com `console`,
 deliberadamente:
 
-- ferramentas standalone (`scripts/`, `tools/`, `test.js` avulso), que rodam por
+- ferramentas standalone (`scripts/`, `tools/`, `test.ts` avulso), que rodam por
   `node` fora do ecossistema — ali `globalThis.Log` não existe;
 - os `SmartRequire`, carregados **durante** a construção do logger;
 - o servidor MCP, cujo stdout é o canal do protocolo.

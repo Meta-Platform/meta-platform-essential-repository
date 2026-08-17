@@ -190,5 +190,5 @@ de endpoint que dependem dela. Purgá-la derrubaria as dependentes.
 
 Num daemon que fica meses no ar, cada instância que sobe e desce deixava esse
 conjunto para trás — e, por transitividade, o compilador webpack de uma interface
-web inteira. Ver `tests/PurgeTask.test.js`, que cobre justamente a preservação da
+web inteira. Ver `tests/PurgeTask.test.ts`, que cobre justamente a preservação da
 identidade das outras tarefas.
