@@ -28,8 +28,9 @@ const installTypeScriptResolutionPath = require.resolve("../../../../Commons.Mod
 
 // WebInterfaceBuilder é capacidade WEB — vive no ecosystem-core (web-interface-builder.lib).
 // Resolvido só se o EcosystemCoreRepo estiver instalado (senão os loaders web nem existem).
-// Devolve { builder, path }: o módulo (fábrica já aplicada) e o caminho absoluto (p/ subprocessos).
-const ResolveWebInterfaceBuilder = (repositoriesData: any) => {
+// Devolve o CAMINHO; quem carrega o módulo é o getter lá embaixo, na primeira
+// vez que algum loader web for de fato instanciado.
+const ResolveWebInterfaceBuilderPath = (repositoriesData: any) => {
     const core = repositoriesData.EcosystemCoreRepo
     if (!core) return undefined
     const wibPath = join(core.installationPath, "Main.Module/Libraries.layer/web-interface-builder.lib/src/WebInterfaceBuilder")
@@ -37,7 +38,7 @@ const ResolveWebInterfaceBuilder = (repositoriesData: any) => {
     // este teste passaria a mentir no dia em que a lib fosse convertida para
     // TypeScript — os loaders web sumiriam sem erro nenhum.
     if (!ResolveModulePath(wibPath)) return undefined
-    return { builder: require(wibPath)(SmartRequire), path: wibPath } // fábrica: recebe SmartRequire
+    return wibPath
 }
 
 // Descoberta dinâmica de object loaders (Fase 2).
@@ -68,18 +69,29 @@ const CreateTaskLoaders = ({ repositoriesData }: { repositoriesData: any }) => {
 
     EnsureGlobalLogger()
 
-    const webInterfaceBuilder = ResolveWebInterfaceBuilder(repositoriesData)
+    const webInterfaceBuilderPath = ResolveWebInterfaceBuilderPath(repositoriesData)
+
+    // O builder web arrasta a `web-interface-builder.lib` inteira para o heap, e
+    // ela só interessa a quem tem interface. Carregado por getter: quem lê
+    // `runtimeDeps.WebInterfaceBuilder` é a fábrica de um loader web, e as
+    // fábricas agora só rodam quando o loader é pedido de verdade.
+    let webInterfaceBuilder: any
+    const _GetWebInterfaceBuilder = () => {
+        if (!webInterfaceBuilderPath) return undefined
+        if (!webInterfaceBuilder) webInterfaceBuilder = require(webInterfaceBuilderPath)(SmartRequire) // fábrica: recebe SmartRequire
+        return webInterfaceBuilder
+    }
 
     const runtimeDeps = {
         TaskStatusTypes,
         CommandChannelEventTypes,
         SmartRequire,
         ComputeObjectHash,
-        WebInterfaceBuilder: webInterfaceBuilder && webInterfaceBuilder.builder,
+        get WebInterfaceBuilder() { return _GetWebInterfaceBuilder() },
         // Caminhos absolutos p/ subprocessos (ex.: electron-main) que resolvem por PATH.
         paths: {
             smartRequire: smartRequirePath,
-            webInterfaceBuilder: webInterfaceBuilder && webInterfaceBuilder.path,
+            webInterfaceBuilder: webInterfaceBuilderPath,
             installGlobalLogger: installGlobalLoggerPath,
             installTypeScriptResolution: installTypeScriptResolutionPath
         }
@@ -103,9 +115,34 @@ const CreateTaskLoaders = ({ repositoriesData }: { repositoriesData: any }) => {
         for (const declaredTaskLoader of declaredTaskLoaders) {
             const { objectLoaderType, path: packagePath, entry, injectsDeps } = declaredTaskLoader
             const loaderModulePath = join(installationPath, packagePath, entry)
-            const loaderModule = require(loaderModulePath)
-            // injectsDeps: o módulo é uma FÁBRICA que recebe runtimeDeps e devolve o loader.
-            taskLoaders[objectLoaderType] = injectsDeps ? loaderModule(runtimeDeps) : loaderModule
+
+            // O `require` acontece na PRIMEIRA consulta, não aqui. Antes, todo
+            // processo do ecossistema carregava todos os loaders de todos os
+            // repositórios instalados — um `.service` sem interface pagava o
+            // `endpoint-instance` do ecosystem-core e o
+            // `install-nodejs-package-dependencies`, que puxa o `@npmcli/arborist`
+            // (o npm inteiro, 35 MiB medidos só de carregar).
+            //
+            // Quem consulta o mapa é o TaskExecutor, e só para os tipos que o
+            // pacote realmente declara nas suas tasks — então a preguiça se
+            // traduz direto em loader não carregado. O getter é `configurable`
+            // e se substitui pelo valor: o require acontece uma vez só.
+            Object.defineProperty(taskLoaders, objectLoaderType, {
+                configurable: true,
+                enumerable:   true,
+                get() {
+                    const loaderModule = require(loaderModulePath)
+                    // injectsDeps: o módulo é uma FÁBRICA que recebe runtimeDeps e devolve o loader.
+                    const loader = injectsDeps ? loaderModule(runtimeDeps) : loaderModule
+                    Object.defineProperty(taskLoaders, objectLoaderType, {
+                        configurable: true,
+                        enumerable:   true,
+                        writable:     true,
+                        value:        loader
+                    })
+                    return loader
+                }
+            })
         }
     }
 
