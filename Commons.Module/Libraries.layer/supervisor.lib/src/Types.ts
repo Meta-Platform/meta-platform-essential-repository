@@ -43,6 +43,11 @@ export type EventStream = {
 
 /** A supervisão de uma instância, vista de fora. */
 export type CommunicationInterface = {
+    /**
+     * Fecha o canal gRPC. Obrigatório para quem guarda o cliente: o canal tem
+     * timers próprios e não é recolhido só por perder a referência.
+     */
+    Close: () => void
     GetLogStreaming: () => EventStream
     GetEventChangeListener: () => EventStream
     KillInstance: () => Promise<string>
