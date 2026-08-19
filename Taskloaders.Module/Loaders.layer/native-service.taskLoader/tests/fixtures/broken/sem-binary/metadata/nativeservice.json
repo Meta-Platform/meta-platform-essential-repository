@@ -1,0 +1,16 @@
+{
+    "alias": "@sem-binary",
+    "abiVersion": 1,
+    "symbols": [
+        "nativeservice_abi_version",
+        "nativeservice_init",
+        "nativeservice_handle",
+        "nativeservice_shutdown"
+    ],
+    "capabilities": [
+        {
+            "name": "unix-socket",
+            "reason": "aceita conexão em socket-params; wasi:sockets não tem socket de domínio Unix."
+        }
+    ]
+}

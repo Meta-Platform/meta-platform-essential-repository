@@ -5,6 +5,7 @@ Os *task loaders* (object loaders) essenciais que o [Task Executor](../Runtime.M
 - [**application-instance** Task Loader](./Loaders.layer/application-instance.taskLoader/README.md)
 - [**command-application** Task Loader](./Loaders.layer/command-application.taskLoader/README.md)
 - [**install-nodejs-package-dependencies** Task Loader](./Loaders.layer/install-nodejs-package-dependencies.taskLoader/README.md)
+- [**native-service** Task Loader](./Loaders.layer/native-service.taskLoader/README.md)
 - [**nodejs-package** Task Loader](./Loaders.layer/nodejs-package.taskLoader/README.md)
 - [**service-instance** Task Loader](./Loaders.layer/service-instance.taskLoader/README.md)
 - [**wasm-module** Task Loader](./Loaders.layer/wasm-module.taskLoader/README.md)

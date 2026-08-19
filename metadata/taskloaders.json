@@ -46,6 +46,13 @@
             "path": "Taskloaders.Module/Loaders.layer/wasm-module.taskLoader",
             "entry": "src/WasmModule.taskLoader",
             "npmDependencies": {}
+        },
+        {
+            "objectLoaderType": "native-service",
+            "package": "@/native-service.taskLoader",
+            "path": "Taskloaders.Module/Loaders.layer/native-service.taskLoader",
+            "entry": "src/NativeService.taskLoader",
+            "npmDependencies": {}
         }
     ]
 }

@@ -1,5 +1,5 @@
 {
     "namespace": "EssentialRepo",
     "dependencies": [],
-    "supportedPackageTypes": ["app", "cli", "service", "lib", "wasmlib"]
+    "supportedPackageTypes": ["app", "cli", "service", "lib", "wasmlib", "nativeservice"]
 }

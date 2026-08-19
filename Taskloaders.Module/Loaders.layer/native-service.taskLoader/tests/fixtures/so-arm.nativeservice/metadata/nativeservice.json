@@ -1,0 +1,19 @@
+{
+    "alias": "@so-arm",
+    "abiVersion": 2,
+    "binary": {
+        "linux-arm64": "dist/linux-arm64/servico.so"
+    },
+    "symbols": [
+        "nativeservice_abi_version",
+        "nativeservice_init",
+        "nativeservice_handle",
+        "nativeservice_shutdown"
+    ],
+    "capabilities": [
+        {
+            "name": "epoll",
+            "reason": "faz o próprio laço de eventos sobre epoll."
+        }
+    ]
+}

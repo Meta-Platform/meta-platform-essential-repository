@@ -1,0 +1,1 @@
+Pacote sem metadata/nativeservice.json: a fixture é a ausência do arquivo.

@@ -1,0 +1,20 @@
+{
+    "alias": "@proxy-borda",
+    "abiVersion": 1,
+    "binary": {
+        "linux-x64": "dist/linux-x64/servico.so",
+        "linux-arm64": "dist/linux-arm64/servico.so"
+    },
+    "symbols": [
+        "nativeservice_abi_version",
+        "nativeservice_init",
+        "nativeservice_handle",
+        "nativeservice_shutdown"
+    ],
+    "capabilities": [
+        {
+            "name": "unix-socket",
+            "reason": "aceita conexão em socket-params; wasi:sockets não tem socket de domínio Unix."
+        }
+    ]
+}

@@ -7,12 +7,16 @@ const ExtractNamespaceAndPath = require("./Utils/ExtractNamespaceAndPath")
 //
 // - `.uilib`  — biblioteca de UI; manifesto/aliases consumidos pelo WebInterfaceBuilder.
 // - `.wasmlib` — módulo WebAssembly; manifesto/binário instanciados pelo wasm-module loader.
+// - `.nativeservice` — serviço-folha de I/O nativo; manifesto/matriz de binários
+//   validados pelo native-service loader (quem CARREGA o cdylib é o host nativo,
+//   noutro processo — dentro do Node ele seria um `.nativelib`).
 //
 // O mapa é aberto de propósito: um sufixo novo aqui é um tipo de pacote novo no
 // grafo, sem tocar no resto do gerador.
 const PACKAGE_TYPE_SUFFIXES: Record<string, string> = {
     ".uilib": "ui-library",
-    ".wasmlib": "wasm-module"
+    ".wasmlib": "wasm-module",
+    ".nativeservice": "native-service"
 }
 
 const ResolveObjectLoaderType = (tag: any) => {

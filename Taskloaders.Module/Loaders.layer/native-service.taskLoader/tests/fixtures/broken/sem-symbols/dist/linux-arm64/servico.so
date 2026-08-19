@@ -1,0 +1,2 @@
+Artefato de mentira: a fixture existe para o caminho declarado existir.
+O loader Node NUNCA carrega este arquivo — quem faz dlopen é o host nativo.
