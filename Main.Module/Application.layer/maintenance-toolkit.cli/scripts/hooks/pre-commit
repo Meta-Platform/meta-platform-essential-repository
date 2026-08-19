@@ -10,6 +10,7 @@
 #
 #   - lint de UI          quando o commit toca `*.webgui/src` ou `*.uilib/src`
 #   - params de boot.json quando o commit toca qualquer `metadata/*.json`
+#   - cópias do `.proto`  quando o commit toca qualquer `.proto`
 #
 # Por que um hook local e não CI: os repositórios NÃO TÊM integração contínua
 # nenhuma. E as duas verificações precisam dos repositórios lado a lado — o kit
@@ -32,7 +33,13 @@ TOCA_UI=$(echo "$ALTERADOS" | grep -E '\.(webgui|uilib)/src/.*\.(ts|tsx|css)$' |
 # gatilho é a pasta `metadata` inteira, e não só o boot.json.
 TOCA_METADATA=$(echo "$ALTERADOS" | grep -E '/metadata/[^/]+\.json$' | head -1)
 
-[ -z "$TOCA_UI" ] && [ -z "$TOCA_METADATA" ] && exit 0
+# O contrato gRPC de supervisão vive em 3 cópias byte-idênticas, em 3
+# repositórios. Alterar uma e esquecer as outras é divergência silenciosa: o
+# carregador do Node é tolerante e só reclama quando o número de um enum já
+# mudou em produção.
+TOCA_PROTO=$(echo "$ALTERADOS" | grep -E '\.proto$' | head -1)
+
+[ -z "$TOCA_UI" ] && [ -z "$TOCA_METADATA" ] && [ -z "$TOCA_PROTO" ] && exit 0
 
 # Os verificadores varrem a partir da raiz do checkout de distribuição, onde os
 # repositórios são irmãos. Subimos até encontrá-la.
@@ -72,6 +79,15 @@ if [ -n "$TOCA_METADATA" ]; then
         node "$GATE" || FALHOU=1
     else
         echo "params de boot.json: script não encontrado em $GATE"
+    fi
+fi
+
+if [ -n "$TOCA_PROTO" ]; then
+    COPIAS="$SCRIPTS/verify-proto-copies.js"
+    if [ -f "$COPIAS" ]; then
+        node "$COPIAS" || FALHOU=1
+    else
+        echo "cópias do .proto: script não encontrado em $COPIAS"
     fi
 fi
 
