@@ -41,6 +41,37 @@ export type EventStream = {
     on: (event: string, listener: (data: any) => void) => void
 }
 
+/**
+ * O que o kernel respondeu à conexão de teste contra o arquivo de socket.
+ *
+ * `REFUSED` é o único veredito POSITIVO de ausência: o arquivo existe e não há
+ * listener ligado nele. `INDETERMINATE` cobre tudo o que não se sabe (timeout,
+ * permissão negada) e nunca autoriza conclusão nenhuma.
+ */
+export type SocketConnectionProbe = "ACCEPTED" | "REFUSED" | "MISSING" | "INDETERMINATE"
+
+/**
+ * Os fatos observáveis sobre um arquivo de socket. Sem juízo de valor: quem
+ * decide o que fazer com eles é a política de supervisão, não a inspeção.
+ *
+ * `listening` é `undefined` quando a plataforma não expõe `/proc/net/unix` —
+ * "não sei" é um terceiro estado, e confundi-lo com `false` seria exatamente o
+ * erro que apaga o socket de uma instância viva.
+ */
+export type SocketInspection = {
+    socketFilePath : string
+    exists         : boolean
+    isSocket       : boolean
+    fileInode     ?: number
+    ageMs         ?: number
+    listening     ?: boolean
+    socketInode   ?: number
+    listenerPid   ?: number
+    listenerAlive ?: boolean
+    connection     : SocketConnectionProbe
+    evidence       : string
+}
+
 /** A supervisão de uma instância, vista de fora. */
 export type CommunicationInterface = {
     /**
