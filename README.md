@@ -65,19 +65,24 @@ vida das tasks. Ver
 
 ### Task loaders (object loaders)
 
-`Runtime.Module/EssentialTaskLoaders.layer` — cada um instancia um
-`objectLoaderType` (ver
-[Tipos de Object Loader](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md)):
+`Taskloaders.Module/Loaders.layer` — cada um instancia um `objectLoaderType`
+(ver [Tipos de Object Loader](https://github.com/Meta-Platform/meta-platform-open-standard/blob/main/concepts/tipos-de-object-loader.md)).
+O registro fica em [`metadata/taskloaders.json`](./metadata/taskloaders.json), e o
+[`taskloader-registry.lib`](./Taskloaders.Module/Registry.layer/taskloader-registry.lib/README.md)
+resolve o tipo em tempo de execução.
 
 | Task loader | `objectLoaderType` |
 |-------------|--------------------|
-| [install-nodejs-package-dependencies.lib](./Runtime.Module/EssentialTaskLoaders.layer/install-nodejs-package-dependencies.lib/README.md) | `install-nodejs-package-dependencies` |
-| [nodejs-package.lib](./Runtime.Module/EssentialTaskLoaders.layer/nodejs-package.lib/README.md) | `nodejs-package` |
-| [application-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/application-instance.lib/README.md) | `application-instance` |
-| [service-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/service-instance.lib/README.md) | `service-instance` |
-| [endpoint-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/endpoint-instance.lib/README.md) | `endpoint-instance` |
-| [command-application.lib](./Runtime.Module/EssentialTaskLoaders.layer/command-application.lib/README.md) | `command-application` |
-| [desktop-window-instance.lib](./Runtime.Module/EssentialTaskLoaders.layer/desktop-window-instance.lib/README.md) | `desktop-window-instance` |
+| [install-nodejs-package-dependencies.taskLoader](./Taskloaders.Module/Loaders.layer/install-nodejs-package-dependencies.taskLoader/README.md) | `install-nodejs-package-dependencies` |
+| [nodejs-package.taskLoader](./Taskloaders.Module/Loaders.layer/nodejs-package.taskLoader/README.md) | `nodejs-package` |
+| [application-instance.taskLoader](./Taskloaders.Module/Loaders.layer/application-instance.taskLoader/README.md) | `application-instance` |
+| [service-instance.taskLoader](./Taskloaders.Module/Loaders.layer/service-instance.taskLoader/README.md) | `service-instance` |
+| [command-application.taskLoader](./Taskloaders.Module/Loaders.layer/command-application.taskLoader/README.md) | `command-application` |
+| [wasm-module.taskLoader](./Taskloaders.Module/Loaders.layer/wasm-module.taskLoader/README.md) | `wasm-module` |
+| [native-service.taskLoader](./Taskloaders.Module/Loaders.layer/native-service.taskLoader/README.md) | `native-service` |
+
+Outros repositórios publicam os seus: `endpoint-instance` e `ui-library` no
+ecosystem-core, `desktop-window-instance` no applications.
 
 Para **criar um novo task loader (object loader)**, siga o
 [Guia: como criar e usar um Object Loader](./Runtime.Module/Executor.layer/task-executor.lib/docs/guia-criar-object-loader.md).
@@ -121,7 +126,8 @@ packages. Por isso os perfis `*-minimal` instalam **apenas** este repositório.
 ## Estrutura do repositório
 
 - [**Commons** Module](./Commons.Module/README.md) — Libraries / PlatformLibraries / Utilities.
-- [**Runtime** Module](./Runtime.Module/README.md) — Executor / EssentialTaskLoaders / MetadataHelpers.
+- [**Runtime** Module](./Runtime.Module/README.md) — Executor / MetadataHelpers.
+- [**Taskloaders** Module](./Taskloaders.Module/README.md) — Loaders / Registry.
 - [**Main** Module](./Main.Module/README.md) — Application (CLIs `repo`, `supervisor`, `mytoolkit`).
 
 ## Troubleshooting
