@@ -113,7 +113,7 @@ Confirmado em
 
 O [cli-script-loader](https://github.com/Meta-Platform/meta-platform-cli-script-loader-library)
 carrega, na inicialização das CLIs, libs do `EssentialRepo` — ex.:
-`print-data-log.lib` e `ecosystem-install-utilities.lib` (lista em
+`module-resolution.lib` e `ecosystem-install-utilities.lib` (lista em
 `meta-platform-dependencies.json` do setup-wizard).
 
 ### Estrutura de bootstrap
